@@ -3,7 +3,6 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
-<script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
 
 {% block content %}
 {% if case.verified %}
@@ -17,7 +16,7 @@
 </p>
 <div class="paper">
     <h5 class='spanTwo' style="padding:15px 15px 0px 10px"> شرح حال و معاینۀ فیزیکی:</h5>
-    <hr/ class="spanTwo">
+    <hr/ class="spanTwo" style="order=0">
     <div class="infoTable spanTwo">
         <div class="cell"> جنسیت: {{ case.gender }} </div> 
         <div class="cell"> وضعیت زناشویی: {{ case.marriage }} </div> 
@@ -83,10 +82,14 @@
     <div class="hx"><b>Other Data: </b><br/>{{ case.dat }}</div>
     <div class="hx"><b>Physical Examination and Review of Systems:</b> <br/>{{ case.phe }}</div>
     <div class="hx" style="background-color:#ffd"><b>Summary: </b>{{ case.summary }}</div>
+    <div class="hx"><b>Diffrential Dx:</b> <br/>{{ case.ddx }}</div>
     <div class="hx"><b>Primary Dx:</b> <br/>{{ case.pdx }}</div>
     <div class="hx"><b>Action:</b> <br/>{{ case.act }}</div>
 
 </div>
+<p style='margin:20px 10px;'>
+    {{ case.post_text|safe }}
+</p>
     <hr/>
 
 {% comment %} {%if case.followup_set.all %}
@@ -113,19 +116,24 @@
 {%endif%}
 <br/> <hr>
 <div> {% endcomment %}
-    <h4>Comments</h4>
+    <div>
+        <h4>دیدگاهی بیفزایید</h4>
+        <form action="" method="post">{% csrf_token %}
+        {{ form|crispy }}
+        <button class="btn btn-success ml-2" type="submit">ثبت</button>
+        </form>
+        </div>
+        <hr/>
+        <div class="commentShow">
     {% for comment in case.comment_set.all %}
-    <p>{{ comment.author }} &middot; {{ comment }}</p>
+    <div class="comment">
+    <span class="commentDetail">{{ comment.author }} در {{ comment.date_created|date:"d F" }} ساعت {{ comment.date_created|date:"H:i" }}:</span> 
+    <p style="margin:10px">&emsp;{{ comment }}</p>
+    </div>
     {% endfor %}
-    <hr>
+        </div>
 </div>
-<div>
-<h4>Add a comment</h4>
-<form action="" method="post">{% csrf_token %}
-{{ form|crispy }}
-<button class="btn btn-success ml-2" type="submit">Save</button>
-</form>
-</div>
+
 {% else %}
 <h2>این مطلب هنوز به تایید ادمین نرسیده است.</h2>
 
@@ -135,11 +143,19 @@
 {% endif %}
 {% endblock content %}
 
-{% block sidebarLeft %}
+{% block edit %}
 {% if user.username == case.author.username %}
-
-<div class="editDelete"><a href="{% url 'case_edit' case.slug %}" class="btn btn-warning">ویرایش</a>
-    <a href="{% url 'case_delete' case.slug %}" class="btn btn-danger">حذف</a></div>
+<a href="{% url 'case_edit' case.slug %}" class="btn btn-warning" style="margin:1px; width:80px; font-size:20px; padding:0px; align-items:center">
+    &#9998; <span style="font-family:Noto Sans; font-size:16px">ویرایش</span></a>
 {% endif %}
-{% endblock sidebarLeft %}
+{% endblock edit %}
+
+{% block delete %}
+{% if user.username == case.author.username %}
+<a href="{% url 'case_delete' case.slug %}" class="btn btn-danger" style="margin:1px; width:80px; font-size:20px; padding:0px;align-items:center">
+    &#128465; <span style="font-family:Noto Sans; font-size:16px">حذف</span></a>
+{% endif %}
+{% endblock delete %}
+
+
 
