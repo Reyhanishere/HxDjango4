@@ -16,19 +16,8 @@
     <form action="" method="post" autocomplete="off">{% csrf_token %}
         <div class="createForm">
         {{ form|crispy }}
-        <div class="editDelete">
-            <button class="btn btn-info ml-2 fix" id="primaryButton" hidden type="submit">Update</button>
-        </div>
+            <div class="text-center" style="justify-contents:center"><button class="btn btn-info" id="primaryButton" type="submit">Update</button></div>
 
     </div>
     </form>
-
-
 {% endblock content %}
-
-{% block sidebarLeft %}
-
-<button type="submit" class="btn btn-info ml-2 editDelete"
-       id="secondaryButton" 
-       onclick="document.getElementById('primaryButton').click()">Update</button>
-{% endblock sidebarLeft%}
