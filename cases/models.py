@@ -5,6 +5,7 @@ from django.urls import reverse
 
 class Case(models.Model):
     verified=models.BooleanField(default=False, )
+    rating=models.SmallIntegerField(choices=[("1",1),("2",2),("3",3),("4",4),("5",5)], null=True, blank=True)
     slug = models.SlugField(
         ("Link"),
         max_length=40,
@@ -32,7 +33,7 @@ class Case(models.Model):
          ("چشم","چشم"),
          ("مسمومین","مسمومین"),]
 
-    title = models.CharField(
+    title = models.CharField(("عنوان:"),
         max_length=50,
         null=False,
         blank=False,
@@ -47,7 +48,7 @@ class Case(models.Model):
     )
 
 
-    description = models.CharField(
+    description = models.CharField(("توضیح:"),
         max_length=200,
         null=True,
         blank=True,
@@ -60,16 +61,16 @@ class Case(models.Model):
         on_delete=models.CASCADE,
     )
 
-    pretext = models.TextField(null=True, blank=True,help_text="اگر خواستید، می‌توانید مقدمه‌ای دربارۀ شرح‌حال خود بنویسید.")
+    pretext = models.TextField(("پیش‌متن"),null=True, blank=True,help_text="اگر خواستید، می‌توانید مقدمه‌ای دربارۀ شرح‌حال خود بنویسید.")
 
-    gender = models.CharField(
+    gender = models.CharField(("جنسیت"),
         max_length=5,
         choices=[("آقا", "Male"), ("خانم", "Female"), ("دیگر", "Other")],
         null=False,
         blank=False,
         default="O",
     )
-    location = models.CharField(
+    location = models.CharField(("محل زندگی"),
         max_length=10,
         choices=[
             ("مطب", "مطب"),
@@ -81,10 +82,10 @@ class Case(models.Model):
         blank=False,
         default="ROT",
     )
-    job = models.CharField(max_length=20, null=True, blank=True)
-    dwelling = models.CharField(max_length=20, null=True, blank=True)
-    age = models.PositiveSmallIntegerField(null=False, blank=False, default=40)
-    marriage = models.CharField(
+    job = models.CharField(("پیشه (شغل)"),max_length=20, null=True, blank=True)
+    dwelling = models.CharField(("محل زندگی"),max_length=20, null=True, blank=True)
+    age = models.PositiveSmallIntegerField(("سن"),null=False, blank=False, default=40)
+    marriage = models.CharField(("وضعیت تاهل"),
         max_length=15,
         choices=[
             ("متاهل", "متاهل"),
@@ -96,9 +97,9 @@ class Case(models.Model):
         blank=True,
     )
     # date_of_admission=models.DateField(null=True, blank=True)
-    doctor = models.CharField(max_length=20, null=True, blank=True)
-    source = models.CharField(max_length=10, null=True, blank=True)
-    reliability = models.CharField(
+    doctor = models.CharField(("پزشک درمانگر"),max_length=20, null=True, blank=True)
+    source = models.CharField(("منبع شرح حال"),max_length=10, null=True, blank=True)
+    reliability = models.CharField(("میزان قابل اعتماد بودن بیمار از 5"),
         max_length=1,
         choices=[
             ("5", "5/5"),
@@ -110,7 +111,7 @@ class Case(models.Model):
         null=True,
         blank=True,
     )
-    setting = models.CharField(max_length=30, null=True, blank=True)
+    setting = models.CharField(("مرکز درمانی"),max_length=30, null=True, blank=True)
 
     PR = models.DecimalField(
         max_digits=3, decimal_places=0, null=True, blank=True, default=70
@@ -122,6 +123,7 @@ class Case(models.Model):
         null=True,
         blank=True,
         default=120,
+        help_text="می‌توانید با حذف کردن مقدار پیش‌فرض، آن را خالی بگذارید.",
     )
     BP_D = models.DecimalField(
         ("Diastolic BP"),
@@ -130,9 +132,11 @@ class Case(models.Model):
         null=True,
         blank=True,
         default=80,
+        help_text="می‌توانید با حذف کردن مقدار پیش‌فرض، آن را خالی بگذارید.",
     )
     RR = models.DecimalField(
-        max_digits=2, decimal_places=0, null=True, blank=True, default=18
+        max_digits=2, decimal_places=0, null=True, blank=True, default=18,
+        help_text="می‌توانید با حذف کردن مقدار پیش‌فرض، آن را خالی بگذارید.",
     )
     SPO2_O = models.DecimalField(
         ("SPO2 With Oxygen"),
@@ -140,6 +144,7 @@ class Case(models.Model):
         decimal_places=0,
         null=True,
         blank=True,
+        help_text="می‌توانید با حذف کردن مقدار پیش‌فرض، آن را خالی بگذارید.",
     )
     SPO2_N = models.DecimalField(
         ("SPO2 Without Oxygen"),
@@ -147,6 +152,7 @@ class Case(models.Model):
         decimal_places=0,
         null=True,
         blank=True,
+        help_text="می‌توانید با حذف کردن مقدار پیش‌فرض، آن را خالی بگذارید.",
     )
     Temp = models.DecimalField(
         ("Temperature"),
@@ -155,64 +161,80 @@ class Case(models.Model):
         null=True,
         blank=True,
         default=37,
+        help_text="می‌توانید با حذف کردن مقدار پیش‌فرض، آن را خالی بگذارید.",
     )
 
     cc = models.CharField(
-        ("Cheif Complaint"), max_length=100, null=False, blank=False, default=""
+        ("شکایت اصلی"), max_length=100, null=False, blank=False, default=""
     )
-    pi = models.TextField(("Present Illness"), null=False, blank=False, default="")
+    pi = models.TextField(("شرح بیماری فعلی"), null=False, blank=False, default="")
     pmh = models.TextField(
-        ("Past Medical History"),
+        ("شرح بیماری‌های گذشته"),
         null=True,
         blank=True,
     )
     drg = models.TextField(
-        ("Drugs and Addictions"),
+        ("داروها"),
         null=True,
         blank=True,
     )
     sh = models.TextField(
-        ("Social History"),
+        ("شرح حال اجتماعی"),
         null=True,
         blank=True,
+        help_text="مصرف مواد مخدر، الکل، وضعیت نظام وظیفه، شغل، روابط اجتماعی و جنسی و ...",
+    
     )
     fh = models.TextField(
-        ("Family History"),
+        ("سابقۀ بیماری‌های خانواده"),
         null=True,
         blank=True,
     )
     alg = models.CharField(
-        ("Allergies"),
+        ("حساسیت‌ها"),
         max_length=100,
         null=True,
         blank=True,
     )
     phe = models.TextField(
-        ("Physical Examinations and Review of Systems"),
+        ("معاینۀ فیزیکی و بررسی دستگاه‌ها"),
         null=True,
         blank=True,
     )
     dat = models.TextField(
-        ("Paraclinic Data"),
+        ("داده‌های پاراکلینیکی"),
         null=True,
         blank=True,
-        help_text=("Including Previous Lab Data and Images and ECGs."),
+        help_text=("داده‌های آزمایشگاهی و گزارش‌های تصویربرداری، اکوگرافی، نوار قلب و ..."),
     )
-    summary = models.TextField(
+    summary = models.TextField(("خلاصۀ شرح حال و معاینه"),
         null=True,
         blank=True,
     )
+    ddx= models.TextField(
+        ("تشخیص‌های افتراقی"),
+        null=True,
+        blank=True,
+        help_text=("دلیل رد تشخیص‌ها و اقدام‌ها جهت رسیدن به تشخیص قطعی را هم می‌توانید اینجا ذکر کنید."))
+
+    act = models.TextField(
+        ("اقدامات"),
+        null=True,
+        blank=True,
+    )
+
     pdx = models.CharField(
-        ("Primary Dx"),
+        ("تشخیص اولیه"),
         max_length=100,
         null=True,
         blank=True,
     )
-    act = models.TextField(
-        ("Actions"),
+
+    post_text= models.TextField(
+        ("توضیح پایانی"),
         null=True,
         blank=True,
-    )
+        help_text=("می‌توانید توضیحات بیشتر که در شرح‌حال قرار نمی‌گیرند و همچنین اطلاعات بیشتر دربارۀ بیماری را در اینجا ذکر کنید."))
 
 
 
@@ -249,7 +271,8 @@ class Comment(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.comment[:32]
 
