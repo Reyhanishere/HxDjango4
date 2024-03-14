@@ -9,15 +9,10 @@
 <form action="" method="post">{% csrf_token %}
 <div class="createForm" autocomplete="off">
     {{ form|crispy }}
-<button class="btn btn-success ml-2" type="submit" id="save" hidden>Save</button>
+<button class="btn btn-success ml-2" type="submit" id="save">Save</button>
 </div>
 </form>
 {% endblock content %}
 
-{% block sidebarLeft %}
 
-<button type="submit" class="btn btn-success ml-2 fix editDelete"
-       id="saveSecond" 
-       onclick="document.getElementById('save').click()">Save</button>
-{% endblock sidebarLeft%}
 
