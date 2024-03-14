@@ -72,14 +72,15 @@
     {% else %}
     <p style="margin:20px">بیمار آلرژی‌ای را ذکر <u>نمی‌کند</u>.</p>
     {% endif %}
-
+    
+    <div class="hx"><b>Other Data: </b><br/>{{ case.dat }}</div>
+   
     {% if case.fh %}
     <div class="hx"><b>FH: </b>{{ case.fh }}</div>
     {% else %}
     <p style="margin:20px">بیمار Family Historyای را ذکر <u>نمی‌کند</u>.</p>
     {% endif %}
 
-    <div class="hx"><b>Other Data: </b><br/>{{ case.dat }}</div>
     <div class="hx"><b>Physical Examination and Review of Systems:</b> <br/>{{ case.phe }}</div>
     <div class="hx" style="background-color:#ffd"><b>Summary: </b>{{ case.summary }}</div>
     <div class="hx"><b>Diffrential Dx:</b> <br/>{{ case.ddx }}</div>
