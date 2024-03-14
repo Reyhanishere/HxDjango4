@@ -5,7 +5,7 @@ from django.urls import reverse
 
 class Case(models.Model):
     verified=models.BooleanField(default=False, )
-    rating=models.SmallIntegerField(choices=[("1",1),("2",2),("3",3),("4",4),("5",5)], null=True, blank=True)
+    rating=models.SmallIntegerField(choices=[(1,1),(2,2),(3,3),(4,4),(5,5)], null=True, blank=True)
     slug = models.SlugField(
         ("Link"),
         max_length=40,
