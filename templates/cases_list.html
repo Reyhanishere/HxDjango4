@@ -1,34 +1,30 @@
 {% extends "base.html" %}
-{% block title %}Cases{% endblock title %}
+{% block title %}{% endblock title %}
 {% block content %}
+<div class="breakToThree">
 {% for case in case_list reversed %}
 {% if case.verified and case.slug %}
-<div class="card vazirmatn">
-<div dir="rtl" class="card-header">
-<a href="{% url 'case_detail' case.slug %}"><span class="font-weight-bold">{{ case.title }}</span></a> &emsp; &middot; &emsp;
-<span dir="ltr" styles="display: flex; justify-content: center;" class="text-muted"> {{ case.date_created|date:"d M"  }}   &emsp; By {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }}
-</span>
-</div>
-<div dir="rtl" class="card-body">
-{{ case.description|safe }}
-</div>
-<div class="card-footer text-left text-muted" dir='ltr'>
-    {{ case.followup|length }} Daily Notes | {{ case.comment|length }} Comments
+<a href="{% url 'case_detail' case.slug %}" class="caseLink">
+    <div class="myCard">
+<span class="caseTitle">{{ case.title }}</span>
+<div dir="rtl" class="cardDetail">
+    <p style="font-size:20px">{{ case.description|safe }}</p>
+    <br/>
+    <p dir="rtl" style="text-align:left" class="text-muted"> 
+        
+        توسط {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }}    &emsp; 
+        در تاریخ {{ case.date_created|date:"d M"  }}
+</p>
+<p style="margin-bottom:5px" dir="ltr">{{ case.followup|length }} Daily Notes | {{ case.comment|length }} Comments
 {% if user.username == case.author.username %}
 <a href="{% url 'case_edit' case.slug %}">Edit</a> | 
 <a href="{% url 'case_delete' case.slug %}">Delete</a>
 {% endif %}
-
-{% comment %} {% if case.followup|length == 0 %}
-No Daily Note Added
-{%elif case.followup|length == 1 %}
-1 Daily Note
-{%else%} {% endcomment %}
-
-{% comment %} {%endif%} {% endcomment %}
+</p>
 </div>
-</div>
-<br />
+</div></a>
+
 {% endif %}
 {% endfor %}
+</div>
 {% endblock content %}
