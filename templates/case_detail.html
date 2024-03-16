@@ -30,8 +30,11 @@
         <div class="cell"> میزان قابل اعتماد بودن: <b>{{ case.reliability }}</b>/5</div>
         <div class="cell"> مرکز درمانی: <b>{{ case.setting }}</b> </div>
     </div>
-    <div class="hx"><b>CC: </b>{{ case.cc }}</div>
+    <div class="hx spanTwo"><b>CC: </b>{{ case.cc }}</div>
 
+   
+    <div class="hx"><b>PI: </b>{{ case.pi|linebreaks }}</div>
+     
     {% if case.PR or case.BP_S or case.RR or case.Temp %}
         <div dir="ltr" class="vital">
         <div class="spanTwo vsText"><b>Vital Signs:</b></div>
@@ -51,8 +54,7 @@
         <div class="spanTwo"><b>No Vital Sign Recorded</b></div>
     </div>
     {% endif %}
-    <div class="hx"><b>PI: </b>{{ case.pi|linebreaks }}</div>
-
+    
     <div class="hx"><b>PMH: </b>{{ case.pmh|linebreaks }}</div>
     {% if case.drg %}
     <div class="hx"><b>Drugs: </b>{{ case.drg|linebreaks }}</div>
