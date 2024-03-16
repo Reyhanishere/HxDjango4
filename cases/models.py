@@ -6,6 +6,13 @@ from django.urls import reverse
 class Case(models.Model):
     verified=models.BooleanField(default=False, )
     rating=models.SmallIntegerField(choices=[(1,1),(2,2),(3,3),(4,4),(5,5)], null=True, blank=True)
+    lang= models.CharField(("زبان"),
+        max_length=2,
+        choices=[("Fa", "Fa")],
+        null=False,
+        blank=False,
+        default="Fa",
+    )
     slug = models.SlugField(
         ("Link"),
         max_length=40,
@@ -196,8 +203,13 @@ class Case(models.Model):
         null=True,
         blank=True,
     )
+    ros=models.TextField(
+        ("بررسی دستگاه‌ها"),
+        null=True,
+        blank=True,
+    )
     phe = models.TextField(
-        ("معاینۀ فیزیکی و بررسی دستگاه‌ها"),
+        ("معاینۀ بدنی"),
         null=True,
         blank=True,
     )
