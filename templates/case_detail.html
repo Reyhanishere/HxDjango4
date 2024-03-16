@@ -18,17 +18,17 @@
     <h5 class='spanTwo' style="padding:15px 15px 0px 10px"> شرح حال و معاینۀ فیزیکی:</h5>
     <hr/ class="spanTwo" style="order=0">
     <div class="infoTable spanTwo">
-        <div class="cell"> جنسیت: {{ case.gender }} </div> 
-        <div class="cell"> وضعیت زناشویی: {{ case.marriage }} </div> 
-        <div class="cell"> پیشه: {{ case.job }} </div>
-        <div class="cell"> پزشک معالج: {{ case.doctor }} </div>
-        <div class="cell"> محل مراجعه: {{ case.location }} </div>
+        <div class="cell"> جنسیت: <b>{{ case.gender }}</b> </div> 
+        <div class="cell"> وضعیت زناشویی: <b>{{ case.marriage }}</b> </div> 
+        <div class="cell"> پیشه: <b>{{ case.job }}</b> </div>
+        <div class="cell"> پزشک معالج: <b>{{ case.doctor }}</b> </div>
+        <div class="cell"> محل مراجعه: <b>{{ case.location }}</b> </div>
         <hr/ class="myHR" style="grid-column: span 5;">
-        <div class="cell">{{ case.age }} ساله </div>
-        <div class="cell">منبع شرح حال: {{ case.source }} </div>
-        <div class="cell"> محل زندگی: {{ case.dwelling }} </div>
-        <div class="cell"> میزان قابل اعتماد بودن: {{ case.reliability }}/5</div>
-        <div class="cell"> مرکز درمانی: {{ case.setting }} </div>
+        <div class="cell"><b>{{ case.age }}</b> ساله </div>
+        <div class="cell">منبع شرح حال: <b>{{ case.source }}</b> </div>
+        <div class="cell"> محل زندگی: <b>{{ case.dwelling }}</b> </div>
+        <div class="cell"> میزان قابل اعتماد بودن: <b>{{ case.reliability }}</b>/5</div>
+        <div class="cell"> مرکز درمانی: <b>{{ case.setting }}</b> </div>
     </div>
     <div class="hx"><b>CC: </b>{{ case.cc }}</div>
 
@@ -51,45 +51,52 @@
         <div class="spanTwo"><b>No Vital Sign Recorded</b></div>
     </div>
     {% endif %}
-    <div class="hx"><b>PI: </b>{{ case.pi }}</div>
+    <div class="hx"><b>PI: </b>{{ case.pi|linebreaks }}</div>
 
-    <div class="hx"><b>PMH: </b>{{ case.pmh }}</div>
+    <div class="hx"><b>PMH: </b>{{ case.pmh|linebreaks }}</div>
     {% if case.drg %}
-    <div class="hx"><b>Drugs: </b>{{ case.drg }}</div>
+    <div class="hx"><b>Drugs: </b>{{ case.drg|linebreaks }}</div>
     {% else %}
     <p style="margin:20px">بیمار دارو یا مادۀ ویژه‌ای مصرف <u>نمی‌کند</u>.</p>
     {% endif %}
 
     {% if case.sh %}
-    <div class="hx"><b>SH: </b>{{ case.sh }}</div>
+    <div class="hx"><b>SH: </b>{{ case.sh|linebreaks }}</div>
     {% else %}
     <p style="margin:20px">بیمار Social Historyای را ذکر <u>نمی‌کند</u>.</p>
     {% endif %}
 
 
     {% if case.alg %}
-    <div class="hx"><b>Allergy: </b>{{ case.alg }}</div>
+    <div class="hx"><b>Allergy: </b>{{ case.alg|linebreaks }}</div>
     {% else %}
     <p style="margin:20px">بیمار آلرژی‌ای را ذکر <u>نمی‌کند</u>.</p>
     {% endif %}
-    
-    <div class="hx"><b>Other Data: </b><br/>{{ case.dat }}</div>
-   
+
     {% if case.fh %}
-    <div class="hx"><b>FH: </b>{{ case.fh }}</div>
+    <div class="hx"><b>FH: </b>{{ case.fh|linebreaks }}</div>
     {% else %}
     <p style="margin:20px">بیمار Family Historyای را ذکر <u>نمی‌کند</u>.</p>
     {% endif %}
 
-    <div class="hx"><b>Physical Examination and Review of Systems:</b> <br/>{{ case.phe }}</div>
-    <div class="hx" style="background-color:#ffd"><b>Summary: </b>{{ case.summary }}</div>
-    <div class="hx"><b>Diffrential Dx:</b> <br/>{{ case.ddx }}</div>
-    <div class="hx"><b>Primary Dx:</b> <br/>{{ case.pdx }}</div>
-    <div class="hx"><b>Action:</b> <br/>{{ case.act }}</div>
+    <div class="hx"><b>Other Data: </b><br/>{{ case.dat|linebreaks }}</div>
+    <div class="hx"><b>Physical Examination and Review of Systems:</b> <br/>{{ case.phe|linebreaks}}</div>
+    <div class="hx" style="background-color:#ffd"><b>Summary: </b>{{ case.summary|linebreaks }}</div>
+    {% comment %} <div class="hx"><br/>{{ case.ddx }}</div> {% endcomment %}
+    <div class="hx">
+
+        <details>
+            <summary><b>Diffrential Dx:</b></summary>
+        <p>{{ case.ddx|linebreaks}}</p>
+        </details>
+    </div>
+    <div class="hx"><details><summary><b>Primary Dx:</b></summary>
+        <p style="margin:10px">{{ case.pdx }}</p></details></div>
+    <div class="hx"><b>Action:</b> <br/>{{ case.act|linebreaks }}</div>
 
 </div>
 <p style='margin:20px 10px;'>
-    {{ case.post_text|safe }}
+    {{ case.post_text|linebreaks }}
 </p>
     <hr/>
 
@@ -127,12 +134,10 @@
         <hr/>
         <div class="commentShow">
     {% for comment in case.comment_set.all %}
-            {% if comment.verified %}
     <div class="comment">
     <span class="commentDetail">{{ comment.author }} در {{ comment.date_created|date:"d F" }} ساعت {{ comment.date_created|date:"H:i" }}:</span> 
     <p style="margin:10px">&emsp;{{ comment }}</p>
     </div>
-            {% endif %}
     {% endfor %}
         </div>
 </div>
@@ -159,6 +164,3 @@
     &#128465; <span style="font-family:Noto Sans; font-size:16px">حذف</span></a>
 {% endif %}
 {% endblock delete %}
-
-
-
