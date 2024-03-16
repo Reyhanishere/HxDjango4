@@ -242,7 +242,7 @@
                 width: 100%;
                 display: grid;
                 column-gap: 3px;
-                grid-template-columns: 1fr 0.4fr;
+                grid-template-columns: 1fr 1fr;
                 box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 8px;
             }
             
