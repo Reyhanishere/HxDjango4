@@ -80,7 +80,8 @@
     {% endif %}
 
     <div class="hx"><b>Other Data: </b><br/>{{ case.dat|linebreaks }}</div>
-    <div class="hx"><b>Physical Examination and Review of Systems:</b> <br/>{{ case.phe|linebreaks}}</div>
+    <div class="hx"><b>Review of Systems:</b> <br/>{{ case.ros|linebreaks}}</div>    
+    <div class="hx"><b>Physical Examination:</b> <br/>{{ case.phe|linebreaks}}</div>
     <div class="hx" style="background-color:#ffd"><b>Summary: </b>{{ case.summary|linebreaks }}</div>
     {% comment %} <div class="hx"><br/>{{ case.ddx }}</div> {% endcomment %}
     <div class="hx">
@@ -164,3 +165,8 @@
     &#128465; <span style="font-family:Noto Sans; font-size:16px">حذف</span></a>
 {% endif %}
 {% endblock delete %}
+
+
+
+
+
