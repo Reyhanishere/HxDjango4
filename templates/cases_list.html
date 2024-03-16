@@ -1,21 +1,23 @@
 {% extends "base.html" %}
-{% block title %}{% endblock title %}
+{%load humanize%}
+
 {% block content %}
+
 <div class="breakToThree">
 {% for case in case_list reversed %}
 {% if case.verified and case.slug %}
-<a href="{% url 'case_detail' case.slug %}" class="caseLink">
+
     <div class="myCard">
-<span class="caseTitle">{{ case.title }}</span>
+        <a href="{% url 'case_detail' case.slug %}" class="caseLink"><p class="caseTitle">{{ case.title }}</p></a>
 <div dir="rtl" class="cardDetail">
-    <p style="font-size:20px">{{ case.description|safe }}</p>
-    <br/>
-    <p dir="rtl" style="text-align:left" class="text-muted"> 
+    <a href="{% url 'case_detail' case.slug %}" class="caseLink"><p style="font-size:20px">{{ case.description|safe }}</p></a>
+    <a href="{% url 'case_detail' case.slug %}" class="caseLink">
+        <p dir="rtl" style="text-align:left" class="text-muted"> 
         
-        توسط {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }}    &emsp; 
-        در تاریخ {{ case.date_created|date:"d M"  }}
-</p>
-<p style="margin-bottom:5px" dir="ltr">{{ case.followup|length }} Daily Notes | {{ case.comment|length }} Comments
+        توسط {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }}
+        <br/><span dir="ltr" >{{ case.date_created|naturaltime}}</span>
+</p></a>
+    <p style="margin-bottom:5px" dir="ltr"><a href="{% url 'case_detail' case.slug %}" class="caseLink">{{ case.followup|length }} Daily Note{{ case.followup|pluralize }} | {{ case.comment|length }} Comment{{ case.comment|pluralize }}</a>
 {% if user.username == case.author.username %}
 <a href="{% url 'case_edit' case.slug %}">Edit</a> | 
 <a href="{% url 'case_delete' case.slug %}">Delete</a>
