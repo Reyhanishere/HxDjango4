@@ -10,7 +10,7 @@ class CaseUpdateForm(ModelForm):
     # cat=CharField(widget=CheckboxSelectMultiple())
     class Meta:
         model = Case
-        exclude = ("slug","verified","author","rating")
+        exclude = ("slug","verified","author","rating","lang")
 
 # class FollowUpForm(ModelForm):
 #     class Meta:
