@@ -17,7 +17,7 @@
         توسط {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }}
         <br/><span dir="ltr" >{{ case.date_created|naturaltime}}</span>
 </p></a>
-    <p style="margin-bottom:5px" dir="ltr"><a href="{% url 'case_detail' case.slug %}" class="caseLink">{{ case.followup|length }} Daily Note{{ case.followup|pluralize }} | {{ case.comment|length }} Comment{{ case.comment|pluralize }}</a>
+    <p style="margin-bottom:5px" dir="ltr"><a href="{% url 'case_detail' case.slug %}" class="caseLink">{{ case.followup_set.all|length }} Daily Note{{ case.followup_set.all|pluralize }} | {{ case.comment_set.all|length }} Comment{{ case.comment_set.all|pluralize }}</a>
 {% if user.username == case.author.username %}
 <a href="{% url 'case_edit' case.slug %}">Edit</a> | 
 <a href="{% url 'case_delete' case.slug %}">Delete</a>
