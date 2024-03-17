@@ -12,7 +12,6 @@
             
             .myHeader {
                 /* grid-area: header; */
-                font-family: Noto Sans;
                 font-weight: 600;
                 font-size: 20px;
                 background-color: #29abe2;
@@ -132,11 +131,9 @@
                 background-color: #705697;
                 width: 100%;
                 color: white;
-                font-family: Noto Sans;
             }
             
             footer {
-                font-family: Noto Sans;
                 background-color: #705697;
             }
             
@@ -160,7 +157,6 @@
                 border-radius: 50%;
                 text-align: center;
                 justify-items: center;
-                font-family: Noto Sans;
                 font-size: 37px;
                 font-weight: 300;
                 left: 30px;
@@ -193,7 +189,6 @@
                 margin: 10px;
                 padding: 5px;
                 box-shadow: 0px 0px 5px 0px #aaa;
-                font-family: Noto Sans;
 /*                 min-width: 400px; */
                 max-width: 500px;
             }
@@ -228,7 +223,6 @@
             }
             
             .caseTitle {
-                font-family: Noto Sans;
                 font-weight: 700;
                 font-size: 32px;
                 margin: 10px
@@ -398,7 +392,6 @@ text-align: center;
             @media (max-width: 600px) {
                 .myHeader {
                     /* grid-area: header; */
-                    font-family: Noto Sans;
                     font-weight: 600;
                     font-size: 16px;
                 }
