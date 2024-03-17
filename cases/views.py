@@ -76,12 +76,12 @@ class CaseDeleteView(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
 class CaseCreateView(LoginRequiredMixin, CreateView): # new
     model = Case
     template_name = "case_new.html"
-    # form_class
+    # form_class    
     fields=("title","cat","description","pretext","gender","location","job",
             "dwelling", "age", "marriage", "doctor", "source", "reliability",
             "setting", "PR","BP_S","BP_D","RR", "SPO2_O","SPO2_N","Temp",
-            "cc","pi","pmh","drg", "sh", "fh", "alg","phe", "dat",
-              "summary", "pdx", "act", "slug")
+            "cc","pi","pmh","drg", "sh", "fh", "alg","ros","phe", "dat",
+              "summary","ddx", "pdx", "act", "slug")
     def form_valid(self, form): # new
         form.instance.author = self.request.user
         return super().form_valid(form)
