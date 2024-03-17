@@ -427,6 +427,7 @@ text-align: center;
                         box-shadow: 0px 0px 3px 0px #bbb;
                     }
                 }
+                        
                 .paper {
                     background-color: #eee;
                     border-radius: 10px;
@@ -435,6 +436,10 @@ text-align: center;
                     display: block;
                     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 8px;
                 }
+                .infoTable {
+                    grid-template-columns: 1fr 1fr 1fr 1fr;
+                    /* gap: 5px; */
+                 }
                 .caseLink {
                     color: black;
                     text-decoration: none;
