@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
 {% comment %} <div class="article-entry" style='margin-left:50px; margin-right:50px'> {% endcomment %}
-<h2>{{ object.title }}</h2>
+<h2 style="font-weight:600">{{ object.title }}</h2>
 <p dir="ltr" style='margin-left:10px;'> {{ object.date_created|date:"d M y" }}  &emsp; By {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }} </p>
 <p style='margin-right:10px;'>
     {{ case.pretext|safe }}
