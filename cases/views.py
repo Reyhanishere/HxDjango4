@@ -81,7 +81,7 @@ class CaseCreateView(LoginRequiredMixin, CreateView): # new
             "dwelling", "age", "marriage", "doctor", "source", "reliability",
             "setting", "PR","BP_S","BP_D","RR", "SPO2_O","SPO2_N","Temp",
             "cc","pi","pmh","drg", "sh", "fh", "alg","ros","phe", "dat",
-              "summary","ddx", "pdx", "act", "slug")
+              "summary","ddx", "pdx", "act","post_text", "slug")
     def form_valid(self, form): # new
         form.instance.author = self.request.user
         return super().form_valid(form)
