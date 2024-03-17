@@ -134,10 +134,12 @@
         <hr/>
         <div class="commentShow">
     {% for comment in case.comment_set.all %}
+    {%if comment.verified %}
     <div class="comment">
     <span class="commentDetail">{{ comment.author }} در {{ comment.date_created|date:"d F" }} ساعت {{ comment.date_created|date:"H:i" }}:</span> 
     <p style="margin:10px">&emsp;{{ comment }}</p>
     </div>
+    {%endif%}
     {% endfor %}
         </div>
 </div>
