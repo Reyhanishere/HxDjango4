@@ -437,8 +437,6 @@ text-align: center;
                     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 8px;
                 }
                 .infoTable {
-                    grid-template-columns: 1fr 1fr 1fr 1fr;
-                    /* gap: 5px; */
                  }
                 .caseLink {
                     color: black;
