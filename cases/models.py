@@ -77,7 +77,7 @@ class Case(models.Model):
         blank=False,
         default="O",
     )
-    location = models.CharField(("محل زندگی"),
+    location = models.CharField(("مکان مراجعه‌"),
         max_length=10,
         choices=[
             ("مطب", "مطب"),
