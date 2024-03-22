@@ -327,13 +327,16 @@ class Picasso (models.Model):
         return reverse("picasso_detail", args=[str(self.slug)])
    
     def save(self, *args, **kwargs):
-        if self.slug:  # Check if the instance has already been saved
-            old_instance = Picasso.objects.get(slug=self.slug)
-            # Check if the image field has changed
-            if old_instance.image != self.image:
-                self.verified = False  # Set verified to False if image has changed
-        else:  # New instance is being created
-            self.verified = False  # Set verified to False for new instances
+        if not self.verified:
+            pass
+        else:
+            if self.slug:  # Check if the instance has already been saved
+                old_instance = Picasso.objects.get(slug=self.slug)
+                # Check if the image field has changed
+                if old_instance.image != self.image:
+                    self.verified = False  # Set verified to False if image has changed
+            else:  # New instance is being created
+                self.verified = False  # Set verified to False for new instances
 
         # Call the parent class's save method to save the instance
         super(Picasso, self).save(*args, **kwargs)
