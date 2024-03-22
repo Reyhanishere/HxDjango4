@@ -3,7 +3,7 @@
 
 {% block title %}Sign Up{% endblock title%}
 {% block content %}
-<div dir='ltr'>
+<div dir='ltr' class="pad-15">
 <h2>Sign Up</h2>
 <form method="post">{% csrf_token %}
 {{ form|crispy }}
