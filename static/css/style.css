@@ -1,323 +1,559 @@
-            .noto-sans arabic {
-                font-family: "Noto Sans Arabic", sans-serif;
-                font-optical-sizing: auto;
-                font-style: normal;
-                font-variation-settings: "wdth" 100;
-            }
-            
-            body {
-                margin: 0;
-                font-family: "Noto Sans Arabic", sans-serif;
-            }
-            
-            .myHeader {
-                /* grid-area: header; */
-                font-weight: 600;
-                font-size: 20px;
-                background-color: #29abe2;
-                color: white;
-                position: fixed;
-                order: 1000;
-                height: 80px;
-                width: 100%;
-                display: grid;
-                grid-template-columns: 1fr 6fr 1fr 1fr;
-                grid-template-rows: 1fr;
-                gap: 10px;
-                /* padding: 10px 0px 0px 10px; */
-                align-items: center;
-                justify-content: center;
-                box-shadow: 0px 5px 10px 0px gray;
-            }
-            
-            .text-left {
-                text-align: left;
-            }
-            
-            .text-right {
-                text-align: right;
-            }
-            
-            .text-center {
-                text-align: center;
-                justify-content: center;
-                align-items: center;
-            }
-            
-            .menu {
-                padding-left: 20px;
-            }
-            
-            .header-logo {
-                font-size: 20px;
-                font-weight: 400;
-                /* display: grid;
+    .noto-sans arabic {
+        font-family: "Noto Sans Arabic", sans-serif;
+        font-optical-sizing: auto;
+        font-style: normal;
+        font-variation-settings: "wdth" 100;
+    }
+    
+    body {
+        margin: 0;
+        font-family: "Noto Sans Arabic", sans-serif;
+        background-color: #f5f5f5
+    }
+    
+    .myHeader {
+        /* grid-area: header; */
+        font-weight: 400;
+        font-size: 20px;
+        background-color: #29abe2;
+        color: white;
+        position: fixed;
+        order: 1000;
+        height: 80px;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 4fr 1fr 1fr;
+        grid-template-rows: 1fr;
+        gap: 10px;
+        /* padding: 10px 0px 0px 10px; */
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 5px 10px 0px gray;
+    }
+    
+    .text-left {
+        text-align: left;
+    }
+    
+    .text-right {
+        text-align: right;
+    }
+    
+    .text-center {
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .menu {
+        /* padding-left: 20px; */
+        text-align: center;
+        font-weight: 600;
+        color: #29abe2;
+    }
+    
+    .header-logo {
+        font-size: 16px;
+        padding-top: 3px;
+        /* display: grid;
     grid-template-columns: 1fr 5fr;
     gap: 10px; */
-                align-items: center;
-            }
-            
-            #logoName {
-                font-size: 20px;
-            }
-            
-            #logoHeader {
-                width: 50px
-            }
-            
-            .header-logo img {
-                filter: invert(100%);
-            }
-            
-            .header-logo a {
-                text-decoration: none;
-                color: white;
-            }
-            
-            .header-logo a:hover {
-                color: whitesmoke;
-            }
-            
-            .login a {
-                color: white;
-                text-decoration: none;
-                font-size: 20px;
-                font-weight: 400;
-            }
-            
-            .login a:hover {
-                color: whitesmoke
-            }
-            
-            .signup a {
-                color: white;
-                text-decoration: none;
-                font-size: 20px;
-                font-weight: 400;
-            }
-            
-            .signup a:hover {
-                color: whitesmoke
-            }
-            
-            .userIcon img {
-                filter: invert(100%);
-            }
-            
-            .font-300 {
-                font-weight: 300;
-            }
-            
-            .font-20 {
-                font-size: 16px;
-            }
-            
-            .myMain {
-                grid-area: main;
-                padding: 15px;
-                background-color: #fcfcfc;
-                margin-top: 100px;
-                order: -1;
-            }
-            
-            .breakToThree {
-                display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
-            
-            .myFooter {
-                grid-area: footer;
-                background-color: #705697;
-                width: 100%;
-                color: white;
-            }
-            
-            footer {
-                background-color: #705697;
-            }
-            
-            .myContainer {
-                display: grid;
-                /* grid-template-columns: 10% 80% 10%; */
-                grid-template-rows: auto 60px;
-                grid-template-areas: "main" "footer";
-            }
-            
-            .butn {
-                display: inline-block;
-                text-decoration: none;
-            }
-            
-            .add {
-                background-color: navy;
-                color: white;
-                width: 60px;
-                height: 60px;
-                border-radius: 50%;
-                text-align: center;
-                justify-items: center;
-                font-size: 42px;
-                font-weight: 300;
-                left: 30px;
-                bottom: 30px;
-                box-shadow: 0px 0px 10px 1px gray;
-                ;
-            }
-            
-            .add:hover {
-                background-color: rgb(0, 0, 160);
-                color: whitesmoke
-            }
-            
-            .comment {
-                background-color: #eee;
-                border-radius: 5px;
-                padding: 10px;
-                margin: 10px 5px;
-                box-shadow: 0px 0px 1px 0.1px #333;
-            }
-            
-            .commentDetail {
-                color: #666;
-                font-size: 14px;
-            }
-            
-            .myCard {
-                background-color: #efefef;
-                border-radius: 20px;
-                margin: 10px;
-                padding: 5px;
-                box-shadow: 0px 0px 5px 0px #aaa;
-/*                 min-width: 400px; */
-                max-width: 500px;
-            }
-            
-            .myCard:hover {
-                box-shadow: 1px 1px 6px 0px #aaa;
-                .cardDetail {
-                    box-shadow: 0px 0px 3px 0px #bbb;
-                    ;
-                }
-            }
-            
-            .cardDetail {
-                background-color: #fafafa;
-                border-radius: 20px;
-                margin: 7px;
-                padding: 10px;
-                /* position: absolute; */
-                /* bottom: 10px; */
-            }
-            
-            .caseLink {
-                color: black;
-                text-decoration: none;
-                display: contents;
-                min-width: 400px;
-                max-width: 500px;
-            }
-            
-            .caseLink:hover {
-                color: #444
-            }
-            
-            .caseTitle {
-                font-weight: 600;
-                font-size: 32px;
-                margin: 10px
-            }
-            /* Copy */
-            
-            .paper {
-                background-color: #eee;
-                border-radius: 10px;
-                padding: 15px 10px;
-                display: grid;
-                width: 100%;
-                display: grid;
-                column-gap: 3px;
-                grid-template-columns: 1fr 1fr;
-                box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 8px;
-            }
-            
-            .infoTable {
-                padding: 10px;
-                display: grid;
-                grid-template-columns: 0.6fr 1fr 0.6fr 1fr 1fr;
-                /* gap: 5px; */
-                flex-direction: row;
-                flex-basis: 70px;
-                flex-wrap: wrap;
-            }
-            
-            .cell {
-                border-style: hidden solid hidden solid;
-                border-color: #ddd;
-                border-width: 0.5px;
-                text-align: center;
-            }
-            
-            .hx {
-                background-color: #f9f9f9;
-                padding: 10px;
-                margin: 5px 10px;
-                border-radius: 10px;
-                box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-            }
-            
-            a.float {
-                margin: 5px 20px;
-                width: 110px;
-            }
-            
-            .vital {
-                background-color: #ffe0e0;
-                padding: 10px;
-                margin: 5px 10px;
-                border-radius: 10px;
-                display: grid;
-                column-gap: 3px;
-                row-gap: 5px;
-                grid-template-columns: 0.6fr 1fr;
-/*                 grid-row: span 2; */
-                box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-            }
-            
-            vsText {
-                border-style: hidden hidden solid hidden;
-                border-color: #2e2e2e;
-                border-width: 0.5px;
-            }
-            
-            .spanTwo {
-                grid-column: span 2;
-            }
-            
-            .myHR {
-                border: 2px solid #ddd;
-            }
-            
-            button.fix {
-                position: fixed;
-                bottom: 50px;
-                left: 50px;
-            }
-            
-            textarea {
-                height: 150px
-            }
-            
-            .createForm {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 5px;
-            }
-            
-            .spanFour {
-                grid-column: span 4;
-            }
-            /* 
+        align-items: center;
+    }
+    
+    #logoName {
+        font-size: 20px;
+    }
+    
+    #logoHeader {
+        width: 50px
+    }
+    
+    .header-logo img {
+        filter: invert(100%);
+    }
+    
+    .header-logo a {
+        text-decoration: none;
+        color: white;
+    }
+    
+    .header-logo a:hover {
+        color: whitesmoke;
+    }
+    
+    .login a {
+        color: white;
+        text-decoration: none;
+        font-size: 20px;
+        font-weight: 400;
+    }
+    
+    .login a:hover {
+        color: whitesmoke
+    }
+    
+    .signup a {
+        color: white;
+        text-decoration: none;
+        font-size: 20px;
+        font-weight: 400;
+    }
+    
+    .signup a:hover {
+        color: whitesmoke
+    }
+    
+    .userIcon img {
+        filter: invert(100%);
+    }
+    
+    .font-300 {
+        font-weight: 300;
+    }
+    
+    .font-20 {
+        font-size: 16px;
+    }
+    
+    .myMain {
+        grid-area: main;
+        padding: 0px;
+        background-color: #fcfcfc;
+        margin: 100px 0px 0px 0px;
+        order: -1;
+    }
+    
+    .breakToThree {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .myFooter {
+        grid-area: footer;
+        background-color: #705697;
+        width: 100%;
+        color: white;
+    }
+    
+    footer {
+        background-color: #705697;
+    }
+    
+    .myContainer {
+        display: grid;
+        /* grid-template-columns: 10% 80% 10%; */
+        grid-template-rows: auto 60px;
+        grid-template-areas: "main" "footer";
+    }
+    
+    .butn {
+        display: inline-block;
+        text-decoration: none;
+    }
+    
+    .addBoth {
+        width: 120px;
+        height: 50px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border-radius: 30px;
+        text-align: center;
+        justify-items: center;
+        font-size: 20px;
+        left: 30px;
+        bottom: 30px;
+        box-shadow: 0px 0px 3px 1px gray;
+        color: white;
+        font-weight: 400;
+        position: fixed;
+        text-align: center;
+        justify-content: center;
+        border-color: #fff;
+        /* border: solid 2px; */
+    }
+    
+    .addBoth a {
+        color: white;
+    }
+    
+    .spanMarg {
+        margin: 12px 0px 0px 0px;
+    }
+    
+    .add {
+        background-color: navy;
+        width: 100%;
+        height: 100%;
+        border-radius: 25px 0px 0px 25px;
+    }
+    
+    .add:hover {
+        background-color: rgb(0, 0, 160);
+        color: whitesmoke
+    }
+    
+    .addPic {
+        background-color: #77202f;
+        width: 100%;
+        height: 100%;
+        border-radius: 0px 25px 25px 0px;
+    }
+    
+    .addPic:hover {
+        background-color: #88202f;
+    }
+    
+    .comment {
+        background-color: #eee;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px 5px;
+        box-shadow: 0px 0px 1px 0.1px #333;
+    }
+    
+    .commentDetail {
+        color: #666;
+        font-size: 14px;
+    }
+    
+    .myCard {
+        background-color: #efefef;
+        border-radius: 20px;
+        margin: 10px;
+        padding: 5px;
+        box-shadow: 0px 0px 5px 0px #aaa;
+        min-width: 400px;
+        max-width: 100%;
+    }
+    
+    .myCard:hover {
+        box-shadow: 1px 1px 6px 0px #aaa;
+        .cardDetail {
+            box-shadow: 0px 0px 3px 0px #bbb;
+            ;
+        }
+    }
+    
+    .cardDetail {
+        background-color: #fafafa;
+        border-radius: 20px;
+        margin: 2px;
+        padding: 10px;
+        font-size: 14px;
+        /* position: absolute; */
+        /* bottom: 10px; */
+    }
+    
+    .caseLink {
+        color: black;
+        text-decoration: none;
+        display: contents;
+        min-width: 400px;
+        max-width: 500px;
+    }
+    
+    .caseLink:hover {
+        color: #444
+    }
+    
+    .caseTitle {
+        font-weight: 700;
+        font-size: 26px;
+        margin: 10px
+    }
+    
+    .caseDesc {
+        font-size: 18px;
+    }
+    
+    .hxTitle {
+        align-items: center;
+        justify-content: center;
+        margin: auto;
+        padding: 30px 0px 20px 0px;
+        text-align: center;
+        color: #2f2f2f;
+        max-width: 1400px;
+    }
+    
+    .hxTitle a {
+        text-decoration: solid;
+        color: #2f2f2f;
+    }
+    
+    .hxTitle a:hover {
+        text-decoration: underline;
+        text-decoration-color: #666;
+        color: #3f3f3f;
+    }
+    
+    #hx {
+        background-color: #f5f5f5;
+    }
+    
+    .down {
+        align-content: center;
+    }
+    
+    .arrow-down {
+        width: 0;
+        height: 0;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-top: 20px solid #666;
+    }
+    
+    .down a {
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        text-decoration: solid;
+        color: #666;
+    }
+    
+    .down a:hover {
+        text-decoration: underline;
+        text-decoration-color: #666;
+        color: #3f3f3f;
+    }
+    
+    .downPic a {
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        text-decoration: solid;
+        color: whitesmoke;
+    }
+    
+    .downPic a:hover {
+        text-decoration: underline;
+        text-decoration-color: #bbb;
+        color: #f0f0f0;
+    }
+    
+    .picasso {
+        background-color: #2f2f2f;
+        margin: 0px;
+        /* width: 100dvw; */
+        /* max-width: 1400px; */
+        /* background-color: #ccc; */
+    }
+    
+    .pics {
+        align-items: center;
+        margin: 0px 0px 0px 0px;
+        padding: 40px 0px 5px 0px;
+        text-align: center;
+        color: whitesmoke;
+    }
+    
+    .pics a {
+        text-decoration: solid;
+        color: whitesmoke;
+    }
+    
+    .pics a:hover {
+        text-decoration: underline;
+        text-decoration-color: #bbb;
+        color: #f0f0f0;
+    }
+    
+    .imageCard {
+        margin: 15px;
+        /* width: 100%; */
+        display: flex;
+        align-items: flex-start;
+        border-radius: 5px;
+        color: white;
+    }
+    
+    .imgThumbnail {
+        width: 100%;
+        max-width: 200px;
+    }
+    
+    .imgThumbnail:hover {
+        filter: grayscale(70%);
+        cursor: pointer;
+        animation-duration: 0.7s;
+    }
+    
+    .imgTitle a {
+        text-decoration: none;
+        color: white
+    }
+    
+    .imgTitle a:hover {
+        text-decoration: underline;
+        text-decoration-color: #999;
+        color: #f1f1f1
+    }
+    
+    .imgTitle h3 {
+        font-weight: 600;
+        margin: 10px;
+    }
+    
+    .author {
+        margin: 5px 25px 5px 10px;
+        color: #ccc;
+        /* align-items: flex-end; */
+    }
+    
+    #picasso {
+        background-color: #f5f5f5;
+    }
+    
+    .imageCardLight {
+        margin: 15px;
+        /* width: 100%; */
+        display: flex;
+        align-items: flex-start;
+        border-radius: 5px;
+        color: #0e0e0e;
+    }
+    
+    .imgTitleLight a {
+        text-decoration: none;
+        color: #0e0e0e;
+    }
+    
+    .imgTitleLight a:hover {
+        text-decoration: underline;
+        text-decoration-color: #444;
+        color: #222
+    }
+    
+    .imgTitleLight h3 {
+        font-weight: 600;
+        margin: 10px;
+    }
+    
+    .authorLight {
+        margin: 5px 25px 5px 10px;
+        color: #999;
+        /* align-items: flex-end; */
+    }
+    
+    .desc {
+        margin: 20px;
+    }
+    
+    .pad-15 {
+        padding: 15px;
+    }
+    /* Copy */
+    
+    .paper {
+        background-color: #eee;
+        border-radius: 10px;
+        padding: 15px 10px;
+        display: grid;
+        width: 100%;
+        display: grid;
+        column-gap: 3px;
+        grid-template-columns: 1fr 0.4fr;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 8px;
+    }
+    
+    .infoTable {
+        padding: 10px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        /* gap: 5px; */
+        flex-direction: row;
+        flex-basis: 70px;
+        flex-wrap: wrap;
+    }
+    
+    .cell {
+        border-style: hidden solid hidden solid;
+        border-color: #ddd;
+        border-width: 0.5px;
+        text-align: center;
+    }
+    
+    .hx {
+        background-color: #f9f9f9;
+        padding: 10px;
+        margin: 5px 10px;
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    }
+    
+    a.float {
+        margin: 5px 20px;
+        width: 110px;
+    }
+    
+    .vital {
+        background-color: #ffe0e0;
+        padding: 10px;
+        margin: 5px 10px;
+        border-radius: 10px;
+        display: grid;
+        column-gap: 3px;
+        row-gap: 5px;
+        grid-template-columns: 0.6fr 1fr;
+        /* grid-row: span 2; */
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    }
+    
+    vsText {
+        border-style: hidden hidden solid hidden;
+        border-color: #2e2e2e;
+        border-width: 0.5px;
+    }
+    
+    .spanTwo {
+        grid-column: span 2;
+    }
+    
+    .myHR {
+        border: 2px solid #ddd;
+    }
+    
+    button.fix {
+        position: fixed;
+        bottom: 50px;
+        left: 50px;
+    }
+    
+    textarea {
+        height: 150px
+    }
+    
+    .createForm {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 5px;
+    }
+    
+    .spanFour {
+        grid-column: span 4;
+    }
+    
+    .imagePicaDetailCont {
+        display: flex;
+        /* align-items: center; */
+        /* Align items vertically in the center */
+    }
+    
+    .imagePicaDetail {
+        flex-shrink: 0;
+        /* Prevent image from shrinking */
+        margin-right: 20px;
+        /* Add some space between image and text */
+    }
+    
+    .picaDetailPara {
+        flex-grow: 1;
+        margin-right: 10px;
+        /* Allow text to grow to fill available space */
+    }
+    /* 
 @media (max-width: 600px) {
     img.logo {
         margin: 0 7px;
@@ -388,61 +624,105 @@ text-align: center;
 
 }
 */
-            
-            @media (max-width: 600px) {
-                .myHeader {
-                    /* grid-area: header; */
-                    font-weight: 600;
-                    font-size: 16px;
-                }
-                #logoHeader {
-                    width: 30px;
-                }
-                #logoName {
-                    font-size: 16px;
-                }
-                .breakToThree {
-                    display: flex;
-                    flex-direction: column;
-                    flex-wrap: wrap;
-                    justify-content: center;
-                    align-items: center;
-                    align-content: center;
-                }
-                .caseLink {
-                    width: 95%;
-                    display: block;
-                }
-                .myCard {
-                    background-color: #efefef;
-                    border-radius: 20px;
-                    margin: 5px;
-                    padding: 5px;
-                    box-shadow: 0px 0px 5px 0px #aaa;
-                    /* width: 80% */
-                }
-                .myCard:hover {
-                    box-shadow: 1px 1px 6px 0px #aaa;
-                    .cardDetail {
-                        box-shadow: 0px 0px 3px 0px #bbb;
-                    }
-                }
-                        
-                .paper {
-                    background-color: #eee;
-                    border-radius: 10px;
-                    padding: 15px 10px;
-                    width: 100%;
-                    display: block;
-                    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 8px;
-                }
-                .infoTable {
-                 }
-                .caseLink {
-                    color: black;
-                    text-decoration: none;
-                    display: block;
-                    min-width: 250px;
-                    max-width: 450px;
-                }
+    
+    @media (max-width: 600px) {
+        .myHeader {
+            /* grid-area: header; */
+            font-size: 16px;
+        }
+        #logoHeader {
+            width: 30px;
+        }
+        #logoName {
+            font-size: 16px;
+        }
+        .breakToThree {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+        }
+        .caseLink {
+            width: 95%;
+            display: block;
+        }
+        .myCard {
+            background-color: #efefef;
+            border-radius: 20px;
+            margin: 5px;
+            padding: 5px;
+            box-shadow: 0px 0px 5px 0px #aaa;
+            /* width: 80% */
+        }
+        .myCard:hover {
+            box-shadow: 1px 1px 6px 0px #aaa;
+            .cardDetail {
+                box-shadow: 0px 0px 3px 0px #bbb;
             }
+        }
+        .cardDetail {
+            background-color: #fafafa;
+            border-radius: 20px;
+            margin: 2px;
+            padding: 10px;
+            font-size: 14px;
+            /* position: absolute; */
+            /* bottom: 10px; */
+        }
+        .caseLink {
+            color: black;
+            text-decoration: none;
+            display: contents;
+        }
+        .caseTitle {
+            font-weight: 700;
+            font-size: 20px;
+            margin: 10px
+        }
+        .caseDesc {
+            font-size: 14px;
+        }
+        .paper {
+            background-color: #eee;
+            border-radius: 10px;
+            padding: 15px 10px;
+            width: 100%;
+            display: block;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 8px;
+        }
+        .infoTable {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            /* gap: 5px; */
+        }
+        .caseLink {
+            color: black;
+            text-decoration: none;
+            display: block;
+            min-width: 250px;
+            max-width: 450px;
+        }
+        .createForm {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 5px;
+        }
+    }
+    
+    @media (max-width: 738px) {
+        .imagePicaDetailCont {
+            flex-direction: column;
+            /* Stack items vertically */
+            text-align: center;
+            align-items: center;
+            /* Center text */
+        }
+        .imagePicaDetail {
+            margin-bottom: 20px;
+            /* Add space between image and text on mobile */
+        }
+        .picaDetailPara {
+            margin-right: 0px;
+        }
+    }
