@@ -59,7 +59,7 @@
             <a href="{% url 'picasso_detail' pica.slug %}">
                 <h3>{{ pica.title }}</h3>
                 <p class="desc">{{ pica.description }}</p>
-                <p class="author">توسط {{ pica.author.last_name }} {{ pica.author.last_name }} ({{ pica.author.degree }})
+                <p class="author">توسط {{ pica.author.first_name }} {{ pica.author.last_name }} ({{ pica.author.degree }})
                 {{ case.date_created|naturaltime}}
                 </p>
             </a>
