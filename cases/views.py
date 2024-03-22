@@ -5,20 +5,24 @@ from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from django.urls import reverse_lazy, reverse
+from django.shortcuts import render
 
-from .models import Case, FollowUp
+from .models import Case, Picasso, FollowUp, Comment
 from .forms import (CaseUpdateForm,
                     # FollowUpForm, 
-                    CommentForm)
+                    CommentForm,
+                    PicassoCreateForm,
+                    PicassoUpdateForm,
+                    )
 
 
 class CasesListView(ListView):
     model = Case
-    template_name = 'cases_list.html'
+    template_name = 'hx_list.html'
 
 class CommentGet(DetailView): # new
     model = Case
-    template_name = "case_detail.html"
+    template_name = "hx_detail.html"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["form"] = CommentForm()
@@ -27,7 +31,7 @@ class CommentGet(DetailView): # new
 class CommentPost(SingleObjectMixin, FormView): # new
     model = Case
     form_class = CommentForm
-    template_name = "case_detail.html"
+    template_name = "hx_detail.html"
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().post(request, *args, **kwargs)
@@ -39,7 +43,7 @@ class CommentPost(SingleObjectMixin, FormView): # new
         return super().form_valid(form)
     def get_success_url(self):
         case = self.get_object()
-        return reverse("case_detail", kwargs={"slug": case.slug})
+        return reverse("hx_detail", kwargs={"slug": case.slug})
 
 class CaseDetailView(View):
     def get(self, request, *args, **kwargs):
@@ -57,8 +61,8 @@ class CaseDetailView(View):
 class CaseUpdateView(LoginRequiredMixin,UserPassesTestMixin, UpdateView):
     model = Case
     # fields="__all__"
-    template_name = 'case_edit.html'
-    success_url = reverse_lazy("cases_list")
+    template_name = 'hx_edit.html'
+    success_url = reverse_lazy("hx_list")
     form_class = CaseUpdateForm
     def test_func(self): # new
         obj = self.get_object()
@@ -66,8 +70,8 @@ class CaseUpdateView(LoginRequiredMixin,UserPassesTestMixin, UpdateView):
 
 class CaseDeleteView(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
     model = Case
-    template_name = 'case_delete.html'
-    success_url = "/cases"
+    template_name = 'hx_delete.html'
+    success_url = "/cases/hx"
     def test_func(self): # new
         obj = self.get_object()
         return obj.author == self.request.user
@@ -75,13 +79,49 @@ class CaseDeleteView(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
 
 class CaseCreateView(LoginRequiredMixin, CreateView): # new
     model = Case
-    template_name = "case_new.html"
-    # form_class    
+    template_name = "hx_new.html"
     fields=("title","cat","description","pretext","gender","location","job",
             "dwelling", "age", "marriage", "doctor", "source", "reliability",
             "setting", "PR","BP_S","BP_D","RR", "SPO2_O","SPO2_N","Temp",
             "cc","pi","pmh","drg", "sh", "fh", "alg","ros","phe", "dat",
-              "summary","ddx", "pdx", "act","post_text", "slug")
+              "summary","ddx", "pdx", "act","post_text","picasso", "slug")
+    success_url = reverse_lazy("cases_main")
+    
     def form_valid(self, form): # new
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+
+class PicassoListView(ListView):
+    model = Picasso
+    template_name = 'picasso_list.html'
+
+class PicassoDetailView(DetailView):
+    model = Picasso
+    template_name = "picasso_detail.html"
+
+class PicassoCreateView(LoginRequiredMixin, CreateView):
+    model=Picasso
+    template_name = "picasso_new.html"
+    # fields=("title","image","description","text","slug")
+    form_class = PicassoCreateForm
+
+    def form_valid(self, form): # new
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+class PicassoUpdateView(LoginRequiredMixin,UserPassesTestMixin, UpdateView):
+    model = Picasso
+    template_name = 'picasso_edit.html'
+    success_url = reverse_lazy("picasso_list")
+    # how to show a message
+    form_class = PicassoUpdateForm
+    def test_func(self): # new
+        obj = self.get_object()
+        return obj.author == self.request.user
+
+
+def cases_main(request):
+    hxs = Case.objects.filter(verified=True).order_by('-date_created')[:3]
+    picassos = Picasso.objects.filter(verified=True).order_by('-date_created')[:3]
+    return render(request, 'cases_main.html', {'hxs': hxs, 'picassos': picassos})
