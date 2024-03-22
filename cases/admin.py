@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Case, Comment, FollowUp
+from .models import Case, Comment, FollowUp, Picasso
 
 
 class FollowUpInline(admin.TabularInline):  # new
@@ -19,8 +19,13 @@ class CaseAdmin(admin.ModelAdmin):  # new
     "title", "author","date_created","verified"
     ]
 
+class PicassoAdmin(admin.ModelAdmin):
+    list_display = [
+    "title", "author","verified","date_created"
+    ]
 
-admin.site.register(Case, CaseAdmin) # new
+admin.site.register(Case, CaseAdmin)
+admin.site.register(Picasso,PicassoAdmin)
 admin.site.register(FollowUp)
 admin.site.register(Comment)
 
