@@ -2,8 +2,14 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
+class Choice(models.Model):
+    name = models.CharField(max_length=36)
 
+    def __str__(self):
+        return self.name
+    
 class Case(models.Model):
+    choice=models.ManyToManyField(Choice, null=True, blank=True)
     verified=models.BooleanField(default=False, )
     rating=models.SmallIntegerField(choices=[(1,1),(2,2),(3,3),(4,4),(5,5)], null=True, blank=True)
     lang= models.CharField(("زبان"),
@@ -21,6 +27,7 @@ class Case(models.Model):
         unique=True,
         help_text="لینک مورد علاقه برای کیس خود را وارد کنید. تلاش کنید لینکتان گویا و دقیق باشد، پس از این توانایی تغییر آن را نخواهید داشت. استفاده از فاصله (Space) مجاز نیست.",
     )
+    cover=models.ImageField(upload_to="cases/hx/uploads/%Y%m%d/",null=True, blank=True)
 
     rts=[("ریه","ریه"),
          ("هماتولوژی و انکولوژی","هماتولوژی و انکولوژی"),
@@ -249,12 +256,13 @@ class Case(models.Model):
         help_text=("می‌توانید توضیحات بیشتر که در شرح‌حال قرار نمی‌گیرند و همچنین اطلاعات بیشتر دربارۀ بیماری را در اینجا ذکر کنید."))
 
 
+    picasso=models.URLField("لینک کیس مرتبط",help_text="می‌توانید لینک کیس مربوط به این تصویر را در اینجا قرار دهید.", null=True, blank=True)
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("case_detail", args=[str(self.slug)])
+        return reverse("hx_detail", args=[str(self.slug)])
 
 
 class FollowUp(models.Model):
@@ -285,6 +293,48 @@ class Comment(models.Model):
     )
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
+    related_name='comments'
     def __str__(self):
         return self.comment[:32]
+
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return "cases/picasso/uploads/user_{0}/{1}".format(instance.author.username, filename)
+
+class Picasso (models.Model):
+    choice=models.ManyToManyField(Choice, null=True, blank=True)
+    premium=models.BooleanField(default=False)
+    verified=models.BooleanField(default=False)
+    lang=models.CharField(max_length=2, choices=[("Fa","Fa")], default="Fa")
+    rating=models.SmallIntegerField(choices=[(1,1),(2,2),(3,3),(4,4),(5,5)], null=True, blank=True)
+    title=models.CharField(("عنوان"), max_length=50,help_text="برای نشان دادن در صفحۀ اصلی.",blank=False,null=False)
+    image=models.ImageField(upload_to=user_directory_path,null=False, blank=False)
+    description=models.CharField(("توضیح کوتاه"), max_length=200,help_text="خلاصه‌ای برای نمایش در صفحۀ اصلی",blank=False,null=False)
+    slug=models.SlugField(("لینک"),help_text="برای دسترسی به این تصویر یک آدرس مرتبط ایجاد کنید. برای مثال cushing-striae-01.",blank=False,null=False)
+    text=models.TextField(("متن"),help_text="متنی کامل دربارۀ تصویر بنویسید. دربارۀ بیماری، دلیل ایجاد این وضعیت و تمام موارد مرتبط.",default="",blank=False,null=False)
+    date_created = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    case=models.URLField("لینک کیس مرتبط",help_text="می‌توانید لینک کیس مربوط به این تصویر را در اینجا قرار دهید.", null=True, blank=True)
+
+
+    def __str__(self):
+        return self.title
+    
+    def get_absolute_url(self):
+        return reverse("picasso_detail", args=[str(self.slug)])
+   
+    def save(self, *args, **kwargs):
+        if self.slug:  # Check if the instance has already been saved
+            old_instance = Picasso.objects.get(slug=self.slug)
+            # Check if the image field has changed
+            if old_instance.image != self.image:
+                self.verified = False  # Set verified to False if image has changed
+        else:  # New instance is being created
+            self.verified = False  # Set verified to False for new instances
+
+        # Call the parent class's save method to save the instance
+        super(Picasso, self).save(*args, **kwargs)
 
