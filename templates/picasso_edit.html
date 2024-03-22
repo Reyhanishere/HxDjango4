@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}| Picasso{%endblock title%}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<style>    
+    button {
+        border: none;
+        padding: 10px
+    }
+
+</style>
+<div class="pad-15">
+<h1>ویرایش</h1>
+
+    <form action="" method="post" enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
+        <div class="createForm">
+        {{ form|crispy }}
+            <div class="text-center" style="justify-contents:center"><button class="btn btn-info" id="primaryButton" type="submit">Update</button></div>
+
+    </div>
+    </form>
+</div>
+{% endblock content %}

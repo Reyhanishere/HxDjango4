@@ -1,0 +1,148 @@
+
+
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}| Hx{%endblock title%}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<div class="pad-15">
+{% if case.verified %}
+{% comment %} <div class="article-entry" style='margin-left:50px; margin-right:50px'> {% endcomment %}
+<h2 style="font-weight:600">{{ object.title }}</h2>
+<p dir="ltr" style='margin-left:10px;'> {{ object.date_created|date:"d M y" }}  &emsp; By {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }} </p>
+<p style='margin-right:10px;'>
+    {{ case.pretext|safe }}
+</p>
+<div class="paper">
+    <h5 class='spanTwo' style="padding:15px 15px 0px 10px"> شرح حال و معاینۀ فیزیکی:</h5>
+    <hr/ class="spanTwo" style="order=0">
+    <div class="infoTable spanTwo">
+        <div class="cell"> جنسیت: <b>{{ case.gender }}</b> </div> 
+        <div class="cell"> وضعیت زناشویی: <b>{{ case.marriage }}</b> </div> 
+        <div class="cell"> پیشه: <b>{{ case.job }}</b> </div>
+        <div class="cell"> محل مراجعه: <b>{{ case.location }}</b> </div>
+        <hr/ class="myHR" style="grid-column: span 5;">
+        <div class="cell"><b>{{ case.age }}</b> ساله </div>
+        <div class="cell">منبع شرح حال: <b>{{ case.source }}</b> </div>
+        <div class="cell"> محل زندگی: <b>{{ case.dwelling }}</b> </div>
+        <div class="cell"> میزان قابل اعتماد بودن: <b>{{ case.reliability }}</b>/5</div>
+    </div>
+    <div class="hx spanTwo"><b>CC: </b>{{ case.cc }}</div>
+
+    {% if case.PR or case.BP_S or case.RR or case.Temp %}
+        <div dir="ltr" class="vital">
+        <div class="spanTwo vsText"><b>Vital Signs:</b></div>
+        <div>PR: {{ case.PR }}</div>
+        <div>BP: {{ case.BP_S }}/{{ case.BP_D }}</div>
+        <div>RR: {{ case.RR }}</div>
+        {% if case.SPO2_O %}
+        <div>SP<sub>O&#8322;</sub>: {{ case.SPO2_O }}</div>
+        {% endif %}
+        <div>T: {{ case.Temp }}&#176;C</div>
+        {% if case.SPO2_O %}
+        <div>SP<sub>O&#8322;</sub><i>With</i> O&#8322;: {{ case.SPO2_N }}</div>
+        {% endif %}
+    </div>
+    {% else %}
+    <div dir="ltr" class="vital">
+        <div class="spanTwo"><b>No Vital Sign Recorded</b></div>
+    </div>
+    {% endif %}
+    <div class="hx"><b>PI: </b>{{ case.pi|linebreaks }}</div>
+
+    <div class="hx"><b>PMH: </b>{{ case.pmh|linebreaks }}</div>
+    {% if case.drg %}
+    <div class="hx"><b>Drugs: </b>{{ case.drg|linebreaks }}</div>
+    {% else %}
+    <p style="margin:20px">بیمار دارو یا مادۀ ویژه‌ای مصرف <u>نمی‌کند</u>.</p>
+    {% endif %}
+
+    {% if case.sh %}
+    <div class="hx"><b>SH: </b>{{ case.sh|linebreaks }}</div>
+    {% else %}
+    <p style="margin:20px">بیمار Social Historyای را ذکر <u>نمی‌کند</u>.</p>
+    {% endif %}
+
+
+    {% if case.alg %}
+    <div class="hx"><b>Allergy: </b>{{ case.alg|linebreaks }}</div>
+    {% else %}
+    <p style="margin:20px">بیمار آلرژی‌ای را ذکر <u>نمی‌کند</u>.</p>
+    {% endif %}
+
+    {% if case.fh %}
+    <div class="hx"><b>FH: </b>{{ case.fh|linebreaks }}</div>
+    {% else %}
+    <p style="margin:20px">بیمار Family Historyای را ذکر <u>نمی‌کند</u>.</p>
+    {% endif %}
+
+    <div class="hx"><b>Other Data: </b><br/>{{ case.dat|linebreaks }}</div>
+    <div class="hx"><b>Review of Systems:</b> <br/>{{ case.ros|linebreaks}}</div>    
+    <div class="hx"><b>Physical Examination:</b> <br/>{{ case.phe|linebreaks}}</div>
+    <div class="hx" style="background-color:#ffd"><b>Summary: </b>{{ case.summary|linebreaks }}</div>
+    {% comment %} <div class="hx"><br/>{{ case.ddx }}</div> {% endcomment %}
+    <div class="hx">
+
+        <details>
+            <summary><b>Diffrential Dx:</b></summary>
+        <p>{{ case.ddx|linebreaks}}</p>
+        </details>
+    </div>
+    <div class="hx"><details><summary><b>Primary Dx:</b></summary>
+        <p style="margin:10px">{{ case.pdx }}</p></details></div>
+    <div class="hx"><b>Action:</b> <br/>{{ case.act|linebreaks }}</div>
+
+</div>
+<p style='margin:20px 10px;'>
+    {{ case.post_text|linebreaks }}
+</p>
+{%if case.picasso%}
+    <p>می‌توانید پیکاسو (تصویر کیس) مربوط به این شرح حال را در این <a href="{{case.picasso}}">لینک</a> مشاهده کنید.</p>
+{%endif%}
+    <hr/>
+    <div>
+        <h4>دیدگاهی بیفزایید</h4>
+        <form action="" method="post">{% csrf_token %}
+        {{ form|crispy }}
+        <button class="btn btn-success ml-2" type="submit">ثبت</button>
+        </form>
+        </div>
+        <hr/>
+        <div class="commentShow">
+    {% for comment in case.comment_set.all %}
+    {%if comment.verified %}
+    <div class="comment">
+    <span class="commentDetail">{{ comment.author }} در {{ comment.date_created|date:"d F" }} ساعت {{ comment.date_created|date:"H:i" }}:</span> 
+    <p style="margin:10px">&emsp;{{ comment }}</p>
+    </div>
+    {%endif%}
+    {% endfor %}
+        </div>
+</div>
+
+{% else %}
+<h2>این مطلب هنوز به تایید ادمین نرسیده است.</h2>
+
+{% endif %}
+</div>
+{% endblock content %}
+
+{% block edit %}
+{% if user.username == case.author.username %}
+<a href="{% url 'hx_edit' case.slug %}" class="btn btn-warning" style="margin:1px; width:60px; font-size:16px; padding:0px; align-items:center">
+    <span style="font-family:Noto Sans; font-size:16px">ویرایش</span></a>
+{% endif %}
+{% endblock edit %}
+
+{% block delete %}
+{% if user.username == case.author.username %}
+<a href="{% url 'hx_delete' case.slug %}" class="btn btn-danger" style="margin:1px; width:60px; font-size:16px; padding:0px;align-items:center">
+    <span style="font-family:Noto Sans; font-size:16px">حذف</span></a>
+{% endif %}
+{% endblock delete %}
+
+
+
+
+

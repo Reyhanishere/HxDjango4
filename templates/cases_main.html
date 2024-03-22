@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{%load humanize%}
+{% load static %}
+{% block content %}
+<div id="hx" class='pad-15'>
+    <div class="hxTitle">
+        <a href="{% url 'hx_list'%}">
+        <h2 style="font-weight:800">Hx</h2>
+        <p>Histories and Physical Examinations</p>
+        </a>
+    </div>
+{% for case in hxs %}
+{% if case.verified and case.slug %}
+
+    <div class="myCard">
+        <a href="{% url 'hx_detail' case.slug %}" class="caseLink"><p class="caseTitle">{{ case.title }}</p></a>
+<div dir="rtl" class="cardDetail">
+    <a href="{% url 'hx_detail' case.slug %}" class="caseLink caseDesc"><p style="font-size:15px">{{ case.description|safe }}</p></a>
+    <a href="{% url 'hx_detail' case.slug %}" style="text-align:right;" class="caseLink">
+        <p dir="rtl" style="text-align:right; color:#666" class=""> 
+        توسط {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }}
+        &emsp;<span dir="ltr" >{{ case.date_created|naturaltime}}</span>
+</p></a>
+    <p style="margin-bottom:5px" dir="ltr"><a href="{% url 'hx_detail' case.slug %}" class="caseLink">
+        {{ case.followup|length }} Daily Note{{ case.followup|pluralize }} | {{ case.comment_set.all|length }} Comment{{ case.comment_set.all|pluralize }}</a>
+        <span>{% if user.username == case.author.username %}
+            <a href="{% url 'hx_edit' case.slug %}">Edit</a> | 
+            <a href="{% url 'hx_delete' case.slug %}">Delete</a>
+            {% endif %}</span>
+
+</p>
+</div>
+</div>
+
+{% endif %}
+{% endfor %}
+<br/>
+<div class="down">
+    <a href="{% url 'hx_list'%}">
+    <h5 dir="ltr" style="font-weight:600">Load More &#9654;</h5>
+    </a>
+</div>
+<br/>
+</div>
+
+<div class="picasso">
+    <div class="pics">
+        <a href="{% url 'picasso_list'%}">
+        <h2 style="font-weight:800">PICASSO</h2>
+        <p>Cases in Pictures</p>
+        </a>
+    </div>
+    <hr style="color:#fff"/>
+{% for pica in picassos %}
+{% if pica.verified %} 
+    <div class="imageCard">
+        <img src="{{ pica.image.url }}" width = '300' class="imgThumbnail" alt="{{pica.title}}"/>
+        <div class="imgTitle">
+            <a href="{% url 'picasso_detail' pica.slug %}">
+                <h3>{{ pica.title }}</h3>
+                <p class="desc">{{ pica.description }}</p>
+                <p class="author">توسط {{ case.author.first_name }} {{ case.author.last_name }} ({{ case.author.degree }})
+                {{ case.date_created|naturaltime}}
+                </p>
+            </a>
+        </div>
+    </div>
+    <hr style="color:#fff"/>
+{%endif%}
+{% endfor %}
+<br/>
+<div class="downPic">
+    <a href="{% url 'picasso_list'%}">
+    <h5 dir="ltr" style="font-weight:600">Load More &#9654;</h5>
+    </a>
+    <br/>
+</div>
+</div>
+{% endblock content %}

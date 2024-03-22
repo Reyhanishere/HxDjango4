@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{%load humanize%}
+{% load static %}
+{% block title %}| Hx{%endblock title%}
+{% block content %}
+<div id="hx" class='pad-15'>
+    <div class="hxTitle">
+        <h2 style="font-weight:800">Hx</h2>
+        <p>Histories and Physical Examinations</p>
+    </div>
+{% for case in case_list reversed %}
+{% if case.verified and case.slug %}
+
+    <div class="myCard">
+        <a href="{% url 'hx_detail' case.slug %}" class="caseLink"><p class="caseTitle">{{ case.title }}</p></a>
+<div dir="rtl" class="cardDetail">
+    <a href="{% url 'hx_detail' case.slug %}" class="caseLink caseDesc"><p style="font-size:15px">{{ case.description|safe }}</p></a>
+    <a href="{% url 'hx_detail' case.slug %}" style="text-align:right;" class="caseLink">
+        <p dir="rtl" style="text-align:right; color:#666" class=""> 
+        توسط {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }}
+        &emsp;<span dir="ltr" >{{ case.date_created|naturaltime}}</span>
+</p></a>
+    <p style="margin-bottom:5px" dir="ltr"><a href="{% url 'hx_detail' case.slug %}" class="caseLink">
+        {{ case.followup|length }} Daily Note{{ case.followup|pluralize }} | {{ case.comment_set.all|length }} Comment{{ case.comment_set.all|pluralize }}</a>
+        <span>{% if user.username == case.author.username %}
+            <a href="{% url 'hx_edit' case.slug %}">Edit</a> | 
+            <a href="{% url 'hx_delete' case.slug %}">Delete</a>
+            {% endif %}</span>
+
+</p>
+</div>
+</div>
+{% endif %}
+{% endfor %}
+<div class="down">
+    <br/>
+    <a href="{% url 'cases_main'%}">
+    <h5 dir="ltr" style="font-weight:600"> &#9664; Back to Cases</h5>
+    </a>
+</div>
+</div>
+{% endblock content %}

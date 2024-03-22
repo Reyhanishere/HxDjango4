@@ -1,0 +1,24 @@
+
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}| Picasso{%endblock title%}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<div class="pad-15">
+{% if picasso.verified %}
+<h2>{{picasso.title}}</h2>
+<p>&emsp;{{picasso.author.first_name}} {{picasso.author.last_name}}{%if picasso.author.degree %} | {{picasso.author.degree}}{%endif%}</p>
+<div class="imagePicaDetailCont">
+    <img src="{{picasso.image.url}}" width='400' class="imagePicaDetail">
+    <p class="picaDetailPara">{{picasso.text}}</p>
+
+{%if picasso.case %}
+    <p>می‌توانید شرح حال مربوط به این پیکاسو را در این <a href="{{picasso.case}}">لینک</a> مشاهده کنید.</p>
+{%endif%}
+</div>
+{% else %}
+    <h2>این مطلب هنوز به تایید ادمین نرسیده است.</h2>
+{% endif %}
+</div>
+{%endblock content%}

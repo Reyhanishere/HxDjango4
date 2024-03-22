@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{%load humanize%}
+{% load static %}
+{% block title %}Picasso{% endblock title %}
+{% block content %}
+<div id="picasso" class='pad-15'>
+    <div class="hxTitle">
+        <h2 style="font-weight:800">PICASSO</h2>
+        <p>Cases in Picture</p>
+    </div>
+    <hr style="color:#000"/>
+{% for pica in picasso_list reversed %}
+{% if pica.verified and pica.slug %}
+
+<div class="imageCardLight">
+    <img src="{{ pica.image.url }}" width = '300' class="imgThumbnail" alt="{{pica.title}}"/>
+    <div class="imgTitleLight">
+        <a href="{% url 'picasso_detail' pica.slug %}">
+            <h3>{{ pica.title }}</h3>
+            <p class="desc">{{ pica.description }}</p>
+            <p class="authorLight">توسط {{ case.author.first_name }} {{ case.author.last_name }} ({{ case.author.degree }})
+            {{ case.date_created|naturaltime}}
+            </p>
+        </a>
+    </div>
+</div>
+<hr style="color:#000"/>
+    
+{% endif %}
+{% endfor %}
+<div class="down">
+    <br/>
+    <a href="{% url 'cases_main'%}">
+    <h5 dir="ltr" style="font-weight:600"> &#9664; Back to Cases</h5>
+    </a>
+</div>
+</div>
+{% endblock content %}

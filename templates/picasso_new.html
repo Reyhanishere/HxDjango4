@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}| Picasso{%endblock title%}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<div class="pad-15">
+<h1>پیکاسوی جدید</h1>
+
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+<div class="createForm" autocomplete="off">
+    {{ form|crispy }}
+<button class="btn btn-success ml-2" type="submit" id="save" >Save</button>
+</div>
+</form>
+<p>نگارۀ شما پس از تایید توسط سردبیر به نمایش درخواهد آمد.</p>
+</div>
+{% endblock content %}
+
+
+
+
+
