@@ -37,6 +37,8 @@ INSTALLED_APPS = [
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+MEDIA_ROOT=BASE_DIR/'media/'
+MEDIA_URL = '/media/'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
