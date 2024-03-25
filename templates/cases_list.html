@@ -14,7 +14,8 @@
     <a href="{% url 'case_detail' case.slug %}" class="caseLink">
         <p dir="rtl" style="text-align:left" class="text-muted"> 
         
-        توسط {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }}
+        توسط <b>{{ case.author.first_name }} {{ case.author.last_name }}</b> 
+            {%if case.author.degree%} ({{ case.author.degree }}) {%endif%}
         <br/><span dir="ltr" >{{ case.date_created|naturaltime}}</span>
 </p></a>
     <p style="margin-bottom:5px" dir="ltr"><a href="{% url 'case_detail' case.slug %}" class="caseLink">{{ case.followup_set.all|length }} Daily Note{{ case.followup_set.all|pluralize }} | {{ case.comment_set.all|length }} Comment{{ case.comment_set.all|pluralize }}</a>
