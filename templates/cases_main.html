@@ -2,7 +2,7 @@
 {%load humanize%}
 {% load static %}
 {% block content %}
-<div id="hx" class='pad-15'>
+<div id="hx" class="">
     <div class="hxTitle">
         <a href="{% url 'hx_list'%}">
         <h2 style="font-weight:800">Hx</h2>
@@ -18,11 +18,11 @@
     <a href="{% url 'hx_detail' case.slug %}" class="caseLink caseDesc"><p style="font-size:15px">{{ case.description|safe }}</p></a>
     <a href="{% url 'hx_detail' case.slug %}" style="text-align:right;" class="caseLink">
         <p dir="rtl" style="text-align:right; color:#666" class=""> 
-        توسط {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }}
+        توسط {{ case.author.first_name }} {{ case.author.last_name }} | {%if case.author.degree %}({{ case.author.degree }}) {%endif%}
         &emsp;<span dir="ltr" >{{ case.date_created|naturaltime}}</span>
 </p></a>
     <p style="margin-bottom:5px" dir="ltr"><a href="{% url 'hx_detail' case.slug %}" class="caseLink">
-        {{ case.followup|length }} Daily Note{{ case.followup|pluralize }} | {{ case.comment_set.all|length }} Comment{{ case.comment_set.all|pluralize }}</a>
+        {% comment %} {{ case.followup|length }} Daily Note{{ case.followup|pluralize }} | {{ case.comment_set.all|length }} Comment{{ case.comment_set.all|pluralize }}</a> {% endcomment %}
         <span>{% if user.username == case.author.username %}
             <a href="{% url 'hx_edit' case.slug %}">Edit</a> | 
             <a href="{% url 'hx_delete' case.slug %}">Delete</a>
@@ -58,10 +58,14 @@
         <div class="imgTitle">
             <a href="{% url 'picasso_detail' pica.slug %}">
                 <h3>{{ pica.title }}</h3>
-                <p class="desc">{{ pica.description }}</p>
-                <p class="author">توسط {{ pica.author.first_name }} {{ pica.author.last_name }} ({{ pica.author.degree }})
+                <p class="desc">{{ pica.image.url }} {{ pica.description }}</p>
+                <p class="author">توسط {{ pica.author.first_name }} {{ pica.author.last_name }} 
+                    {%if pica.author.degree %}({{ pica.author.degree }}) {%endif%}
                 {{ case.date_created|naturaltime}}
                 </p>
+                <p>{% if user.username == pica.author.username %}
+                    <a href="{% url 'picasso_edit' pica.slug %}">Edit</a> | 
+                    {% endif %}</p>
             </a>
         </div>
     </div>
