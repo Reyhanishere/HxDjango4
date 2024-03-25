@@ -223,9 +223,9 @@
         background-color: #efefef;
         border-radius: 20px;
         margin: 10px;
-        padding: 5px;
+        padding: 10px;
         box-shadow: 0px 0px 5px 0px #aaa;
-        width: 100%;
+        width: 98%;
     }
     
     .myCard:hover {
@@ -291,6 +291,7 @@
     
     #hx {
         background-color: #f5f5f5;
+        padding: 10px;
     }
     
     .down {
@@ -653,10 +654,10 @@ text-align: center;
         .myCard {
             background-color: #efefef;
             border-radius: 20px;
-            margin: 5px;
-            padding: 5px;
+            margin-bottom: 14px;
+            padding: 3px;
             box-shadow: 0px 0px 5px 0px #aaa;
-            /* width: 80% */
+            /* width: 96%; */
         }
         .myCard:hover {
             box-shadow: 1px 1px 6px 0px #aaa;
