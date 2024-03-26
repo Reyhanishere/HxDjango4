@@ -10,6 +10,7 @@ from .views import (CasesListView,
                      PicassoUpdateView,
                      PicassoListView,
                      PicassoDetailView,
+                     SearchResultsListView
                      )
 
 
@@ -24,5 +25,7 @@ urlpatterns = [
     path("hx/<slug:slug>/edit", CaseUpdateView.as_view(), name="hx_edit"),
     path("hx/<slug:slug>/delete", CaseDeleteView.as_view(), name="hx_delete"),
     path("hx/new", CaseCreateView.as_view(), name="hx_new"),
+    path("search/", SearchResultsListView.as_view(), name="search_results"),
+
     ]
 
