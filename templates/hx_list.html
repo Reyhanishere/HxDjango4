@@ -17,7 +17,8 @@
     <a href="{% url 'hx_detail' case.slug %}" class="caseLink caseDesc"><p style="font-size:15px">{{ case.description|safe }}</p></a>
     <a href="{% url 'hx_detail' case.slug %}" style="text-align:right;" class="caseLink">
         <p dir="rtl" style="text-align:right; color:#666" class=""> 
-        توسط {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }}
+        توسط <b>{{case.author.first_name}} {{case.author.last_name}}</b>{%if case.author.degree %} ({{case.author.degree}}){%endif%}
+
         &emsp;<span dir="ltr" >{{ case.date_created|naturaltime}}</span>
 </p></a>
     <p style="margin-bottom:5px" dir="ltr"><a href="{% url 'hx_detail' case.slug %}" class="caseLink">
