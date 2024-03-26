@@ -11,7 +11,7 @@
 <p>&emsp;{{picasso.author.first_name}} {{picasso.author.last_name}}{%if picasso.author.degree %} | {{picasso.author.degree}}{%endif%}</p>
 <div class="imagePicaDetailCont">
     <img src="{{picasso.image.url}}" class="imagePicaDetail">
-    <p class="picaDetailPara">{{picasso.text}}</p>
+    <p class="picaDetailPara">{{picasso.text|safe}}</p>
 
 {%if picasso.case %}
     <p>می‌توانید شرح حال مربوط به این پیکاسو را در این <a href="{{picasso.case}}">لینک</a> مشاهده کنید.</p>
