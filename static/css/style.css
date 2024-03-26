@@ -24,7 +24,7 @@
         display: grid;
         grid-template-columns: 1fr 4fr 1fr 1fr;
         grid-template-rows: 1fr;
-        gap: 10px;
+        gap: 5px;
         padding: 10px 0px 0px 0px;
         align-items: center;
         justify-content: center;
@@ -48,8 +48,8 @@
     .menu {
         /* padding-left: 20px; */
         text-align: center;
-        font-weight: 600;
-        color: #29abe2;
+        font-weight: 400;
+        color: white;
     }
     
     .header-logo {
@@ -85,8 +85,9 @@
     .login a {
         color: white;
         text-decoration: none;
-        font-size: 16px;
+        font-size: 20px;
         font-weight: 400;
+        transition: 0.5s;
     }
     
     .login a:hover {
@@ -96,8 +97,9 @@
     .signup a {
         color: white;
         text-decoration: none;
-        font-size: 16px;
+        font-size: 20px;
         font-weight: 400;
+        transition: 0.5s;
     }
     
     .signup a:hover {
@@ -188,6 +190,7 @@
         width: 100%;
         height: 100%;
         border-radius: 25px 0px 0px 25px;
+        transition: 0.5s;
     }
     
     .add:hover {
@@ -200,6 +203,7 @@
         width: 100%;
         height: 100%;
         border-radius: 0px 25px 25px 0px;
+        transition: 0.5s;
     }
     
     .addPic:hover {
@@ -242,6 +246,7 @@
         margin: 2px;
         padding: 10px;
         font-size: 14px;
+        transition: 0.5s;
         /* position: absolute; */
         /* bottom: 10px; */
     }
@@ -252,6 +257,7 @@
         display: contents;
         min-width: 400px;
         max-width: 500px;
+        transition: 0.5s;
     }
     
     .caseLink:hover {
@@ -281,6 +287,7 @@
     .hxTitle a {
         text-decoration: solid;
         color: #2f2f2f;
+        transition: 0.5s;
     }
     
     .hxTitle a:hover {
@@ -312,6 +319,7 @@
         text-align: center;
         text-decoration: solid;
         color: #666;
+        transition: 0.5s;
     }
     
     .down a:hover {
@@ -326,6 +334,7 @@
         text-align: center;
         text-decoration: solid;
         color: whitesmoke;
+        transition: 0.5s;
     }
     
     .downPic a:hover {
@@ -353,6 +362,7 @@
     .pics a {
         text-decoration: solid;
         color: whitesmoke;
+        transition: 0.5s;
     }
     
     .pics a:hover {
@@ -373,6 +383,7 @@
     .imgThumbnail {
         width: 100%;
         max-width: 200px;
+        transition: 0.5s;
     }
     
     .imgThumbnail:hover {
@@ -383,7 +394,8 @@
     
     .imgTitle a {
         text-decoration: none;
-        color: white
+        color: white;
+        transition: 0.5s;
     }
     
     .imgTitle a:hover {
@@ -419,6 +431,7 @@
     .imgTitleLight a {
         text-decoration: none;
         color: #0e0e0e;
+        transition: 0.5s;
     }
     
     .imgTitleLight a:hover {
@@ -657,6 +670,7 @@ text-align: center;
             margin-bottom: 14px;
             padding: 3px;
             box-shadow: 0px 0px 5px 0px #aaa;
+            transition: 0.5s;
             /* width: 96%; */
         }
         .myCard:hover {
@@ -710,6 +724,49 @@ text-align: center;
             display: grid;
             grid-template-columns: 1fr;
             gap: 5px;
+        }
+    }
+    
+    .sidenav {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #2f2f2f;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+    }
+    
+    .sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #aaa;
+        display: block;
+        transition: 0.3s;
+    }
+    
+    .sidenav a:hover {
+        color: #fafafa;
+    }
+    
+    .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+    }
+    
+    @media screen and (max-height: 450px) {
+        .sidenav {
+            padding-top: 15px;
+        }
+        .sidenav a {
+            font-size: 18px;
         }
     }
     
