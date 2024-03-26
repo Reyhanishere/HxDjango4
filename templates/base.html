@@ -76,10 +76,15 @@
 
             <div dir="ltr" id="mySidenav" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                <a href="{% url 'about'%}">About</a>
-                <a href="#">Term & Services</a>
-                <a href="#">Guide</a>
-                
+                <form class="d-flex m-2" action="{% url 'search_results' %}" method="get">
+                    <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-\
+                    label="Search" >
+                    <button class="btn btn-outline-success" type="submit">&#128269;
+                    </button>
+                    </form>                    
+                    <a href="{% url 'about'%}">About</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Guide</a>
             </div>
 
     <div class="myMain" style="min-height:82vh">
