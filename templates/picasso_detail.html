@@ -8,7 +8,7 @@
 <div class="pad-15">
 {% if picasso.verified %}
 <h2>{{picasso.title}}</h2>
-<p>&emsp;{{picasso.author.first_name}} {{picasso.author.last_name}}{%if picasso.author.degree %} | {{picasso.author.degree}}{%endif%}</p>
+<p>&emsp;<b>{{picasso.author.first_name}} {{picasso.author.last_name}}</b>{%if picasso.author.degree %} ({{picasso.author.degree}}){%endif%}</p>
 <div class="imagePicaDetailCont">
     <img src="{{picasso.image.url}}" class="imagePicaDetail">
     <div class="pad-15"><p class="picaDetailPara">{{picasso.text|linebreaks}}</p></div>
