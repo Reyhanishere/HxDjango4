@@ -21,7 +21,8 @@
 <body>
         <div class="myContainer">
             <div class="myHeader" dir="ltr">
-                <div class="menu" >MENU</div>
+                <div class="menu" ><span style="cursor:pointer" onclick="openNav()">&#9776;</span>
+                </div>
                 <div class="header-logo text-left">
                     <a class="" href="{% url 'cases_main' %}">
                         <img id="logoHeader"src="{% static 'images\Logo Prime.svg' %}" width="50px" alt="medepartout Logo"> <span id="logoName">medepartout | Cases
@@ -72,6 +73,14 @@
                 </div>
                 {% endif %}
             </div>
+
+            <div dir="ltr" id="mySidenav" class="sidenav">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="{% url 'about'%}">About</a>
+                <a href="#">Services</a>
+                <a href="#">Clients</a>
+            </div>
+
     <div class="myMain" style="min-height:82vh">
 
             {% block content %}
@@ -83,6 +92,16 @@
     {% comment %} <footer dir="ltr">
         <p style="color:white; padding:10px">medepartout | All Right Reserved &copy; 2024</p>
     </footer> {% endcomment %}
+    <script>
+        function openNav() {
+          document.getElementById("mySidenav").style.width = "250px";
+        }
+        
+        function closeNav() {
+          document.getElementById("mySidenav").style.width = "0";
+        }
+        </script>
+        
 </body>
 
 </html>
