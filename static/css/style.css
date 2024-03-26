@@ -774,7 +774,7 @@ text-align: center;
         .imagePicaDetailCont {
             flex-direction: column;
             /* Stack items vertically */
-            text-align: center;
+            text-align: right;
             align-items: center;
             /* Center text */
         }
