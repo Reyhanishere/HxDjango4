@@ -1,7 +1,9 @@
-﻿asgiref==3.7.2
+asgiref==3.7.2
 crispy-bootstrap5==0.6
 Django==4.0.10
 django-crispy-forms==1.13.0
+django-social-share==2.3.0
+Markdown==3.6
+pillow==10.2.0
 sqlparse==0.4.4
 tzdata==2024.1
-pillow==10.2.0
