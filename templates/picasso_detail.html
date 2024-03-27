@@ -1,5 +1,5 @@
-
 {% extends "base.html" %}
+{% load my_tags %}
 {% load crispy_forms_tags %}
 {% load static %}
 {% block title %}| Picasso{%endblock title%}
@@ -8,10 +8,10 @@
 <div class="pad-15">
 {% if picasso.verified %}
 <h2>{{picasso.title}}</h2>
-<p>&emsp;<b>{{picasso.author.first_name}} {{picasso.author.last_name}}</b>{%if picasso.author.degree %} ({{picasso.author.degree}}){%endif%}</p>
+<p>&emsp;{{picasso.author.first_name}} {{picasso.author.last_name}}{%if picasso.author.degree %} | {{picasso.author.degree}}{%endif%}</p>
 <div class="imagePicaDetailCont">
     <img src="{{picasso.image.url}}" class="imagePicaDetail">
-    <div class="pad-15"><p class="picaDetailPara">{{picasso.text|linebreaks}}</p></div>
+    <div class="pad-15 picaDetailPara"><p class="picaDetailPara">{{ picasso.text|markdown|safe}}</p></div>
 
 {%if picasso.case %}
     <p>می‌توانید شرح حال مربوط به این پیکاسو را در این <a href="{{picasso.case}}">لینک</a> مشاهده کنید.</p>
@@ -22,6 +22,7 @@
 {% endif %}
 </div>
 {%endblock content%}
+
 {% block edit %}
 {% if user.username == picasso.author.username %}
 <a href="{% url 'picasso_edit' picasso.slug %}" class="btn btn-warning" style="margin:1px; width:60px; font-size:16px; padding:0px; align-items:center">
