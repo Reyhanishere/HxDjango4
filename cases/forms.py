@@ -26,7 +26,7 @@ class PicassoCreateForm(forms.ModelForm):
 class PicassoUpdateForm(ModelForm):
     class Meta:
         model = Picasso
-        exclude = ("slug","verified","premium","rating","lang","choice")
+        exclude = ("slug","verified","premium","rating","lang","choice","author")
 
 # class FollowUpForm(ModelForm):
 #     class Meta:
