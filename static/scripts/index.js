@@ -7,7 +7,7 @@ function closeNav() {
 }
 
 function addMarkdown(type) {
-    const textarea = document.getElementById('picasso-text-editor');
+    const textarea = document.getElementById('picasso_text_editor');
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const selectedText = textarea.value.substring(start, end);
@@ -34,7 +34,7 @@ function addMarkdown(type) {
 }
 
 function addLink() {
-    const textarea = document.getElementById('picasso-text-editor');
+    const textarea = document.getElementById('picasso_text_editor');
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const selectedText = textarea.value.substring(start, end);
@@ -51,7 +51,7 @@ function addLink() {
 }
 
 function addFootnote() {
-    const textarea = document.getElementById('picasso-text-editor');
+    const textarea = document.getElementById('picasso_text_editor');
     const position = textarea.selectionStart;
     const footnoteNumber = textarea.value.match(/\[\^\d+\]/g);
     const nextFootnoteNumber = footnoteNumber ? footnoteNumber.length + 1 : 1;
