@@ -25,7 +25,6 @@
     </form>
 </div>
 <script>
-
     function createMarkdownButtons() {
         const markdownButtonsContainer = document.getElementById('div_id_text');
 
@@ -38,6 +37,7 @@
             { label: 'P.S', onclick: "addFootnote()" }
         ];
         const style= "\
+        padding: 1px 7px;\
         margin-right: 10px;\
         background-color: #ddd;\
         border-radius: 5px;\
@@ -51,7 +51,7 @@
         const div = document.createElement('div');
         // Create buttons and append them to the container
         markdownButtons.forEach(buttonInfo => {
-            const button = document.createElement('button');
+            const button = document.createElement('a');
             button.textContent = buttonInfo.label;
             button.setAttribute('onclick', buttonInfo.onclick);
             button.setAttribute('style', style);
@@ -59,6 +59,8 @@
             
         });
         markdownButtonsContainer.insertBefore(div, markdownButtonsContainer.Child);
+        {% comment %} const textarea=document.getElementById('picasso-create-text-editor'); {% endcomment %}
+        {% comment %} textarea.insertBefore(div, textarea.firstChild); {% endcomment %}
     }
 
     window.onload = createMarkdownButtons
