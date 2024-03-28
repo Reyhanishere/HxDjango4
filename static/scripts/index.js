@@ -51,11 +51,11 @@ function addLink() {
 }
 
 function addFootnote() {
-    const textBox = document.getElementById('picasso_text_editor');
+    const textarea = document.getElementById('picasso_text_editor');
     const position = textBox.selectionStart;
     const footnoteNumber = textBox.value.match(/\[\^\d+\]/g);
     const nextFootnoteNumber = footnoteNumber ? footnoteNumber.length + 1 : 1;
-    const newText = `[^${nextFootnoteNumber}]`;
-    textBox.value = textBox.value.substring(0, position) + newText + textBox.value.substring(position) + `\n\n[^${nextFootnoteNumber}]: `;
+    const newText = `[^${(nextFootnoteNumber+1)/2}]`;
+    textBox.value = textarea.value.substring(0, position) + newText + textBox.value.substring(position) + `\n\n[^${(nextFootnoteNumber+1)/2}]: `;
     textBox.focus();
 }
