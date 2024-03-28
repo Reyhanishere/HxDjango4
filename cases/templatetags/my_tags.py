@@ -12,4 +12,7 @@ def model_type(obj):
 @register.filter()
 @stringfilter
 def markdown(value):
-    return md.markdown(value, extensions=['markdown.extensions.fenced_code'])
+    return md.markdown(value, extensions=['markdown.extensions.fenced_code',
+                                          'footnotes',
+                                          'tables',
+                                          'toc'])
