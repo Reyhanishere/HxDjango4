@@ -56,6 +56,6 @@ function addFootnote() {
     const footnoteNumber = textBox.value.match(/\[\^\d+\]/g);
     const nextFootnoteNumber = footnoteNumber ? footnoteNumber.length + 1 : 1;
     const newText = `[^${(nextFootnoteNumber+1)/2}]`;
-    textBox.value = textarea.value.substring(0, position) + newText + textBox.value.substring(position) + `\n\n[^${(nextFootnoteNumber+1)/2}]: `;
+    textBox.value = textBox.value.substring(0, position) + newText + textBox.value.substring(position) + `\n\n[^${(nextFootnoteNumber+1)/2}]: `;
     textBox.focus();
 }
