@@ -7,7 +7,7 @@ function closeNav() {
 }
 
 function addMarkdown(type) {
-    const textarea = document.querySelector('.markdown-editor');
+    const textarea = document.getElementById('picasso-text-editor');
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const selectedText = textarea.value.substring(start, end);
@@ -34,7 +34,7 @@ function addMarkdown(type) {
 }
 
 function addLink() {
-    const textarea = document.querySelector('.markdown-editor');
+    const textarea = document.getElementById('picasso-text-editor');
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const selectedText = textarea.value.substring(start, end);
@@ -51,39 +51,11 @@ function addLink() {
 }
 
 function addFootnote() {
-    const textarea = document.querySelector('.markdown-editor');
+    const textarea = document.getElementById('picasso-text-editor');
     const position = textarea.selectionStart;
     const footnoteNumber = textarea.value.match(/\[\^\d+\]/g);
     const nextFootnoteNumber = footnoteNumber ? footnoteNumber.length + 1 : 1;
     const newText = `[^${nextFootnoteNumber}]`;
     textarea.value = textarea.value.substring(0, position) + newText + textarea.value.substring(position) + `\n\n[^${nextFootnoteNumber}]: `;
     textarea.focus();
-}
-
-function createMarkdownButtons(divName) {
-    const markdownTextDiv = document.getElementById(divName);
-
-    // Markdown button labels and their respective functions
-    const markdownButtons = [
-        { label: 'Bold', onclick: "addMarkdown('bold')" },
-        { label: 'Italic', onclick: "addMarkdown('italic')" },
-        { label: 'Underline', onclick: "addMarkdown('underline')" },
-        { label: 'Link', onclick: "addLink()" },
-        { label: 'Footnote', onclick: "addFootnote()" }
-    ];
-
-    // Create buttons and append them to the container
-    markdownButtons.forEach(buttonInfo => {
-        const button = document.createElement('button');
-        button.textContent = buttonInfo.label;
-        button.setAttribute('onclick', buttonInfo.onclick);
-        button.setAttribute('class', buttonInfo.class);
-
-        const btnsDiv = document.createElement('div');
-        btnsDiv.setAttribute('class', 'markdown-buttons');
-        btnsDiv.setAttribute('id', 'buttons-div');
-        markdownTextDiv.insertBefore(button, markdownTextDiv.firstChild);
-        const markdownButtonsContainer = document.getElementById("buttons-div");
-        markdownButtonsContainer.appendChild(button);
-    });
 }
