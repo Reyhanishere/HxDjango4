@@ -458,6 +458,37 @@
     .pad-15 {
         padding: 15px;
     }
+    
+    .editor-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-top: 50px;
+    }
+    
+    textarea {
+        width: 400px;
+        height: 200px;
+        margin-bottom: 20px;
+        padding: 5px;
+        border: none;
+    }
+    
+    .editorBtn {
+        margin-right: 10px;
+        background-color: #ddd;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        height: 30px;
+        margin: 2px;
+        display: inline;
+        font-size: 16px;
+    }
+    
+    .editorBtn:hover {
+        background-color: #ccc
+    }
     /* Copy */
     
     .paper {
