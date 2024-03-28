@@ -18,8 +18,8 @@
         <a href="{% url 'picasso_detail' pica.slug %}">
             <h3>{{ pica.title }}</h3>
             <p class="desc">{{ pica.description }}</p>
-            <p class="authorLight">توسط {{ pica.author.first_name }} {{ pica.author.last_name }} 
-                {%if pica.author.degree%} ({{ pica.author.degree }}) {%endif%}
+            <p class="authorLight">توسط <b>{{ pica.author.first_name }} {{ pica.author.last_name }} </b>
+                {%if pica.author.degree%} ({{ pica.author.degree }}) {%endif%} |
             {{ pica.date_created|naturaltime}}
             </p>
         </a>
