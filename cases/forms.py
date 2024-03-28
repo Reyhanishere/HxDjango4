@@ -24,7 +24,7 @@ class CommentForm(ModelForm):
 
 class PicassoCreateForm(forms.ModelForm):
     text = forms.CharField(widget=forms.Textarea(attrs={'class':'markdown-editor',
-                                                        'id':'picasso-create-text-editor',}))
+                                                        'id':'picasso-text-editor',}))
 
     class Meta:
         model = Picasso
@@ -33,7 +33,7 @@ class PicassoCreateForm(forms.ModelForm):
 
 class PicassoUpdateForm(ModelForm):
     text = forms.CharField(widget=forms.Textarea(attrs={'class':'markdown-editor',
-                                                        'id':'picasso-edit-text-editor',}))
+                                                        'id':'picasso-text-editor',}))
     class Meta:
         model = Picasso
         exclude = ("slug", "verified", "premium", "rating", "lang", "choice", "author")
