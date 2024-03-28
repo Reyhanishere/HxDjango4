@@ -51,7 +51,7 @@ function addLink() {
 }
 
 function addFootnote() {
-    const textarea = document.getElementById('picasso_text_editor');
+    const textBox = document.getElementById('picasso_text_editor');
     const position = textBox.selectionStart;
     const footnoteNumber = textBox.value.match(/\[\^\d+\]/g);
     const nextFootnoteNumber = footnoteNumber ? footnoteNumber.length + 1 : 1;
