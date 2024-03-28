@@ -16,6 +16,48 @@
 </form>
 <p>نگارۀ شما پس از تایید توسط سردبیر به نمایش درخواهد آمد.</p>
 </div>
+
+<script>
+
+    function createMarkdownButtons() {
+        const markdownButtonsContainer = document.getElementById('div_id_text');
+
+        // Markdown button labels and their respective functions
+        const markdownButtons = [
+            { label: 'B', onclick: "addMarkdown('bold')" },
+            { label: 'Italic', onclick: "addMarkdown('italic')" },
+            { label: 'U', onclick: "addMarkdown('underline')" },
+            { label: 'Link', onclick: "addLink()" },
+            { label: 'P.S', onclick: "addFootnote()" }
+        ];
+        const style= "\
+        margin-right: 10px;\
+        background-color: #ddd;\
+        border-radius: 5px;\
+        border: none;\
+        cursor: pointer;\
+        height: 30px;\
+        margin: 2px;\
+        display: inline;\
+        font-size: 16px;\
+    "
+        const div = document.createElement('div');
+        // Create buttons and append them to the container
+        markdownButtons.forEach(buttonInfo => {
+            const button = document.createElement('button');
+            button.textContent = buttonInfo.label;
+            button.setAttribute('onclick', buttonInfo.onclick);
+            button.setAttribute('style', style);
+            div.appendChild(button);
+            
+        });
+        markdownButtonsContainer.insertBefore(div, markdownButtonsContainer.Child);
+        {% comment %} const textarea=document.getElementById('picasso-create-text-editor'); {% endcomment %}
+        {% comment %} textarea.insertBefore(div, textarea.firstChild); {% endcomment %}
+    }
+
+    window.onload = createMarkdownButtons
+</script>
 {% endblock content %}
 
 
