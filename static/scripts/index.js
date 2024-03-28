@@ -7,10 +7,10 @@ function closeNav() {
 }
 
 function addMarkdown(type) {
-    const textarea = document.getElementById('picasso_text_editor');
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selectedText = textarea.value.substring(start, end);
+    const textBox = document.getElementById('picasso_text_editor');
+    const start = textBox.selectionStart;
+    const end = textBox.selectionEnd;
+    const selectedText = textBox.value.substring(start, end);
     let newText;
 
     if (selectedText.length !== 0) {
@@ -28,16 +28,16 @@ function addMarkdown(type) {
                 return;
         }
 
-        textarea.value = textarea.value.substring(0, start) + newText + textarea.value.substring(end);
+        textBox.value = textBox.value.substring(0, start) + newText + textBox.value.substring(end);
     }
-    textarea.focus();
+    textBox.focus();
 }
 
 function addLink() {
-    const textarea = document.getElementById('picasso_text_editor');
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selectedText = textarea.value.substring(start, end);
+    const textBox = document.getElementById('picasso_text_editor');
+    const start = textBox.selectionStart;
+    const end = textBox.selectionEnd;
+    const selectedText = textBox.value.substring(start, end);
     let linkTitle = selectedText;
     if (selectedText.length === 0) {
         linkTitle = prompt('Enter the title of the link:');
@@ -45,17 +45,17 @@ function addLink() {
     const linkURL = prompt('Enter the URL:');
     if (linkURL) {
         const newText = `[${linkTitle}](${linkURL})`;
-        textarea.value = textarea.value.substring(0, start) + newText + textarea.value.substring(end);
+        textBox.value = textBox.value.substring(0, start) + newText + textBox.value.substring(end);
     }
-    textarea.focus();
+    textBox.focus();
 }
 
 function addFootnote() {
-    const textarea = document.getElementById('picasso_text_editor');
-    const position = textarea.selectionStart;
-    const footnoteNumber = textarea.value.match(/\[\^\d+\]/g);
+    const textBox = document.getElementById('picasso_text_editor');
+    const position = textBox.selectionStart;
+    const footnoteNumber = textBox.value.match(/\[\^\d+\]/g);
     const nextFootnoteNumber = footnoteNumber ? footnoteNumber.length + 1 : 1;
     const newText = `[^${nextFootnoteNumber}]`;
-    textarea.value = textarea.value.substring(0, position) + newText + textarea.value.substring(position) + `\n\n[^${nextFootnoteNumber}]: `;
-    textarea.focus();
+    textBox.value = textBox.value.substring(0, position) + newText + textBox.value.substring(position) + `\n\n[^${nextFootnoteNumber}]: `;
+    textBox.focus();
 }
