@@ -48,7 +48,7 @@
     .menu {
         /* padding-left: 20px; */
         text-align: center;
-        font-weight: 400;
+        font-weight: 600;
         color: white;
     }
     
@@ -550,18 +550,13 @@
     }
     
     .imagePicaDetailCont {
-        display: flex;
-        /* align-items: center; */
-        /* Align items vertically in the center */
+        display: block;
     }
     
     .imagePicaDetail {
-        flex-shrink: 0;
-        /* Prevent image from shrinking */
-        /* margin-right: 20px; */
-        margin: 0px;
+        float: left;
+        margin-right: 20px;
         max-width: 400px;
-        /* Add some space between image and text */
     }
     
     .picaDetailPara {
@@ -772,6 +767,7 @@ text-align: center;
     
     @media (max-width: 738px) {
         .imagePicaDetailCont {
+            display: flex;
             flex-direction: column;
             /* Stack items vertically */
             text-align: right;
