@@ -7,7 +7,7 @@ from .models import (
     Choice,
     # Tag,
     LabTestItem,
-    CaseImage,
+    ImageCase,
 )
 
 
@@ -27,7 +27,7 @@ class LabInline(admin.TabularInline):
 
 
 class CaseImageInline(admin.TabularInline):
-    model = CaseImage
+    model = ImageCase
     extra = 1
 
 
@@ -47,4 +47,4 @@ admin.site.register(Picasso, PicassoAdmin)
 # admin.site.register(FollowUp)
 admin.site.register(Comment)
 # admin.site.register(LabTestItem)
-admin.site.register(CaseImage)
+admin.site.register(ImageCase)
