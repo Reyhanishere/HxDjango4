@@ -155,61 +155,6 @@ class Case(models.Model):
     )
     setting = models.CharField(("مرکز درمانی"), max_length=30, null=True, blank=True)
 
-    PR = models.DecimalField(
-        max_digits=3, decimal_places=0, null=True, blank=True, default=70
-    )
-    BP_S = models.DecimalField(
-        ("Systolic BP"),
-        max_digits=3,
-        decimal_places=0,
-        null=True,
-        blank=True,
-        default=120,
-        help_text="می‌توانید با حذف کردن مقدار پیش‌فرض، آن را خالی بگذارید.",
-    )
-    BP_D = models.DecimalField(
-        ("Diastolic BP"),
-        max_digits=3,
-        decimal_places=0,
-        null=True,
-        blank=True,
-        default=80,
-        help_text="می‌توانید با حذف کردن مقدار پیش‌فرض، آن را خالی بگذارید.",
-    )
-    RR = models.DecimalField(
-        max_digits=2,
-        decimal_places=0,
-        null=True,
-        blank=True,
-        default=18,
-        help_text="می‌توانید با حذف کردن مقدار پیش‌فرض، آن را خالی بگذارید.",
-    )
-    SPO2_O = models.DecimalField(
-        ("SPO2 With Oxygen"),
-        max_digits=3,
-        decimal_places=0,
-        null=True,
-        blank=True,
-        help_text="می‌توانید با حذف کردن مقدار پیش‌فرض، آن را خالی بگذارید.",
-    )
-    SPO2_N = models.DecimalField(
-        ("SPO2 Without Oxygen"),
-        max_digits=3,
-        decimal_places=0,
-        null=True,
-        blank=True,
-        help_text="می‌توانید با حذف کردن مقدار پیش‌فرض، آن را خالی بگذارید.",
-    )
-    Temp = models.DecimalField(
-        ("Temperature"),
-        max_digits=2,
-        decimal_places=0,
-        null=True,
-        blank=True,
-        default=37,
-        help_text="می‌توانید با حذف کردن مقدار پیش‌فرض، آن را خالی بگذارید.",
-    )
-
     cc = models.CharField(
         ("شکایت اصلی"), max_length=100, null=False, blank=False, default=""
     )
@@ -295,7 +240,7 @@ class Case(models.Model):
         ),
     )
 
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, null=True, blank=True)
     picasso = models.URLField(
         "لینک کیس مرتبط",
         help_text="می‌توانید لینک کیس مربوط به این تصویر را در اینجا قرار دهید.",
