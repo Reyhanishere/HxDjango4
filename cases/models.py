@@ -19,7 +19,7 @@ class Choice(models.Model):
 
 
 class Case(models.Model):
-    choice = models.ManyToManyField(Choice, null=True, blank=True)
+    chice = models.ManyToManyField(Choice, "Choice",null=True, blank=True)
     verified = models.BooleanField(
         default=False,
     )
