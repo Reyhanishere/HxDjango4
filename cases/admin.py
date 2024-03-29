@@ -4,7 +4,7 @@ from .models import (
     Comment,
     FollowUp,
     Picasso,
-    Choice,
+    # Choice,
     # Tag,
     LabTestItem,
     ImageCase,
@@ -40,7 +40,7 @@ class PicassoAdmin(admin.ModelAdmin):
     list_display = ["title", "author", "verified", "date_created"]
 
 
-admin.site.register(Choice)
+# admin.site.register(Choice)
 # admin.site.register(Tag)
 admin.site.register(Case, CaseAdmin)
 admin.site.register(Picasso, PicassoAdmin)
