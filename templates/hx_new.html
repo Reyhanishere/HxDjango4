@@ -10,8 +10,15 @@
 <form action="" method="post">{% csrf_token %}
 <div class="createForm" autocomplete="off">
     {{ form|crispy }}
-<button class="btn btn-success ml-2" type="submit" id="save" >Save</button>
 </div>
+<details class="pad-15" style="margin:10px">
+    <summary style="font-size:16px; font-weight:600;">
+            راهنمای افزودن تصاویر
+    </summary>
+        برای این کار پس از ثبت مطلب (Submit) باید لینک مطلب خود را در اختیار داشته باشید که خودتان در فیلد Link وارد کرده‌اید. به آدرس medepartout.ir/cases/hx، آن لینک را اضافه کنید و سپس در انتهای آن عبارت /add-image/ را وارد کنید. اینگونه وارد صفحۀ آپلود تصاویر مربوط به آن شرح حال خواهید شد.
+        لینک نهایی به صورت مقابل خواهد بود: <b>medepartout.ir/cases/hx/YOUR-Hx-LINK/add-image</b>
+</details>
+<button class="btn btn-success ml-2" type="submit" id="save" >Submit</button>
 </form>
 <p>جستار شما پس از تایید توسط سردبیر به نمایش درخواهد آمد.</p>
 </div>
