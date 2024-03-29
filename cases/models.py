@@ -10,12 +10,12 @@ class Choice(models.Model):
         return self.name
 
 
-class Tag(models.Model):
-    name = models.CharField(max_length=16)
-    slug = models.SlugField()
+# class Tag(models.Model):
+#     name = models.CharField(max_length=16)
+#     slug = models.SlugField()
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
 
 class Case(models.Model):
@@ -240,7 +240,7 @@ class Case(models.Model):
         ),
     )
 
-    tags = models.ManyToManyField(Tag, null=True, blank=True)
+    # tags = models.ManyToManyField(Tag, null=True, blank=True)
     picasso = models.URLField(
         "لینک کیس مرتبط",
         help_text="می‌توانید لینک کیس مربوط به این تصویر را در اینجا قرار دهید.",
