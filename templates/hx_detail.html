@@ -1,6 +1,6 @@
 
-
 {% extends "base.html" %}
+{% load social_share %}
 {% load crispy_forms_tags %}
 {% load static %}
 {% block title %}| Hx{%endblock title%}
@@ -30,7 +30,7 @@
     </div>
     <div class="hx spanTwo"><b>CC: </b>{{ case.cc }}</div>
 
-    {% if case.PR or case.BP_S or case.RR or case.Temp %}
+<!--     {% if case.PR or case.BP_S or case.RR or case.Temp %}
         <div dir="ltr" class="vital">
         <div class="spanTwo vsText"><b>Vital Signs:</b></div>
         <div>PR: {{ case.PR }}</div>
@@ -48,7 +48,7 @@
     <div dir="ltr" class="vital">
         <div class="spanTwo"><b>No Vital Sign Recorded</b></div>
     </div>
-    {% endif %}
+    {% endif %} -->
     <div class="hx"><b>PI: </b>{{ case.pi|linebreaks }}</div>
 
     <div class="hx"><b>PMH: </b>{{ case.pmh|linebreaks }}</div>
@@ -77,7 +77,20 @@
     <p style="margin:20px">بیمار Family Historyای را ذکر <u>نمی‌کند</u>.</p>
     {% endif %}
 
-    <div class="hx"><b>Other Data: </b><br/>{{ case.dat|linebreaks }}</div>
+    <div class="hx"><b>Other Data: </b><br/>
+        <div style="padding:5px;">
+            {%if user.username == case.author.username %}
+            <a href="add-image" style="color:#333;margin:5px; font-size:16px">
+                تصاویر کیس خود را اضافه کنید.
+            </a><br/>
+            {%endif%}
+            {%for img in case.caseimage_set.all %}
+            {% comment %} {% if verified %} {% endcomment %}
+            <img src="{{img.image.url}}" width="60" alt=""/>
+            {% endfor%}
+        </div>
+        <a href="#images" style="color:#333;margin:5px;">تمام تصاویر در زیر برگۀ شرح حال</a><hr/>{{ case.dat|linebreaks }}
+    </div>
     <div class="hx"><b>Review of Systems:</b> <br/>{{ case.ros|linebreaks}}</div>    
     <div class="hx"><b>Physical Examination:</b> <br/>{{ case.phe|linebreaks}}</div>
     <div class="hx" style="background-color:#ffd"><b>Summary: </b>{{ case.summary|linebreaks }}</div>
@@ -94,12 +107,41 @@
     <div class="hx"><b>Action:</b> <br/>{{ case.act|linebreaks }}</div>
 
 </div>
+<br/>
+<div class="paper">
+    <h4 id="images" class="spanTwo">تصاویر</h4>
+    <details class="spanTwo">
+        <summary class="pad-15">کلیک کنید</summary>
+        <div class="imageCaseCont">
+        {%for img in case.caseimage_set.all %}
+         {% comment %} {% if verified %} {% endcomment %}
+            <div class="imageCaseCont">
+                <img src="{{img.image.url}}" width="300" class="imageCaseImg" alt="{{case.title}}, {{img.type}}"/>
+                <div>
+                    <p dir="" class="imgType">{{img.type}}:</p>
+                    <p class="imageCaseP">{{img.text}}</p>
+                </div>
+            </div>
+            <hr class="spanTwo"/>
+        {% endfor%}
+        </div>
+    </details>
+</div>
+<div>
 <p style='margin:20px 10px;'>
     {{ case.post_text|linebreaks }}
 </p>
+</div>
 {%if case.picasso%}
     <p>می‌توانید پیکاسو (تصویر کیس) مربوط به این شرح حال را در این <a href="{{case.picasso}}">لینک</a> مشاهده کنید.</p>
 {%endif%}
+
+<div class="social-sharing">
+    <h3>Share this content:</h3>
+    {% post_to_facebook object_or_url "Post to Facebook!" %}
+    {% copy_to_clipboard case.slug "Copy to clipboard!" %}
+</div>
+
     <hr/>
     <div>
         <h4>دیدگاهی بیفزایید</h4>
