@@ -65,10 +65,10 @@
                 تصاویر کیس خود را اضافه کنید.
             </a><br/>
             {%endif%}
-<!--              {% comment %}{%for img in case.caseimage_set.all %}
-            {% if verified %} 
+            {%for img in case.caseimage_set.all %}
+            
             <img src="{{img.image.url}}" width="60" alt=""/>
-            {% endfor%}{% endcomment %} -->
+            {% endfor%}
         </div>
         <a href="#images" style="color:#333;margin:5px;">تمام تصاویر در زیر برگۀ شرح حال</a><hr/>{{ case.dat|linebreaks }}
     </div>
