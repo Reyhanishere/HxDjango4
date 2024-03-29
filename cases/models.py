@@ -3,11 +3,11 @@ from django.db import models
 from django.urls import reverse
 
 
-class Choice(models.Model):
-    name = models.CharField(max_length=36)
+# class Choice(models.Model):
+#     name = models.CharField(max_length=36)
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
 
 # class Tag(models.Model):
@@ -19,7 +19,7 @@ class Choice(models.Model):
 
 
 class Case(models.Model):
-    chice = models.ManyToManyField(Choice, "Choice",null=True, blank=True)
+    # chice = models.ManyToManyField(Choice, "Choice",null=True, blank=True)
     verified = models.BooleanField(
         default=False,
     )
