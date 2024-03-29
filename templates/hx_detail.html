@@ -30,25 +30,6 @@
     </div>
     <div class="hx spanTwo"><b>CC: </b>{{ case.cc }}</div>
 
-<!--     {% if case.PR or case.BP_S or case.RR or case.Temp %}
-        <div dir="ltr" class="vital">
-        <div class="spanTwo vsText"><b>Vital Signs:</b></div>
-        <div>PR: {{ case.PR }}</div>
-        <div>BP: {{ case.BP_S }}/{{ case.BP_D }}</div>
-        <div>RR: {{ case.RR }}</div>
-        {% if case.SPO2_O %}
-        <div>SP<sub>O&#8322;</sub>: {{ case.SPO2_O }}</div>
-        {% endif %}
-        <div>T: {{ case.Temp }}&#176;C</div>
-        {% if case.SPO2_O %}
-        <div>SP<sub>O&#8322;</sub><i>With</i> O&#8322;: {{ case.SPO2_N }}</div>
-        {% endif %}
-    </div>
-    {% else %}
-    <div dir="ltr" class="vital">
-        <div class="spanTwo"><b>No Vital Sign Recorded</b></div>
-    </div>
-    {% endif %} -->
     <div class="hx"><b>PI: </b>{{ case.pi|linebreaks }}</div>
 
     <div class="hx"><b>PMH: </b>{{ case.pmh|linebreaks }}</div>
@@ -84,10 +65,10 @@
                 تصاویر کیس خود را اضافه کنید.
             </a><br/>
             {%endif%}
-<!--             {%for img in case.caseimage_set.all %}
-            {% comment %} {% if verified %} {% endcomment %}
+<!--              {% comment %}{%for img in case.caseimage_set.all %}
+            {% if verified %} 
             <img src="{{img.image.url}}" width="60" alt=""/>
-            {% endfor%} -->
+            {% endfor%}{% endcomment %} -->
         </div>
         <a href="#images" style="color:#333;margin:5px;">تمام تصاویر در زیر برگۀ شرح حال</a><hr/>{{ case.dat|linebreaks }}
     </div>
@@ -108,13 +89,13 @@
 
 </div>
 <br/>
-<!-- <div class="paper">
+<!--   {% comment %}<div class="paper">
     <h4 id="images" class="spanTwo">تصاویر</h4>
     <details class="spanTwo">
         <summary class="pad-15">کلیک کنید</summary>
         <div class="imageCaseCont">
         {%for img in case.caseimage_set.all %}
-         {% comment %} {% if verified %} {% endcomment %}
+        {% if verified %} 
             <div class="imageCaseCont">
                 <img src="{{img.image.url}}" width="300" class="imageCaseImg" alt="{{case.title}}, {{img.type}}"/>
                 <div>
@@ -126,7 +107,7 @@
         {% endfor%}
         </div>
     </details>
-</div> -->
+</div>{% endcomment %} -->
 <div>
 <p style='margin:20px 10px;'>
     {{ case.post_text|linebreaks }}
