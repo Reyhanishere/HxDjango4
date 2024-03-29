@@ -400,7 +400,7 @@ def user_directory_path(instance, filename):
 
 
 class Picasso(models.Model):
-    choice = models.ManyToManyField(Choice, null=True, blank=True)
+    # choice = models.ManyToManyField(Choice, null=True, blank=True)
     premium = models.BooleanField(default=False)
     verified = models.BooleanField(default=False)
     lang = models.CharField(max_length=2, choices=[("Fa", "Fa")], default="Fa")
