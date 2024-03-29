@@ -7,7 +7,19 @@ from .models import (
     #  FollowUp,
     Comment,
     Picasso,
+    LabTestItem,
+    CaseImage,
 )
+
+LabTestForm = forms.inlineformset_factory(
+    Case, LabTestItem, fields="__all__", extra=1, can_delete=True, can_order=False
+)
+
+
+class CaseImageForm(ModelForm):
+    class Meta:
+        model = CaseImage
+        exclude = ("case", "verified", "visible")
 
 
 class CaseUpdateForm(ModelForm):
@@ -23,8 +35,14 @@ class CommentForm(ModelForm):
 
 
 class PicassoCreateForm(forms.ModelForm):
-    text = forms.CharField(widget=forms.Textarea(attrs={'class':'markdown_editor',
-                                                        'id':'picasso_text_editor',}))
+    text = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                "class": "markdown_editor",
+                "id": "picasso_text_editor",
+            }
+        )
+    )
 
     class Meta:
         model = Picasso
@@ -32,8 +50,15 @@ class PicassoCreateForm(forms.ModelForm):
 
 
 class PicassoUpdateForm(ModelForm):
-    text = forms.CharField(widget=forms.Textarea(attrs={'class':'markdown_editor',
-                                                        'id':'picasso_text_editor',}))
+    text = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                "class": "markdown_editor",
+                "id": "picasso_text_editor",
+            }
+        )
+    )
+
     class Meta:
         model = Picasso
         exclude = ("slug", "verified", "premium", "rating", "lang", "choice", "author")
