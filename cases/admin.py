@@ -41,7 +41,7 @@ class PicassoAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Choice)
-admin.site.register(Tag)
+# admin.site.register(Tag)
 admin.site.register(Case, CaseAdmin)
 admin.site.register(Picasso, PicassoAdmin)
 # admin.site.register(FollowUp)
