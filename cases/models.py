@@ -362,7 +362,7 @@ def user_directory_path_hx(instance, filename):
     return "cases/hx/uploads/hx_{0}/{1}".format(instance.case.slug, filename)
 
 
-class CaseImage(models.Model):
+class ImageCase(models.Model):
     type_choices = [
         ("ECG", "ECG"),
         ("X-Ray", "X-Ray"),
@@ -373,7 +373,7 @@ class CaseImage(models.Model):
     verified=models.BooleanField(default=False)
     visible=models.BooleanField(default=True)
     case = models.ForeignKey(Case, on_delete=models.CASCADE)
-    related_name = "caseimage"
+    related_name = "imagecase"
     image = models.ImageField(
         "آپلود تصویر", upload_to=user_directory_path_hx, null=False, blank=False
     )
