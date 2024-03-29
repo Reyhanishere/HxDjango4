@@ -5,7 +5,7 @@ from .models import (
     FollowUp,
     Picasso,
     Choice,
-    Tag,
+    # Tag,
     LabTestItem,
     CaseImage,
 )
