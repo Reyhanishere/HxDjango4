@@ -8,7 +8,7 @@ from .models import (
     Comment,
     Picasso,
     LabTestItem,
-    CaseImage,
+    ImageCase,
 )
 
 LabTestForm = forms.inlineformset_factory(
@@ -18,7 +18,7 @@ LabTestForm = forms.inlineformset_factory(
 
 class CaseImageForm(ModelForm):
     class Meta:
-        model = CaseImage
+        model = ImageCase
         exclude = ("case", "verified", "visible")
 
 
