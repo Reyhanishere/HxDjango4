@@ -99,7 +99,7 @@ class CaseDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class CaseCreateView(LoginRequiredMixin, CreateView):  # new
     model = Case
     template_name = "hx_new.html"
-    formset = LabTestForm
+    # formset = LabTestForm
     fields = (
         "title",
         "cat",
@@ -115,13 +115,6 @@ class CaseCreateView(LoginRequiredMixin, CreateView):  # new
         "source",
         "reliability",
         "setting",
-        "PR",
-        "BP_S",
-        "BP_D",
-        "RR",
-        "SPO2_O",
-        "SPO2_N",
-        "Temp",
         "cc",
         "pi",
         "pmh",
