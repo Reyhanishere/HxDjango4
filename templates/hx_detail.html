@@ -84,10 +84,10 @@
                 تصاویر کیس خود را اضافه کنید.
             </a><br/>
             {%endif%}
-            {%for img in case.caseimage_set.all %}
+<!--             {%for img in case.caseimage_set.all %}
             {% comment %} {% if verified %} {% endcomment %}
             <img src="{{img.image.url}}" width="60" alt=""/>
-            {% endfor%}
+            {% endfor%} -->
         </div>
         <a href="#images" style="color:#333;margin:5px;">تمام تصاویر در زیر برگۀ شرح حال</a><hr/>{{ case.dat|linebreaks }}
     </div>
@@ -108,7 +108,7 @@
 
 </div>
 <br/>
-<div class="paper">
+<!-- <div class="paper">
     <h4 id="images" class="spanTwo">تصاویر</h4>
     <details class="spanTwo">
         <summary class="pad-15">کلیک کنید</summary>
@@ -126,7 +126,7 @@
         {% endfor%}
         </div>
     </details>
-</div>
+</div> -->
 <div>
 <p style='margin:20px 10px;'>
     {{ case.post_text|linebreaks }}
