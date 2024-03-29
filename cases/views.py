@@ -1,7 +1,7 @@
 from itertools import chain
 
 from django.views import View
-from django.views.generic import ListView, DetailView, FormView
+from django.views.generic import ListView, DetailView, FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -9,15 +9,17 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 
 from django.urls import reverse_lazy, reverse
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import Case, Picasso, FollowUp, Comment
+from .models import Case, Picasso, FollowUp, Comment, LabTestItem, CaseImage
 from .forms import (
     CaseUpdateForm,
     # FollowUpForm,
     CommentForm,
     PicassoCreateForm,
     PicassoUpdateForm,
+    LabTestForm,
+    CaseImageForm,
 )
 
 
@@ -97,6 +99,7 @@ class CaseDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class CaseCreateView(LoginRequiredMixin, CreateView):  # new
     model = Case
     template_name = "hx_new.html"
+    formset = LabTestForm
     fields = (
         "title",
         "cat",
@@ -134,14 +137,47 @@ class CaseCreateView(LoginRequiredMixin, CreateView):  # new
         "pdx",
         "act",
         "post_text",
+        "tags",
         "picasso",
         "slug",
     )
-    success_url = reverse_lazy("cases_main")
+    success_url = "/cases/success/"
+    # def get_success_url(self):
+    #     case = self.get_object()
+    #     return reverse("success")
 
-    def form_valid(self, form):  # new
+    def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if self.request.POST:
+            data["formset"] = LabTestForm(self.request.POST)
+        else:
+            data["formset"] = LabTestForm()
+        print(data["formset"])  # Add this line to check formset contents
+        return data
+
+
+class CaseImageView(LoginRequiredMixin, CreateView):
+    model = CaseImage
+    form_class = CaseImageForm
+    template_name = "hx_add_img.html"
+    success_url = "/cases/success/"  # Update with your success URL
+
+    def form_valid(self, form):
+        case_slug = self.kwargs["case_slug"]
+        case = get_object_or_404(Case, slug=case_slug, author=self.request.user)
+        form.instance.case = case
+        return super().form_valid(form)
+
+
+class LabTestCreateView(CreateView):
+    model = LabTestItem
+    form_class = LabTestForm
+    template_name = "labtest_create.html"
+    success_url = "cases/success"  # Update with your success URL
 
 
 class PicassoListView(ListView):
@@ -177,6 +213,10 @@ class PicassoUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return obj.author == self.request.user
 
 
+class SuccessPageView(TemplateView):
+    template_name = "success.html"
+
+
 def cases_main(request):
     hxs = Case.objects.filter(verified=True).order_by("-date_created")[:3]
     picassos = Picasso.objects.filter(verified=True).order_by("-date_created")[:3]
@@ -208,7 +248,7 @@ class SearchResultsListView(ListView):
             # combined_queryset = queryset_model1.union(queryset_model2)
             # return combined_queryset
             # context = {"hxs": queryset_model1, "picassos": queryset_model2}
-            context= list(chain(queryset_model1, queryset_model2))
+            context = list(chain(queryset_model1, queryset_model2))
             return context
         else:
             return None
