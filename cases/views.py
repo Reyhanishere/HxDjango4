@@ -11,7 +11,7 @@ from django.db.models import Q
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import Case, Picasso, FollowUp, Comment, LabTestItem, CaseImage
+from .models import Case, Picasso, FollowUp, Comment, LabTestItem, ImageCase
 from .forms import (
     CaseUpdateForm,
     # FollowUpForm,
@@ -154,7 +154,7 @@ class CaseCreateView(LoginRequiredMixin, CreateView):  # new
 
 
 class CaseImageView(LoginRequiredMixin, CreateView):
-    model = CaseImage
+    model = ImageCase
     form_class = CaseImageForm
     template_name = "hx_add_img.html"
     success_url = "/cases/success/"  # Update with your success URL
