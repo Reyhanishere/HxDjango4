@@ -139,4 +139,5 @@ DEFAULT_FROM_EMAIL = "admin@mdpt.ir"
 EMAIL_HOST = "smtp.c1.liara.email"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-
+EMAIL_HOST_USER = "clever_perlman_do3c1q"
+EMAIL_HOST_PASSWORD = "2fa83d2f-8afc-43e3-833c-c3106ae5faf8"
