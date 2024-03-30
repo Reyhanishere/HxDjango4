@@ -17,7 +17,7 @@ class CustomUser(AbstractUser):
     UNIS = [
         ("MUMS", "علوم پزشکی مشهد"),
         ("TUMS", "علوم پزشکی تهران"),
-       ( "NKUMS","علوم پزشکی خراسان شمالی"),
+        ("NKUMS","علوم پزشکی خراسان شمالی"),
         ("SBMU","علوم پزشکی بهشتی"),
         ("SUMS","علوم پزشکی شیراز"),
         ("IUMS","علوم پزشکی ایران"),
@@ -29,10 +29,10 @@ class CustomUser(AbstractUser):
     last_name= models.CharField(max_length=50)
     degree = models.CharField(max_length=20, choices=DEGREES, null=True, blank=True,
             help_text=(
-            "Your current degree."
+            "Your current degree. Leave empty if not Medical Doctor/Student."
         ),)
 
     university= models.CharField(max_length=5, choices=UNIS, null=True, blank=True,
             help_text=(
-            "Your current university."
+            "Your current university. Leave empty if not a student."
         ),)
