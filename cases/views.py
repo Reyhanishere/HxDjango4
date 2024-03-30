@@ -11,14 +11,15 @@ from django.db.models import Q
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import Case, Picasso, Comment #, ImageCase # FollowUp,
+from .models import Case, Picasso, FollowUp, Comment, ImageCase
 from .forms import (
     CaseUpdateForm,
     # FollowUpForm,
     CommentForm,
     PicassoCreateForm,
     PicassoUpdateForm,
-    # CaseImageForm,
+    # LabTestForm,
+    CaseImageForm,
 )
 
 
@@ -98,6 +99,7 @@ class CaseDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class CaseCreateView(LoginRequiredMixin, CreateView):  # new
     model = Case
     template_name = "hx_new.html"
+    # formset = LabTestForm
     fields = (
         "title",
         "cat",
@@ -128,6 +130,8 @@ class CaseCreateView(LoginRequiredMixin, CreateView):  # new
         "pdx",
         "act",
         "post_text",
+        "tags",
+        "picasso",
         "slug",
     )
     success_url = "/cases/success/"
@@ -139,17 +143,34 @@ class CaseCreateView(LoginRequiredMixin, CreateView):  # new
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-# class CaseImageView(LoginRequiredMixin, CreateView):
-#     model = ImageCase
-#     form_class = CaseImageForm
-#     template_name = "hx_add_img.html"
-#     success_url = "/cases/success/"
+    # def get_context_data(self, **kwargs):
+    #     data = super().get_context_data(**kwargs)
+    #     if self.request.POST:
+    #         data["formset"] = LabTestForm(self.request.POST)
+    #     else:
+    #         data["formset"] = LabTestForm()
+    #     print(data["formset"])  # Add this line to check formset contents
+    #     return data
 
-#     def form_valid(self, form):
-#         case_slug = self.kwargs["case_slug"]
-#         case = get_object_or_404(Case, slug=case_slug, author=self.request.user)
-#         form.instance.case = case
-#         return super().form_valid(form)
+
+class CaseImageView(LoginRequiredMixin, CreateView):
+    model = ImageCase
+    form_class = CaseImageForm
+    template_name = "hx_add_img.html"
+    success_url = "/cases/success/"  # Update with your success URL
+
+    def form_valid(self, form):
+        case_slug = self.kwargs["case_slug"]
+        case = get_object_or_404(Case, slug=case_slug, author=self.request.user)
+        form.instance.case = case
+        return super().form_valid(form)
+
+
+# class LabTestCreateView(CreateView):
+#     model = LabTestItem
+#     form_class = LabTestForm
+#     template_name = "labtest_create.html"
+#     success_url = "cases/success"  # Update with your success URL
 
 
 class PicassoListView(ListView):
@@ -203,6 +224,7 @@ class SearchResultsListView(ListView):
     def get_queryset(self):
         query = self.request.GET.get("q")
         if query:
+            # Create Q objects for each field to search in both models
             q_objects_model1 = Q()
             q_objects_model2 = Q()
             for field in Case._meta.fields:
@@ -211,8 +233,14 @@ class SearchResultsListView(ListView):
             for field in Picasso._meta.fields:
                 if field.get_internal_type() in ["CharField", "TextField"]:
                     q_objects_model2 |= Q(**{f"{field.name}__icontains": query})
+            # Combine Q objects from both models
+            # combined_q_objects = q_objects_model1 | q_objects_model2
+            # Filter and union querysets from both models
             queryset_model1 = Case.objects.filter(q_objects_model1, verified=True)
             queryset_model2 = Picasso.objects.filter(q_objects_model2, verified=True)
+            # combined_queryset = queryset_model1.union(queryset_model2)
+            # return combined_queryset
+            # context = {"hxs": queryset_model1, "picassos": queryset_model2}
             context = list(chain(queryset_model1, queryset_model2))
             return context
         else:
