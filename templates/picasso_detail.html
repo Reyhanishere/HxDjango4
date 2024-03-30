@@ -12,10 +12,6 @@
 <div class="imagePicaDetailCont">
     <img src="{{picasso.image.url}}" class="imagePicaDetail">
     <div class="pad-15 picaDetailPara"><p class="picaDetailPara">{{ picasso.text|markdown|safe}}</p></div>
-
-{%if picasso.case %}
-    <p>می‌توانید شرح حال مربوط به این پیکاسو را در این <a href="{{picasso.case}}">لینک</a> مشاهده کنید.</p>
-{%endif%}
 </div>
 {% else %}
     <h2>این مطلب هنوز به تایید ادمین نرسیده است.</h2>
