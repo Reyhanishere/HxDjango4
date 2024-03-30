@@ -94,8 +94,8 @@
     <details class="spanTwo">
         <summary class="pad-15">کلیک کنید</summary>
         <div class="imageCaseCont">
-        {%for img in case.caseimage_set.all %}
-        {% if verified %} 
+        {%for img in case.imagecase_set.all %}
+            {%if img.verified %}
             <div class="imageCaseCont">
                 <img src="{{img.image.url}}" width="300" class="imageCaseImg" alt="{{case.title}}, {{img.type}}"/>
                 <div>
@@ -104,6 +104,7 @@
                 </div>
             </div>
             <hr class="spanTwo"/>
+            {%endif%}
         {% endfor%}
         </div>
     </details>
