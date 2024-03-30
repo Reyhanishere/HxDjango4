@@ -49,22 +49,22 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='case',
             name='done',
-            field=models.BooleanField(default=True),
+            field=models.BooleanField(blank=True, null=True,default=True),
         ),
         migrations.AddField(
             model_name='case',
             name='premium',
-            field=models.BooleanField(default=False),
+            field=models.BooleanField(blank=True, null=True,default=False),
         ),
         migrations.AddField(
             model_name='case',
             name='visible',
-            field=models.BooleanField(default=True),
+            field=models.BooleanField(blank=True, null=True,default=True),
         ),
         migrations.AddField(
             model_name='picasso',
             name='done',
-            field=models.BooleanField(default=True),
+            field=models.BooleanField(blank=True, null=True,default=True),
         ),
         migrations.AddField(
             model_name='picasso',
@@ -74,6 +74,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='picasso',
             name='visible',
-            field=models.BooleanField(default=True),
+            field=models.BooleanField(blank=True, null=True,default=True),
         ),
     ]
