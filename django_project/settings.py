@@ -133,3 +133,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = "cases_main"
 LOGOUT_REDIRECT_URL = "cases_main"
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" 
+DEFAULT_FROM_EMAIL = "admin@mdpt.ir"
+EMAIL_HOST = "smtp.c1.liara.email"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
