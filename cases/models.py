@@ -291,34 +291,34 @@ def user_directory_path_hx(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     return "cases/hx/uploads/hx_{0}/{1}".format(instance.case.slug, filename)
 
-class ImageCase(models.Model):
-    type_choices = [
-        ("ECG", "ECG"),
-        ("X-Ray", "X-Ray"),
-        ("MRI", "MRI"),
-        ("Ultra-Sound", "Ultra-Sound"),
-        ("Other", "Other"),
-    ]
-    verified=models.BooleanField(default=False)
-    visible=models.BooleanField(default=True)
-    case = models.ForeignKey(Case, on_delete=models.CASCADE)
-    related_name = "imagecase"
-    image = models.ImageField(
-        "آپلود تصویر", upload_to=user_directory_path_hx, null=False, blank=False
-    )
-    type = models.CharField(
-        "نوع داده",
-        choices=type_choices,
-        default="Other",
-        max_length=16,
-        null=False,
-        blank=False,
-    )
+# class ImageCase(models.Model):
+#     type_choices = [
+#         ("ECG", "ECG"),
+#         ("X-Ray", "X-Ray"),
+#         ("MRI", "MRI"),
+#         ("Ultra-Sound", "Ultra-Sound"),
+#         ("Other", "Other"),
+#     ]
+#     verified=models.BooleanField(default=False)
+#     visible=models.BooleanField(default=True)
+#     case = models.ForeignKey(Case, on_delete=models.CASCADE)
+#     related_name = "imagecase"
+#     image = models.ImageField(
+#         "آپلود تصویر", upload_to=user_directory_path_hx, null=False, blank=False
+#     )
+#     type = models.CharField(
+#         "نوع داده",
+#         choices=type_choices,
+#         default="Other",
+#         max_length=16,
+#         null=False,
+#         blank=False,
+#     )
 
-    text = models.TextField(
-        "متن",
-        help_text="توضیح یا گزارش تصویر",
-        blank=True,
-        null=True,
-    )
+#     text = models.TextField(
+#         "متن",
+#         help_text="توضیح یا گزارش تصویر",
+#         blank=True,
+#         null=True,
+#     )
 
