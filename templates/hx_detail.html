@@ -64,7 +64,7 @@
                 تصاویر کیس خود را اضافه کنید.
             </a><br/>
             {%endif%}
-            {%for img in case.caseimage_set.all %}
+            {%for img in case.imagecase_set.all %}
             
             <img src="{{img.image.url}}" width="60" alt=""/>
             {% endfor%}
