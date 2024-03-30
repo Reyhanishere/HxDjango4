@@ -20,7 +20,7 @@ class Tag(models.Model):
 
 class Case(models.Model):
     choice = models.ManyToManyField(Choice, "Choice",null=True, blank=True)
-    premium = models.BooleanField(default=False)
+    premium = models.BooleanField(default=False,null=True, blank=True)
     verified = models.BooleanField(
         default=False,
     )
