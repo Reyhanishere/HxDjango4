@@ -366,7 +366,7 @@ class Comment(models.Model):
 
 def user_directory_path_hx(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return "cases/hx/uploads/hx_{0}/{1}".format(instance.case.slug, filename)
+    return "cases/hx/uploads/hx_{0}/{1}".format(instance.author.slug, filename)
 
 class ImageCase(models.Model):
     type_choices = [
@@ -402,7 +402,7 @@ class ImageCase(models.Model):
 
 def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return "cases/picasso/uploads/user_{0}/{1}".format(instance.case.username, filename)
+    return "cases/picasso/uploads/user_{0}/{1}".format(instance.author.username, filename)
 
 
 class Picasso(models.Model):
