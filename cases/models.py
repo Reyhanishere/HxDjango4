@@ -201,8 +201,7 @@ class Case(models.Model):
         blank=True,
         help_text=("می‌توانید توضیحات بیشتر که در شرح‌حال قرار نمی‌گیرند و همچنین اطلاعات بیشتر دربارۀ بیماری را در اینجا ذکر کنید."))
 
-
-    picasso=models.URLField("لینک کیس مرتبط",help_text="می‌توانید لینک کیس مربوط به این تصویر را در اینجا قرار دهید.", null=True, blank=True)
+    # picasso=models.URLField("لینک کیس مرتبط",help_text="می‌توانید لینک کیس مربوط به این تصویر را در اینجا قرار دهید.", null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -263,7 +262,7 @@ class Picasso (models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    case=models.URLField("لینک کیس مرتبط",help_text="می‌توانید لینک کیس مربوط به این تصویر را در اینجا قرار دهید.", null=True, blank=True)
+    # case=models.URLField("لینک کیس مرتبط",help_text="می‌توانید لینک کیس مربوط به این تصویر را در اینجا قرار دهید.", null=True, blank=True)
 
 
     def __str__(self):
