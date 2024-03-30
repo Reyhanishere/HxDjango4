@@ -7,13 +7,13 @@ from .models import (
     #  FollowUp,
     Comment,
     Picasso,
-    ImageCase,
+    #ImageCase,
 )
 
-class CaseImageForm(ModelForm):
-    class Meta:
-        model = ImageCase
-        exclude = ("case", "verified", "visible")
+# class CaseImageForm(ModelForm):
+#     class Meta:
+#         model = ImageCase
+#         exclude = ("case", "verified", "visible")
 
 
 class CaseUpdateForm(ModelForm):
