@@ -18,7 +18,7 @@ from .forms import (
     CommentForm,
     PicassoCreateForm,
     PicassoUpdateForm,
-    CaseImageForm,
+    # CaseImageForm,
 )
 
 
@@ -139,17 +139,17 @@ class CaseCreateView(LoginRequiredMixin, CreateView):  # new
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-class CaseImageView(LoginRequiredMixin, CreateView):
-    model = ImageCase
-    form_class = CaseImageForm
-    template_name = "hx_add_img.html"
-    success_url = "/cases/success/"
+# class CaseImageView(LoginRequiredMixin, CreateView):
+#     model = ImageCase
+#     form_class = CaseImageForm
+#     template_name = "hx_add_img.html"
+#     success_url = "/cases/success/"
 
-    def form_valid(self, form):
-        case_slug = self.kwargs["case_slug"]
-        case = get_object_or_404(Case, slug=case_slug, author=self.request.user)
-        form.instance.case = case
-        return super().form_valid(form)
+#     def form_valid(self, form):
+#         case_slug = self.kwargs["case_slug"]
+#         case = get_object_or_404(Case, slug=case_slug, author=self.request.user)
+#         form.instance.case = case
+#         return super().form_valid(form)
 
 
 class PicassoListView(ListView):
