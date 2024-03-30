@@ -6,7 +6,7 @@ from .models import (
     Picasso,
     # Choice,
     # Tag,
-    LabTestItem,
+    # LabTestItem,
     ImageCase,
 )
 
@@ -21,9 +21,9 @@ class CommentInline(admin.TabularInline):  # new
     extra = 0
 
 
-class LabInline(admin.TabularInline):
-    model = LabTestItem
-    extra = 1
+# class LabInline(admin.TabularInline):
+#     model = LabTestItem
+#     extra = 1
 
 
 class CaseImageInline(admin.TabularInline):
@@ -31,8 +31,8 @@ class CaseImageInline(admin.TabularInline):
     extra = 1
 
 
-class CaseAdmin(admin.ModelAdmin):  # new
-    inlines = [FollowUpInline, CommentInline, LabInline, CaseImageInline]
+class CaseAdmin(admin.ModelAdmin):
+    inlines = [FollowUpInline, CommentInline, CaseImageInline] #LabInline,
     list_display = ["title", "author", "date_created", "verified"]
 
 
