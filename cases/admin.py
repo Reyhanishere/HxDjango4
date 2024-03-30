@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Case, Comment, FollowUp, Picasso
+from .models import Case, Comment, Picasso
+# import FollowUp
 
 
 # class FollowUpInline(admin.TabularInline): 
