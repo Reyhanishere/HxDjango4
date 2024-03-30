@@ -12,7 +12,7 @@ from .views import (CasesListView,
                      PicassoDetailView,
                      SearchResultsListView,
                      SuccessPageView,
-                     CaseImageView,
+                     # CaseImageView,
             
                      )
 
@@ -29,5 +29,5 @@ urlpatterns = [
     path("hx/new", CaseCreateView.as_view(), name="hx_new"),
     path("search/", SearchResultsListView.as_view(), name="search_results"),
     path("success/", SuccessPageView.as_view(), name="success"),
-    path('hx/<slug:case_slug>/add-image', CaseImageView.as_view(), name='hx_add_image'),
+    # path('hx/<slug:case_slug>/add-image', CaseImageView.as_view(), name='hx_add_image'),
     ]
