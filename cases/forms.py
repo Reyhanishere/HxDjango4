@@ -25,7 +25,7 @@ class CaseImageForm(ModelForm):
 class CaseUpdateForm(ModelForm):
     class Meta:
         model = Case
-        exclude = ("slug", "verified", "author", "rating", "lang", "cover", "choice","done","visible")
+        exclude = ("slug", "verified", "author", "rating", "lang", "cover", "choice","done","visible","premium")
 
 
 class CommentForm(ModelForm):
@@ -61,7 +61,7 @@ class PicassoUpdateForm(ModelForm):
 
     class Meta:
         model = Picasso
-        exclude = ("slug", "verified", "premium", "rating", "lang", "choice", "author")
+        exclude = ("slug", "verified", "premium", "rating", "lang", "choice", "author","done","visible")
 
 
 # class FollowUpForm(ModelForm):
