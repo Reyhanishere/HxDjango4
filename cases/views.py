@@ -11,7 +11,7 @@ from django.db.models import Q
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import Case, Picasso, Comment, LabTestItem, ImageCase # FollowUp,
+from .models import Case, Picasso, Comment, ImageCase # FollowUp,
 from .forms import (
     CaseUpdateForm,
     # FollowUpForm,
