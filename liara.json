@@ -1,6 +1,6 @@
 {
     "platform": "django",
-    "app": "django-starter",
+    "app": "mdpt",
     "django": {
         "pythonVersion": "3.10.2"
     },
