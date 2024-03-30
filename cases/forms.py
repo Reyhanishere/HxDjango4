@@ -30,11 +30,10 @@ class CommentForm(ModelForm):
 
 class PicassoCreateForm(forms.ModelForm):
     text = forms.CharField(widget=forms.Textarea(attrs={'class':'markdown_editor',
-                                                        'id':'picasso_text_editor',}))
-
+                                                        'id':'picasso_text_editor',})
     class Meta:
         model = Picasso
-        fields = ["title", "image", "description", "text", "slug", "case"]
+        fields = ["title", "image", "description", "text", "slug"]
 
 
 class PicassoUpdateForm(ModelForm):
