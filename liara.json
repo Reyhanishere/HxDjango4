@@ -5,7 +5,7 @@
         "pythonVersion": "3.11"
     },
     "disks": [{
-            "name": "dtbs",
+            "name": "database",
             "mountTo": "data"
         },
         {
