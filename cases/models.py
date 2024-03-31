@@ -248,12 +248,6 @@ class Case(models.Model):
     )
 
     tags = models.ManyToManyField(Tag, null=True, blank=True)
-    picasso = models.URLField(
-        "لینک کیس مرتبط",
-        help_text="می‌توانید لینک کیس مربوط به این تصویر را در اینجا قرار دهید.",
-        null=True,
-        blank=True,
-    )
 
     def __str__(self):
         return self.title
