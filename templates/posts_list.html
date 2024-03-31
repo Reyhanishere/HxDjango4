@@ -11,7 +11,7 @@
     {% for post in post_list reversed %}
     <div class="blog-post">
         <div class="blog-post-title">
-            <h4>{{post.title}}<h4>
+            <h4 id="{{post.id}}">{{post.title}}<h4>
         </div>
         <div class="blog-post-date" dir="ltr">{{post.date | date:"j M Y"}}</div>
         <div class="blog-post-text">
