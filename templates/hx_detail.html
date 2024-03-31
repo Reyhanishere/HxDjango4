@@ -65,8 +65,9 @@
             </a><br/>
             {%endif%}
             {%for img in case.imagecase_set.all %}
-            
+            {%if img.verified %}
             <img src="{{img.image.url}}" width="60" alt=""/>
+            {% endif %}
             {% endfor%}
         </div>
         {%if case.imagecase_set.all %} <a href="#images" style="color:#333;margin:5px;">تمام تصاویر در زیر برگۀ شرح حال</a>{% endif %}<hr/>{{ case.dat|linebreaks }}
