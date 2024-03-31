@@ -398,6 +398,8 @@ class ImageCase(models.Model):
         blank=True,
         null=True,
     )
+    def __str__(self):
+        return f"{self.case.slug}: {self.type}"
 
 
 def user_directory_path(instance, filename):
