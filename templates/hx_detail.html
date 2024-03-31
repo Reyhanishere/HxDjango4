@@ -122,7 +122,8 @@
     {% post_to_facebook object_or_url "Post to Facebook!" %}
     {% copy_to_clipboard case.slug "Copy to clipboard!" %}
 </div> -->
-
+    
+    {% if user.is_authenticated %}
     <hr/>
     <div>
         <h4>دیدگاهی بیفزایید</h4>
@@ -133,6 +134,9 @@
         </div>
         <hr/>
         <div class="commentShow">
+    {%else%}
+        <p>برای ثبت کامنت لازم است <a href="{% url "login" %}">وارد</a> شوید.</p>
+    {% endif %}
     {% for comment in case.comment_set.all %}
     {%if comment.verified %}
     <div class="comment">
