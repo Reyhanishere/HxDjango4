@@ -138,6 +138,6 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.c1.liara.email"
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "clever_perlman_do3c1q"
-EMAIL_HOST_PASSWORD="0b5c2307-1da7-4a99-a82b-5155ae371def"
+EMAIL_HOST_PASSWORD=os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = "admin@mdpt.ir"
