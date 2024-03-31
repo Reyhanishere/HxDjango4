@@ -131,7 +131,6 @@ class CaseCreateView(LoginRequiredMixin, CreateView):  # new
         "act",
         "post_text",
         "tags",
-        "picasso",
         "slug",
     )
     success_url = "/cases/success/"
