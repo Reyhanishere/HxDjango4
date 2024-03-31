@@ -6,16 +6,14 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <div class="pad-15">
-{% if case.verified is not True and user.username == case.author.username %}
-    <h2>این مطلب هنوز به تایید سردبیر نرسیده است.</h2>
-    <p>چون شما نویسندۀ این مطلب هستید، می‌توانید پیش از تایید به ظاهر کلی آن دسترسی داشته باشید تا در صورت نیاز آن را ویرایش کنید.</p>
-{% elif (case.verified and case.visible) or user.username == case.author.username %}
+{% if case.verified and case.visible %}
+{% comment %} <div class="article-entry" style='margin-left:50px; margin-right:50px'> {% endcomment %}
 <h2 style="font-weight:600">{{ object.title }}</h2>
 <p dir="ltr" style='margin-left:10px;'> {{ object.date_created|date:"d M y" }}  &emsp; By {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }} </p>
 <p style='margin-right:10px;'>
     {{ case.pretext|safe }}
 </p>
-<div class="paper" style="{% if case.verified is False and user.username == case.author.username %}border-color:#d00{% endif %}">
+<div class="paper">
     <h5 class='spanTwo' style="padding:15px 15px 0px 10px"> شرح حال و معاینۀ فیزیکی:</h5>
     <hr/ class="spanTwo" style="order=0">
     <div class="infoTable spanTwo">
@@ -152,9 +150,9 @@
 
 {% else %}
 <h2>این مطلب هنوز به تایید ادمین نرسیده است.</h2>
-<!--     {%if user.username == case.author.username %}
+    {%if user.username == case.author.username %}
     <p>برای افزودن تصاویر برای این شرح حال می‌توانید به این <a href="/add-image">لینک</a> بروید.</p>
-    {% endif %} -->
+    {% endif %}
 
 {% endif %}
 </div>
@@ -173,8 +171,3 @@
     <span style="font-family:Noto Sans; font-size:16px">حذف</span></a>
 {% endif %}
 {% endblock delete %}
-
-
-
-
-
