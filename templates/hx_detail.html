@@ -6,7 +6,7 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <div class="pad-15">
-{% if case.verified==Flase and user.username == case.author.username %}
+{% if not case.verified and user.username == case.author.username %}
     <h2>این مطلب هنوز به تایید سردبیر نرسیده است.</h2>
     <p>چون شما نویسندۀ این مطلب هستید، می‌توانید پیش از تایید به ظاهر کلی آن دسترسی داشته باشید تا در صورت نیاز آن را ویرایش کنید.</p>
 {% elif (case.verified and case.visible) or user.username == case.author.username %}
@@ -15,7 +15,7 @@
 <p style='margin-right:10px;'>
     {{ case.pretext|safe }}
 </p>
-<div class="paper" style="{% if case.verified==Flase and user.username == case.author.username %}border-color:#d00{% endif %}">
+<div class="paper" style="{% if not case.verified and user.username == case.author.username %}border-color:#d00{% endif %}">
     <h5 class='spanTwo' style="padding:15px 15px 0px 10px"> شرح حال و معاینۀ فیزیکی:</h5>
     <hr/ class="spanTwo" style="order=0">
     <div class="infoTable spanTwo">
