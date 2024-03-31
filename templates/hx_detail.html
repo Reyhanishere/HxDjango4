@@ -6,7 +6,7 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <div class="pad-15">
-{% if case.verified %}
+{% if case.verified and case.visible %}
 {% comment %} <div class="article-entry" style='margin-left:50px; margin-right:50px'> {% endcomment %}
 <h2 style="font-weight:600">{{ object.title }}</h2>
 <p dir="ltr" style='margin-left:10px;'> {{ object.date_created|date:"d M y" }}  &emsp; By {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }} </p>
@@ -150,6 +150,9 @@
 
 {% else %}
 <h2>این مطلب هنوز به تایید ادمین نرسیده است.</h2>
+    {%if user.username == case.author.username %}
+    <p>برای افزودن تصاویر برای این شرح حال می‌توانید به این <a href="/add-image">لینک</a> بروید.</p>
+    {% endif %}
 
 {% endif %}
 </div>
