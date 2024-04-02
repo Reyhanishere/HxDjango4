@@ -51,7 +51,7 @@ class PicassoCreateForm(forms.ModelForm):
         widget=forms.Textarea(
             attrs={
                 "class": "markdown_editor",
-                "id": "picasso_text_editor",
+                "id": "md_text_editor",
             }
         )
     )
@@ -66,7 +66,7 @@ class PicassoUpdateForm(ModelForm):
         widget=forms.Textarea(
             attrs={
                 "class": "markdown_editor",
-                "id": "picasso_text_editor",
+                "id": "md_text_editor",
             }
         )
     )
@@ -91,7 +91,7 @@ class ExUpdateForm(ModelForm):
         widget=forms.Textarea(
             attrs={
                 "class": "markdown_editor",
-                "id": "ex_text_editor",
+                "id": "md_text_editor",
             }
         )
     )
@@ -118,7 +118,7 @@ class ExCreateForm(ModelForm):
         widget=forms.Textarea(
             attrs={
                 "class": "markdown_editor",
-                "id": "ex_text_editor",
+                "id": "md_text_editor",
             }
         )
     )
