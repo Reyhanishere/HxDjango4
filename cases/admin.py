@@ -4,6 +4,7 @@ from .models import (
     Comment,
     FollowUp,
     Picasso,
+    Note,
     Choice,
     Tag,
     # LabTestItem,
@@ -33,17 +34,22 @@ class CaseImageInline(admin.TabularInline):
 
 class CaseAdmin(admin.ModelAdmin):  # new
     inlines = [FollowUpInline, CommentInline, CaseImageInline]
-    list_display = ["title", "author", "date_created", "verified"]
+    list_display = ["title", "author", "date_created", "verified","visible"]
 
 
 class PicassoAdmin(admin.ModelAdmin):
-    list_display = ["title", "author", "verified", "date_created"]
+    list_display = ["title", "author", "verified", "delete", "date_created"]
+
+class NotesAdmin(admin.ModelAdmin):
+    list_display = ["title", "author", "verified", "delete", "date_created"]
+
 
 
 admin.site.register(Choice)
 admin.site.register(Tag)
 admin.site.register(Case, CaseAdmin)
 admin.site.register(Picasso, PicassoAdmin)
+admin.site.register(Note,NotesAdmin)
 # admin.site.register(FollowUp)
 admin.site.register(Comment)
 # admin.site.register(LabTestItem)
