@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load social_share %}
 {% load crispy_forms_tags %}
 {% load static %}
 {% block title %} | {{case.title}}{%endblock title%}
@@ -117,12 +116,6 @@
 </p>
 </div>
 
-<!-- <div class="social-sharing">
-    <h3>Share this content:</h3>
-    {% post_to_facebook object_or_url "Post to Facebook!" %}
-    {% copy_to_clipboard case.slug "Copy to clipboard!" %}
-</div> -->
-    
     {% if user.is_authenticated %}
     <hr/>
     <div>
