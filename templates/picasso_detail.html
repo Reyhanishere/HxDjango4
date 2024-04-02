@@ -2,19 +2,23 @@
 {% load my_tags %}
 {% load crispy_forms_tags %}
 {% load static %}
-{% block title %} | Cases | Picasso{% endblock title %}
-{% block content %}
+{% block title %} | Cases | Picasso{% endblock title %}{% block content %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <div class="pad-15">
-{% if picasso.verified %}
+{% if picasso.verified and picasso.visible and not picasso.delete %}
 <h2>{{picasso.title}}</h2>
 <p>&emsp;{{picasso.author.first_name}} {{picasso.author.last_name}}{%if picasso.author.degree %} | {{picasso.author.degree}}{%endif%}</p>
 <div class="imagePicaDetailCont">
     <img src="{{picasso.image.url}}" class="imagePicaDetail">
     <div class="pad-15 picaDetailPara"><p class="picaDetailPara">{{ picasso.text|markdown|safe}}</p></div>
+
+{%if picasso.case %}
+    <p>می‌توانید شرح حال مربوط به این پیکاسو را در این <a href="{{picasso.case}}">لینک</a> مشاهده کنید.</p>
+{%endif%}
 </div>
 {% else %}
-    <h2>این مطلب هنوز به تایید ادمین نرسیده است.</h2>
+    <h2>این مطلب اکنون در دسترس نیست.</h2>
+    <p>این مطلب یا تایید نشده، یا توسط نویسنده غیرقابل دسترسی شده و یا توسط ایشان پاک شده است.</p>
 {% endif %}
 </div>
 {%endblock content%}
@@ -25,3 +29,9 @@
     <span style="font-size:16px">ویرایش</span></a>
 {% endif %}
 {% endblock edit %}
+{% block delete %}
+{% if user.username == picasso.author.username %}
+<a href="{% url 'picasso_delete' picasso.slug %}" class="btn btn-danger" style="margin:1px; width:60px; font-size:16px; padding:0px; align-items:center">
+    <span style="font-size:16px" dir="rtl">حذف</span></a>
+{% endif %}
+{% endblock delete %}
