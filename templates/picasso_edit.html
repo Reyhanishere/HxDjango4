@@ -4,7 +4,6 @@
 {% block title %} | Cases | Picasso{% endblock title %}
 
 {% block content %}
-
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <style>    
     button {
@@ -15,16 +14,24 @@
 </style>
 <div class="pad-15">
 <h1>ویرایش</h1>
+{% if not picasso.delete%}
 
     <form action="" method="post" enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
         <div class="createForm">
         {{ form|crispy }}
-            <div class="text-center" style="justify-contents:center"><button class="btn btn-info" id="primaryButton" type="submit">Update</button></div>
+            <div class="text-center" style="justify-contents:center">
+                <button class="btn btn-info" id="primaryButton" type="submit">Update</button>
+            </div>
 
     </div>
     </form>
+{%else%}
+    <h3>این پیکاسو حذف شده است.</h3>
+{%endif%}
 </div>
+
 <script>
+
     function createMarkdownButtons() {
         const markdownButtonsContainer = document.getElementById('div_id_text');
 
@@ -37,7 +44,6 @@
             { label: 'P.S', onclick: "addFootnote()" }
         ];
         const style= "\
-        padding: 1px 7px;\
         margin-right: 10px;\
         background-color: #ddd;\
         border-radius: 5px;\
@@ -59,7 +65,7 @@
             
         });
         markdownButtonsContainer.insertBefore(div, markdownButtonsContainer.Child);
-        {% comment %} const textarea=document.getElementById('picasso-create-text-editor'); {% endcomment %}
+        {% comment %} const textarea=document.getElementById('picasso_text_editor'); {% endcomment %}
         {% comment %} textarea.insertBefore(div, textarea.firstChild); {% endcomment %}
     }
 
