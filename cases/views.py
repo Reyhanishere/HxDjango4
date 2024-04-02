@@ -11,7 +11,7 @@ from django.db.models import Q
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import Case, Picasso, FollowUp, Comment, ImageCase
+from .models import Case, Picasso, FollowUp, Comment, ImageCase, Note
 from .forms import (
     CaseUpdateForm,
     # FollowUpForm,
@@ -20,6 +20,8 @@ from .forms import (
     PicassoUpdateForm,
     # LabTestForm,
     CaseImageForm,
+    ExCreateForm,
+    ExUpdateForm,
 )
 
 
@@ -132,11 +134,14 @@ class CaseCreateView(LoginRequiredMixin, CreateView):  # new
         "post_text",
         "tags",
         "slug",
+        "suggest",
     )
+
     success_url = "/cases/success/"
+
     # def get_success_url(self):
     #     case = self.get_object()
-    #     return reverse("success")
+    #     return case.slug #reverse("hx_detail", kwargs={"slug": case.slug})
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -163,13 +168,6 @@ class CaseImageView(LoginRequiredMixin, CreateView):
         case = get_object_or_404(Case, slug=case_slug, author=self.request.user)
         form.instance.case = case
         return super().form_valid(form)
-
-
-# class LabTestCreateView(CreateView):
-#     model = LabTestItem
-#     form_class = LabTestForm
-#     template_name = "labtest_create.html"
-#     success_url = "cases/success"  # Update with your success URL
 
 
 class PicassoListView(ListView):
@@ -205,14 +203,31 @@ class PicassoUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return obj.author == self.request.user
 
 
+class PicassoDeleteView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Picasso
+    template_name = "picasso_delete.html"
+    fields = ["delete"]
+
+    def test_func(self):  # new
+        obj = self.get_object()
+        return obj.author == self.request.user
+
+
 class SuccessPageView(TemplateView):
     template_name = "success.html"
 
 
 def cases_main(request):
-    hxs = Case.objects.filter(verified=True).order_by("-date_created")[:3]
-    picassos = Picasso.objects.filter(verified=True).order_by("-date_created")[:3]
-    return render(request, "cases_main.html", {"hxs": hxs, "picassos": picassos})
+    hxs = Case.objects.filter(verified=True, visible=True).order_by("-date_created")[:4]
+    picassos = Picasso.objects.filter(
+        verified=True, delete=False, visible=True
+    ).order_by("-date_created")[:3]
+    exs = Note.objects.filter(verified=True, delete=False, visible=True).order_by(
+        "-date_created"
+    )[:4]
+    return render(
+        request, "cases_main.html", {"hxs": hxs, "picassos": picassos, "exs": exs}
+    )
 
 
 class SearchResultsListView(ListView):
@@ -226,21 +241,78 @@ class SearchResultsListView(ListView):
             # Create Q objects for each field to search in both models
             q_objects_model1 = Q()
             q_objects_model2 = Q()
+            q_objects_model3 = Q()
+
             for field in Case._meta.fields:
                 if field.get_internal_type() in ["CharField", "TextField"]:
                     q_objects_model1 |= Q(**{f"{field.name}__icontains": query})
             for field in Picasso._meta.fields:
                 if field.get_internal_type() in ["CharField", "TextField"]:
                     q_objects_model2 |= Q(**{f"{field.name}__icontains": query})
-            # Combine Q objects from both models
-            # combined_q_objects = q_objects_model1 | q_objects_model2
-            # Filter and union querysets from both models
+            for field in Note._meta.fields:
+                if field.get_internal_type() in ["CharField", "TextField"]:
+                    q_objects_model3 |= Q(**{f"{field.name}__icontains": query})
+
             queryset_model1 = Case.objects.filter(q_objects_model1, verified=True)
-            queryset_model2 = Picasso.objects.filter(q_objects_model2, verified=True)
-            # combined_queryset = queryset_model1.union(queryset_model2)
-            # return combined_queryset
-            # context = {"hxs": queryset_model1, "picassos": queryset_model2}
-            context = list(chain(queryset_model1, queryset_model2))
+            queryset_model2 = Picasso.objects.filter(
+                q_objects_model2, verified=True, visible=True, delete=False
+            )
+            queryset_model3 = Note.objects.filter(
+                q_objects_model3, verified=True, visible=True, delete=False
+            )
+
+            context = list(chain(queryset_model1, queryset_model2, queryset_model3))
             return context
         else:
             return None
+
+
+class ExListView(ListView):
+    model = Note
+    template_name = "ex/ex_list.html"
+
+
+class ExCreateView(LoginRequiredMixin, CreateView):
+    model = Note
+    template_name = "ex/ex_new.html"
+    success_url = reverse_lazy("ex_list")
+    form_class = ExCreateForm
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+
+class ExUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Note
+    template_name = "ex/ex_edit.html"
+    success_url = reverse_lazy("ex_list")
+    # how to show a message
+    form_class = ExUpdateForm
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.author == self.request.user
+
+
+class ExDetailView(DetailView):
+    model = Note
+    template_name = "ex/ex_detail.html"
+
+
+class ExDeleteView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Note
+    template_name = "ex/ex_delete.html"
+    fields = ["delete"]
+    success_url = reverse_lazy("ex_list")
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.author == self.request.user
+
+
+# class LabTestCreateView(CreateView):
+#     model = LabTestItem
+#     form_class = LabTestForm
+#     template_name = "labtest_create.html"
+#     success_url = "cases/success"  # Update with your success URL
