@@ -11,8 +11,12 @@ class CustomUserAdmin(UserAdmin):
     "username",
     "first_name",
     "last_name",
+    "field",
     "degree",
     "university",
+    "is_article_author",
+    "is_article_editor",
+    "is_case_editor",
     "is_staff",
     ]
     fieldsets = UserAdmin.fieldsets + ((None, {"fields": ("university","degree")}),)
