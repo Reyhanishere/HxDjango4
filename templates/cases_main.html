@@ -10,6 +10,7 @@
         <p>Histories and Physical Examinations</p>
         </a>
     </div>
+    <div class="blogContCases">
 {% for case in hxs %}
 {% if case.verified and case.slug %}
 
@@ -19,12 +20,11 @@
     <a href="{% url 'hx_detail' case.slug %}" class="caseLink caseDesc"><p style="font-size:15px">{{ case.description|safe }}</p></a>
     <a href="{% url 'hx_detail' case.slug %}" style="text-align:right;" class="caseLink">
         <p dir="rtl" style="text-align:right; color:#666" class=""> 
-        توسط <b>{{ case.author.first_name }} {{ case.author.last_name }}</b> {%if case.author.degree %}({{ case.author.degree }}) {%endif%}
+        توسط {{ case.author.first_name }} {{ case.author.last_name }} | {%if case.author.degree %}({{ case.author.degree }}) {%endif%}
         &emsp;<span dir="ltr" >{{ case.date_created|naturaltime}}</span>
 </p></a>
     <p style="margin-bottom:5px" dir="ltr"><a href="{% url 'hx_detail' case.slug %}" class="caseLink">
-        {% comment %} {{ case.followup|length }} Daily Note{{ case.followup|pluralize }} | {% endcomment %}
-        {{ case.comment_set.all|length }} Comment{{ case.comment_set.all|pluralize }}</a> 
+        {% comment %} {{ case.followup|length }} Daily Note{{ case.followup|pluralize }} | {{ case.comment_set.all|length }} Comment{{ case.comment_set.all|pluralize }}</a> {% endcomment %}
         <span>{% if user.username == case.author.username %}
             <a href="{% url 'hx_edit' case.slug %}">Edit</a> | 
             <a href="{% url 'hx_delete' case.slug %}">Delete</a>
@@ -36,6 +36,7 @@
 
 {% endif %}
 {% endfor %}
+</div>
 <br/>
 <div class="down">
     <a href="{% url 'hx_list'%}">
@@ -56,18 +57,18 @@
 {% for pica in picassos %}
 {% if pica.verified %} 
     <div class="imageCard">
-        <img src="{{ pica.image.url }}" width = '300' class="imgThumbnail" alt="{{pica.title}}"/>
+        <a href="{% url 'picasso_detail' pica.slug %}"><img src="{{ pica.image.url }}" width = '300' class="imgThumbnail" alt="{{pica.title}}"/></a>
         <div class="imgTitle">
             <a href="{% url 'picasso_detail' pica.slug %}">
                 <h3>{{ pica.title }}</h3>
                 <p class="desc">{{ pica.description }}</p>
-                <p class="author">توسط <b>{{ pica.author.first_name }} {{ pica.author.last_name }}</b> 
+                <p class="author">توسط {{ pica.author.first_name }} {{ pica.author.last_name }} 
                     {%if pica.author.degree %}({{ pica.author.degree }}) {%endif%}
-<!--                 {{ pica.date_created|naturaltime}} -->
-                    {% if user.username == pica.author.username %}
-                        <a href="{% url 'picasso_edit' pica.slug %}">Edit</a>
-                    {% endif %}
+                {% comment %} {{ case.date_created|naturaltime}} {% endcomment %}
                 </p>
+                {% comment %} <p>{% if user.username == pica.author.username %}
+                    <a href="{% url 'picasso_edit' pica.slug %}">Edit</a> | 
+                    {% endif %}</p> {% endcomment %}
             </a>
         </div>
     </div>
@@ -77,6 +78,44 @@
 <br/>
 <div class="downPic">
     <a href="{% url 'picasso_list'%}">
+    <h5 dir="ltr" style="font-weight:600">Load More &#9654;</h5>
+    </a>
+    <br/>
+</div>
+<hr style="color:#fff"/>
+
+</div>
+<div id="ex" class='pad-15'>
+    <div class="hxTitle">
+        <a href="{% url 'ex_list'%}">
+            <h2 style="font-weight:800">Ex</h2>
+        <p>Notes of Experiences | Beyond Limits</p>
+        </a>
+    </div>
+    <div class="blogContCases">
+{% for ex in exs %}
+    <div class="blog-post-2">
+        <div class="blog-post-title-2">
+            <a href="{% url 'ex_detail' ex.slug%}" class="no-link-title"><h4>{{ex.title}}<h4></a>
+        </div>
+        <div class="blog-post-date-2" dir="ltr"><a href="{{ex.slug}}" class="no-link-date">
+            {{ex.author.first_name}} {{ex.author.last_name}} | {{ex.date_created | naturaltime}}</a>
+        </div>
+        <div class="blog-post-text-2">
+                <p><a href="{{ex.slug}}" class="no-link-text">{{ex.description}}</a></p>
+        </div>
+        {% if user.username == ex.author.username %}
+        <div class="blog-post-date-2" dir="ltr"><a href="{{ex.slug}}" class="no-link-date">
+            <a href="{% url 'ex_edit' ex.slug %}" class="no-link-date">Edit</a> | 
+            <a href="{% url 'ex_delete' ex.slug %}"class="no-link-date">Delete</a> 
+        </div>
+        {%endif%}
+    </div>
+
+{% endfor %}</div>
+<br/>
+<div class="down">
+    <a href="{% url 'ex_list'%}">
     <h5 dir="ltr" style="font-weight:600">Load More &#9654;</h5>
     </a>
     <br/>
