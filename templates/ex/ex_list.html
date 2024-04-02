@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{%load humanize%}
+{% load static %}
+{% load my_tags %}
+{% block title %}| Ex{%endblock title%}
+{% block desc %}تمام یادداشت‌های آموزنده را اینجا بخوانید.{% endblock desc %}
+{% block content %}
+<div id="hx" class='pad-15'>
+    <div class="hxTitle">
+        <h2 style="font-weight:800">Ex</h2>
+        <p>Notes of Experiences | Beyond Limits</p>
+    </div>
+{% for note in note_list reversed %}
+{% if note.verified and not note.delete and note.visible%}
+<div class="blogCont">
+    <div class="blog-post-2">
+        <div class="blog-post-title-2">
+            <a href="{{note.slug}}" class="no-link-title"><h4>{{note.title}}<h4></a>
+        </div>
+    <div class="blog-post-date-2" dir="ltr"><a href="{{note.slug}}" class="no-link-date">
+        {{note.author.first_name}} {{note.author.last_name}} | {{note.date_created | naturaltime}}
+    </a></div>
+        <div class="blog-post-text-2">
+                <p><a href="{{note.slug}}" class="no-link-text">{{note.description}}</a></p>
+        </div>
+        {% if user.username == note.author.username %}
+        <div class="blog-post-date-2" dir="ltr"><a href="{{note.slug}}" class="no-link-date">
+            <a href="{% url 'ex_edit' note.slug %}" class="no-link-date">Edit</a> | 
+            <a href="{% url 'ex_delete' note.slug %}"class="no-link-date">Delete</a> 
+        </div>
+        {%endif%}
+    </div>
+</div>
+{% endif %}
+{% endfor %}
+<div class="down">
+    <br/>
+    <a href="{% url 'cases_main'%}">
+    <h5 dir="ltr" style="font-weight:600"> &#9664; Back to Cases</h5>
+    </a>
+</div>
+</div>
+{% endblock content %}

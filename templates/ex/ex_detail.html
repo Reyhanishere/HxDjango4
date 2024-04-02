@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load social_share %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load my_tags %}
+{% load humanize %}
+{% block title %}| Ex{%endblock title%}
+{% block desc %}{{note.title}}{%endblock desc%}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<div class="pad-15">
+{% if note.verified and not note.delete%}
+<div class="blogCont">
+    <div class="blog-post-2">
+        <div class="blog-post-title-2">
+            <h2>{{note.title}}<h2>
+        </div>
+    <div class="blog-post-date" dir="ltr">
+        {{note.author.first_name}} {{note.author.last_name}} | {{note.date_created | naturaltime}}
+    </a></div>
+        <div class="blog-post-text">
+                <p>{{note.text | markdown | safe}}</p>
+        </div>
+    </div>
+</div>    
+{% else %}
+<h2>{{"این مطلب *اکنون* قابل دسترسی نیست." | markdown | safe}}</h2>
+<p>این مطلب یا تایید نشده، یا توسط نویسنده غیرقابل دسترسی شده و یا توسط ایشان پاک شده است.</p>
+{% endif %}
+</div>
+{% endblock content %}
+
+{% block edit %}
+{% if user.username == note.author.username %}
+<a href="{% url 'ex_edit' note.slug %}" class="btn btn-warning" style="margin:1px; width:60px; font-size:16px; padding:0px; align-items:center">
+    <span style="font-size:16px">ویرایش</span></a>
+{% endif %}
+{% endblock edit %}
+
+{% block delete %}
+{% if user.username == note.author.username %}
+<a href="{% url 'ex_delete' note.slug %}" class="btn btn-danger" style="margin:1px; width:60px; font-size:16px; padding:0px;align-items:center">
+    <span style="font-size:16px">حذف</span></a>
+{% endif %}
+{% endblock delete %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<style>    
+    button {
+        border: none;
+        padding: 10px
+    }
+
+</style>
+<div class="pad-15">
+<h1>ویرایش</h1>
+{% if not note.delete%}
+
+    <form action="" method="post" autocomplete="off">{% csrf_token %}
+        <div class="createForm">
+        {{ form|crispy }}
+            <div class="text-center" style="justify-contents:center"><button class="btn btn-info" id="primaryButton" type="submit">Update</button></div>
+    </div>
+    </form>
+{%else%}
+    <h3>این یادداشت حذف شده است.</h3>
+{%endif%}
+</div>
+
+
+<script>
+
+    function createMarkdownButtons() {
+        const markdownButtonsContainer = document.getElementById('div_id_text');
+
+        // Markdown button labels and their respective functions
+        const markdownButtons = [
+            { label: 'B', onclick: "addMarkdown('bold')" },
+            { label: 'Italic', onclick: "addMarkdown('italic')" },
+            { label: 'U', onclick: "addMarkdown('underline')" },
+            { label: 'Link', onclick: "addLink()" },
+            { label: 'P.S', onclick: "addFootnote()" }
+        ];
+        const style= "\
+        margin-right: 10px;\
+        background-color: #ddd;\
+        border-radius: 5px;\
+        border: none;\
+        cursor: pointer;\
+        height: 30px;\
+        margin: 2px;\
+        display: inline;\
+        font-size: 16px;\
+    "
+        const div = document.createElement('div');
+        // Create buttons and append them to the container
+        markdownButtons.forEach(buttonInfo => {
+            const button = document.createElement('a');
+            button.textContent = buttonInfo.label;
+            button.setAttribute('onclick', buttonInfo.onclick);
+            button.setAttribute('style', style);
+            div.appendChild(button);
+            
+        });
+        markdownButtonsContainer.insertBefore(div, markdownButtonsContainer.Child);
+        {% comment %} const textarea=document.getElementById('ex_text_editor'); {% endcomment %}
+        {% comment %} textarea.insertBefore(div, textarea.firstChild); {% endcomment %}
+    }
+
+    window.onload = createMarkdownButtons
+</script>
+{% endblock content %}

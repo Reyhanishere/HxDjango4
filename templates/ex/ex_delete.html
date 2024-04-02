@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}| Ex{%endblock title%}
+{% block content %}
+<div class="pad-15">
+    <h1>حذف</h1>
+{% if not note.delete%}
+    <form action="" method="post" enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
+        {{ form|crispy }}
+            <div class="text-center" style="justify-contents:center">
+                <button class="btn btn-danger ml-2" type="submit">Confirm</button>
+                </div>
+    </form>
+{%else%}
+    <h3>این یادداشت پیش از این با موفقیت حذف شده است.</h3>
+{%endif%}
+</div>
+{% endblock content %}

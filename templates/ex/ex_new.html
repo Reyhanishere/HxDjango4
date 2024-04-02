@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}| Hx{%endblock title%}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<div class="pad-15">
+<h1>یادداشت جدید</h1>
+
+<form action="" method="post">{% csrf_token %}
+<div class="createForm" autocomplete="off">
+    {{ form|crispy }}
+    {% comment %} <a href="{% url 'lab-create' %}" target="_blank">Add LabTest</a> {% endcomment %}
+</div>
+<button class="btn btn-success ml-2" type="submit" id="save" >Submit</button>
+</form>
+
+<p>جستار شما پس از تایید توسط سردبیر به نمایش درخواهد آمد.</p>
+</div>
+{% endblock content %}
+
+
+
+
+
