@@ -1,10 +1,32 @@
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
+
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
+# class CRSModel(models.Model):
+#     class Meta:
+#         abstract=True
+
+#     def allow_comments(self):
+#         return True
+    
+#     def allow_reviews(self):
+#         return True
+    
+#     def allow_suggests(self):
+#         return True
 
 class Choice(models.Model):
     name = models.CharField(max_length=36)
+
+    def __str__(self):
+        return self.name
+
+class Suggest(models.Model):
+    name=models.CharField(max_length=15,null=False, blank=False)
+    slug=models.SlugField(null=False, blank=False)
 
     def __str__(self):
         return self.name
@@ -17,10 +39,24 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
-
+class Review(models.Model):
+    author=models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,)
+    date_created = models.DateTimeField(auto_now_add=True)
+    text = models.TextField(
+        ("متن"),
+        default="",
+        blank=False,
+        null=False,
+    )
+    
+    def __str__(self):
+        return f"{self.author}: {self.content_object.title}"
+    
 class Case(models.Model):
     choice = models.ManyToManyField(Choice, "Choice",null=True, blank=True)
-    premium = models.BooleanField(default=False,null=True, blank=True)
+    premium = models.BooleanField(default=False)
     verified = models.BooleanField(
         default=False,
     )
@@ -248,6 +284,7 @@ class Case(models.Model):
     )
 
     tags = models.ManyToManyField(Tag, null=True, blank=True)
+    suggests=models.ManyToManyField(Suggest, null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -291,9 +328,192 @@ class Comment(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     related_name = "comments"
-
+    
     def __str__(self):
         return self.comment[:32]
+
+
+def user_directory_path_hx(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return "cases/hx/uploads/hx_{0}/{1}".format(instance.author.slug, filename)
+
+class ImageCase(models.Model):
+    type_choices = [
+        ("ECG", "ECG"),
+        ("X-Ray", "X-Ray"),
+        ("MRI", "MRI"),
+        ("Ultra-Sound", "Ultra-Sound"),
+        ("Other", "Other"),
+    ]
+    verified=models.BooleanField(default=False)
+    visible=models.BooleanField(default=True)
+    case = models.ForeignKey(Case, on_delete=models.CASCADE)
+    related_name = "imagecase"
+    image = models.ImageField(
+        "آپلود تصویر", upload_to=user_directory_path_hx, null=False, blank=False
+    )
+    type = models.CharField(
+        "نوع داده",
+        choices=type_choices,
+        default="Other",
+        max_length=16,
+        null=False,
+        blank=False,
+    )
+
+    text = models.TextField(
+        "متن",
+        help_text="توضیح یا گزارش تصویر",
+        blank=True,
+        null=True,
+    )
+    def __str__(self):
+        return f"{self.case.slug}: {self.type}"
+
+
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return "cases/picasso/uploads/user_{0}/{1}".format(instance.author.username, filename)
+
+
+class Picasso(models.Model):
+    choice = models.ManyToManyField(Choice, null=True, blank=True)
+    premium = models.BooleanField(default=False)
+    verified = models.BooleanField(default=False)
+    visible = models.BooleanField(
+        default=True,
+    )
+    done = models.BooleanField(
+        default=True,
+    )
+    delete=models.BooleanField("I want to DELETE this Picasso.",
+        default=False,
+    )
+    lang = models.CharField(max_length=2, choices=[("Fa", "Fa")], default="Fa")
+    rating = models.SmallIntegerField(
+        choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], null=True, blank=True
+    )
+    title = models.CharField(
+        ("عنوان"),
+        max_length=50,
+        help_text="برای نشان دادن در صفحۀ اصلی.",
+        blank=False,
+        null=False,
+    )
+    image = models.ImageField(upload_to=user_directory_path, null=False, blank=False)
+    description = models.CharField(
+        ("توضیح کوتاه"),
+        max_length=200,
+        help_text="خلاصه‌ای برای نمایش در صفحۀ اصلی",
+        blank=False,
+        null=False,
+    )
+    slug = models.SlugField(
+        ("لینک"),
+        help_text="برای دسترسی به این تصویر یک آدرس مرتبط ایجاد کنید. برای مثال cushing-striae-01.",
+        blank=False,
+        null=False,
+    )
+    text = models.TextField(
+        ("متن"),
+        help_text="متنی کامل دربارۀ تصویر بنویسید. دربارۀ بیماری، دلیل ایجاد این وضعیت و تمام موارد مرتبط.",
+        default="",
+        blank=False,
+        null=False,
+    )
+    date_created = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    tags=models.ManyToManyField(Tag, null=True, blank=True)
+    case = models.URLField(
+        "لینک کیس مرتبط",
+        help_text="می‌توانید لینک کیس مربوط به این تصویر را در اینجا قرار دهید.",
+        null=True,
+        blank=True,
+    )
+    editors_review=models.TextField(blank=True,null=True)
+    suggests=models.ManyToManyField(Suggest, null=True, blank=True)
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse("picasso_detail", args=[str(self.slug)])
+
+    def save(self, *args, **kwargs):
+        if not self.verified:
+            pass
+        else:
+            if self.slug:  # Check if the instance has already been saved
+                old_instance = Picasso.objects.get(slug=self.slug)
+                # Check if the image field has changed
+                if old_instance.image != self.image:
+                    self.verified = False  # Set verified to False if image has changed
+            else:  # New instance is being created
+                self.verified = False  # Set verified to False for new instances
+
+        # Call the parent class's save method to save the instance
+        super(Picasso, self).save(*args, **kwargs)
+
+class Note(models.Model):
+    choice = models.ManyToManyField(Choice, null=True, blank=True)
+    premium = models.BooleanField(default=False)
+    verified = models.BooleanField(default=True)
+    visible = models.BooleanField(
+        default=True,
+    )
+    done = models.BooleanField(
+        default=True,
+    )
+    lang = models.CharField(max_length=2, choices=[("Fa", "Fa")], default="Fa")
+    rating = models.SmallIntegerField(
+        choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], null=True, blank=True
+    )
+    title = models.CharField(
+        ("عنوان"),
+        max_length=50,
+        help_text="برای نشان دادن در صفحۀ اصلی.",
+        blank=False,
+        null=False,
+    )
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    description = models.CharField(
+        ("توضیح کوتاه"),
+        max_length=200,
+        help_text="خلاصه‌ای برای نمایش در صفحۀ اصلی",
+        blank=False,
+        null=False,
+    )
+    text = models.TextField(
+        ("متن"),
+        help_text="اینجا در اختیار شماست تا تمام متن خود را بنویسید.",
+        default="",
+        blank=False,
+        null=False,
+    )
+    
+    tags=models.ManyToManyField(Tag, null=True, blank=True)
+    slug = models.SlugField(
+        ("لینک"),
+        help_text="برای دسترسی به این یادداشت یک آدرس مرتبط ایجاد کنید. برای مثال ems-01.",
+        blank=False,
+        null=False,
+    )
+    date_created = models.DateTimeField(auto_now_add=True)
+    
+    delete = models.BooleanField("I want to DELETE this Ex.",
+        default=False,
+    )
+    editors_review=models.TextField(blank=True,null=True)
+
+    suggests=models.ManyToManyField(Suggest, null=True, blank=True)
+
+    def __str__(self):
+        return self.title
 
 
 # class LabTestItem(models.Model):
@@ -356,123 +576,3 @@ class Comment(models.Model):
 
 #     def __str__(self):
 #         return self.item_abbr[:32]
-
-
-def user_directory_path_hx(instance, filename):
-    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return "cases/hx/uploads/hx_{0}/{1}-{2}".format(instance.case.slug,instance.case.author , filename)
-
-class ImageCase(models.Model):
-    type_choices = [
-        ("ECG", "ECG"),
-        ("X-Ray", "X-Ray"),
-        ("MRI", "MRI"),
-        ("Ultra-Sound", "Ultra-Sound"),
-        ("Other", "Other"),
-    ]
-    verified=models.BooleanField(default=False)
-    visible=models.BooleanField(default=True)
-    case = models.ForeignKey(Case, on_delete=models.CASCADE)
-    related_name = "imagecase"
-    image = models.ImageField(
-        "آپلود تصویر", upload_to=user_directory_path_hx, null=False, blank=False
-    )
-    type = models.CharField(
-        "نوع داده",
-        choices=type_choices,
-        default="Other",
-        max_length=16,
-        null=False,
-        blank=False,
-    )
-
-    text = models.TextField(
-        "متن",
-        help_text="توضیح یا گزارش تصویر",
-        blank=True,
-        null=True,
-    )
-    def __str__(self):
-        return f"{self.case.slug}: {self.type}"
-
-
-def user_directory_path(instance, filename):
-    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return "cases/picasso/uploads/user_{0}/{1}".format(instance.author.username, filename)
-
-
-class Picasso(models.Model):
-    choice = models.ManyToManyField(Choice, null=True, blank=True)
-    premium = models.BooleanField(default=False)
-    verified = models.BooleanField(default=False)
-    visible = models.BooleanField(
-        default=True,
-    )
-    done = models.BooleanField(
-        default=True,
-    )
-    lang = models.CharField(max_length=2, choices=[("Fa", "Fa")], default="Fa")
-    rating = models.SmallIntegerField(
-        choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], null=True, blank=True
-    )
-    title = models.CharField(
-        ("عنوان"),
-        max_length=50,
-        help_text="برای نشان دادن در صفحۀ اصلی.",
-        blank=False,
-        null=False,
-    )
-    image = models.ImageField(upload_to=user_directory_path, null=False, blank=False)
-    description = models.CharField(
-        ("توضیح کوتاه"),
-        max_length=200,
-        help_text="خلاصه‌ای برای نمایش در صفحۀ اصلی",
-        blank=False,
-        null=False,
-    )
-    slug = models.SlugField(
-        ("لینک"),
-        help_text="برای دسترسی به این تصویر یک آدرس مرتبط ایجاد کنید. برای مثال cushing-striae-01.",
-        blank=False,
-        null=False,
-    )
-    text = models.TextField(
-        ("متن"),
-        help_text="متنی کامل دربارۀ تصویر بنویسید. دربارۀ بیماری، دلیل ایجاد این وضعیت و تمام موارد مرتبط.",
-        default="",
-        blank=False,
-        null=False,
-    )
-    date_created = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-    )
-    tags=models.ManyToManyField(Tag, null=True, blank=True)
-    case = models.URLField(
-        "لینک کیس مرتبط",
-        help_text="می‌توانید لینک کیس مربوط به این تصویر را در اینجا قرار دهید.",
-        null=True,
-        blank=True,
-    )
-
-    def __str__(self):
-        return self.title
-
-    def get_absolute_url(self):
-        return reverse("picasso_detail", args=[str(self.slug)])
-
-    def save(self, *args, **kwargs):
-        if not self.verified:
-            pass
-        else:
-            if self.slug:  # Check if the instance has already been saved
-                old_instance = Picasso.objects.get(slug=self.slug)
-                # Check if the image field has changed
-                if old_instance.image != self.image:
-                    self.verified = False  # Set verified to False if image has changed
-            else:  # New instance is being created
-                self.verified = False  # Set verified to False for new instances
-
-        # Call the parent class's save method to save the instance
-        super(Picasso, self).save(*args, **kwargs)
