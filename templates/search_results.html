@@ -9,8 +9,10 @@
 {% if case_list %}
     {% for case in case_list %}
     {% if case|model_type == "Case" %}
+
     <div class="">
-        <div class="imgTitleLight">
+        <div class="imgTitleLight">    
+            <a href="{% url 'hx_list'%}"><p style="margin:5px 0px;color:#999">Hx</p></a>
             <a href="{% url 'hx_detail' case.slug %}">
                 <h3>{{ case.title }}</h3>
                 <p class="desc">{{ case.description }}</p>
@@ -22,9 +24,11 @@
         </div>
     </div>
     {%elif case|model_type == "Picasso"%}
-    
+
     <div class="imageCardLight">
         <div class="imgTitleLight">
+            <a href="{% url 'picasso_list'%}">
+        <p style="margin:5px 0px;color:#999">Picasso</p></a>
             <a href="{% url 'picasso_detail' case.slug %}">
                 <h3>{{ case.title }}</h3>
                 <p class="desc">{{ case.description }}</p>
@@ -37,6 +41,23 @@
         <a href="{% url 'picasso_detail' case.slug %}">
             <img src="{{ case.image.url }}" width = '300' class="imgThumbnail" alt="{{case.title}}"/></a>
         
+    </div>
+    {%elif case|model_type == "Note"%}
+    
+    <div class="">
+        <div class="imgTitleLight">
+            
+                <a href="{% url 'ex_list'%}">
+                    <p style="margin:5px 0px;color:#999">Ex</p></a>
+                    <a href="{% url 'ex_detail' case.slug %}">
+                <h3>{{ case.title }}</h3>
+                <p class="desc">{{ case.description }}</p>
+                <p class="authorLight">توسط <b>{{ case.author.first_name }} {{ case.author.last_name }} </b>
+                    {%if case.author.degree %}({{ case.author.degree }}) {%endif%}
+                </p>
+
+            </a>
+        </div>
     </div>
     {%endif%}
     <hr/>
