@@ -9,6 +9,7 @@ from .models import (
     Picasso,
     # LabTestItem,
     ImageCase,
+    Note,
 )
 
 # LabTestForm = forms.inlineformset_factory(
@@ -25,7 +26,18 @@ class CaseImageForm(ModelForm):
 class CaseUpdateForm(ModelForm):
     class Meta:
         model = Case
-        exclude = ("slug", "verified", "author", "rating", "lang", "cover", "choice","done","visible","premium")
+        exclude = (
+            "slug",
+            "verified",
+            "author",
+            "rating",
+            "lang",
+            "cover",
+            "choice",
+            "done",
+            "visible",
+            "premium",
+        )
 
 
 class CommentForm(ModelForm):
@@ -61,7 +73,70 @@ class PicassoUpdateForm(ModelForm):
 
     class Meta:
         model = Picasso
-        exclude = ("slug", "verified", "premium", "rating", "lang", "choice", "author","done","visible")
+        exclude = (
+            "slug",
+            "verified",
+            "premium",
+            "rating",
+            "lang",
+            "choice",
+            "author",
+            "delete",
+            "editors_review",
+        )
+
+
+class ExUpdateForm(ModelForm):
+    text = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                "class": "markdown_editor",
+                "id": "ex_text_editor",
+            }
+        )
+    )
+
+    class Meta:
+        model = Note
+        exclude = (
+            "slug",
+            "verified",
+            "premium",
+            "rating",
+            "lang",
+            "choice",
+            "author",
+            "delete",
+            "editors_review",
+            "done",
+            "visible",
+        )
+
+
+class ExCreateForm(ModelForm):
+    text = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                "class": "markdown_editor",
+                "id": "ex_text_editor",
+            }
+        )
+    )
+
+    class Meta:
+        model = Note
+        exclude = (
+            "verified",
+            "premium",
+            "rating",
+            "lang",
+            "choice",
+            "author",
+            "delete",
+            "editors_review",
+            "done",
+            "visible",
+        )
 
 
 # class FollowUpForm(ModelForm):
