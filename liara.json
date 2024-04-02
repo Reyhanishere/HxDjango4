@@ -2,7 +2,11 @@
     "platform": "django",
     "app": "mdpt",
     "django": {
-        "pythonVersion": "3.10"
+        "pythonVersion": "3.10",
+        "mirror": false
+    },
+    "build": {
+        "location": "germany"
     },
     "disks": [{
             "name": "database",
