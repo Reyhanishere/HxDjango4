@@ -134,7 +134,7 @@ class CaseCreateView(LoginRequiredMixin, CreateView):  # new
         "post_text",
         "tags",
         "slug",
-        "suggest",
+        "suggests",
     )
 
     success_url = "/cases/success/"
