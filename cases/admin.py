@@ -9,6 +9,7 @@ from .models import (
     Tag,
     # LabTestItem,
     ImageCase,
+    Suggest,
 )
 
 
@@ -47,10 +48,11 @@ class NotesAdmin(admin.ModelAdmin):
 
 admin.site.register(Choice)
 admin.site.register(Tag)
+admin.site.register(ImageCase)
+admin.site.register(Suggest)
 admin.site.register(Case, CaseAdmin)
 admin.site.register(Picasso, PicassoAdmin)
 admin.site.register(Note,NotesAdmin)
 # admin.site.register(FollowUp)
 admin.site.register(Comment)
 # admin.site.register(LabTestItem)
-admin.site.register(ImageCase)
