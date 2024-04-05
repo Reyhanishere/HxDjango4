@@ -1,6 +1,3 @@
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
-
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
@@ -283,8 +280,8 @@ class Case(models.Model):
         ),
     )
 
-    tags = models.ManyToManyField(Tag, null=True, blank=True)
-    suggests=models.ManyToManyField(Suggest, null=True, blank=True)
+    tags = models.ManyToManyField(Tag, null=True, blank=True,help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
+    suggests=models.ManyToManyField(Suggest, null=True, blank=True,help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
 
     def __str__(self):
         return self.title
