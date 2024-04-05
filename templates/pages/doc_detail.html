@@ -1,0 +1,25 @@
+{%extends "base.html"%}
+{% load my_tags %}
+{% load static %}
+{% block title %} | Docs{% endblock title %}
+{% block desc %} مستندات مربوط به بخش‌های مختلف سایت را در اینجا بخوانید - {{doc.title}}{% endblock desc %}
+
+{% block content %}
+<div class="pad-15">
+    <br/>
+<h2>مستندات و آموزش کار با سایت</h2>
+<br/>
+
+<div class="blogCont">
+    <div class="blog-post">
+        <div class="blog-post-title">
+            <h3>{{doc.title}}<h3>
+        </div>
+        <div class="blog-post-text">
+                <p>{{doc.text | markdown | safe }}</p>
+        </div>
+    </div> 
+</div>
+</div>
+    
+{% endblock content %}
