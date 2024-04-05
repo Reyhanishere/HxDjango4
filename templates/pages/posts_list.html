@@ -6,6 +6,7 @@
 {% block content %}
 <div class="blogCont">
     {% for post in post_list reversed %}
+    {% if post.visible %}
     <div class="blog-post">
         <div class="blog-post-title">
             <h4>{{post.title}}<h4>
@@ -19,6 +20,7 @@
             {%endif%}
         </div>
     </div>
+    {% endif %}
     {% endfor %}
 </div>
     
