@@ -18,7 +18,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icon//favicon-16x16.png' %}">
     <link rel="manifest" href="/site.webmanifest">
-    <style>
+<style>
     .new-button {
         border-radius: 50%;
         width: 60px;
@@ -41,7 +41,7 @@
         color: #000;
         width: 50px;
         height: 50px;
-        font-size: 28px;
+        font-size: 26px;
         bottom: 30px;
         left: 30px;
     }
@@ -56,8 +56,9 @@
                 </div>
                 <div class="header-logo text-left">
                     <a class="" href="{% url 'cases_main' %}">
-                        <img id="logoHeader"src="{% static 'images\Logo Prime.svg' %}" width="50px" alt="medepartout Logo"> <span id="logoName">medepartout | Cases
-                            </span>
+                        <img id="logoHeader"src="{% static 'images\Logo Prime.svg' %}" width="50px" alt="medepartout Logo">
+                        {% comment %} <span id="logoName">medepartout{%block title%}{%endblock title%}</span> {% endcomment %}
+                        <span id="logoName">medepartout | Cases</span>
                     </a>
                 </div>
                 <div class="editDelete text-right">
@@ -67,6 +68,7 @@
                     <div>{% block delete %}{% endblock delete %}</div>
                 </div>
                 {%if user.is_authenticated %}
+            
                 <div class="user text-center">
                     <div dir="ltr" class="userIcon">
                         <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
@@ -91,10 +93,10 @@
                 {% else %}
                 <div class="user text-center">
                     <div class="login">
-                        <a href="{% url 'login' %}" class="text-center">Login</a>
+                        <a href="{% url 'login' %}" class="btn text-center">Login</a>
                     </div>
                     <div class="signup">
-                        <a href="{% url 'signup' %}" class="text-center">SignUp</a>
+                        <a href="{% url 'signup' %}" class="btn text-center">SignUp</a>
                     </div>
                 </div>
                 {% endif %}
@@ -103,24 +105,31 @@
             <div dir="ltr" id="mySidenav" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
                 <form class="d-flex m-2" action="{% url 'search_results' %}" method="get" autocomplete="off">
-                    <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-\
+                    <input class="form-control me-2" type="search" name="q" placeholder="Search Cases" aria-\
                     label="Search" >
                     <button class="btn btn-outline-success" type="submit">&#128269;
                     </button>
-                    </form>                    
-                    <a href="{% url 'about'%}">About</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="{% url 'posts-list' %}">Blog (+Guide)</a>
+                    </form>        
+                    <br/>            
+                    <br/>            
+
+                    <div dir="ltr">         
+                    <a href="{% url 'about'%}">دربارۀ ما</a>
+                    <a href="{% url 'docs_list'%}">آموزش‌ها</a>
+                    <a href="{% url 'terms' %}">قوانین</a>
+                    <a href="{% url 'posts-list' %}">بلاگ</a>
+                    </div>
             </div>
 
     <div class="myMain" style="min-height:81vh">
+        
         {%if user.is_authenticated %}
         <div class="container mt-5" style="position: fixed">
             <div class="dropdown dropup">
               <div class="new-button" id="dropup-toggle">
                 &#128395;
               </div>
-              <div class="dropdown-menu dropup-menu" id="dropup-menu">
+              <div class="dropdown-menu dropup-menu" dir="ltr" id="dropup-menu">
                 <div class="dropdown-header">New &#10024;</div>
                 <a class="dropdown-item" href="{%url "hx_new"%}">Hx</a>
                 <a class="dropdown-item" href="{%url "picasso_new"%}">Picasso</a>
