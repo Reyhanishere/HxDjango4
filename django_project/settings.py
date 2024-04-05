@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "pages.apps.PagesConfig",
     "cases.apps.CasesConfig",
     "blogs.apps.BlogsConfig",
+    "docs.apps.DocsConfig",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
