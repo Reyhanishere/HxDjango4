@@ -10,5 +10,6 @@ urlpatterns = [
     path("", include("pages.urls")),
     path("cases/", include("cases.urls")),
     path("blog/",include("blogs.urls")),
+    path("docs/",include("docs.urls")),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
