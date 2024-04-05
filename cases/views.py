@@ -214,7 +214,7 @@ class PicassoDeleteView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 class SuccessPageView(TemplateView):
-    template_name = "success.html"
+    template_name = "pages/success.html"
 
 
 def cases_main(request):
@@ -233,7 +233,7 @@ def cases_main(request):
 class SearchResultsListView(ListView):
     model = Case
     context_object_name = "case_list"
-    template_name = "search_results.html"
+    template_name = "pages/search_results.html"
 
     def get_queryset(self):
         query = self.request.GET.get("q")
