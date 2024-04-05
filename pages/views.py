@@ -1,10 +1,10 @@
 from django.views.generic import TemplateView
 
-class  MainPageView(TemplateView):
-    template_name = "case_list.html"
-
 class HomePageView(TemplateView):
-    template_name = "index.html"
+    template_name = "pages/index.html"
 
 class AboutPageView(TemplateView):
-    template_name = "about.html"
+    template_name = "pages/about.html"
+
+class TermsPageView(TemplateView):
+    template_name = "pages/terms.html"
