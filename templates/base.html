@@ -123,7 +123,6 @@
 
     <div class="myMain" style="min-height:81vh">
         
-        {%if user.is_authenticated %}
         <div class="container mt-5" style="position: fixed">
             <div class="dropdown dropup">
               <div class="new-button" id="dropup-toggle">
@@ -137,7 +136,6 @@
               </div>
             </div>
         </div>
-        {%endif%}
             {% block content %}
             {% endblock content %}
     </div>
