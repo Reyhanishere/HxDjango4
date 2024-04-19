@@ -37,7 +37,14 @@ class CaseUpdateForm(ModelForm):
             "done",
             "visible",
             "premium",
+            "suggests",
         )
+        labels = {
+            'tags': ('دسته‌بندی تظاهرات'),
+        }
+        help_texts={
+            'tags': ('دسته‌بندی بر اساس تظاهر بالینی اولیه. می‌توانید چند مورد را انتخاب کنید.'),
+        }
 
 
 class CommentForm(ModelForm):
@@ -145,7 +152,25 @@ class ExCreateForm(ModelForm):
 #         fields = ('date',"text",)
 
 
-# class CaseCreateForm(ModelForm):
-#     class Meta:
-#         model = Case
-#         exclude = ("author",)
+class CaseCreateForm(ModelForm):
+    class Meta:
+        model = Case
+        exclude = (
+            "verified",
+            "author",
+            "rating",
+            "lang",
+            "cover",
+            "choice",
+            "done",
+            "visible",
+            "premium",
+            "suggests",
+        )
+        labels = {
+            'tags': ('دسته‌بندی تظاهرات'),
+            'rts':('بخش'),
+        }
+        help_texts={
+            'tags': ('دسته‌بندی بر اساس تظاهر بالینی اولیه. می‌توانید چند مورد را انتخاب کنید.'),
+        }
