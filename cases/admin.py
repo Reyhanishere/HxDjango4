@@ -10,7 +10,7 @@ from .models import (
     # LabTestItem,
     ImageCase,
     Suggest,
-    Rotaion,
+    Rotation,
 )
 
 
