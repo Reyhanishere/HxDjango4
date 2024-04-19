@@ -1,3 +1,6 @@
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
+
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
@@ -30,9 +33,16 @@ class Suggest(models.Model):
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=16)
+    name = models.CharField(max_length=25)
     slug = models.SlugField()
 
+    def __str__(self):
+        return self.name
+
+class Rotation(models.Model):
+    name=models.CharField(max_length=25)
+    slug = models.SlugField()
+    cover= models.ImageField(upload_to="cases/uploads/", null=True, blank=True)
     def __str__(self):
         return self.name
 
@@ -75,37 +85,29 @@ class Case(models.Model):
         blank=False,
         default="Fa",
     )
-    slug = models.SlugField(
-        ("Link"),
-        max_length=40,
-        null=False,
-        blank=False,
-        unique=True,
-        help_text="لینک مورد علاقه برای کیس خود را وارد کنید. تلاش کنید لینکتان گویا و دقیق باشد، پس از این توانایی تغییر آن را نخواهید داشت. استفاده از فاصله (Space) مجاز نیست.",
-    )
     cover = models.ImageField(
         upload_to="cases/hx/uploads/%Y%m%d/", null=True, blank=True
     )
 
-    rts = [
-        ("ریه", "ریه"),
-        ("هماتولوژی و انکولوژی", "هماتولوژی و انکولوژی"),
-        ("روماتولوژی", "روماتولوژی"),
-        ("غدد", "غدد"),
-        ("گوارش", "گوارش"),
-        ("نفرولوژی", "نفرولوژی"),
-        ("جنرال", "جنرال"),
-        ("قلب", "قلب"),
-        ("پوست", "پوست"),
-        ("اطفال", "اطفال"),
-        ("زنان", "زنان"),
-        ("اعصاب", "اعصاب"),
-        ("روان", "روان"),
-        ("ENT", "ENT"),
-        ("عفونی", "عفونی"),
-        ("چشم", "چشم"),
-        ("مسمومین", "مسمومین"),
-    ]
+    # rts = [
+    #     ("ریه", "ریه"),
+    #     ("هماتولوژی و انکولوژی", "هماتولوژی و انکولوژی"),
+    #     ("روماتولوژی", "روماتولوژی"),
+    #     ("غدد", "غدد"),
+    #     ("گوارش", "گوارش"),
+    #     ("نفرولوژی", "نفرولوژی"),
+    #     ("جنرال", "جنرال"),
+    #     ("قلب", "قلب"),
+    #     ("پوست", "پوست"),
+    #     ("اطفال", "اطفال"),
+    #     ("زنان", "زنان"),
+    #     ("اعصاب", "اعصاب"),
+    #     ("روان", "روان"),
+    #     ("ENT", "ENT"),
+    #     ("عفونی", "عفونی"),
+    #     ("چشم", "چشم"),
+    #     ("مسمومین", "مسمومین"),
+    # ]
 
     title = models.CharField(
         ("عنوان:"),
@@ -113,13 +115,7 @@ class Case(models.Model):
         null=False,
         blank=False,
     )
-    cat = models.CharField(
-        ("دسته:"),
-        max_length=100,
-        choices=rts,
-        null=True,
-        blank=True,
-    )
+    rts = models.ForeignKey(Rotation, on_delete=models.CASCADE, null=True, blank=True,)
 
     description = models.CharField(
         ("توضیح:"),
@@ -161,10 +157,10 @@ class Case(models.Model):
         ],
         null=False,
         blank=False,
-        default="ROT",
+        default="بخش",
     )
-    job = models.CharField(("پیشه (شغل)"), max_length=20, null=True, blank=True)
-    dwelling = models.CharField(("محل زندگی"), max_length=20, null=True, blank=True)
+    job = models.CharField(("پیشه (شغل)"), max_length=20, null=True, blank=True, default="",)
+    dwelling = models.CharField(("محل زندگی"), max_length=20, null=True, blank=True, default="")
     age = models.PositiveSmallIntegerField(("سن"), null=False, blank=False, default=40)
     marriage = models.CharField(
         ("وضعیت تاهل"),
@@ -177,10 +173,11 @@ class Case(models.Model):
         ],
         null=True,
         blank=True,
+        default="متاهل"
     )
     # date_of_admission=models.DateField(null=True, blank=True)
     doctor = models.CharField(("پزشک درمانگر"), max_length=20, null=True, blank=True)
-    source = models.CharField(("منبع شرح حال"), max_length=10, null=True, blank=True)
+    source = models.CharField(("منبع شرح حال"), max_length=10, null=True, blank=True, default="")
     reliability = models.CharField(
         ("میزان قابل اعتماد بودن بیمار از 5"),
         max_length=1,
@@ -196,13 +193,14 @@ class Case(models.Model):
     )
     setting = models.CharField(("مرکز درمانی"), max_length=30, null=True, blank=True)
     cc = models.CharField(
-        ("شکایت اصلی"), max_length=100, null=False, blank=False, default=""
+        ("شکایت اصلی"), max_length=100, null=False, blank=False, default="", help_text="Chief Complaint"
     )
-    pi = models.TextField(("شرح بیماری فعلی"), null=False, blank=False, default="")
+    pi = models.TextField(("شرح بیماری فعلی"), null=False, blank=False, default="", help_text="Present Illness")
     pmh = models.TextField(
         ("شرح بیماری‌های گذشته"),
         null=True,
         blank=True,
+        help_text="Past Medical History"
     )
     drg = models.TextField(
         ("داروها"),
@@ -219,6 +217,7 @@ class Case(models.Model):
         ("سابقۀ بیماری‌های خانواده"),
         null=True,
         blank=True,
+        help_text="Family History"
     )
     alg = models.CharField(
         ("حساسیت‌ها"),
@@ -230,11 +229,14 @@ class Case(models.Model):
         ("بررسی دستگاه‌ها"),
         null=True,
         blank=True,
+        help_text="Review of Systems"
     )
     phe = models.TextField(
         ("معاینۀ بدنی"),
         null=True,
         blank=True,
+        help_text="Physical Examinations"
+
     )
     dat = models.TextField(
         ("داده‌های پاراکلینیکی"),
@@ -282,6 +284,14 @@ class Case(models.Model):
 
     tags = models.ManyToManyField(Tag, null=True, blank=True,help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
     suggests=models.ManyToManyField(Suggest, null=True, blank=True,help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
+    slug = models.SlugField(
+        ("Link"),
+        max_length=40,
+        null=False,
+        blank=False,
+        unique=True,
+        help_text="لینک مورد علاقه برای کیس خود را وارد کنید. تلاش کنید لینکتان گویا و دقیق باشد، پس از این توانایی تغییر آن را نخواهید داشت. استفاده از فاصله (Space) مجاز نیست.",
+    )
 
     def __str__(self):
         return self.title
@@ -332,7 +342,7 @@ class Comment(models.Model):
 
 def user_directory_path_hx(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return "cases/hx/uploads/hx_{0}/{1}".format(instance.author.slug, filename)
+    return "cases/hx/uploads/hx_{0}/{1}".format(instance.case.author.username, filename)
 
 class ImageCase(models.Model):
     type_choices = [
