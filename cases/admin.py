@@ -10,6 +10,7 @@ from .models import (
     # LabTestItem,
     ImageCase,
     Suggest,
+    Roataion,
 )
 
 
@@ -50,6 +51,7 @@ admin.site.register(Choice)
 admin.site.register(Tag)
 admin.site.register(ImageCase)
 admin.site.register(Suggest)
+admin.site.register(Rotation)
 admin.site.register(Case, CaseAdmin)
 admin.site.register(Picasso, PicassoAdmin)
 admin.site.register(Note,NotesAdmin)
