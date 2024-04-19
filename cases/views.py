@@ -13,6 +13,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import Case, Picasso, FollowUp, Comment, ImageCase, Note
 from .forms import (
+    CaseCreateForm,
     CaseUpdateForm,
     # FollowUpForm,
     CommentForm,
@@ -83,7 +84,7 @@ class CaseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     success_url = reverse_lazy("hx_list")
     form_class = CaseUpdateForm
 
-    def test_func(self):  # new
+    def test_func(self):
         obj = self.get_object()
         return obj.author == self.request.user
 
@@ -101,41 +102,42 @@ class CaseDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class CaseCreateView(LoginRequiredMixin, CreateView):  # new
     model = Case
     template_name = "hx_new.html"
+    form_class = CaseCreateForm
     # formset = LabTestForm
-    fields = (
-        "title",
-        "cat",
-        "description",
-        "pretext",
-        "gender",
-        "location",
-        "job",
-        "dwelling",
-        "age",
-        "marriage",
-        "doctor",
-        "source",
-        "reliability",
-        "setting",
-        "cc",
-        "pi",
-        "pmh",
-        "drg",
-        "sh",
-        "fh",
-        "alg",
-        "ros",
-        "phe",
-        "dat",
-        "summary",
-        "ddx",
-        "pdx",
-        "act",
-        "post_text",
-        "tags",
-        "slug",
-        "suggests",
-    )
+    # fields = (
+    #     "title",
+    #     "rts",
+    #     "description",
+    #     "pretext",
+    #     "gender",
+    #     "location",
+    #     "job",
+    #     "dwelling",
+    #     "age",
+    #     "marriage",
+    #     "doctor",
+    #     "source",
+    #     "reliability",
+    #     "setting",
+    #     "cc",
+    #     "pi",
+    #     "pmh",
+    #     "drg",
+    #     "sh",
+    #     "fh",
+    #     "alg",
+    #     "ros",
+    #     "phe",
+    #     "dat",
+    #     "summary",
+    #     "ddx",
+    #     "pdx",
+    #     "act",
+    #     "post_text",
+    #     "tags",
+    #     "slug",
+    #     "suggests",
+    # )
 
     success_url = "/cases/success/"
 
@@ -157,17 +159,21 @@ class CaseCreateView(LoginRequiredMixin, CreateView):  # new
     #     return data
 
 
-class CaseImageView(LoginRequiredMixin, CreateView):
+class CaseImageView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = ImageCase
     form_class = CaseImageForm
     template_name = "hx_add_img.html"
-    success_url = "/cases/success/"  # Update with your success URL
+    success_url = "/cases/success/"
 
     def form_valid(self, form):
         case_slug = self.kwargs["case_slug"]
         case = get_object_or_404(Case, slug=case_slug, author=self.request.user)
         form.instance.case = case
         return super().form_valid(form)
+    def test_func(self):  # new
+        case_slug = self.kwargs["case_slug"]
+        case = get_object_or_404(Case, slug=case_slug, author=self.request.user)
+        return case.author == self.request.user
 
 
 class PicassoListView(ListView):
