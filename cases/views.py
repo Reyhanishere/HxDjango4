@@ -5,13 +5,14 @@ from django.views.generic import ListView, DetailView, FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import JsonResponse
 
 from django.db.models import Q
 
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import Case, Picasso, FollowUp, Comment, ImageCase, Note
+from .models import Case, Picasso, FollowUp, Comment, ImageCase, Note, Reply
 from .forms import (
     CaseCreateForm,
     CaseUpdateForm,
@@ -23,6 +24,7 @@ from .forms import (
     CaseImageForm,
     ExCreateForm,
     ExUpdateForm,
+    ReplyForm,
 )
 
 
@@ -63,19 +65,80 @@ class CommentPost(SingleObjectMixin, FormView):  # new
 
 
 class CaseDetailView(View):
+    # def get(self, request, *args, **kwargs):
+    #     view = CommentGet.as_view()
+    #     return view(request, *args, **kwargs)
+
+    # def post(self, request, *args, **kwargs):
+    #     view = CommentPost.as_view()
+    #     return view(request, *args, **kwargs)
+
+    # def get_context_data(self, **kwargs):  # new
+    #     context = super().get_context_data(**kwargs)
+    #     context["form"] = CommentForm()
+    #     return context
     def get(self, request, *args, **kwargs):
-        view = CommentGet.as_view()
-        return view(request, *args, **kwargs)
+        case = Case.objects.get(slug=kwargs.get('slug'))
+        comments = Comment.objects.filter(case=case)
+        context = {'case': case, 'comments': comments, 'comment_form': CommentForm(), 'reply_form': ReplyForm()}
+        return render(request, 'hx_detail.html', context)
 
     def post(self, request, *args, **kwargs):
-        view = CommentPost.as_view()
-        return view(request, *args, **kwargs)
+        case_slug = kwargs.get('slug')
+        case = Case.objects.get(slug=case_slug)
+        comment_form = CommentForm(request.POST)
+        reply_form = ReplyForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.case = case
+            comment.author = request.user
+            comment.save()
+            return redirect(reverse('hx_detail', kwargs={'slug': case_slug}))
+        elif reply_form.is_valid():
+            reply = reply_form.save(commit=False)
+            comment_id = request.POST.get('comment_id')
+            reply.comment = Comment.objects.get(id=comment_id)
+            reply.author = request.user
+            reply.save()
+            return redirect(reverse('hx_detail', kwargs={'slug': case_slug}))
+        else:
+            return redirect(reverse('hx_detail', kwargs={'slug': case_slug}))
+        
+def add_reply(request):
+    if request.method == 'POST':
+        comment_id = request.POST.get('comment_id')
+        reply_content = request.POST.get('reply_content')
+        if comment_id and reply_content:
+            comment = get_object_or_404(Comment, id=comment_id)
+            reply = Reply(content=reply_content, comment=comment, author=request.user)
+            reply.save()
+            # Redirect back to the case detail page with the appropriate slug
+            return redirect('hx_detail', slug=comment.case.slug)
+    # Handle invalid or GET requests by redirecting to the home page
+    return redirect('hx_detail', slug=comment.case.slug)  # Adjust the redirect URL as needed
 
-    def get_context_data(self, **kwargs):  # new
-        context = super().get_context_data(**kwargs)
-        context["form"] = CommentForm()
-        return context
-
+def like_comment(request):
+    if request.method == 'POST':
+        user = request.user
+        comment_id = request.POST.get('comment_id')
+        if comment_id:
+            try:
+                comment = Comment.objects.get(id=comment_id)
+                if user in comment.liked_by.all():
+                    # User has already liked the comment, remove their like
+                    comment.liked_by.remove(user)
+                    comment.likes -= 1
+                    comment.save()
+                    return JsonResponse({'likes': comment.likes, 'liked': False})
+                else:
+                    # User hasn't liked the comment yet, add their like
+                    comment.liked_by.add(user)
+                    comment.likes += 1
+                    comment.save()
+                    return JsonResponse({'likes': comment.likes, 'liked': True})
+            except Comment.DoesNotExist:
+                pass
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 class CaseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Case
