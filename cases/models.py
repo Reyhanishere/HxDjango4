@@ -335,10 +335,23 @@ class Comment(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     related_name = "comments"
-    
+    likes = models.SmallIntegerField(default=0)
+    liked_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_comments')
     def __str__(self):
         return self.comment[:32]
 
+    
+
+class Reply(models.Model):
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    content = models.TextField()
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    verified = models.BooleanField(default=True)
+    delete = models.BooleanField(default=False)
+    date_created = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.author.username} in {self.comment.case} to {self.comment.author.username}: {self.content[:50]}"
+    
 
 def user_directory_path_hx(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
