@@ -1,11 +1,13 @@
+
 {% extends "base.html" %}
+{% load social_share %}
 {% load crispy_forms_tags %}
 {% load static %}
 {% block title %} | {{case.title}}{%endblock title%}
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <div class="pad-15">
-{% if case.verified and case.visible %}
+{% if case.verified %}
 {% comment %} <div class="article-entry" style='margin-left:50px; margin-right:50px'> {% endcomment %}
 <h2 style="font-weight:600">{{ object.title }}</h2>
 <p dir="ltr" style='margin-left:10px;'> {{ object.date_created|date:"d M y" }}  &emsp; By {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }} </p>
@@ -28,6 +30,25 @@
     </div>
     <div class="hx spanTwo"><b>CC: </b>{{ case.cc }}</div>
 
+  <!---  {% if case.PR or case.BP_S or case.RR or case.Temp %}
+        <div dir="ltr" class="vital">
+        <div class="spanTwo vsText"><b>Vital Signs:</b></div>
+        <div>PR: {{ case.PR }}</div>
+        <div>BP: {{ case.BP_S }}/{{ case.BP_D }}</div>
+        <div>RR: {{ case.RR }}</div>
+        {% if case.SPO2_O %}
+        <div>SP<sub>O&#8322;</sub>: {{ case.SPO2_O }}</div>
+        {% endif %}
+        <div>T: {{ case.Temp }}&#176;C</div>
+        {% if case.SPO2_O %}
+        <div>SP<sub>O&#8322;</sub><i>With</i> O&#8322;: {{ case.SPO2_N }}</div>
+        {% endif %}
+    </div>
+    {% else %}
+    <div dir="ltr" class="vital">
+        <div class="spanTwo"><b>No Vital Sign Recorded</b></div>
+    </div>
+    {% endif %}-->
     <div class="hx"><b>PI: </b>{{ case.pi|linebreaks }}</div>
 
     <div class="hx"><b>PMH: </b>{{ case.pmh|linebreaks }}</div>
@@ -88,14 +109,13 @@
 
 </div>
 <br/>
-{%if case.imagecase_set.all %}
 <div class="paper">
     <h4 id="images" class="spanTwo">تصاویر</h4>
     <details class="spanTwo">
         <summary class="pad-15">کلیک کنید</summary>
         <div class="imageCaseCont">
         {%for img in case.imagecase_set.all %}
-            {%if img.verified %}
+         {% comment %} {% if verified %} {% endcomment %}
             <div class="imageCaseCont">
                 <img src="{{img.image.url}}" width="300" class="imageCaseImg" alt="{{case.title}}, {{img.type}}"/>
                 <div>
@@ -104,51 +124,148 @@
                 </div>
             </div>
             <hr class="spanTwo"/>
-            {%endif%}
         {% endfor%}
         </div>
     </details>
 </div>
-    {% endif %}
 <div>
 <p style='margin:20px 10px;'>
     {{ case.post_text|linebreaks }}
 </p>
 </div>
+{%if case.picasso%}
+    <p>می‌توانید پیکاسو (تصویر کیس) مربوط به این شرح حال را در این <a href="{{case.picasso}}">لینک</a> مشاهده کنید.</p>
+{%endif%}
 
-    {% if user.is_authenticated %}
-    <hr/>
-    <div>
-        <h4>دیدگاهی بیفزایید</h4>
-        <form action="" method="post">{% csrf_token %}
-        {{ form|crispy }}
-        <button class="btn btn-success ml-2" type="submit">ثبت</button>
-        </form>
-        </div>
-        <hr/>
-        <div class="commentShow">
-    {%else%}
-        <p>برای ثبت کامنت لازم است <a href="{% url "login" %}">وارد</a> شوید.</p>
-    {% endif %}
-    {% for comment in case.comment_set.all %}
-    {%if comment.verified %}
-    <div class="comment">
-    <span class="commentDetail">{{ comment.author }} در {{ comment.date_created|date:"d F" }} ساعت {{ comment.date_created|date:"H:i" }}:</span> 
-    <p style="margin:10px">&emsp;{{ comment.comment }}</p>
+{% comment %} <div class="social-sharing">
+    <h3>Share this content:</h3>
+    {% post_to_facebook object_or_url "Post to Facebook!" %}
+    {% copy_to_clipboard case.slug "Copy to clipboard!" %}
+</div> {% endcomment %}
+
+{% comment %}{% if user.is_authenticated %}
+ <hr/>
+<div>
+    <h4>دیدگاهی بیفزایید</h4>
+    <form action="" method="post">{% csrf_token %}
+    {{ form|crispy }}
+    <button class="btn btn-success ml-2" type="submit">ثبت</button>
+    </form>
     </div>
+    <hr/>
+    <div class="commentShow">
+{%else%}
+    <p>برای ثبت کامنت لازم است <a href="{% url "login" %}">وارد</a> شوید.</p>
+{% endif %}
+{% for comment in case.comment_set.all %}
+{%if comment.verified %}
+<div class="comment">
+<span class="commentDetail">{{ comment.author }} در {{ comment.date_created|date:"d F" }} ساعت {{ comment.date_created|date:"H:i" }}:</span> 
+<p style="margin:10px">&emsp;{{ comment }}</p>
+</div>
     {%endif%}
     {% endfor %}
         </div>
+</div> {% endcomment %}
+<div>
+    {% if user.is_authenticated %}
+    <h4>دیدگاهی بیفزایید</h4>
+    <form method="post">
+        {% csrf_token %}
+        {{ comment_form|crispy }}
+    <button class="btn btn-success ml-2" type="submit">ثبت</button>
+    </form>
+    </div>
+    <hr/>
+    <div class="commentShow">
+{%else%}
+<p style="margin:15px 7px">برای ثبت دیدگاه و پاسخ لازم است <b><a href="{% url "login" %}">وارد</a></b> شوید.</p>
+{% endif %}
+    <h4 style="margin-bottom:15px">دیدگاه‌ها</h4>
+    {% for comment in comments|dictsort:"likes" reversed %}
+    {%if comment.verified %}
+    <div class="comment">
+        <div class="comment-content">
+            <span class="commentDetail">{{ comment.author }} در {{ comment.date_created|date:"d F" }} ساعت {{ comment.date_created|date:"H:i" }}:</span> 
+            <p style="margin:10px">&emsp;{{ comment.comment }}</p>
+        </div>
+         <div class="like-section">
+            <form dir="ltr" class="like-form" method="post" action="{% url 'like_comment' %}">
+                {% csrf_token %}
+                <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                <button type="submit" class="like-btn" style="{%if user in comment.liked_by.all %} color:#0b0 {%endif%}">&#9650;</button><span id="likes_count_{{ comment.id }}">{{ comment.likes }}</span>
+            </form>
+        </div>
+    
+    <div class="reply-box">
+        {% if comment.reply_set.all.count > 0 %}
+        <details class="reply">
+            <summary>پاسخ‌ها ({{comment.reply_set.all | length}})</summary>
+            <br/>
+        {% for reply in comment.reply_set.all %}
+            {% if reply.verified %}
+            <div class="reply-each">
+                <span class="commentDetail">{{ reply.author }} در {{ reply.date_created|date:"d F" }} ساعت {{ reply.date_created|date:"H:i" }}:</span> 
+                <p class="reply-text">{{ reply.content }}</p>
+            </div>
+            {%endif%}
+        {% endfor %}
+        </details>
+        {%else%}
+        <p style="background-color:#fff; padding:5px; border-radius:5px; color:#666" hidden></p>
+    {%endif%}
+    {% if user.is_authenticated %}
+    <form class="reply-form" id="reply_form_{{ comment.id }}" method="post" action="{% url 'add_reply' %}">
+        {% csrf_token %}
+        <input type="hidden" name="comment_id" value="{{ comment.id }}">
+        <textarea name="reply_content" placeholder="پاسخ خود را اینجا بنویسید..." required></textarea>
+        <button type="submit">ثبت پاسخ</button>
+    </form>
+    
+    {%endif%}
 </div>
+        {%endif%}
 
+
+    </div>
+        <!-- Display replies for the comment if any -->
+        
+    {% endfor %}
+</div>
 {% else %}
 <h2>این مطلب هنوز به تایید ادمین نرسیده است.</h2>
-    {%if user.username == case.author.username %}
-    <p>برای افزودن تصاویر برای این شرح حال می‌توانید به این <a href="/add-image">لینک</a> بروید.</p>
-    {% endif %}
 
 {% endif %}
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const likeForms = document.querySelectorAll('.like-form');
+        likeForms.forEach(form => {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const formData = new FormData(this);
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // If like request is successful, reload the page
+                        window.location.reload();
+                    } else {
+                        console.error('Failed to like comment');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        });
+    });
+</script>
 {% endblock content %}
 
 {% block edit %}
