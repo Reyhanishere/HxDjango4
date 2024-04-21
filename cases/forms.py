@@ -10,6 +10,7 @@ from .models import (
     # LabTestItem,
     ImageCase,
     Note,
+    Reply,
 )
 
 # LabTestForm = forms.inlineformset_factory(
@@ -53,6 +54,10 @@ class CommentForm(ModelForm):
         model = Comment
         fields = ("comment",)
 
+class ReplyForm(forms.ModelForm):
+    class Meta:
+        model = Reply
+        fields = ['content']
 
 class PicassoCreateForm(forms.ModelForm):
     text = forms.CharField(
