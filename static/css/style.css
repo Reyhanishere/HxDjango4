@@ -210,6 +210,21 @@ gap: 10px; */
         background-color: #88202f;
     }
     
+    .copyLink {
+        background: none;
+        border: none;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        text-align: left;
+        border-radius: 4px;
+        text-align: center;
+        height: 35px
+    }
+    
+    .copyLink:hover {
+        background-color: #ddd;
+    }
+    
     .comment {
         background-color: #eee;
         border-radius: 5px;
@@ -217,7 +232,7 @@ gap: 10px; */
         margin: 10px 5px;
         box-shadow: 0px 0px 1px 0.1px #333;
         display: grid;
-        grid-template-columns: 9fr 1fr;
+        grid-template-columns: 1fr auto;
     }
     
     .commentDetail {
@@ -227,8 +242,7 @@ gap: 10px; */
     
     .comment-box {
         display: grid;
-        grid-template-columns: 9fr 1fr;
-        /* Larger part for comment content, smaller part for like section */
+        grid-template-columns: auto auto;
         border: 1px solid #ccc;
         padding: 10px;
         margin-bottom: 20px;
@@ -261,7 +275,11 @@ gap: 10px; */
         display: grid;
         align-items: center;
         justify-items: center;
-        grid-template-rows: 1fr 1fr;
+        min-width: 45px;
+        max-width: 60px;
+        padding-left: 10px;
+        padding-top: 28px;
+        margin-right: 5px;
     }
     /* Style for like button */
     
@@ -269,6 +287,7 @@ gap: 10px; */
         background: none;
         border: none;
         font-size: 25px;
+        padding: 0px;
     }
     /* Style for like count */
     
