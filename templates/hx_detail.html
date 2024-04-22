@@ -4,16 +4,22 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block title %} | {{case.title}}{%endblock title%}
+{% block desc %}شرح حالی از {{ case.author.first_name }} {{ case.author.last_name }}{% endblock desc%}
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <div class="pad-15">
 {% if case.verified %}
 {% comment %} <div class="article-entry" style='margin-left:50px; margin-right:50px'> {% endcomment %}
-<h2 style="font-weight:600">{{ object.title }}</h2>
-<p dir="ltr" style='margin-left:10px;'> {{ object.date_created|date:"d M y" }}  &emsp; By {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }} </p>
+<h2 style="font-weight:600; padding-top:10px">{{ case.title }}</h2>
+<p dir="ltr" style='margin-left:10px;'>
+    <span style="color:#888" hidden>Share</span><button dir="rtl" onclick="copyToClipboard()" class="copyLink" id="copy"><img id="share"src="{% static 'images\share-icon.svg' %}" width="20px" alt="Copy case link to clipboard"></button>
+    <br/> {{ case.date_created|date:"d M y" }}  &emsp; By {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }} 
+</p>
+
 <p style='margin-right:10px;'>
     {{ case.pretext|safe }}
 </p>
+
 <div class="paper">
     <h5 class='spanTwo' style="padding:15px 15px 0px 10px"> شرح حال و معاینۀ فیزیکی:</h5>
     <hr/ class="spanTwo" style="order=0">
@@ -109,6 +115,7 @@
 
 </div>
 <br/>
+{% if case.imagecase_set.all|length > 0%}
 <div class="paper">
     <h4 id="images" class="spanTwo">تصاویر</h4>
     <details class="spanTwo">
@@ -128,14 +135,22 @@
         </div>
     </details>
 </div>
+{%else%}
+<p style="color:#888"> <i>برای این کیس هنوز تصویری ثبت و تایید نشده است.</i></p>
+{%endif%}
 <div>
 <p style='margin:20px 10px;'>
     {{ case.post_text|linebreaks }}
 </p>
 </div>
-{%if case.picasso%}
+<p style="color:#888; text-align:center">با کلیک بر روی
+<button dir="rtl" onclick="copyToClipboard()" class="copyLink"><img id="shareDown"src="{% static 'images\share-icon.svg' %}" width="20px" alt="Copy case link to clipboard"></button>
+لینک مطلب را کپی کنید.
+<span id="copied" hidden>(کپی شد!)</span>
+</p>
+{% comment %} {%if case.picasso%}
     <p>می‌توانید پیکاسو (تصویر کیس) مربوط به این شرح حال را در این <a href="{{case.picasso}}">لینک</a> مشاهده کنید.</p>
-{%endif%}
+{%endif%} {% endcomment %}
 
 {% comment %} <div class="social-sharing">
     <h3>Share this content:</h3>
@@ -169,19 +184,21 @@
 </div> {% endcomment %}
 <div>
     {% if user.is_authenticated %}
-    <h4>دیدگاهی بیفزایید</h4>
+    <h4>دیدگاهی بیفزایید:</h4>
     <form method="post">
         {% csrf_token %}
         {{ comment_form|crispy }}
     <button class="btn btn-success ml-2" type="submit">ثبت</button>
     </form>
     </div>
-    <hr/>
-    <div class="commentShow">
+
 {%else%}
 <p style="margin:15px 7px">برای ثبت دیدگاه و پاسخ لازم است <b><a href="{% url "login" %}">وارد</a></b> شوید.</p>
 {% endif %}
-    <h4 style="margin-bottom:15px">دیدگاه‌ها</h4>
+{% if comments.all.count > 0 %}    
+<hr/>
+    <h4 style="margin-bottom:15px">دیدگاه‌ها ({{comments.all | length}}):</h4>
+{%endif%}
     {% for comment in comments|dictsort:"likes" reversed %}
     {%if comment.verified %}
     <div class="comment">
@@ -219,7 +236,7 @@
         {% csrf_token %}
         <input type="hidden" name="comment_id" value="{{ comment.id }}">
         <textarea name="reply_content" placeholder="پاسخ خود را اینجا بنویسید..." required></textarea>
-        <button type="submit">ثبت پاسخ</button>
+        <button type="submit">ثبت</button>
     </form>
     
     {%endif%}
@@ -265,6 +282,19 @@
             });
         });
     });
+
+    function copyToClipboard() {
+        // Get the text field
+        var copyText = "https://mdpt.ir/cases/hx/{{case.slug}}";
+      
+         // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText);
+        var copied = document.getElementById("copied");
+        copied.hidden=false;
+        setTimeout(() => {
+            copied.hidden=true;
+          }, 4000);
+      }
 </script>
 {% endblock content %}
 
