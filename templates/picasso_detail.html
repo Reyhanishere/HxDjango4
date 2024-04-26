@@ -3,6 +3,9 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block title %} | Cases | Picasso{% endblock title %}{% block content %}
+{% block desc %}{{picasso.title}}{% endblock desc %}
+<meta property="og:image" content="{{picasso.image.url}}">
+
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <div class="pad-15">
 {% if picasso.verified and picasso.visible and not picasso.delete %}
