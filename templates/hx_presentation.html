@@ -43,17 +43,19 @@ h3{
             <p style="margin:20px">بیمار دارو یا مادۀ ویژه‌ای مصرف <u>نمی‌کند</u>.</p>
             {% endif %}
         
-            {% if case.sh %}
-            <div id="SH" class="hx content"><b>SH: </b>{{ case.sh|linebreaks }}</div>
+            <div id="SH" class="hx content">
+            {% if case.sh %}<b>SH: </b>{{ case.sh|linebreaks }}
             {% else %}
-            <p style="margin:20px">بیمار Social Historyای را ذکر <u>نمی‌کند</u>.</p>
+            <p style="margin:20px">بیمار Social History ویژه‌ای را ذکر <u>نمی‌کند</u>.</p>
             {% endif %}
-        
-            {% if case.fh %}
-            <div id="FH" class="hx content"><b>FH: </b>{{ case.fh|linebreaks }}</div>
+            </div>
+            
+            <div id="FH" class="hx content">
+            {% if case.fh %}<b>FH: </b>{{ case.fh|linebreaks }}
             {% else %}
             <p style="margin:20px">بیمار Family Historyای را ذکر <u>نمی‌کند</u>.</p>
             {% endif %}
+            </div>
             
             <div id="ROS" class="hx content"><b>Review of Systems:</b> <br/>{{ case.ros|linebreaks}}</div>    
             <div id="PE" class="hx content"><b>Physical Examination:</b> <br/>{{ case.phe|linebreaks}}</div>
