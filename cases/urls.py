@@ -23,6 +23,7 @@ from .views import (CasesListView,
                      ExDeleteView,
                      like_comment,
                      add_reply,
+                     CasePresentationView,
                      )
 
 
@@ -38,6 +39,7 @@ urlpatterns = [
     path("hx/<slug:slug>/edit", CaseUpdateView.as_view(), name="hx_edit"),
     path("hx/<slug:slug>/delete", CaseDeleteView.as_view(), name="hx_delete"),
     path("hx/new", CaseCreateView.as_view(), name="hx_new"),
+    path("hx/<slug:slug>/presentation",CasePresentationView.as_view(),  name="hx_presentation"),
     path("search/", SearchResultsListView.as_view(), name="search_results"),
     # path('hx/new/lab', LabTestCreateView.as_view(), name='lab-create'),
     path("success/", SuccessPageView.as_view(), name="success"),
