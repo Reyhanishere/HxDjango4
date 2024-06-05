@@ -103,7 +103,7 @@ class CaseDetailView(View):
             return redirect(reverse('hx_detail', kwargs={'slug': case_slug}))
         else:
             return redirect(reverse('hx_detail', kwargs={'slug': case_slug}))
-        
+
 def add_reply(request):
     if request.method == 'POST':
         comment_id = request.POST.get('comment_id')
@@ -238,7 +238,10 @@ class CaseImageView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         case = get_object_or_404(Case, slug=case_slug, author=self.request.user)
         return case.author == self.request.user
 
-
+class CasePresentationView(DetailView):
+    model=Case
+    template_name="hx_presentation.html"
+    
 class PicassoListView(ListView):
     model = Picasso
     template_name = "picasso_list.html"
