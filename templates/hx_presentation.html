@@ -69,6 +69,7 @@ h3{
             <div id="Action" class="hx content"><b>Action:</b> <br/>{{ case.act|linebreaks }}</div>
             <div id="OD" class="hx content"><b>Other Data: </b><br/>
                 <div style="padding:5px;">
+                    <p style="font-size:16px;">{{ case.dat|linebreaks }}</p>
                     {%for img in case.imagecase_set.all %}
                     {% comment %} {%if img.verified %} {% endcomment %}
                     <div class="m-2" style="background-color:#eee; border-radius:10px; max-width:220px; display:inline-block">
