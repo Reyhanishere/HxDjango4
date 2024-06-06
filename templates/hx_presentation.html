@@ -70,14 +70,14 @@ h3{
             <div id="OD" class="hx content"><b>Other Data: </b><br/>
                 <div style="padding:5px;">
                     {%for img in case.imagecase_set.all %}
-                    {%if img.verified %}
-                    <div class="m-2" style="background-color:#eee; border-radius:10px; max-width:220px">
+                    {% comment %} {%if img.verified %} {% endcomment %}
+                    <div class="m-2" style="background-color:#eee; border-radius:10px; max-width:220px; display:inline-block">
                     <a href="{{img.image.url}}" target="_blank">
                         <img src="{{img.image.url}}" style="border-radius:10px;" width="220" alt="{{img.text}}"/>
                     </a>
                     <p style="font-size:16px; padding:5px">{{img.text}}</p>
                     </div>
-                    {% endif %}
+                    {% comment %} {% endif %} {% endcomment %}
                     {% endfor%}
                 </div>
             </div>
