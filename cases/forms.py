@@ -1,27 +1,17 @@
 from django.forms import ModelForm, CheckboxSelectMultiple, CharField
 from django import forms
 
-
-from .models import (
-    Case,
-    #  FollowUp,
-    Comment,
-    Picasso,
-    # LabTestItem,
-    ImageCase,
-    Note,
-    Reply,
-)
-
-# LabTestForm = forms.inlineformset_factory(
-#     Case, LabTestItem, fields="__all__", extra=1, can_delete=True, can_order=False
-# )
-
+from .models import *
 
 class CaseImageForm(ModelForm):
     class Meta:
         model = ImageCase
         exclude = ("case", "verified", "visible")
+
+class FreeGraphForm(ModelForm):
+    class Meta:
+        model = LabGraphSelection
+        exclude = ("case", "author")
 
 
 class CaseUpdateForm(ModelForm):
@@ -150,13 +140,6 @@ class ExCreateForm(ModelForm):
             "done",
             "visible",
         )
-
-
-# class FollowUpForm(ModelForm):
-#     class Meta:
-#         model = FollowUp
-#         fields = ('date',"text",)
-
 
 class CaseCreateForm(ModelForm):
     class Meta:
