@@ -1,30 +1,6 @@
 from django.urls import path
 
-from .views import (CasesListView,
-                     CaseDetailView, 
-                     CaseUpdateView, 
-                     CaseDeleteView, 
-                     CaseCreateView,
-                     cases_main,
-                     PicassoCreateView,
-                     PicassoUpdateView,
-                     PicassoListView,
-                     PicassoDetailView,
-                     PicassoDeleteView,
-                     SearchResultsListView,
-                    #  LabTestCreateView,
-                     SuccessPageView,
-                     CaseImageView,
-
-                     ExCreateView,
-                     ExDetailView,
-                     ExListView,
-                     ExUpdateView,
-                     ExDeleteView,
-                     like_comment,
-                     add_reply,
-                     CasePresentationView,
-                     )
+from .views import *
 
 
 urlpatterns = [
@@ -36,10 +12,13 @@ urlpatterns = [
     path("picasso/<slug:slug>/delete", PicassoDeleteView.as_view(), name="picasso_delete"),
     path("hx/", CasesListView.as_view(), name="hx_list"),
     path("hx/<slug:slug>/", CaseDetailView.as_view(), name="hx_detail"),
+    # path("hx/<slug:slug>/presentation",CasePresentationView.as_view(),  name="hx_presentation"),
+    path("hx/<slug:case_slug>/graphs/new", CaseGraphCreateView.as_view(), name="hx_graph_new"),
+    path("hx/<slug:case_slug>/graphs/", GraphListView.as_view(), name="hx_graphs"),
+    path("hx/<slug:slug>/presentation",CasePresentationView.as_view(),  name="hx_presentation"),
     path("hx/<slug:slug>/edit", CaseUpdateView.as_view(), name="hx_edit"),
     path("hx/<slug:slug>/delete", CaseDeleteView.as_view(), name="hx_delete"),
     path("hx/new", CaseCreateView.as_view(), name="hx_new"),
-    path("hx/<slug:slug>/presentation",CasePresentationView.as_view(),  name="hx_presentation"),
     path("search/", SearchResultsListView.as_view(), name="search_results"),
     # path('hx/new/lab', LabTestCreateView.as_view(), name='lab-create'),
     path("success/", SuccessPageView.as_view(), name="success"),
@@ -52,4 +31,3 @@ urlpatterns = [
     path('like/', like_comment, name='like_comment'),
     path('add_reply/', add_reply, name='add_reply'),
     ]
-
