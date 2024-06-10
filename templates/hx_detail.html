@@ -11,10 +11,19 @@
 {% if case.verified %}
 {% comment %} <div class="article-entry" style='margin-left:50px; margin-right:50px'> {% endcomment %}
 <h2 style="font-weight:600; padding-top:10px">{{ case.title }}</h2>
-<p dir="ltr" style='margin-left:10px;'>
+<div dir="ltr">
+    <a href="presentation" class="btn btn-secondary">Presentation Mode</a>
+    {%if user.username == case.author.username %}
+    <a href="graphs/new" class="btn btn-secondary">
+        See Lab Data
+    </a>
+    <a href="graphs/new" class="btn btn-outline-secondary">
+        + Lab Data
+    </a>
+    {%endif%}
     <span style="color:#888" hidden>Share</span><button dir="rtl" onclick="copyToClipboard()" class="copyLink" id="copy"><img id="share"src="{% static 'images\share-icon.svg' %}" width="20px" alt="Copy case link to clipboard"></button>
-    <br/> {{ case.date_created|date:"d M y" }}  &emsp; By {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }} 
-</p>
+</div>
+    <p dir="ltr" style='margin:5px;'>{{ case.date_created|date:"d M y" }}  &emsp; By {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }} </p>
 
 <p style='margin-right:10px;'>
     {{ case.pretext|safe }}
@@ -86,9 +95,13 @@
     <div class="hx"><b>Other Data: </b><br/>
         <div style="padding:5px;">
             {%if user.username == case.author.username %}
+            <a href="graphs/new" style="color:#333;margin:5px; font-size:16px">
+                آزمایش‌های کیس خود را اضافه کنید.
+            </a><br/>
             <a href="add-image" style="color:#333;margin:5px; font-size:16px">
                 تصاویر کیس خود را اضافه کنید.
             </a><br/>
+
             {%endif%}
             {%for img in case.imagecase_set.all %}
             {%if img.verified %}
@@ -96,7 +109,9 @@
             {% endif %}
             {% endfor%}
         </div>
+        {%if case.labgraphselection_set.all %} <a href="graphs" style="color:#333;margin:5px;">آزمایش‌های بیمار</a><br/>{% endif %}
         {%if case.imagecase_set.all %} <a href="#images" style="color:#333;margin:5px;">تمام تصاویر در زیر برگۀ شرح حال</a>{% endif %}<hr/>{{ case.dat|linebreaks }}
+        
     </div>
     <div class="hx"><b>Review of Systems:</b> <br/>{{ case.ros|linebreaks}}</div>    
     <div class="hx"><b>Physical Examination:</b> <br/>{{ case.phe|linebreaks}}</div>
