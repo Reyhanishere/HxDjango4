@@ -20,6 +20,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        .contain{
+            min-height:85vh;
+        }
         .thisContainer {
             display: flex;
             align-items: flex-start;
@@ -103,24 +106,27 @@
                 
             }
             .table-container {
-                margin-left: 20px;
+                margin-left: 0;
+            }
+            table{
+                margin: 5px
             }
         }
 
     </style>
 </head>
 <body>
-    <div class="myHead" style="height:50px; top:0px">
-        <div class="menu" ></div>
+<div class="myHead" style="height:50px; top:0px">
+    <div class="menu" ></div>
 
-        <div class="header-logo text-left">
-            <a class="" href="{% url 'cases_main' %}">
-                <img src="{% static 'images\Logo Prime.svg' %}" width="40px" alt="medepartout Logo">
-                <span id="logoName"  style="font-size: 16px;">medepartout | Graphs</span>
-            </a>
-        </div>
+    <div class="header-logo text-left">
+        <a class="" href="{% url 'cases_main' %}">
+            <img src="{% static 'images\Logo Prime.svg' %}" width="40px" alt="medepartout Logo">
+            <span id="logoName"  style="font-size: 16px;">medepartout | Graphs</span>
+        </a>
+    </div>
 </div>
-<div>
+<div class="contain">
     {% for graph in graphs reversed%}
     <div class="thisContainer">
         <div class="chart-container">
