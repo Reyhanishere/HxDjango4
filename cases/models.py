@@ -5,19 +5,6 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
-# class CRSModel(models.Model):
-#     class Meta:
-#         abstract=True
-
-#     def allow_comments(self):
-#         return True
-    
-#     def allow_reviews(self):
-#         return True
-    
-#     def allow_suggests(self):
-#         return True
-
 class Choice(models.Model):
     name = models.CharField(max_length=36)
 
@@ -535,64 +522,24 @@ class Note(models.Model):
     def __str__(self):
         return self.title
 
+class LabGraphSelection(models.Model):   
+    title = models.CharField(
+        max_length=64,
+        help_text="You can name this selection.",
+        blank=False,
+        null=False,
+    )
+    case=models.ForeignKey(Case, on_delete=models.CASCADE, blank=True, null=True)
+    data=models.TextField(blank=False, null=False)
+    description=models.TextField(help_text="Optional", blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
 
-# class LabTestItem(models.Model):
-#     cat_choice = [
-#         ("Blood", "Blood"),
-#         ("Biochemistry", "Biochemistry"),
-#         ("U/A", "U/A"),
-#         ("Serologic", "Serologic"),
-#         ("Other", "Other"),
-#     ]
-#     flg_choice = [
-#         ("NL", "NL"),
-#         ("H", "H"),
-#         ("L", "L"),
-#         ("Positive", "Positive"),
-#         ("Negative", "Negative"),
-#         ("Other", "Other"),
-#     ]
-#     case = models.ForeignKey(Case, on_delete=models.CASCADE)
-#     day = models.SmallIntegerField(default=0, null=True, blank=True)
-#     item_abbr = models.CharField(
-#         "مخفف نام", help_text="eg: WBC", max_length=16, null=False, blank=False
-#     )
-#     item_full = models.CharField(
-#         "نام کامل",
-#         help_text="eg: White Blood Cell",
-#         max_length=50,
-#         null=True,
-#         blank=True,
-#     )
-#     category = models.CharField(
-#         "دسته",
-#         max_length=25,
-#         choices=cat_choice,
-#         default="Blood",
-#         null=False,
-#         blank=False,
-#     )
-#     value = models.CharField("مقدار", default="", max_length=8, null=False, blank=False)
-#     unit = models.CharField(
-#         "واحد", default="10^3/µL", max_length=16, null=False, blank=False
-#     )
-#     ref_rng = models.CharField(
-#         "بازۀ مرجع",
-#         default="",
-#         help_text="eg: 3.8 - 5.4",
-#         max_length=16,
-#         null=False,
-#         blank=False,
-#     )
-#     flag = models.CharField(
-#         "وضعیت",
-#         max_length=25,
-#         choices=flg_choice,
-#         default="Other",
-#         null=False,
-#         blank=False,
-#     )
-#     related_name = "lab"
-
-#     def __str__(self):
-#         return self.item_abbr[:32]
+    def __str__(self):
+        if self.case:
+            return str(self.title) + " from " + str(self.case) + " by " + str(self.author)
+        else:
+            return str(self.title) + " FREE by " + str(self.author)
