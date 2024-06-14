@@ -934,14 +934,22 @@ gap: 10px; */
         margin-top: 70px
     }
     
-    th,
+       th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+    
     td {
         border: 1px solid #dddddd;
         text-align: left;
         padding: 8px;
     }
     
-    th:first-child,
+    th:first-child {
+        background-color: #f2f2f2;
+    }
+    
     td:first-child {
         background-color: #f2f2f2;
     }
