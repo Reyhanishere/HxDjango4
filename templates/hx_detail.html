@@ -133,21 +133,31 @@
 <div class="paperLighter">
     <h4 id="labData" >آزمایش‌ها</h4>
     <details>
-        <summary class="pad-15">کلیک کنید</summary>
-        <a href="graphs" target="_blank" class="btn"><span style="text-decoration: underline">
-           مشاهدۀ تمام آزمایش‌ها به همراه <b>نمودار</b>
-        </span></a>
-        <div class="labDataCont">
+        <summary class="pad-15">کلیک کنید
+            <a href="graphs" target="_blank" class="btn"><span style="text-decoration: underline">
+                مشاهدۀ تمام آزمایش‌ها به همراه <b>نمودار</b>
+             </span></a>
+        </summary>
+
+        
         {%for graph in case.labgraphselection_set.all %}
+        <h5>{{graph.title}}:</h5>
+        <div class="labDataCont">
+            {%if graph.description%}<div class="description">{{graph.description | linebreaks}}</div>{%endif%}
             <div dir="ltr" class="table-container">
-                <table id="table-{{ forloop.counter }}">
+                <table id="table-{{ forloop.counter }}" style="margin: 10px 5px">
                     <tbody>
                         <!-- Data will be inserted here by JavaScript -->
                     </tbody>
                 </table>
-                
+                {%if graph.author.username == user.username%}
+                <div>
+                    <a href="{% url 'hx_graph_edit' graph.case.slug graph.pk %}" class="editGraph">Edit</a> |
+                    <a href="{% url 'hx_graph_delete' graph.case.slug graph.pk %}" class="editGraph" style="color:#c33">Delete</a>
+                </div>
+                {%endif%}
             </div>
-            {%if graph.description%}<div class="description">{{graph.description | linebreaks}}</div>{%endif%}
+        
             <script>
                 const graphData{{ forloop.counter }} = '{{ graph.data|striptags|linebreaksbr }}'.split('<br>');
                 const datasets{{ forloop.counter }} = [];
@@ -183,9 +193,10 @@
                     }
                 }
             </script>
-            <hr class="spanTwo"/>
-        {% endfor%}
         </div>
+            <hr>
+        {% endfor%}
+        
     </details>
 </div>
 {%else%}
