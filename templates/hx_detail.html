@@ -138,9 +138,13 @@
                 مشاهدۀ تمام آزمایش‌ها به همراه <b>نمودار</b>
              </span></a>
         </summary>
-        {%for graph in case.labgraphselection_set.all %}
+     {%for graph in case.labgraphselection_set.all %}
         <h5>{{graph.title}}:</h5>
         <div class="labDataCont">
+            {%if graph.description%}<div class="description">{{graph.description | linebreaks}}</div>
+            {%else%}
+            <div></div>
+            {%endif%}
             <div dir="ltr" class="table-container">
                 <table id="table-{{ forloop.counter }}" style="margin: 10px 5px">
                     <tbody>
@@ -154,10 +158,7 @@
                 </div>
                 {%endif%}
             </div>
-            {%if graph.description%}<div class="description">{{graph.description | linebreaks}}</div>
-            {%else%}
-            <div></div>
-            {%endif%}
+
         
             <script>
                 const graphData{{ forloop.counter }} = '{{ graph.data|striptags|linebreaksbr }}'.split('<br>');
