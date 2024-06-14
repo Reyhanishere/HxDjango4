@@ -19,101 +19,7 @@
     <link rel="manifest" href="/site.webmanifest">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        .contain{
-            min-height:85vh;
-        }
-        .thisContainer {
-            display: flex;
-            align-items: flex-start;
-            margin: 20px;
-        }
-        .chart-container {
-            flex: 1;
-        }
-        .table-container {
-            flex: 1;
-            margin-left: 20px;
-        }
-        .divider {
-            background-color: #ccc;
-            width: 5px;
-            cursor: ew-resize;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-bottom: 10px;
-            margin-top:70px
-        }
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-        th:first-child, td:first-child {
-            background-color: #f2f2f2;
-        }
-        th:first-child {
-            position: sticky;
-            left: 0;
-            z-index: 2;
-            background-color: #ffffff;
-        }
-        .myHead {
-            font-weight: 400;
-            font-size: 16px;
-            background-color: #2999de;
-            color: white;
-            height: 50px;
-            width: 100%;
-            display: grid;
-            grid-template-columns: 0.5fr 4fr 2fr;
-            grid-template-rows: 1fr;
-            gap: 5px;
-            padding: 0;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0px 1px 5px 0px gray;
-        }
-        .myFoot {
-            background-color: #705697;
-            width: 100%;
-            color: white;
-            bottom:0px;
-            height:50px
-        }
-        .description {
-            background-color: #efefef;
-            border-radius:10px;
-            margin-bottom: 10px;
-            padding:8px;
-        }
-        .description:hover{
-            background-color: #ebebeb;
-            
-        }
-        .description p{
-            margin:0
-        }
-        @media(max-width: 700px){
-            .thisContainer {
-                display: grid;
-                grid-template-rows: auto auto;
-                margin: 20px;
-            }
-            .chart-container {
-                
-            }
-            .table-container {
-                margin-left: 0;
-            }
-            table{
-                margin: 5px
-            }
-        }
-
-    </style>
+    
 </head>
 <body>
 <div class="myHead" style="height:50px; top:0px">
@@ -127,11 +33,19 @@
     </div>
 </div>
 <div class="contain">
+
+<div style="background-color: #f5f5f5; margin: 10px; border-radius: 7px; padding: 15px 10px;" dir="rtl">
+    <b>خلاصه: </b>{{ graphs.0.case.summary }}</div>
+
     {% for graph in graphs reversed%}
     <div class="thisContainer">
         <div class="chart-container">
             <img src="{% static 'images\Logo Prime.svg' %}" width="25px" alt="medepartout Logo" style="margin:0 0 12px 0;opacity: 0.7;">
             <h3 style="display:inline-block; margin:0 0 0 2px">{{ graph.title }}</h3>
+            {%if graph.author.username == user.username%}
+            <a href="{{graph.id}}/edit" class="editGraph">Edit</a>
+            <a href="{% url 'hx_graph_delete' graph.case.slug graph.pk %}" class="editGraph" style="color:#c33">Delete</a>
+            {%endif%}
             <canvas id="chart-{{ forloop.counter }}"></canvas>
         </div>
         <div class="divider" id="divider-{{ forloop.counter }}"></div>
@@ -141,11 +55,11 @@
                     <!-- Data will be inserted here by JavaScript -->
                 </tbody>
             </table>
-            {%if graph.description%}<div class="description">{{graph.description | linebreaks}}</div>{%endif%}
+            {%if graph.description%}<div dir="rtl" class="description">{{graph.description | linebreaks}}</div>{%endif%}
         </div>
-    </div>
+    
 
-</div>
+
     <script>
     const graphData{{ forloop.counter }} = '{{ graph.data|striptags|linebreaksbr }}'.split('<br>');
     const datasets{{ forloop.counter }} = [];
@@ -211,41 +125,10 @@
         }
     }
 </script>
+</div>
     {% endfor %}
+</div>
     <div class="myFoot" dir="ltr"><p style="color:white; padding:13px; margin:7px 10px">medepartout | All Right Reserved &copy; 2024</p></div>
-    <script>
-        // Set up resizable dividers
-        const containers = document.querySelectorAll('.container');
-        containers.forEach(container => {
-            const divider = container.querySelector('.divider');
-            const chartContainer = container.querySelector('.chart-container');
-            const tableContainer = container.querySelector('.table-container');
-
-            let isResizing = false;
-            let lastX;
-
-            divider.addEventListener('mousedown', function(event) {
-                isResizing = true;
-                lastX = event.clientX;
-            });
-
-            document.addEventListener('mousemove', function(event) {
-                if (isResizing) {
-                    const deltaX = event.clientX - lastX;
-                    const chartWidth = chartContainer.offsetWidth + deltaX;
-                    const tableWidth = tableContainer.offsetWidth - deltaX;
-
-                    chartContainer.style.width = chartWidth + 'px';
-                    tableContainer.style.width = tableWidth + 'px';
-
-                    lastX = event.clientX;
-                }
-            });
-
-            document.addEventListener('mouseup', function() {
-                isResizing = false;
-            });
-        });
-    </script>
+    
 </body>
 </html>
