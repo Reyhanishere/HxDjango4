@@ -53,6 +53,18 @@ class CommentPost(SingleObjectMixin, FormView):  # new
 
 
 class CaseDetailView(View):
+    # def get(self, request, *args, **kwargs):
+    #     view = CommentGet.as_view()
+    #     return view(request, *args, **kwargs)
+
+    # def post(self, request, *args, **kwargs):
+    #     view = CommentPost.as_view()
+    #     return view(request, *args, **kwargs)
+
+    # def get_context_data(self, **kwargs):  # new
+    #     context = super().get_context_data(**kwargs)
+    #     context["form"] = CommentForm()
+    #     return context
     def get(self, request, *args, **kwargs):
         case = Case.objects.get(slug=kwargs.get('slug'))
         comments = Comment.objects.filter(case=case)
@@ -142,6 +154,41 @@ class CaseCreateView(LoginRequiredMixin, CreateView):  # new
     model = Case
     template_name = "hx_new.html"
     form_class = CaseCreateForm
+    # formset = LabTestForm
+    # fields = (
+    #     "title",
+    #     "rts",
+    #     "description",
+    #     "pretext",
+    #     "gender",
+    #     "location",
+    #     "job",
+    #     "dwelling",
+    #     "age",
+    #     "marriage",
+    #     "doctor",
+    #     "source",
+    #     "reliability",
+    #     "setting",
+    #     "cc",
+    #     "pi",
+    #     "pmh",
+    #     "drg",
+    #     "sh",
+    #     "fh",
+    #     "alg",
+    #     "ros",
+    #     "phe",
+    #     "dat",
+    #     "summary",
+    #     "ddx",
+    #     "pdx",
+    #     "act",
+    #     "post_text",
+    #     "tags",
+    #     "slug",
+    #     "suggests",
+    # )
 
     success_url = "/cases/success/"
 
@@ -152,6 +199,15 @@ class CaseCreateView(LoginRequiredMixin, CreateView):  # new
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+    # def get_context_data(self, **kwargs):
+    #     data = super().get_context_data(**kwargs)
+    #     if self.request.POST:
+    #         data["formset"] = LabTestForm(self.request.POST)
+    #     else:
+    #         data["formset"] = LabTestForm()
+    #     print(data["formset"])  # Add this line to check formset contents
+    #     return data
 
 
 class CaseImageView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -346,3 +402,30 @@ class GraphListView(ListView):
     context_object_name = "graphs"
     template_name="hx/graph/graph_list.html"
 
+class GraphUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = LabGraphSelection
+    template_name = "hx/graph/graph_edit.html"
+    # how to show a message
+    form_class = GraphUpdateForm
+
+    def get_success_url(self):
+        case_slug = self.kwargs["case_slug"]
+        case = get_object_or_404(Case, slug=case_slug)
+        return f"/cases/hx/{case.slug}/graphs"
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.author == self.request.user
+
+class GraphDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model=LabGraphSelection
+    template_name="hx/graph/graph_delete.html"
+
+    def get_success_url(self):
+        case_slug = self.kwargs["case_slug"]
+        case = get_object_or_404(Case, slug=case_slug)
+        return f"/cases/hx/{case.slug}/graphs"
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.author == self.request.user
