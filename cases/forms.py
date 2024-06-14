@@ -1,7 +1,13 @@
 from django.forms import ModelForm, CheckboxSelectMultiple, CharField
 from django import forms
 
+
 from .models import *
+
+# LabTestForm = forms.inlineformset_factory(
+#     Case, LabTestItem, fields="__all__", extra=1, can_delete=True, can_order=False
+# )
+
 
 class CaseImageForm(ModelForm):
     class Meta:
@@ -12,6 +18,18 @@ class FreeGraphForm(ModelForm):
     class Meta:
         model = LabGraphSelection
         exclude = ("case", "author")
+
+class GraphUpdateForm(ModelForm):
+    description = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                "dir": "rtl",
+            }
+        )
+    )
+    class Meta:
+        model=LabGraphSelection
+        exclude=("author", "case")
 
 
 class CaseUpdateForm(ModelForm):
@@ -140,6 +158,13 @@ class ExCreateForm(ModelForm):
             "done",
             "visible",
         )
+
+
+# class FollowUpForm(ModelForm):
+#     class Meta:
+#         model = FollowUp
+#         fields = ('date',"text",)
+
 
 class CaseCreateForm(ModelForm):
     class Meta:
