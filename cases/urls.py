@@ -14,6 +14,8 @@ urlpatterns = [
     path("hx/<slug:slug>/", CaseDetailView.as_view(), name="hx_detail"),
     # path("hx/<slug:slug>/presentation",CasePresentationView.as_view(),  name="hx_presentation"),
     path("hx/<slug:case_slug>/graphs/new", CaseGraphCreateView.as_view(), name="hx_graph_new"),
+    path("hx/<slug:case_slug>/graphs/<int:pk>/edit", GraphUpdateView.as_view(), name="hx_graph_edit"),
+    path("hx/<slug:case_slug>/graphs/<int:pk>/delete", GraphDeleteView.as_view(), name="hx_graph_delete"),
     path("hx/<slug:case_slug>/graphs/", GraphListView.as_view(), name="hx_graphs"),
     path("hx/<slug:slug>/presentation",CasePresentationView.as_view(),  name="hx_presentation"),
     path("hx/<slug:slug>/edit", CaseUpdateView.as_view(), name="hx_edit"),
@@ -31,3 +33,4 @@ urlpatterns = [
     path('like/', like_comment, name='like_comment'),
     path('add_reply/', add_reply, name='add_reply'),
     ]
+
