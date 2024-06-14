@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}| Hx{%endblock title%}
+{% block content %}
+<div class="pad-15">
+    <h2 dir="rtl">حذف</h2>
+<form action="" method="post">{% csrf_token %}
+<p>آیا از زدودن این دسته آزمایش اطمینان دارید؟</p>
+<button class="btn btn-danger ml-2" type="submit">Confirm</button>
+</form></div>
+{% endblock content %}
