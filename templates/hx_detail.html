@@ -1,23 +1,21 @@
-
 {% extends "base.html" %}
-{% load social_share %}
 {% load crispy_forms_tags %}
 {% load static %}
 {% block title %} | {{case.title}}{%endblock title%}
 {% block desc %}شرح حالی از {{ case.author.first_name }} {{ case.author.last_name }}{% endblock desc%}
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
 <div class="pad-15">
 {% if case.verified %}
-{% comment %} <div class="article-entry" style='margin-left:50px; margin-right:50px'> {% endcomment %}
 <h2 style="font-weight:600; padding-top:10px">{{ case.title }}</h2>
 <div dir="ltr">
-    <a href="presentation" class="btn btn-secondary">Presentation Mode</a>
-    {%if user.username == case.author.username %}
-    <a href="graphs" class="btn btn-secondary">
+    <a href="presentation" target="_blank" class="btn btn-secondary">Presentation Mode</a>
+    <a href="graphs" target="_blank" class="btn btn-secondary">
         See Lab Data
     </a>
-    <a href="graphs/new" class="btn btn-outline-secondary">
+    {%if user.username == case.author.username %}
+    <a href="graphs/new" target="_blank" class="btn btn-outline-secondary">
         + Lab Data
     </a>
     {%endif%}
@@ -44,28 +42,7 @@
         <div class="cell"> میزان قابل اعتماد بودن: <b>{{ case.reliability }}</b>/5</div>
     </div>
     <div class="hx spanTwo"><b>CC: </b>{{ case.cc }}</div>
-
-  <!---  {% if case.PR or case.BP_S or case.RR or case.Temp %}
-        <div dir="ltr" class="vital">
-        <div class="spanTwo vsText"><b>Vital Signs:</b></div>
-        <div>PR: {{ case.PR }}</div>
-        <div>BP: {{ case.BP_S }}/{{ case.BP_D }}</div>
-        <div>RR: {{ case.RR }}</div>
-        {% if case.SPO2_O %}
-        <div>SP<sub>O&#8322;</sub>: {{ case.SPO2_O }}</div>
-        {% endif %}
-        <div>T: {{ case.Temp }}&#176;C</div>
-        {% if case.SPO2_O %}
-        <div>SP<sub>O&#8322;</sub><i>With</i> O&#8322;: {{ case.SPO2_N }}</div>
-        {% endif %}
-    </div>
-    {% else %}
-    <div dir="ltr" class="vital">
-        <div class="spanTwo"><b>No Vital Sign Recorded</b></div>
-    </div>
-    {% endif %}-->
     <div class="hx"><b>PI: </b>{{ case.pi|linebreaks }}</div>
-
     <div class="hx"><b>PMH: </b>{{ case.pmh|linebreaks }}</div>
     {% if case.drg %}
     <div class="hx"><b>Drugs: </b>{{ case.drg|linebreaks }}</div>
@@ -78,7 +55,6 @@
     {% else %}
     <p style="margin:20px">بیمار Social Historyای را ذکر <u>نمی‌کند</u>.</p>
     {% endif %}
-
 
     {% if case.alg %}
     <div class="hx"><b>Allergy: </b>{{ case.alg|linebreaks }}</div>
@@ -109,16 +85,15 @@
             {% endif %}
             {% endfor%}
         </div>
-        {%if case.labgraphselection_set.all %} <a href="graphs" style="color:#333;margin:5px;">آزمایش‌های بیمار</a><br/>{% endif %}
+        {%if case.labgraphselection_set.all %} <a href="graphs" style="color:#333;margin:5px;">نمودار و جدول آزمایش‌های بیمار</a><br/>{% endif %}
+        {%if case.labgraphselection_set.all %} <a href="#labData" style="color:#333;margin:5px;">جدول آزمایش‌های بیمار در زیر برگۀ شرح حال</a><br/>{% endif %}
         {%if case.imagecase_set.all %} <a href="#images" style="color:#333;margin:5px;">تمام تصاویر در زیر برگۀ شرح حال</a>{% endif %}<hr/>{{ case.dat|linebreaks }}
         
     </div>
     <div class="hx"><b>Review of Systems:</b> <br/>{{ case.ros|linebreaks}}</div>    
     <div class="hx"><b>Physical Examination:</b> <br/>{{ case.phe|linebreaks}}</div>
     <div class="hx" style="background-color:#ffd"><b>Summary: </b>{{ case.summary|linebreaks }}</div>
-    {% comment %} <div class="hx"><br/>{{ case.ddx }}</div> {% endcomment %}
     <div class="hx">
-
         <details>
             <summary><b>Diffrential Dx:</b></summary>
         <p>{{ case.ddx|linebreaks}}</p>
@@ -131,9 +106,9 @@
 </div>
 <br/>
 {% if case.imagecase_set.all|length > 0%}
-<div class="paper">
-    <h4 id="images" class="spanTwo">تصاویر</h4>
-    <details class="spanTwo">
+<div class="paperLighter">
+    <h4 id="images" >تصاویر</h4>
+    <details >
         <summary class="pad-15">کلیک کنید</summary>
         <div class="imageCaseCont">
         {%for img in case.imagecase_set.all %}
@@ -145,7 +120,7 @@
                     <p class="imageCaseP">{{img.text}}</p>
                 </div>
             </div>
-            <hr class="spanTwo"/>
+            <hr/>
         {% endfor%}
         </div>
     </details>
@@ -153,6 +128,70 @@
 {%else%}
 <p style="color:#888"> <i>برای این کیس هنوز تصویری ثبت و تایید نشده است.</i></p>
 {%endif%}
+
+{% if case.labgraphselection_set.all|length > 0%}
+<div class="paperLighter">
+    <h4 id="labData" >آزمایش‌ها</h4>
+    <details>
+        <summary class="pad-15">کلیک کنید</summary>
+        <a href="graphs" target="_blank" class="btn"><span style="text-decoration: underline">
+           مشاهدۀ تمام آزمایش‌ها به همراه <b>نمودار</b>
+        </span></a>
+        <div class="labDataCont">
+        {%for graph in case.labgraphselection_set.all %}
+            <div dir="ltr" class="table-container">
+                <table id="table-{{ forloop.counter }}">
+                    <tbody>
+                        <!-- Data will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+                
+            </div>
+            {%if graph.description%}<div class="description">{{graph.description | linebreaks}}</div>{%endif%}
+            <script>
+                const graphData{{ forloop.counter }} = '{{ graph.data|striptags|linebreaksbr }}'.split('<br>');
+                const datasets{{ forloop.counter }} = [];
+                // Create table
+                const tableBody{{ forloop.counter }} = document.getElementById('table-{{ forloop.counter }}').querySelector('tbody');
+                graphData{{ forloop.counter }}.forEach(line => {
+                    const [label, values] = line.split(': ');
+                    const dataPoints = values.split(', ').map(val => val === '-' ? null : parseFloat(val.trim()));
+                    addToTable(label, dataPoints, tableBody{{ forloop.counter }});
+                });
+
+                function addToTable(label, dataPoints, tableBody) {
+                    const rowCount = tableBody.rows.length;
+
+                    if (rowCount === 0) {
+                        // Create header row
+                        const headerRow = tableBody.insertRow(-1);
+                        const labelHeader = headerRow.insertCell(0);
+                        labelHeader.textContent = 'Day:';
+                        for (let i = 0; i < dataPoints.length; i++) {
+                            const dataHeader = headerRow.insertCell(-1);
+                            dataHeader.textContent = 'D' + (i + 1).toString();
+                        }
+                    }
+
+                    // Insert label and data points
+                    const dataRow = tableBody.insertRow(-1);
+                    const labelCell = dataRow.insertCell(0);
+                    labelCell.textContent = label;
+                    for (let i = 0; i < dataPoints.length; i++) {
+                        const dataCell = dataRow.insertCell(-1);
+                        dataCell.textContent = dataPoints[i];
+                    }
+                }
+            </script>
+            <hr class="spanTwo"/>
+        {% endfor%}
+        </div>
+    </details>
+</div>
+{%else%}
+<p style="color:#888"> <i>برای این کیس هنوز آزمایشی ثبت نشده است.</i></p>
+{%endif%}
+
 <div>
 <p style='margin:20px 10px;'>
     {{ case.post_text|linebreaks }}
@@ -163,40 +202,6 @@
 لینک مطلب را کپی کنید.
 <span id="copied" hidden>(کپی شد!)</span>
 </p>
-{% comment %} {%if case.picasso%}
-    <p>می‌توانید پیکاسو (تصویر کیس) مربوط به این شرح حال را در این <a href="{{case.picasso}}">لینک</a> مشاهده کنید.</p>
-{%endif%} {% endcomment %}
-
-{% comment %} <div class="social-sharing">
-    <h3>Share this content:</h3>
-    {% post_to_facebook object_or_url "Post to Facebook!" %}
-    {% copy_to_clipboard case.slug "Copy to clipboard!" %}
-</div> {% endcomment %}
-
-{% comment %}{% if user.is_authenticated %}
- <hr/>
-<div>
-    <h4>دیدگاهی بیفزایید</h4>
-    <form action="" method="post">{% csrf_token %}
-    {{ form|crispy }}
-    <button class="btn btn-success ml-2" type="submit">ثبت</button>
-    </form>
-    </div>
-    <hr/>
-    <div class="commentShow">
-{%else%}
-    <p>برای ثبت کامنت لازم است <a href="{% url "login" %}">وارد</a> شوید.</p>
-{% endif %}
-{% for comment in case.comment_set.all %}
-{%if comment.verified %}
-<div class="comment">
-<span class="commentDetail">{{ comment.author }} در {{ comment.date_created|date:"d F" }} ساعت {{ comment.date_created|date:"H:i" }}:</span> 
-<p style="margin:10px">&emsp;{{ comment }}</p>
-</div>
-    {%endif%}
-    {% endfor %}
-        </div>
-</div> {% endcomment %}
 <div>
     {% if user.is_authenticated %}
     <h4>دیدگاهی بیفزایید:</h4>
