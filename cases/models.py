@@ -5,6 +5,19 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
+# class CRSModel(models.Model):
+#     class Meta:
+#         abstract=True
+
+#     def allow_comments(self):
+#         return True
+    
+#     def allow_reviews(self):
+#         return True
+    
+#     def allow_suggests(self):
+#         return True
+
 class Choice(models.Model):
     name = models.CharField(max_length=36)
 
@@ -52,7 +65,7 @@ class Case(models.Model):
     choice = models.ManyToManyField(Choice, "Choice",null=True, blank=True)
     premium = models.BooleanField(default=False)
     verified = models.BooleanField(
-        default=False,
+        default=True,
     )
     visible = models.BooleanField(
         default=True,
@@ -350,9 +363,10 @@ class ImageCase(models.Model):
         ("X-Ray", "X-Ray"),
         ("MRI", "MRI"),
         ("Ultra-Sound", "Ultra-Sound"),
+        ("CT Scan", "CT Scan"),
         ("Other", "Other"),
     ]
-    verified=models.BooleanField(default=False)
+    verified=models.BooleanField(default=True)
     visible=models.BooleanField(default=True)
     case = models.ForeignKey(Case, on_delete=models.CASCADE)
     related_name = "imagecase"
@@ -386,7 +400,7 @@ def user_directory_path(instance, filename):
 class Picasso(models.Model):
     choice = models.ManyToManyField(Choice, null=True, blank=True)
     premium = models.BooleanField(default=False)
-    verified = models.BooleanField(default=False)
+    verified = models.BooleanField(default=True)
     visible = models.BooleanField(
         default=True,
     )
@@ -543,3 +557,64 @@ class LabGraphSelection(models.Model):
             return str(self.title) + " from " + str(self.case) + " by " + str(self.author)
         else:
             return str(self.title) + " FREE by " + str(self.author)
+
+# class LabTestItem(models.Model):
+#     cat_choice = [
+#         ("Blood", "Blood"),
+#         ("Biochemistry", "Biochemistry"),
+#         ("U/A", "U/A"),
+#         ("Serologic", "Serologic"),
+#         ("Other", "Other"),
+#     ]
+#     flg_choice = [
+#         ("NL", "NL"),
+#         ("H", "H"),
+#         ("L", "L"),
+#         ("Positive", "Positive"),
+#         ("Negative", "Negative"),
+#         ("Other", "Other"),
+#     ]
+#     case = models.ForeignKey(Case, on_delete=models.CASCADE)
+#     day = models.SmallIntegerField(default=0, null=True, blank=True)
+#     item_abbr = models.CharField(
+#         "مخفف نام", help_text="eg: WBC", max_length=16, null=False, blank=False
+#     )
+#     item_full = models.CharField(
+#         "نام کامل",
+#         help_text="eg: White Blood Cell",
+#         max_length=50,
+#         null=True,
+#         blank=True,
+#     )
+#     category = models.CharField(
+#         "دسته",
+#         max_length=25,
+#         choices=cat_choice,
+#         default="Blood",
+#         null=False,
+#         blank=False,
+#     )
+#     value = models.CharField("مقدار", default="", max_length=8, null=False, blank=False)
+#     unit = models.CharField(
+#         "واحد", default="10^3/µL", max_length=16, null=False, blank=False
+#     )
+#     ref_rng = models.CharField(
+#         "بازۀ مرجع",
+#         default="",
+#         help_text="eg: 3.8 - 5.4",
+#         max_length=16,
+#         null=False,
+#         blank=False,
+#     )
+#     flag = models.CharField(
+#         "وضعیت",
+#         max_length=25,
+#         choices=flg_choice,
+#         default="Other",
+#         null=False,
+#         blank=False,
+#     )
+#     related_name = "lab"
+
+#     def __str__(self):
+#         return self.item_abbr[:32]
