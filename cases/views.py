@@ -397,9 +397,8 @@ class CaseGraphCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         case = get_object_or_404(Case, slug=case_slug, author=self.request.user)
         return case.author == self.request.user
 
-class GraphListView(ListView):
-    model=LabGraphSelection
-    context_object_name = "graphs"
+class GraphListView(DetailView):
+    model=Case
     template_name="hx/graph/graph_list.html"
 
 class GraphUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
