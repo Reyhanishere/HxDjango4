@@ -1,11 +1,45 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>medepartout</title>
+    <link rel="stylesheet" href="css/styles_RP.css">
+  
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icon//favicon-16x16.png' %}">
+    <link rel="manifest" href="/site.webmanifest">
+  
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+</head>
+<body>
+<div class="container">
+    <div class="text-section">
+        <div class="head">
+            <img id="dawsh-help" src= "{% static 'images\Logo Prime.svg' %}" alt="medepartout-logo">
+            <h1>Welcome to medepartout Website</h1>
+            <h2>The Site is Under Construction</h2>
+        </div>
+        
+        <p>Sign up to see our latest updates :</p>
+        <div class="butt">
+            <button id="b1"><a href="{% url 'signup' %}>sign up</a></button>
+            <button id="b2"><a href="{% url 'login' %}">log in</a></button>
+        </div>
+        <div class="footer">
+            <div class="with">
+                <a href="{% url 'cases_main' %}">Cases App</a>
+                <a href="{% url 'docs' %}">Docs</a>
+                <a href="{% url 'about' %}">About</a>
+            </div>
+            <p style="margin:5px">medepartout | All Right Reserved © 2024</p>           
 
-{% block title %}Home{% endblock title %}
-{% block content %}
-<div dir="ltr" class="pad-15">
-<h3>Welcome to medepartout Website.</h3>
-<h5>The Site is Under Construction. </h5>
-Our First App of That is Released.
-Check <a href= "{% url 'cases_main' %}" style="font-size:20px" class=""><b>Cases App</b></a>
+        </div>
+    </div>
+    <div class="image-section"></div>
 </div>
-{% endblock content %}
+
+</body>
+</html>
