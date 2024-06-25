@@ -132,8 +132,12 @@ class CaseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Case
     # fields="__all__"
     template_name = "hx_edit.html"
-    success_url = reverse_lazy("hx_list")
     form_class = CaseUpdateForm
+
+    def get_success_url(self):
+        case_slug = self.kwargs["slug"]
+        case = get_object_or_404(Case, slug=case_slug)
+        return f"/cases/hx/{case.slug}/"
 
     def test_func(self):
         obj = self.get_object()
@@ -245,18 +249,22 @@ class PicassoCreateView(LoginRequiredMixin, CreateView):
     template_name = "picasso_new.html"
     # fields=("title","image","description","text","slug")
     form_class = PicassoCreateForm
-
+    success_url = reverse_lazy("picasso_list")
     def form_valid(self, form):  # new
         form.instance.author = self.request.user
         return super().form_valid(form)
+    
 
 
 class PicassoUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Picasso
     template_name = "picasso_edit.html"
-    success_url = reverse_lazy("picasso_list")
     # how to show a message
     form_class = PicassoUpdateForm
+    def get_success_url(self):
+        pic_slug = self.kwargs["slug"]
+        pic = get_object_or_404(Picasso, slug=pic_slug)
+        return f"/cases/picasso/{pic.slug}/"
 
     def test_func(self):  # new
         obj = self.get_object()
@@ -337,6 +345,10 @@ class ExCreateView(LoginRequiredMixin, CreateView):
     template_name = "ex/ex_new.html"
     success_url = reverse_lazy("ex_list")
     form_class = ExCreateForm
+    # def get_success_url(self):
+    #     ex_slug = self.kwargs["ex_slug"]
+    #     case = get_object_or_404(Case, slug=ex_slug)
+    #     return f"/cases/ex/{case.slug}/"
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -346,9 +358,13 @@ class ExCreateView(LoginRequiredMixin, CreateView):
 class ExUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Note
     template_name = "ex/ex_edit.html"
-    success_url = reverse_lazy("ex_list")
+    # success_url = reverse_lazy("ex_list")
     # how to show a message
     form_class = ExUpdateForm
+    def get_success_url(self):
+        ex_slug = self.kwargs["slug"]
+        ex = get_object_or_404(Note, slug=ex_slug)
+        return f"/cases/ex/{ex.slug}/"
 
     def test_func(self):
         obj = self.get_object()
