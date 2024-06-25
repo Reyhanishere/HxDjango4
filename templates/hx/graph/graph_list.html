@@ -89,7 +89,7 @@
         options: {
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero:{% if graph.zero %} true{%else%} false{%endif%}
                 }
             }
         }
