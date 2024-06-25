@@ -34,14 +34,14 @@ class Suggest(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=25)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
 
     def __str__(self):
         return self.name
 
 class Rotation(models.Model):
     name=models.CharField(max_length=25)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     cover= models.ImageField(upload_to="cases/uploads/", null=True, blank=True)
     def __str__(self):
         return self.name
@@ -285,11 +285,11 @@ class Case(models.Model):
     tags = models.ManyToManyField(Tag, null=True, blank=True,help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
     suggests=models.ManyToManyField(Suggest, null=True, blank=True,help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
     slug = models.SlugField(
-        ("Link"),
+        ("لینک"),
+        unique=True,
         max_length=40,
         null=False,
         blank=False,
-        unique=True,
         help_text="لینک مورد علاقه برای کیس خود را وارد کنید. تلاش کنید لینکتان گویا و دقیق باشد، پس از این توانایی تغییر آن را نخواهید داشت. استفاده از فاصله (Space) مجاز نیست.",
     )
 
@@ -431,6 +431,7 @@ class Picasso(models.Model):
     )
     slug = models.SlugField(
         ("لینک"),
+        unique=True,
         help_text="برای دسترسی به این تصویر یک آدرس مرتبط ایجاد کنید. برای مثال cushing-striae-01.",
         blank=False,
         null=False,
@@ -520,6 +521,7 @@ class Note(models.Model):
     tags=models.ManyToManyField(Tag, null=True, blank=True)
     slug = models.SlugField(
         ("لینک"),
+        unique=True,
         help_text="برای دسترسی به این یادداشت یک آدرس مرتبط ایجاد کنید. برای مثال ems-01.",
         blank=False,
         null=False,
