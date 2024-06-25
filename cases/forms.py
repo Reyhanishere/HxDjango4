@@ -79,7 +79,7 @@ class PicassoCreateForm(forms.ModelForm):
 
     class Meta:
         model = Picasso
-        fields = ["title", "image", "description", "text", "slug", "case"]
+        fields = ["title", "image", "description", "text", "slug", "case", "inappropriate"]
 
 
 class PicassoUpdateForm(ModelForm):
