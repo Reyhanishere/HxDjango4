@@ -5,8 +5,23 @@ body {
 }
 
 a {
-  text-decoration: none;
-  color: #46151d;
+    text-decoration: none;
+    color: #46151d;
+}
+
+#casesApp {
+    margin: 0;
+    background-color: #FFAA80;
+    border-radius: 5px;
+    padding: 10px;
+    color: #1F132B;
+    transition: 0.5s;
+}
+
+#casesApp:hover {
+    /* text-decoration: underline; */
+    color: #FFAA80;
+    background-color: #1F132B;
 }
 
 .container {
@@ -28,32 +43,32 @@ a {
 }
 
 .text-section h1 {
-    font-family:"Noto Sans";
+    font-family: "Noto Sans";
     font-size: 2.5em;
     margin-bottom: 0;
     margin-top: 110px;
-    
 }
+
 .text-section h2 {
     font-family: 'Noto Sans';
     font-size: 1em;
     margin-bottom: 0;
-    
 }
 
-.head{
-  margin: 0 auto 75px auto;
+.head {
+    margin: 0 auto 75px auto;
 }
 
 .text-section p {
     font-family: 'Noto Sans';
     font-size: 1.2em;
     margin-bottom: 12px;
+    margin-top: 5px;
     line-height: 1.5;
 }
 
 .text-section button {
-    font-family:"Noto Sans";
+    font-family: "Noto Sans";
     padding: 10px 20px;
     background-color: white;
     color: #1F132B;
@@ -62,76 +77,90 @@ a {
     margin-bottom: 2em;
 }
 
-#dawsh-help{
-  border-radius: 30%;
-  height: auto;
-  width: 40%;
-  float: left;
-  margin: 110px 10px 10px auto;
-  text-align: center;
-  
+#dawsh-help {
+    border-radius: 30%;
+    height: auto;
+    width: 40%;
+    float: left;
+    margin: 110px 10px 10px auto;
+    text-align: center;
 }
 
-.butt{
+.butt {
     display: flex;
     justify-items: center;
 }
 
-#b1{
+#b1 {
     border-radius: 5px;
     background-color: #FFAA80;
-    color: #9a3047;
+    color: #000;
     margin-right: 20px;
-    font-size:large;
-}
-#b2{
-    border-radius: 5px;
-    background-color:#FFAA80;
-    color: #54C7E4;
-    font-size:large;
+    font-size: large;
+    transition: 0.5s;
 }
 
-#b1:hover{
+#b2 {
+    border-radius: 5px;
+    background-color: #FFAA80;
+    color: #000;
+    font-size: large;
+    transition: 0.5s;
+}
+
+#b1:hover {
     background-color: #EAD196;
     margin-right: 20px;
 }
-#b2:hover{
+
+#b2:hover {
     border-radius: 10%;
     background-color: #EAD196;
 }
 
 .image-section {
     flex: 2;
-    background-image: url(frog.jpg);
+    background-image: url(https://raw.githubusercontent.com/EhsanKalateh/HxDjango4/main/static/images/frog.jpg);
     background-size: cover;
     background-position: center;
     clip-path: polygon(30% 0, 100% 0, 100% 100%, 0% 100%);
 }
 
 .footer {
-  position: fixed;
-  left: 3px;
-  bottom: 25px;
-  height: 5%;
-  width: 100%;
-  background-color: #1F132B;
-  color:white;
-  text-align: left;
+    position: fixed;
+    left: 0px;
+    bottom: 25px;
+    height: 5%;
+    width: 100%;
+    background-color: #1F132B;
+    color: white;
+    text-align: left;
+}
+
+.footer p {
+    margin: 10px 5px;
+    padding: 3px;
+    font-size: 17px;
+    background-color: #1F1318;
+}
+
+.with {
+    margin-left: 7px;
 }
 
 .with a {
-  color:white;
-  margin-right: 15px;
-  text-decoration: none;
-  left: 2px;
-  bottom: 10px;
-  height: 5%;
-  width: 50%;
-  background-color: #1F132B;
-  color:white;
-  text-align: left;
+    color: white;
+    margin-right: 15px;
+    text-decoration: none;
+    left: 2px;
+    bottom: 10px;
+    height: 5%;
+    width: 50%;
+    background-color: #1F132B;
+    color: white;
+    text-align: left;
 }
 
-.with a:hover{
-color:#FFAA80;
+.with a:hover {
+    color: #FFAA80;
 }
