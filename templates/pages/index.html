@@ -1,32 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-{% load static %}
+    {% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>medepartout</title>
-    <link rel="stylesheet" href="{% static 'css/styles_RP.css' %}">
-  
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icon/apple-touch-icon.png' %}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icon/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icon/favicon-16x16.png' %}">
-    <link rel="manifest" href="/site.webmanifest">
-  
+    <meta name="description" content="مدوپارتو | سرک‌کشی به گوشه‌های پزشکی"/>
+    <link rel="stylesheet" href="{% static '/css/styles_RP.css' %}">
+    <link rel="icon" href="./images/icon/favicon.ico">
     <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
 </head>
 <body>
 <div class="container">
     <div class="text-section">
         <div class="head">
-            <img id="dawsh-help" src= "{% static 'images\Logo Prime.svg' %}" style="filter: invert(100%);" alt="medepartout-logo">
+            <img id="dawsh-help" src="{% static '/images/Logo Color FFAA80.svg' %}" alt="medepartout-logo">
             <h1>Welcome to medepartout Website</h1>
             <h2>The Site is Under Construction</h2>
+            
         </div>
+        <h2 style="margin:10px 0"><a id="casesApp" href="{% url 'cases_main' %}">Cases App</a></h2>
         
-        <p>Sign up to see our latest updates :</p>
+        <p>Sign up to see our latest updates:</p>
         <div class="butt">
-            <button id="b1"><a href="{% url 'signup' %}">sign up</a></button>
-            <button id="b2"><a href="{% url 'login' %}">log in</a></button>
+            <a href="{% url 'signup' %}"><button id="b1">Sign Up</button></a>
+            <a href="{% url 'login' %}"><button id="b2">Log In</button></a>
         </div>
         <div class="footer">
             <div class="with">
@@ -34,7 +32,7 @@
                 <a href="{% url 'docs_list' %}">Docs</a>
                 <a href="{% url 'about' %}">About</a>
             </div>
-            <p style="margin:5px">medepartout | All Right Reserved © 2024</p>           
+            <p>medepartout | All Right Reserved © 2024</p>           
 
         </div>
     </div>
