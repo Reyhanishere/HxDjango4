@@ -449,6 +449,7 @@ class Picasso(models.Model):
         on_delete=models.CASCADE,
     )
     tags=models.ManyToManyField(Tag, null=True, blank=True)
+    inappropriate=models.BooleanField(("آزاردهنده"),default=False,help_text="اگر این تصویر می‌تواند برای بخشی از جامعۀ هدف آزاردهنده باشد، این تیک را بزنید تا به طور واضح در صفحۀ نخست سایت به نمایش در نیاید.")
     case = models.URLField(
         "لینک کیس مرتبط",
         help_text="می‌توانید لینک کیس مربوط به این تصویر را در اینجا قرار دهید.",
@@ -548,6 +549,7 @@ class LabGraphSelection(models.Model):
     case=models.ForeignKey(Case, on_delete=models.CASCADE, blank=True, null=True)
     data=models.TextField(blank=False, null=False)
     description=models.TextField(help_text="Optional", blank=True, null=True)
+    zero=models.BooleanField(("رسم از صفر"),default=False,help_text="اگر می‌خواهید عدد صفر هم در نمودار درج شود، این تیک را بزنید")
     date_created = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
