@@ -1,15 +1,21 @@
 from django.forms import ModelForm, CheckboxSelectMultiple, CharField
 from django import forms
 
+from django.utils.translation import gettext_lazy as _
+
+from PIL import Image
 
 from .models import *
 
-# LabTestForm = forms.inlineformset_factory(
-#     Case, LabTestItem, fields="__all__", extra=1, can_delete=True, can_order=False
-# )
-
-
 class CaseImageForm(ModelForm):
+    image = forms.ImageField()
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if image:
+            max_size_kb = 256  # Max size in kilobytes
+            if image.size > max_size_kb *1024:
+                raise forms.ValidationError(f"حجم تصویری که بارگذاری می‌کنید نباید بیشتر از {max_size_kb} کیلوبایت باشد. حجم فایل شما، {round(image.size/1024, 1)} کیلوبایت است.")  
+        return image
     class Meta:
         model = ImageCase
         exclude = ("case", "verified", "visible")
@@ -77,9 +83,27 @@ class PicassoCreateForm(forms.ModelForm):
         )
     )
 
+    image = forms.ImageField()
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if image:
+            max_size_mb = 1  # Max size in megabytes
+            if image.size > max_size_mb * 1024*1024:
+                raise forms.ValidationError(f"حجم تصویری که بارگذاری می‌کنید نباید بیشتر از {max_size_mb} مگابایت باشد. حجم فایل شما، {round(image.size/1024**2, 1)} مگابایت است.")  
+        img = Image.open(image)
+        width, height = img.size
+        if width != height:
+            raise forms.ValidationError("تصویری که آپلود کرده‌اید، مربعی نیست.")
+        elif width<100:
+            raise forms.ValidationError("تصویری که برگزیده‌اید بسیار کوچک است.")
+        return image
+
     class Meta:
         model = Picasso
         fields = ["title", "image", "description", "text", "slug", "case", "inappropriate"]
+        help_texts={
+            'image': ('تصویر شما باید ابعاد مربعی داشته و حجم آن کمتر از یک مگابایت باشد.'),
+        }
 
 
 class PicassoUpdateForm(ModelForm):
@@ -91,10 +115,31 @@ class PicassoUpdateForm(ModelForm):
             }
         )
     )
+    
+    image = forms.ImageField()
+
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if image:
+            max_size_mb = 1  # Max size in megabytes
+            if image.size > max_size_mb * 1024*1024:
+                raise forms.ValidationError(f"حجم تصویری که بارگذاری می‌کنید نباید بیشتر از {max_size_mb} مگابایت باشد. حجم فایل شما، {round(image.size/1024**2, 1)} مگابایت است.")  
+        img = Image.open(image)
+        width, height = img.size
+        if width != height:
+            raise forms.ValidationError("تصویری که آپلود کرده‌اید، مربعی نیست.")
+        elif width<100:
+            raise forms.ValidationError("تصویری که برگزیده‌اید بسیار کوچک است.")
+        return image
 
     class Meta:
         model = Picasso
+        help_texts={
+            'image': ('تصویر شما باید ابعاد مربعی داشته و حجم آن کمتر از یک مگابایت باشد.'),
+        }
         exclude = (
+            "visible",
+            "done",
             "slug",
             "verified",
             "premium",
@@ -104,6 +149,7 @@ class PicassoUpdateForm(ModelForm):
             "author",
             "delete",
             "editors_review",
+            "suggests",
         )
 
 
@@ -131,6 +177,7 @@ class ExUpdateForm(ModelForm):
             "editors_review",
             "done",
             "visible",
+            "suggests",
         )
 
 
@@ -157,6 +204,7 @@ class ExCreateForm(ModelForm):
             "editors_review",
             "done",
             "visible",
+            "suggests",
         )
 
 
