@@ -522,7 +522,11 @@ gap: 10px; */
         cursor: pointer;
         animation-duration: 0.7s;
     }
-    
+
+    .inapp{
+        filter: blur(0.4rem)    
+    }
+
     .imgTitle a {
         text-decoration: none;
         color: white;
