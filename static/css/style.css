@@ -637,6 +637,8 @@ gap: 10px; */
     
     .imagePicaDetailCont {
         display: block;
+        padding-right: 5px;
+        padding-bottom: 5px;
     }
     
     .imagePicaDetail {
@@ -1262,6 +1264,7 @@ text-align: center;
             text-align: right;
             align-items: center;
             /* Center text */
+            padding: 0;
         }
         .imagePicaDetail {
             margin-bottom: 20px;
