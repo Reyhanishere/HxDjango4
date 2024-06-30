@@ -2,10 +2,7 @@
 {% load my_tags %}
 {% load crispy_forms_tags %}
 {% load static %}
-{% block desc %}{{picasso.title}}{% endblock desc %}
-{% block imgprv %}{{picasso.image.url}}{% endblock imgprv %}
-{% block title %} | Cases | Picasso{% endblock title %}
-{% block content %}
+{% block title %} | Cases | Picasso{% endblock title %}{% block content %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <div class="pad-15">
 {% if picasso.verified and picasso.visible and not picasso.delete %}
@@ -20,8 +17,13 @@
 {%endif%}
 </div>
 {% else %}
-    <h2>این مطلب اکنون در دسترس نیست.</h2>
-    <p>این مطلب یا تایید نشده، یا توسط نویسنده غیرقابل دسترسی شده و یا توسط ایشان پاک شده است.</p>
+    <h2>این مطلب به یکی از دلایل زیر، اکنون در دسترس نیست.</h2>
+    <ul>
+        <li>عدم تایید از سمت سایت</li>
+        <li>عدم نمایش موقت از سمت نویسنده</li>
+        <li>حذف توسط نویسنده</li>
+
+        </ul>
 {% endif %}
 </div>
 {%endblock content%}
