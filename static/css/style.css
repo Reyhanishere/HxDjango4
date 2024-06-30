@@ -637,14 +637,14 @@ gap: 10px; */
     
     .imagePicaDetailCont {
         display: block;
-        padding-right: 5px;
-        padding-bottom: 5px;
     }
     
     .imagePicaDetail {
         float: left;
-        margin-right: 20px;
+        margin-right: 15px;
+        margin-bottom: 15px;
         max-width: 400px;
+
     }
     
     .picaDetailPara {
@@ -1264,7 +1264,6 @@ text-align: center;
             text-align: right;
             align-items: center;
             /* Center text */
-            padding: 0;
         }
         .imagePicaDetail {
             margin-bottom: 20px;
