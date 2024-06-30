@@ -57,7 +57,9 @@
 {% for pica in picassos %}
 {% if pica.verified %} 
     <div class="imageCard">
-        <a href="{% url 'picasso_detail' pica.slug %}"><img src="{{ pica.image.url }}" width = '300' class="imgThumbnail" alt="{{pica.title}}"/></a>
+        <a href="{% url 'picasso_detail' pica.slug %}">
+            <img src="{{ pica.image.url }}" width = '300' class="imgThumbnail {%if pica.inappropriate %}inapp"{%endif%}" alt="{{pica.title}}"/>
+        </a>
         <div class="imgTitle">
             <a href="{% url 'picasso_detail' pica.slug %}">
                 <h3>{{ pica.title }}</h3>
