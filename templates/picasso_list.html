@@ -10,7 +10,7 @@
     </div>
     <hr style="color:#000"/>
 {% for pica in picasso_list reversed %}
-{% if pica.verified and pica.slug %}
+{% if pica.verified and pica.slug and not pica.delete %}
 
 <div class="imageCardLight">
     <img src="{{ pica.image.url }}" width = '300' class="imgThumbnail" alt="{{pica.title}}"/>
