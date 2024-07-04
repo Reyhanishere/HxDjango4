@@ -1,0 +1,227 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+    font-family: 'Noto Sans';
+    background-color: #000;
+}
+
+.my-container {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+
+
+.top-container{
+  color: white;
+  order: 1;
+  padding-top: 150px;
+  font-family: 'Noto Sans';
+  margin: 0 auto 0 auto;
+  text-align: center;
+  color:#ffffff;
+  background: -webkit-linear-gradient(#eee, #828282);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 6px 6px 0px rgba(0,0,0,0.2);
+  display:block;
+  position: relative;
+  z-index: 3;
+  width: 80%;
+}
+
+
+.top-container h1{
+  margin-bottom: 0.5em;
+  font-size: 5.625rem;
+  text-align: center;
+}
+
+.top-container h2{
+  margin-bottom: 0.5em;
+  text-align: center;
+  font-size: 25px;
+  line-height: 2em;
+}
+
+
+
+
+@keyframes move-twink-back {
+  from {background-position:0 0;}
+  to {background-position:-10000px 5000px;}
+}
+
+@keyframes move-clouds-back {
+  from {background-position:0 0;}
+  to {background-position:10000px 0;}
+}
+
+.stars, .twinkling, .clouds {
+position:absolute;
+top:0;
+left:0;
+right:0;
+bottom:0;
+width:100%;
+height:100%;
+display:block;
+}
+
+.stars {
+background:#000 url(stars.png) repeat top center;
+z-index:0;
+}
+
+.twinkling{
+background:transparent url(twinkling.png) repeat top center;
+z-index:1;
+animation:move-twink-back 200s linear infinite;
+}
+
+.clouds{
+  background:transparent url(clouds.png) repeat top center;
+  z-index:2;
+  opacity: .4;
+  animation:move-clouds-back 200s linear infinite;
+}
+
+
+
+.middle-container {
+  order: 2;
+  background-color: #B2B2B2;
+  /* the color is for my love for this website's backend developer */
+  background: -webkit-linear-gradient(#eee, #333);
+  color: black;
+  padding: 50px 50px 0 50px ;
+  font-size: 20px;
+  font-family: 'Noto Sans';
+  margin: 100px auto 0 auto;
+  text-align: center;
+  width: 80%;
+  display:block;
+  position: relative;
+  z-index: 3; 
+}
+
+
+h2{
+  margin-top: 40px;
+  text-align: center;
+}
+
+h2 a {
+  margin-right: 15px;
+  text-decoration: none;
+  left: 2px;
+  bottom: 10px;
+  height: 5%;
+  width: 50%;
+  color:black;
+  text-align: left;
+}
+
+h2 a:hover{
+color:#3C3633
+}
+
+.text{
+  font-size: 1.15em;
+  line-height: 1.7em;
+  text-align: left;
+}
+
+.farsi.head{
+  font-size: 1.5rem;
+}
+
+.image{
+  width: 20%;
+  float: left;
+  mix-blend-mode:multiply;
+}
+
+.geek.image{
+  float: right;
+  width: 30%;
+}
+
+.picasso.image{
+  float: right;
+  margin-left: 20px;
+}
+
+.contact.image{
+  width: 15%;
+}
+
+.reyhaneh.english.text{
+  padding-left: 15px;
+}
+
+.picasso.english.text{
+  padding-left: 15px;
+}
+
+.contact.farsi.text{
+  padding-right: 15px;
+}
+
+.pastiera{
+  margin: 50px auto 100px auto;
+}
+
+.pastiera.contact{
+  margin-bottom: 200px;
+}
+
+.hrs{
+  background:#000 url(stars.png) repeat top center;
+}
+
+.bottom-container{
+  order: 3;
+  background-color: #B2B2B2;
+  background:#000 url(stars.png) repeat top center; 
+   /* footer's background is diffrent from defult footer of the site */
+  color: #EEEDEB;
+  font-size: 20px;
+  font-family: 'Noto Sans';
+  margin: 100px auto 100px auto;
+  text-align: center;
+  width: 80%;
+  display:block;
+  position: relative;
+  z-index: 3; 
+
+}
+
+.with{
+  margin-bottom: 20PX;
+  text-align: center;
+}
+
+.with a {
+  margin-right: 15px;
+  text-decoration: none;
+  left: 2px;
+  bottom: 10px;
+  height: 5%;
+  width: 50%;
+  color:white;
+  text-align: left;
+}
+
+.with a:hover{
+color:#E6B9A6
+}
+
+
+.farsi{
+  font-family: "Noto Sans Arabic", sans-serif;
+  text-align: right;
+}
