@@ -1,33 +1,112 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>medepartout</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="./images/icon/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-{% block title %} | About{% endblock title %}
-{% block content %}
-<div dir="rtl" class="mar-5p">
-<h3>به وبسایت <b>مدوپارتو</b> خوش آمدید.</h3>
-<p style="color:gray;font-size:12px">این سایت همچنان در حال توسعه است و صفحۀ اصلی آن  هنوز طراحی نشده است.</p>
-<p>این پلتفرم برای علاقه‌مندان علوم پزشکی و به ویژه پزشکی طراحی شده است.</p>
-<p>در اینجا تلاش می‌کنیم مرزهای فیزیکی را پاک کنیم و از سرتاسر دنیا، دانش پزشکی خود را به اشتراک بذاریم و بهبود ببخشیم.</p>
-<p>بخش اولی که در وبسایت راه‌اندازی شده Cases نام دارد و بستری را برای همرسانی شرح‌حال‌ها، تصاویر و یادداشت‌های آموزندۀ پزشکی است. تلاش کرده‌ایم که فضای ویژه‌ای برای این موارد آماده کنیم تا آن را به شبکه‌های اجتماعی رایج ترجیح دهید.</p>
-<p>نوید توسعۀ مداوم مدوپارتو را به شما می‌دهیم تا آن را با هم به مرجعی برای یادگیری مباحث بالینی و تقویت مهارت شرح‌حال‌گیری تبدیل کنیم.</p>
-<p>همراهمان باشید.</p>
-<p>برای ارتباط با ما می‌توانید به ایمیل contact@mdpt.ir نامه بزنید</p>
-<hr />
-<div dir="ltr">
-<h3>Welcome to <b>medepartout</b> Website</h3>
-
-<p> Medepartout is a platform dedicated to medic geeks, designed with the aim of dispatching medical insights across borders. Our mission is to foster collaboration and knowledge-sharing among students and experts in various fields, transcending geographical limitations.</p>
-
-<p> Our initial offering features an app tailored for medical history-taking, crafted with the needs of specialists in mind. While our focus is niche, our aspirations are vast. We strive to cultivate a community where geeks :) can exchange ideas, stay updated on the latest developments, and elevate their practice to new heights.</p>
+  </head>
     
-<p> As we navigate this journey, we remain grounded in our commitment to excellence. We understand the importance of continuous improvement and eagerly anticipate expanding our offerings to cater to the evolving needs of our community.</p>
-    
-<p> Join us as we embark on this journey to foster excellence and collaboration among learners worldwide. Together, let's harness the power of collective expertise to make a meaningful impact in our respective fields.</p>
-    
-<p> Thank you for being a part of the Medepartout community.</p>
-<p>Check <a href= "{% url 'cases_main' %}" style="font-size:20px" class=""><b>Cases App</b></a></p>
+<body>
 
-<p style="color:gray;font-size:12px">The text above is written with free version of Chat-GPT with some modifications. </p>
-</div>
-</div>
+<div class="my-container">
 
-{% endblock content %}
+  <div class="stars"></div>
+  <div class="twinkling"></div> 
+  <div class="clouds"></div>
+
+    <div class="top-container">  
+      <div class="intro">
+        <h1>ABOUT US</h1>
+        <h2 class="english-introduction">Share your knowledge. Enjoy writing limitlessly, learn from others and go beyond the borders!</h2>
+        <h2 dir="rtl" class="farsi introduction">این پلتفرم برای علاقه‌مندان علوم پزشکی و به ویژه پزشکی طراحی شده است. در اینجا تلاش می‌کنیم مرزهای فیزیکی را پاک کنیم و از سرتاسر دنیا، دانش پزشکی خود را به اشتراک بگذاریم و بهبود ببخشیم.</h2>
+      </div>
+    
+    </div>
+
+    <div class="middle-container">
+
+      <div class="reyhaneh">
+        <h2>Welcome to medepartout</h2>
+        <div class="pastiera">
+        <img class="geek image" src="./images/geek.jpg" alt="reyhaneh">
+        <p class="reyhaneh english text">Join the learners! Learn from the experts. Walk us through your journey in medicine.</p >
+        <br>
+        <h2 dir="rtl" class="farsi head">به مدپارتو خوش آمدید! </h2>
+        <p dir="rtl" class="farsi text">مسیری که در پزشکی میگذرانید را با دیگر همسفر های خود به اشتراک بگذارید؛ تا از تجارب هم یاد بگیریم و به همدیگر بیاموزیم.</p>
+        </div>
+      </div>
+
+      <div class="hrs"><br></div>
+
+      <div class="hx">
+        
+        <h2><a href="https://medepartout.ir/cases/hx/">Hx</a></h2>
+        <div class="pastiera">
+        <img class="hx image" src="./images/hx.png" alt="picture of a medical history sheet">
+        <p class="hx english text">Our first app "Cases app" is a platform for you to walk us through your journey. Let others in Healthcare community (or simply The Medic Geeks 🕶️) see medicine through your eyes.</p>
+        <br>
+        <p dir="rtl" class="farsi text">بخش اولی که در وبسایت راه‌اندازی شده Cases نام دارد و بستری را برای همرسانی شرح‌حال‌ها، تصاویر و یادداشت‌های آموزندۀ پزشکی است. تلاش کرده‌ایم که فضای ویژه‌ای برای این موارد آماده کنیم تا آن را به شبکه‌های اجتماعی رایج ترجیح دهید. </p>
+      </div>
+      </div>
+
+      <div class="hrs"><br></div>
+
+      <div class="picasso">
+        
+        <h2><a href="https://medepartout.ir/cases/picasso/">Picasso</a></h2>
+        <div class="pastiera">
+        <img class="picasso image" src="./images/camera.jpg" alt="picture of a camera">
+        <p class="picasso english text"> Picasso is literally for us to see what you've seen in healthcare.</p>
+        <br>
+        <p dir="rtl" class="picasso farsi text">بخش پیکاسو برای به اشتراک گذاشتن تصاویر دنیای درمان. من هیچ ایده ای برای متن فارسی ندارم. امروز ناهار سلف جوجه است ولی من صبحانه سنگین خورده ام و میلی ندارم. بعد فرانت باید پاشم برای مبینا خوراکی درست کنم بیاد اینجا عصری فیلم ببینیم. شایدم رفتیم بیرون؛ نمیدونم.</p>
+        </div>
+
+      </div>
+
+      <div class="hrs"><br></div>
+
+      <div class="contact">
+        
+        <h2>Get In Touch</h2>
+        <div class="pastiera contact">
+        <img class="contact image" src="./images/email.png" alt="picture of a mail ">
+        <p class="contact english text">If you are passionate about this platform enhance it by giving us feedbacks! We'd love to hear from you!</p>
+        <br>
+        <p dir="rtl" class="contact farsi text">برای ارتباط با ما می‌توانید به ایمیل contact@mdpt.ir نامه بزنید</p>
+        </div>
+
+      </div>
+      
+      
+    </div>
+
+    <div class="bottom-container">
+      <div class="with">
+        <a href="https://medepartout.ir/"">Home</a></li>
+        <a href="https://medepartout.ir/about">Contact us</a></li>
+        <a href="https://medepartout.ir/cases/">Cases App</a></li>
+        <a href="https://medepartout.ir/docs/">Docs</a></li>
+        <a href="https://medepartout.ir/about/">About</a></li>
+      </div>
+
+      <hr>
+
+      <p>medepartout | All Right Reserved © 2024</p>
+  </div>
+
+  
+</div> 
+
+
+</body>
+</html>
+
