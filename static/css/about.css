@@ -95,7 +95,7 @@ animation:move-twink-back 200s linear infinite;
   order: 2;
   background-color: #B2B2B2;
   /* the color is for my love for this website's backend developer */
-  background: -webkit-linear-gradient(#eee, #333);
+  background: -webkit-linear-gradient(#eee, #555);
   color: black;
   padding: 50px 50px 0 50px ;
   font-size: 20px;
@@ -189,7 +189,7 @@ color:#3C3633
   background:#000 url(https://raw.githubusercontent.com/EhsanKalateh/HxDjango4/main/static/images/about/stars.png) repeat top center; 
    /* footer's background is diffrent from defult footer of the site */
   color: #EEEDEB;
-  font-size: 20px;
+  font-size: 16px;
   font-family: 'Noto Sans';
   margin: 100px auto 100px auto;
   text-align: center;
@@ -201,8 +201,9 @@ color:#3C3633
 }
 
 .with{
-  margin-bottom: 20PX;
+  margin-bottom: 6PX;
   text-align: center;
+  font-size: 18px;
 }
 
 .with a {
@@ -213,7 +214,7 @@ color:#3C3633
   height: 5%;
   width: 50%;
   color:white;
-  text-align: left;
+/*   text-align: left; */
 }
 
 .with a:hover{
