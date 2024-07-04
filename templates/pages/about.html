@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+    {% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>medepartout</title>
+    <title>medepartout | About</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" href="./images/icon/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,6 +14,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+    <link rel="stylesheet" href="{% static 'css/about.css' %}">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icon/favicon-16x16.png' %}">
+    <link rel="manifest" href="/site.webmanifest">
   </head>
     
 <body>
@@ -37,11 +44,11 @@
       <div class="reyhaneh">
         <h2>Welcome to medepartout</h2>
         <div class="pastiera">
-        <img class="geek image" src="./images/geek.jpg" alt="reyhaneh">
+        <img class="geek image" src="{% static 'images/about/geek.jpg' %}" alt="reyhaneh">
         <p class="reyhaneh english text">Join the learners! Learn from the experts. Walk us through your journey in medicine.</p >
         <br>
         <h2 dir="rtl" class="farsi head">به مدپارتو خوش آمدید! </h2>
-        <p dir="rtl" class="farsi text">مسیری که در پزشکی میگذرانید را با دیگر همسفر های خود به اشتراک بگذارید؛ تا از تجارب هم یاد بگیریم و به همدیگر بیاموزیم.</p>
+        <p dir="rtl" class="farsi text">مسیری که در پزشکی می‌گذرانید را با دیگر همسفر های خود به اشتراک بگذارید؛ تا از تجارب هم یاد بگیریم و به همدیگر بیاموزیم.</p>
         </div>
       </div>
 
@@ -49,12 +56,12 @@
 
       <div class="hx">
         
-        <h2><a href="https://medepartout.ir/cases/hx/">Hx</a></h2>
+        <h2><a href="{% url 'hx_list' %}">Hx</a></h2>
         <div class="pastiera">
-        <img class="hx image" src="./images/hx.png" alt="picture of a medical history sheet">
+        <img class="hx image" src="{% static 'images/about/hx.png' %}" alt="picture of a medical history sheet">
         <p class="hx english text">Our first app "Cases app" is a platform for you to walk us through your journey. Let others in Healthcare community (or simply The Medic Geeks 🕶️) see medicine through your eyes.</p>
         <br>
-        <p dir="rtl" class="farsi text">بخش اولی که در وبسایت راه‌اندازی شده Cases نام دارد و بستری را برای همرسانی شرح‌حال‌ها، تصاویر و یادداشت‌های آموزندۀ پزشکی است. تلاش کرده‌ایم که فضای ویژه‌ای برای این موارد آماده کنیم تا آن را به شبکه‌های اجتماعی رایج ترجیح دهید. </p>
+        <p dir="rtl" class="farsi text">نخستین بخشی که در وبسایت راه‌اندازی شده Cases نام دارد و بستری را برای همرسانی شرح‌حال‌ها، تصاویر و یادداشت‌های آموزندۀ پزشکی است. تلاش کرده‌ایم که فضای ویژه‌ای برای این موارد آماده کنیم تا آن را به شبکه‌های اجتماعی رایج ترجیح دهید. </p>
       </div>
       </div>
 
@@ -62,12 +69,13 @@
 
       <div class="picasso">
         
-        <h2><a href="https://medepartout.ir/cases/picasso/">Picasso</a></h2>
+        <h2><a href="{% url 'picasso_list' %}">Picasso</a></h2>
         <div class="pastiera">
-        <img class="picasso image" src="./images/camera.jpg" alt="picture of a camera">
+        <img class="picasso image" src="{% static 'images/about/camera.jpg' %}" alt="picture of a camera">
         <p class="picasso english text"> Picasso is literally for us to see what you've seen in healthcare.</p>
         <br>
-        <p dir="rtl" class="picasso farsi text">بخش پیکاسو برای به اشتراک گذاشتن تصاویر دنیای درمان. من هیچ ایده ای برای متن فارسی ندارم. امروز ناهار سلف جوجه است ولی من صبحانه سنگین خورده ام و میلی ندارم. بعد فرانت باید پاشم برای مبینا خوراکی درست کنم بیاد اینجا عصری فیلم ببینیم. شایدم رفتیم بیرون؛ نمیدونم.</p>
+        <p dir="rtl" class="picasso farsi text">بخش پیکاسو برای به اشتراک گذاشتن تصاویر دنیای درمان. </p>
+        <p dir="rtl" class="picasso farsi text">گاهی با تظاهرات بالینی و یا تصاویر رادیولوژیکی مواجه می‌شویم که برایمان جالب است و یا بسیار تیپیک می‌تواند نشانگر بیماری‌های خاصی باشد. در این بخش می‌توانید این تصاویر را از هر نوعی که باشند (گرافی، MRI، ECG، و هر مورد بالینی دیگری) را با دیگران به اشتراک بگذارید.</p>
         </div>
 
       </div>
@@ -78,10 +86,10 @@
         
         <h2>Get In Touch</h2>
         <div class="pastiera contact">
-        <img class="contact image" src="./images/email.png" alt="picture of a mail ">
+        <img class="contact image" src="{% static 'images/about/email.png' %}" alt="picture of a mail ">
         <p class="contact english text">If you are passionate about this platform enhance it by giving us feedbacks! We'd love to hear from you!</p>
         <br>
-        <p dir="rtl" class="contact farsi text">برای ارتباط با ما می‌توانید به ایمیل contact@mdpt.ir نامه بزنید</p>
+        <p dir="rtl" class="contact farsi text">برای ارتباط با ما می‌توانید به ایمیل contact@mdpt.ir نامه بزنید.</p>
         </div>
 
       </div>
@@ -91,11 +99,11 @@
 
     <div class="bottom-container">
       <div class="with">
-        <a href="https://medepartout.ir/"">Home</a></li>
-        <a href="https://medepartout.ir/about">Contact us</a></li>
-        <a href="https://medepartout.ir/cases/">Cases App</a></li>
-        <a href="https://medepartout.ir/docs/">Docs</a></li>
-        <a href="https://medepartout.ir/about/">About</a></li>
+        <a href="{% url 'home' %}">Home</a></li>
+        <!---<a href="https://medepartout.ir/about">Contact us</a></li>-->
+        <a href="{% url 'cases_main' %}">Cases App</a></li>
+        <a href="{% url 'docs_list' %}">Docs</a></li>
+        <a href="{% url 'about' %}">About</a></li>
       </div>
 
       <hr>
@@ -109,4 +117,3 @@
 
 </body>
 </html>
-
