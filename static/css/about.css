@@ -72,18 +72,18 @@ display:block;
 }
 
 .stars {
-background:#000 url(stars.png) repeat top center;
+background:#000 url(https://raw.githubusercontent.com/EhsanKalateh/HxDjango4/main/static/images/about/stars.png) repeat top center;
 z-index:0;
 }
 
 .twinkling{
-background:transparent url(twinkling.png) repeat top center;
+background:transparent url(https://raw.githubusercontent.com/EhsanKalateh/HxDjango4/main/static/images/about/twinkling.png) repeat top center;
 z-index:1;
 animation:move-twink-back 200s linear infinite;
 }
 
 .clouds{
-  background:transparent url(clouds.png) repeat top center;
+  background:transparent url(https://raw.githubusercontent.com/EhsanKalateh/HxDjango4/main/static/images/about/clouds.png) repeat top center;
   z-index:2;
   opacity: .4;
   animation:move-clouds-back 200s linear infinite;
@@ -180,13 +180,13 @@ color:#3C3633
 }
 
 .hrs{
-  background:#000 url(stars.png) repeat top center;
+  background:#000 url(https://raw.githubusercontent.com/EhsanKalateh/HxDjango4/main/static/images/about/stars.png) repeat top center;
 }
 
 .bottom-container{
   order: 3;
   background-color: #B2B2B2;
-  background:#000 url(stars.png) repeat top center; 
+  background:#000 url(https://raw.githubusercontent.com/EhsanKalateh/HxDjango4/main/static/images/about/stars.png) repeat top center; 
    /* footer's background is diffrent from defult footer of the site */
   color: #EEEDEB;
   font-size: 20px;
