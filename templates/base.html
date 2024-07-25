@@ -10,6 +10,7 @@
     
     <title>medepartout{% block title %}{% endblock title %}</title>
     
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap" rel="stylesheet">
@@ -17,10 +18,12 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/style_base.css' %}">
 
+
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icon/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icon//favicon-16x16.png' %}">
     <link rel="manifest" href="/site.webmanifest">
+
 </head>
 
 <body>
@@ -28,7 +31,7 @@
         <div id="LogoSearchDiv">
             <div id="logo">
                 <a aria-label="Homepage" rel="noopener follow" href="{% url 'cases_main'%}">
-                    <img style="color: #242424;" src="{% static '/images/Logo with Typo Light.svg' %}" alt=" medepartout " height="40px " /></a>
+                    <img class="headerLogo" src="{% static '/images/Logo with Typo Light.svg' %}" alt=" medepartout " height="40px " /></a>
             </div>
             <div id="search" style="margin-left:12px;">
                 <form class="d-flex m-2" action="{% url 'search_results' %}" method="get" autocomplete="off">
@@ -79,7 +82,7 @@
             <div class="dropdown" id="userIcon">
                     <div class="dropbtn" id="userBTN">
                 
-                        <svg width="24 " height="24 " viewBox="0 0 1024 1024 " fill="#000" aria-label="Notifications ">
+                        <svg id="userSVG" width="24 " height="24 " viewBox="0 0 1024 1024 " fill="#000" aria-label="Notifications ">
                         <path style="stroke:#FFFFFF; stroke-width:30; stroke-miterlimit:10;" d="M901.5,911.1c0,0.6,0.1,1.3,0.1,1.9h-0.3c-1.5,21.6-19.3,38.7-41.3,38.7c-22,0-39.7-17.1-41.3-38.7h-0.7
                         c0-1,0.2-2,0.2-3.1c0-83.9-33.3-159.8-87.1-215.4l0.1-0.1c-7.4-7.3-12-17.4-12-28.6c0-22.1,17.9-40,40-40c11.7,0,22.2,5.2,29.5,13.2
                         c68.3,69.1,111.1,163.6,112.7,268.1c0.1,1,0.3,1.9,0.3,2.9C901.6,910.5,901.5,910.8,901.5,911.1z M512,605.5
@@ -105,7 +108,7 @@
             <div class="dropdown" id="userIcon">
                     <div class="dropbtn" id="userBTN">
             
-                        <svg width="24 " height="24 " viewBox="0 0 1024 1024 " fill="#000" aria-label="Notifications ">
+                        <svg id="userSVG" width="24 " height="24 " viewBox="0 0 1024 1024 " fill="#000" aria-label="Notifications ">
                         <path style="stroke:#FFFFFF; stroke-width:30; stroke-miterlimit:10;" d="M901.5,911.1c0,0.6,0.1,1.3,0.1,1.9h-0.3c-1.5,21.6-19.3,38.7-41.3,38.7c-22,0-39.7-17.1-41.3-38.7h-0.7
                         c0-1,0.2-2,0.2-3.1c0-83.9-33.3-159.8-87.1-215.4l0.1-0.1c-7.4-7.3-12-17.4-12-28.6c0-22.1,17.9-40,40-40c11.7,0,22.2,5.2,29.5,13.2
                         c68.3,69.1,111.1,163.6,112.7,268.1c0.1,1,0.3,1.9,0.3,2.9C901.6,910.5,901.5,910.8,901.5,911.1z M512,605.5
@@ -124,13 +127,6 @@
                         
                     </div>
                 </div>
-                <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="color:white; transform: translate(50px, 5px); inset:0px">
-                    <li><a class="dropdown-item" href="{% url 'signup'%}">
-                    SignUp</a></li>
-                    <li>
-                        <a href="{% url 'login' %}" class="dropdown-item">Log In</a>
-                        </li>
-                </ul>
             </div>
             {%endif%}
         </div>
@@ -155,6 +151,7 @@
         </div>
             
         <script src="{% static '/scripts/index.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
            <script>
             
             document.addEventListener('click', function(event) {
@@ -192,4 +189,3 @@
            </script> 
     </body>
     </html>
-
