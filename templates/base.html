@@ -10,159 +10,186 @@
     
     
     <title>medepartout{% block title %}{% endblock title %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icon/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icon//favicon-16x16.png' %}">
     <link rel="manifest" href="/site.webmanifest">
-<style>
-    .new-button {
-        border-radius: 50%;
-        width: 60px;
-        height: 60px;
-        background-color: navy;
-        color: #fff;
-        font-size: 33px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        position: fixed;
-        bottom: 50px;
-        left: 50px;
-        box-shadow: 0px 0px 3px 1px gray;
-    }
-    @media (max-width: 738px) {
-        .new-button {
-        background-color: rgb(205, 215, 235);
-        color: #000;
-        width: 50px;
-        height: 50px;
-        font-size: 26px;
-        bottom: 30px;
-        left: 30px;
-    }
-}
-</style>
 </head>
 
 <body>
-        <div class="myContainer">
-            <div class="myHeader" dir="ltr">
-                <div class="menu" ><span style="cursor:pointer" onclick="openNav()">&#9776;</span>
+    <div id="header" class="flx" dir="ltr">
+        <div id="LogoSearchDiv">
+            <div id="logo">
+                <a aria-label="Homepage" rel="noopener follow" href="{% url 'cases_main'%}">
+                    <img style="color: #242424;" src="{% static '/images/Logo with Typo Light.svg' %}" alt=" medepartout " height="40px " /></a>
+            </div>
+            <div id="search" style="margin-left:12px;">
+                <form class="d-flex m-2" action="{% url 'search_results' %}" method="get" autocomplete="off">
+                <div class="flx" style="background: #F9F9F9;min-width: 100px; max-width: 400px; border-radius: 20px; align-items: center;">
+                    <button style="border: none; background-color:transparent" type="submit">
+                    
+                        <div style="margin:0 12px;">
+                            <svg width=" 24 " height="24 " viewBox="0 0 24 24 " fill="none ">
+                                <path style="fill: #6B6B6B;" fill-rule="evenodd " clip-rule="evenodd " d="M4.1 11.06a6.95 6.95 0 1 1 13.9 0 6.95 6.95 0 0 1-13.9 0zm6.94-8.05a8.05 8.05 0 1 0 5.13 14.26l3.75 3.75a.56.56
+                                0 1 0 .8-.79l-3.74-3.73A8.05 8.05 0 0 0 11.04 3v.01z " fill="currentColor "></path>
+                            </svg>
+                        </div>
+                    </button>
+                    
+                    <input style="color: #242424;background-color: transparent;padding: 10px 20px 10px 0;width: 100%;font-size: 14px;line-height: 20px; border: none; outline: none; "
+                    type="search" name="q" placeholder="Search" aria-label="Search"/>
+
                 </div>
-                <div class="header-logo text-left">
-                    <a class="" href="{% url 'cases_main' %}">
-                        <img id="logoHeader"src="{% static 'images\Logo Prime.svg' %}" width="50px" alt="medepartout Logo">
-                        {% comment %} <span id="logoName">medepartout{%block title%}{%endblock title%}</span> {% endcomment %}
-                        <span id="logoName">medepartout | Cases</span>
-                    </a>
-                </div>
-                <div class="editDelete text-right">
-                    <div>
-                        {% block edit %}{% endblock edit %}
+            </form>
+
+            </div>
+        </div>
+        <div class="flx">
+            <div class="flx" style="margin:0 32px 0 20px;">
+                <div class="dropdown">
+                    <div class="dropbtn" id="newBTN">
+                            <span class="new">New</span>
+                            <svg id="newSVG" width=" 24 " height="24 " viewBox="0 0 24 24 " fill="none " aria-label="New ">
+                            <path  d="M14.5,7.5L6,16C6,16,6,16,6,16.1l-0.8,2.5c-0.1,0.2,0.1,0.4,0.3,0.3L7.9,18C8,18,8,18,8,18l8.5-8.5 M14.5,7.5 l2.3-2.3c0.1-0.1,0.3-0.1,0.4,0l1.6,1.6c0.1,0.1,0.1,0.3,0,0.4l-2.3,2.3
+                            M14.5,7.5l2,2 "/>
+                            </svg>
                     </div>
-                    <div>{% block delete %}{% endblock delete %}</div>
+                                     
+                    <div class="dropdown-content" id="newDiv" dir="ltr">
+                        <a class="dropdown-item" href="{%url "hx_new"%}">Hx</a>
+                        <a class="dropdown-item" href="{%url "picasso_new"%}">Picasso</a>
+                        <a class="dropdown-item" href="{%url "ex_new"%}">Ex</a>
+                    </div>
                 </div>
-                {%if user.is_authenticated %}
             
-                <div class="user text-center">
-                    <div dir="ltr" class="userIcon">
-                        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
-                        id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false" style="color:white;">
-                        <img src="{% static 'images\user-icon-svgrepo.svg' %}" width="25px" alt="user icon">
-                    </a>
-                    <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="color:white;">
-                        <li><a class="dropdown-item" href="{% url 'password_change'%}">
-                        Change password</a></li>
-                        <li>
+            </div>
+            <div>
+            </div>
+            <!-- <div style="margin-right: 32px; color:white; cursor:default;">
+                N
+            </div> -->
+            {%if user.is_authenticated %}
+            <div class="dropdown" id="userIcon">
+                    <div class="dropbtn" id="userBTN">
+                
+                        <svg width="24 " height="24 " viewBox="0 0 1024 1024 " fill="#000" aria-label="Notifications ">
+                        <path style="stroke:#FFFFFF; stroke-width:30; stroke-miterlimit:10;" d="M901.5,911.1c0,0.6,0.1,1.3,0.1,1.9h-0.3c-1.5,21.6-19.3,38.7-41.3,38.7c-22,0-39.7-17.1-41.3-38.7h-0.7
+                        c0-1,0.2-2,0.2-3.1c0-83.9-33.3-159.8-87.1-215.4l0.1-0.1c-7.4-7.3-12-17.4-12-28.6c0-22.1,17.9-40,40-40c11.7,0,22.2,5.2,29.5,13.2
+                        c68.3,69.1,111.1,163.6,112.7,268.1c0.1,1,0.3,1.9,0.3,2.9C901.6,910.5,901.5,910.8,901.5,911.1z M512,605.5
+                        c-11.2,0-22.3-0.9-33.1-2.3c-153.5,16.7-273.1,147.6-273.1,306.7c0,0.1,0,0.2,0,0.3c0,0,0,0.1,0,0.1c0,0.9,0.1,1.8,0.1,2.7h-0.4
+                        c-1.5,21.6-19.3,38.7-41.3,38.7c-22,0-39.7-17.1-41.3-38.7h-0.6c0-160.1,96.7-297.5,234.8-357.5c-67.6-48.4-111.7-127.3-111.7-216.7
+                        c0-147.2,119.4-266.6,266.6-266.6s266.6,119.3,266.6,266.6S659.2,605.5,512,605.5z M512,154c-101.9,0-184.6,82.6-184.6,184.6
+                        S410.1,523.1,512,523.1s184.6-82.6,184.6-184.6S613.9,154,512,154z"/>
+                        </svg>
+                    </div>
+                    <div class="dropdown-content" id="userDiv" dir="ltr">
+
+                        <a class="dropdown-item" href="{% url 'password_change'%}">
+                        Change password</a>
+                        
                             <form method="post" action="{% url 'logout' %}">
                                 {% csrf_token %}
                                 <button type="submit" class="dropdown-item">Log Out</button>
-                            </form></li>
-                    </ul>
+                            </form>
+                    </div>
+                
+            </div>
+            {% else %}
+            <div class="dropdown" id="userIcon">
+                    <div class="dropbtn" id="userBTN">
+            
+                        <svg width="24 " height="24 " viewBox="0 0 1024 1024 " fill="#000" aria-label="Notifications ">
+                        <path style="stroke:#FFFFFF; stroke-width:30; stroke-miterlimit:10;" d="M901.5,911.1c0,0.6,0.1,1.3,0.1,1.9h-0.3c-1.5,21.6-19.3,38.7-41.3,38.7c-22,0-39.7-17.1-41.3-38.7h-0.7
+                        c0-1,0.2-2,0.2-3.1c0-83.9-33.3-159.8-87.1-215.4l0.1-0.1c-7.4-7.3-12-17.4-12-28.6c0-22.1,17.9-40,40-40c11.7,0,22.2,5.2,29.5,13.2
+                        c68.3,69.1,111.1,163.6,112.7,268.1c0.1,1,0.3,1.9,0.3,2.9C901.6,910.5,901.5,910.8,901.5,911.1z M512,605.5
+                        c-11.2,0-22.3-0.9-33.1-2.3c-153.5,16.7-273.1,147.6-273.1,306.7c0,0.1,0,0.2,0,0.3c0,0,0,0.1,0,0.1c0,0.9,0.1,1.8,0.1,2.7h-0.4
+                        c-1.5,21.6-19.3,38.7-41.3,38.7c-22,0-39.7-17.1-41.3-38.7h-0.6c0-160.1,96.7-297.5,234.8-357.5c-67.6-48.4-111.7-127.3-111.7-216.7
+                        c0-147.2,119.4-266.6,266.6-266.6s266.6,119.3,266.6,266.6S659.2,605.5,512,605.5z M512,154c-101.9,0-184.6,82.6-184.6,184.6
+                        S410.1,523.1,512,523.1s184.6-82.6,184.6-184.6S613.9,154,512,154z"/>
+                        </svg>
+                        <div style="background-color:#e33; position: relative; width:5px; height:5px; border-radius: 100%; right:-22px; top:-22px"></div>
+                    <div class="dropdown-content" id="userDiv" dir="ltr">
+
+                            <a class="dropdown-item" href="{% url 'login'%}">
+                            Login</a>
+                            <a class="dropdown-item" href="{% url 'signup'%}">
+                                SignUp</a>
                         
                     </div>
-                    <div class="font-300 font-20">
-                        {{ user.first_name }}
-                    </div>
                 </div>
-                {% else %}
-                <div class="user text-center">
-                    <div class="login">
-                        <a href="{% url 'login' %}" class="btn text-center">Login</a>
-                    </div>
-                    <div class="signup">
-                        <a href="{% url 'signup' %}" class="btn text-center">SignUp</a>
-                    </div>
-                </div>
-                {% endif %}
+                <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="color:white; transform: translate(50px, 5px); inset:0px">
+                    <li><a class="dropdown-item" href="{% url 'signup'%}">
+                    SignUp</a></li>
+                    <li>
+                        <a href="{% url 'login' %}" class="dropdown-item">Log In</a>
+                        </li>
+                </ul>
             </div>
-
-            <div dir="ltr" id="mySidenav" class="sidenav">
-                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                <form class="d-flex m-2" action="{% url 'search_results' %}" method="get" autocomplete="off">
-                    <input class="form-control me-2" type="search" name="q" placeholder="Search Cases" aria-\
-                    label="Search" >
-                    <button class="btn btn-outline-success" type="submit">&#128269;
-                    </button>
-                    </form>        
-                    <br/>            
-                    <br/>            
-
-                    <div dir="ltr">         
-                    <a href="{% url 'about'%}">دربارۀ ما</a>
-                    <a href="{% url 'docs_list'%}">آموزش‌ها</a>
-                    <a href="{% url 'terms' %}">قوانین</a>
-                    <a href="{% url 'posts-list' %}">بلاگ</a>
-                    </div>
-            </div>
-
-    <div class="myMain" style="min-height:81vh">
+            {%endif%}
+        </div>
+    </div>
+        <div class="myMain" style="min-height:81vh; margin-top:0;background-color: #fff;">
         
-        <div class="container mt-5" style="position: fixed">
-            <div class="dropdown dropup">
-              <div class="new-button" id="dropup-toggle">
-                &#128395;
-              </div>
-              <div class="dropdown-menu dropup-menu" dir="ltr" id="dropup-menu">
-                <div class="dropdown-header">New &#10024;</div>
-                <a class="dropdown-item" href="{%url "hx_new"%}">Hx</a>
-                <a class="dropdown-item" href="{%url "picasso_new"%}">Picasso</a>
-                <a class="dropdown-item" href="{%url "ex_new"%}">Ex</a>
-              </div>
+
+
+    
+                {% block content %}
+                {% endblock content %}
+        </div>
+        <div class="myFooter" dir="ltr">
+            <p style="color:white; padding:10px; margin:2px 0 0 0; display:inline-block">medepartout | All Right Reserved &copy; 2024</p>
+            <p style="color:white; padding:10px; margin:2px 0 0 0; display:inline-block">|</p>
+
+            <div class="footerLinks" style="display: inline-block; right:20px">
+                <a href="{% url 'cases_main' %}">Cases App</a>
+                <a href="{% url 'docs_list' %}">Docs</a>
+                <a href="{% url 'about' %}">About</a>
             </div>
         </div>
-            {% block content %}
-            {% endblock content %}
-    </div>
-    <div class="myFooter" dir="ltr"><p style="color:white; padding:10px; margin:2px 0 0 0;">medepartout | All Right Reserved &copy; 2024</p></div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        
-    <script src="{% static '/scripts/index.js' %}"></script>
-
-    <script>
-        $(document).ready(function(){
-            $('#dropup-toggle').click(function(){
-              $('#dropup-menu').toggleClass('show');
+            
+        <script src="{% static '/scripts/index.js' %}"></script>
+           <script>
+            
+            document.addEventListener('click', function(event) {
+                var dropdowns = document.querySelectorAll('.dropdown-content');
+                dropdowns.forEach(function(dropdown) {
+                    if (!event.target.closest('.dropdown')) {
+                        dropdown.style.display = 'none';
+                    }
+                });
             });
-            $(document).click(function(e) {
-              if (!$(e.target).closest('.dropup').length) {
-                $('.dropup-menu').removeClass('show');
-              }
+            
+            document.getElementById('newBTN').addEventListener('click', function(event) {
+                event.stopPropagation();
+                var dropdownContent = document.getElementById('newDiv');
+                toggleDropdown(dropdownContent);
             });
-          });
-    </script>
-        
-</body>
+            
+            document.getElementById('userBTN').addEventListener('click', function(event) {
+                event.stopPropagation();
+                var dropdownContent = document.getElementById('userDiv');
+                toggleDropdown(dropdownContent);
+            });
+            function toggleDropdown(dropdownContent) {
+                var isVisible = dropdownContent.style.display === 'block';
+                closeAllDropdowns();
+                dropdownContent.style.display = isVisible ? 'none' : 'block';
+            }
+            
+            function closeAllDropdowns() {
+                var dropdowns = document.querySelectorAll('.dropdown-content');
+                dropdowns.forEach(function(dropdown) {
+                    dropdown.style.display = 'none';
+                });
+            }
+           </script> 
+    </body>
+    </html>
 
-</html>
