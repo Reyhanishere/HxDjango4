@@ -1,5 +1,6 @@
 .flx {
     display: flex;
+    align-items: center;
 }
 
 #header {
@@ -29,6 +30,8 @@ span.new:hover {
 #newSVG:hover {
     stroke: #242424;
 }
+
+#userSVG {}
 
 #LogoSearchDiv {
     display: flex;
@@ -74,12 +77,29 @@ span.new:hover {
     text-decoration: none;
     display: block;
     border-radius: 10px;
+    font-size: 16px;
 }
 
 .dropdown-content button {
     color: black;
     padding: 7px 12px;
+    background-color: transparent;
     text-decoration: none;
     display: block;
     border-radius: 10px;
+    border-style: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.dropdown-content a:hover {
+    background-color: #eee
+}
+
+.dropdown-content button:hover {
+    background-color: #eee
+}
+
+.headerLogo {
+    color: #242424;
 }
