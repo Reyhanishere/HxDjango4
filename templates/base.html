@@ -5,9 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A Social Media for Cases and Medical Geeks. Share and Read Cases from All Over the World Here."/>
-    <meta name="description" content="مدوپارتو | کیس‌های پزشکی را بخوانید و بنویسید | {% block desc %}{% endblock desc %}"/>
-    <meta property="og:image" content="{% block imgprv %}{% endblock imgprv %}">
-    
+    <meta name="description" content="{% block desc %}{% endblock desc %}"/>
+
     <title>medepartout{% block title %}{% endblock title %}</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -18,12 +17,11 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/style_base.css' %}">
 
-
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icon/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icon//favicon-16x16.png' %}">
     <link rel="manifest" href="/site.webmanifest">
-
+    
 </head>
 
 <body>
@@ -33,10 +31,10 @@
                 <a aria-label="Homepage" rel="noopener follow" href="{% url 'cases_main'%}">
                     <img class="headerLogo" src="{% static '/images/Logo with Typo Light.svg' %}" alt=" medepartout " height="40px " /></a>
             </div>
-            <div id="search" style="margin-left:12px;">
+            <div id="search">
                 <form class="d-flex m-2" action="{% url 'search_results' %}" method="get" autocomplete="off">
-                <div class="flx" style="background: #F9F9F9;min-width: 100px; max-width: 400px; border-radius: 20px; align-items: center;">
-                    <button style="border: none; background-color:transparent" type="submit">
+                <div id="searchBar" class="flx">
+                    <button id="searchBTN" type="submit">
                     
                         <div style="margin:0 12px;">
                             <svg width=" 24 " height="24 " viewBox="0 0 24 24 " fill="none ">
@@ -46,8 +44,9 @@
                         </div>
                     </button>
                     
-                    <input style="color: #242424;background-color: transparent;padding: 10px 20px 10px 0;width: 100%;font-size: 14px;line-height: 20px; border: none; outline: none; "
-                    type="search" name="q" placeholder="Search" aria-label="Search"/>
+                    <input id="searchInput" class= "smallSRCH" type="search" name="q" placeholder="" aria-label="Search"/>
+                    <input id="searchInput" class= "largeSRCH" type="search" name="q" placeholder="Search" aria-label="Search"/>
+
 
                 </div>
             </form>
@@ -140,7 +139,7 @@
             {% block edel %}
             {% endblock edel %}
         </div>
-    
+
         <div class="myFooter" dir="ltr">
             <p style="color:white; padding:10px; margin:2px 0 0 0; display:inline-block">medepartout | All Right Reserved &copy; 2024</p>
             <p style="color:white; padding:10px; margin:2px 0 0 0; display:inline-block">|</p>
