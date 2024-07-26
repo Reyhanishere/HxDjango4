@@ -32,9 +32,9 @@
 
 {% if user.username == note.author.username %}
     {% block edel %}
-        <a href="{% url 'note_edit' picasso.slug %}" class="btn btn-warning" style="width:70px; font-size:16px; padding:4px; align-items:center">
+        <a href="{% url 'ex_edit' note.slug %}" class="btn btn-warning" style="width:70px; font-size:16px; padding:4px; align-items:center">
             <span style="font-size:16px">ویرایش</span></a>
-        <a href="{% url 'note_delete' note.slug %}" class="btn btn-danger" style="width:70px; font-size:16px; padding:4px;align-items:center">
+        <a href="{% url 'ex_delete' note.slug %}" class="btn btn-danger" style="width:70px; font-size:16px; padding:4px;align-items:center">
             <span style="font-size:16px">حذف</span></a>
     {% endblock edel %}
 {% endif %}
