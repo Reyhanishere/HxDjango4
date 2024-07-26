@@ -4,6 +4,7 @@
 {% load static %}
 {% block title %} | Cases | Picasso{% endblock title %}{% block content %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/style_base.css' %}">
 <div class="pad-15">
 {% if picasso.verified and picasso.visible and not picasso.delete %}
 <h2>{{picasso.title}}</h2>
