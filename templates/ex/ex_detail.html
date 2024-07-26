@@ -8,6 +8,7 @@
 {% block desc %}{{note.title}}{%endblock desc%}
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/style_base.css' %}">
 <div class="pad-15">
 {% if note.verified and not note.delete%}
 <div class="blogCont">
