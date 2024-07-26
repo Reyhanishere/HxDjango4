@@ -103,3 +103,15 @@ span.new:hover {
 .headerLogo {
     color: #242424;
 }
+
+#edel {
+    position: fixed;
+    bottom: 15px;
+    left: 15px;
+    border-radius: 5px
+}
+
+#edel a {
+    display: block;
+    margin: 5px;
+}
