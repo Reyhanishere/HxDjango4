@@ -160,14 +160,16 @@
                 {%endif%}
             </div>
 
-            {% if user.username == case.author.username %}
-                {% block edel %}
+            
+            {% block edel %}
+                {% if user.username == case.author.username %}
                     <a href="{% url 'hx_edit' case.slug %}" class="btn btn-warning" style="width:70px; font-size:16px; padding:4px; align-items:center">
                         <span style="font-size:16px">ویرایش</span></a>
                     <a href="{% url 'hx_delete' case.slug %}" class="btn btn-danger" style="width:70px; font-size:16px; padding:4px;align-items:center">
                         <span style="font-size:16px">حذف</span></a>                
-                {% endblock edel %}
-            {% endif %}
+                {% endif %}
+            {% endblock edel %}
+            
         
             <script>
                 const graphData{{ forloop.counter }} = '{{ graph.data|striptags|linebreaksbr }}'.split('<br>');
