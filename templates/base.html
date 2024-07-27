@@ -130,7 +130,7 @@
             {%endif%}
         </div>
     </div>
-        <div class="myMain" style="min-height:81vh; margin-top:0;background-color: #fff;">
+        <div class="myMain" style="min-height:86vh; margin-top:0;background-color: #fff;">
             {% block content %}
             {% endblock content %}
         </div>
@@ -141,10 +141,10 @@
         </div>
 
         <div class="myFooter" dir="ltr">
-            <p style="color:white; padding:10px; margin:2px 0 0 0; display:inline-block">medepartout | All Right Reserved &copy; 2024</p>
-            <p style="color:white; padding:10px; margin:2px 0 0 0; display:inline-block">|</p>
+            <p class="footerPs">medepartout | All Right Reserved &copy; 2024</p>
+            <p class="footerPs" id="footerPHide">|</p>
 
-            <div class="footerLinks" style="display: inline-block; right:20px">
+            <div class="footerLinks" style="display: inline-block; right:20px; margin:2px 0 4px 0">
                 <a href="{% url 'cases_main' %}">Cases App</a>
                 <a href="{% url 'docs_list' %}">Docs</a>
                 <a href="{% url 'about' %}">About</a>
