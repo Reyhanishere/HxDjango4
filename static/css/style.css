@@ -834,6 +834,11 @@ gap: 10px; */
         box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
     }
     
+    .twoColumnar {
+        column-count: 2;
+        margin: 5px
+    }
+    
     a.float {
         margin: 5px 20px;
         width: 110px;
@@ -1205,6 +1210,10 @@ text-align: center;
             display: grid;
             grid-template-columns: 1fr;
             gap: 5px;
+        }
+        .twoColumnar {
+            column-count: 1;
+            margin: 5px
         }
     }
     
