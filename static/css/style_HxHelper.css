@@ -1,0 +1,101 @@
+.ros-toggle-button {
+    background-color: #FFAA80;
+    font-size: 16px;
+    padding: 0px 20px;
+    border: 2px solid #1F132B;
+    border-radius: 20px;
+    margin-bottom: 5px;
+    color: #1F132B;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.ros-toggle-button:hover {
+    background-color: #FFAA99;
+    border: 2px solid #55132B;
+}
+
+.helperCloseBtn {
+    display: inline-block;
+    background-color: #c33;
+    color: white;
+    padding: 2px;
+    font-weight: 600;
+    border-radius: 4px;
+    width: 25px;
+    text-align: center;
+}
+
+.helperCloseBtn:hover {
+    background-color: #b44;
+}
+
+.ROSTab {
+    display: none;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.ROSTab span {
+    background-color: inherit;
+    float: right;
+    border-top: none;
+    border-bottom: none;
+    border-right: none;
+    border-left: 1px solid #ccc;
+    outline: none;
+    cursor: pointer;
+    padding: 7px 14px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+.ROSTab span:hover {
+    background-color: #ddd;
+}
+
+.ROSTab span.active {
+    background-color: #ccc;
+}
+
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+}
+
+.tabTitle {
+    display: inline-block;
+    margin-left: 15px
+}
+
+.phraseTitle {
+    margin-bottom: 20px;
+}
+
+.phrase-container {
+    margin-bottom: 20px;
+}
+
+.phrase-container .pn {
+    margin-left: 10px;
+    background-color: #ddd;
+    border: none;
+    border-radius: 4px;
+    margin: 3px;
+    min-height: 30px;
+    text-align: center;
+    min-width: 30px;
+    cursor: pointer;
+}
+
+.phraseText {
+    margin-left: 10px;
+}
