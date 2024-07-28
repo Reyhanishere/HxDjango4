@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
-{% block title %} | Cases | Hx{%endblock title%}
 {% block content %}
 
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/style_HxHelper.css' %}">
+
 <style>    
     button {
         border: none;
@@ -18,10 +19,32 @@
     <form action="" method="post" autocomplete="off">{% csrf_token %}
         <div class="createForm">
         {{ form|crispy }}
-            <div class="text-center" style="justify-contents:center"><button class="btn btn-info" id="primaryButton" type="submit">Update</button></div>
+            <div class="text-center" style="justify-contents:center"><button class="btn btn-info" id="primaryButton" type="submit">بروزرسانی</button></div>
 
     </div>
     </form>
-    <p>در صورت تعویض تصویر، نیاز به تایید مجدد سردبیر خواهد بود و فرایند تایید ممکن است چند ساعت به درازا بکشد.</p>
 </div>
+
+
+<script src="{% static '/scripts/Hx_Helper.js'%}"></script>
+<script>document.addEventListener("DOMContentLoaded", function() {
+    const divIdRos = document.getElementById('div_id_ros');
+    const labelElement = divIdRos.querySelector('label');
+
+    if (labelElement) {
+        labelElement.insertAdjacentHTML('afterend', `
+            <span class="ros-toggle-button" onclick="toggleROSTab()">کمکم کن!</span>
+            <div class="ROSTab" id="ROSTab"></div>
+            <div id="tabs-container"></div>
+        `);
+
+        // Initialize ROS buttons and tabs after injecting the container elements
+        createButtons(ROSButtonData);
+        createTabs(ROSData);
+    }
+});
+
+
+</script>
 {% endblock content %}
+
