@@ -1,27 +1,50 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
-{% block title %} | Cases | Hx{% endblock title %}
+{% block title %}| Hx{%endblock title%}
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/style_HxHelper.css' %}">
+
 <div class="pad-15">
 <h1>کیس جدید</h1>
 
 <form action="" method="post">{% csrf_token %}
 <div class="createForm" autocomplete="off">
     {{ form|crispy }}
+    {% comment %} <a href="{% url 'lab-create' %}" target="_blank">Add LabTest</a> {% endcomment %}
 </div>
-<details class="pad-15" style="margin:10px">
-    <summary style="font-size:16px; font-weight:600;">
+    <details class="pad-15" style="margin:10px">
+        <summary style="font-size:16px; font-weight:600;">
             راهنمای افزودن تصاویر
-    </summary>
-     آموزش این عمل در بخش Blog مطرح شده است. به صورت خلاصه، دو راه دارید. یکی اینکه پس از ثبت مطلب (Submit) در صفحۀ تایید ثبت شدن مطلب، بر روی لینک کلیک کنید و تصاویر را اضافه کنید. دیگری اینکه پس از تایید مطلب توسط وبسایت و انتشار آن، به صفحۀ شرح حال بروید و با کلیک بر روی لینکی که در بخش Other Data قرار گرفته، تصاویر را اضافه کنید. هردوی این پیوندها شما را به آدرس زیر هدایت می‌کنند. <br/>
-        <b>medepartout.ir/cases/hx/YOUR-Hx-LINK/add-image</b>
-</details>
+        </summary>
+        پس از ثبت مطلب خود، در صفحۀ مربوط به آن می‌توانید روی دکمۀ "+ Images" کلیک کنید.
+
+    </details>
 <button class="btn btn-success ml-2" type="submit" id="save" >Submit</button>
 </form>
-<p>جستار شما پس از تایید توسط سردبیر به نمایش درخواهد آمد.</p>
+
 </div>
+
+<script src="{% static '/scripts/Hx_Helper.js'%}"></script>
+<script>document.addEventListener("DOMContentLoaded", function() {
+    const divIdRos = document.getElementById('div_id_ros');
+    const labelElement = divIdRos.querySelector('label');
+
+    if (labelElement) {
+        labelElement.insertAdjacentHTML('afterend', `
+            <span class="ros-toggle-button" onclick="toggleROSTab()">کمکم کن!</span>
+            <div class="ROSTab" id="ROSTab"></div>
+            <div id="tabs-container"></div>
+        `);
+
+        // Initialize ROS buttons and tabs after injecting the container elements
+        createButtons(ROSButtonData);
+        createTabs(ROSData);
+    }
+});
+
+</script>
 {% endblock content %}
 
 
