@@ -37,23 +37,33 @@ h3{
             <div id="PI" class="hx content"><b>PI: </b>{{ case.pi|linebreaks }}</div>
 
             <div id="PMH" class="hx content"><b>PMH: </b>{{ case.pmh|linebreaks }}</div>
-            {% if case.drg %}
-            <div id="Drugs" class="hx content"><b>Drugs: </b>{{ case.drg|linebreaks }}</div>
+            
+            <div id="Drugs" class="hx content">
+                {% if case.drg %}
+                <b>Drugs: </b>{{ case.drg|linebreaks }}
             {% else %}
             <p style="margin:20px">بیمار دارو یا مادۀ ویژه‌ای مصرف <u>نمی‌کند</u>.</p>
-            {% endif %}
+            {% endif %}</div>
         
             {% if case.sh %}
-            <div id="SH" class="hx content"><b>SH: </b>{{ case.sh|linebreaks }}</div>
+            <div id="SH" class="hx content">
+                {% if case.sh %}
+                <b>SH: </b>{{ case.sh|linebreaks }}
             {% else %}
             <p style="margin:20px">بیمار Social Historyای را ذکر <u>نمی‌کند</u>.</p>
             {% endif %}
+
+            </div>
         
+            
+            <div id="FH" class="hx content">
             {% if case.fh %}
-            <div id="FH" class="hx content"><b>FH: </b>{{ case.fh|linebreaks }}</div>
+                <b>FH: </b>{{ case.fh|linebreaks }}
             {% else %}
-            <p style="margin:20px">بیمار Family Historyای را ذکر <u>نمی‌کند</u>.</p>
+                <p style="margin:20px">بیمار Family Historyای را ذکر <u>نمی‌کند</u>.</p>
             {% endif %}
+            </div>
+            
             
             <div id="ROS" class="hx content"><b>Review of Systems:</b> <br/><div class="twoColumnar">{{ case.ros|linebreaks}}</div></div>  
             <div id="PE" class="hx content"><b>Physical Examination:</b> <br/>{{ case.phe|linebreaks}}</div>
