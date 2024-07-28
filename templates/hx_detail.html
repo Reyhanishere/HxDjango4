@@ -11,18 +11,21 @@
 {% if case.verified %}
 <h2 style="font-weight:600; padding-top:10px">{{ case.title }}</h2>
 <div dir="ltr">
-    <a href="presentation" target="_blank" class="btn btn-secondary">Presentation Mode</a>
-    <a href="graphs" target="_blank" class="btn btn-secondary">
+    <a href="{% url 'hx_presentation' case.slug %}" target="_blank" class="btn btn-secondary">Presentation Mode</a>
+    <a href="{% url 'hx_graphs' case.slug %}" target="_blank" class="btn btn-secondary">
         See Lab Data
     </a>
     {%if user.username == case.author.username %}
-    <a href="graphs/new" target="_blank" class="btn btn-outline-secondary">
+    <a href="{% url 'hx_graph_new' case.slug %}" target="_blank" class="btn btn-outline-secondary">
         + Lab Data
+    </a>
+    <a href="{% url 'hx_add_image' case.slug %}" target="_blank" class="btn btn-outline-secondary">
+        + Images
     </a>
     {%endif%}
     <span style="color:#888" hidden>Share</span><button dir="rtl" onclick="copyToClipboard()" class="copyLink" id="copy"><img id="share"src="{% static 'images\share-icon.svg' %}" width="20px" alt="Copy case link to clipboard"></button>
 </div>
-    <p dir="ltr" style='margin:5px;'>{{ case.date_created|date:"d M y" }}  &emsp; By {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }} </p>
+    <p dir="ltr" style='margin:5px;'><span dir="rtl">{{ case.date_created|date:"d M Y" }}</span>  &emsp; By {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }} </p>
 
 <p style='margin-right:10px;'>
     {{ case.pretext|safe }}
@@ -91,8 +94,8 @@
         {%if case.imagecase_set.all %} <a href="#images" style="color:#333;margin:5px;">تمام تصاویر در زیر برگۀ شرح حال</a>{% endif %}<hr/>{{ case.dat|linebreaks }}
         
     </div>
-    <div class="hx"><b>Review of Systems:</b> <br/>{{ case.ros|linebreaks}}</div>    
-    <div class="hx"><b>Physical Examination:</b> <br/>{{ case.phe|linebreaks}}</div>
+    <div class="hx"><b>Review of Systems:</b> <br/><div class="twoColumnar">{{ case.ros|linebreaks}}</div></div>
+    <div class="hx"><b>Physical Examination:</b> <br/><div class="twoColumnar">{{ case.phe|linebreaks}}</div></div>
     <div class="hx" style="background-color:#ffd"><b>Summary: </b>{{ case.summary|linebreaks }}</div>
     <div class="hx">
         <details>
@@ -139,7 +142,8 @@
                 مشاهدۀ تمام آزمایش‌ها به همراه <b>نمودار</b>
              </span></a>
         </summary>
-     {%for graph in case.labgraphselection_set.all %}
+        
+        {%for graph in case.labgraphselection_set.all %}
         <h5>{{graph.title}}:</h5>
         <div class="labDataCont">
             {%if graph.description%}<div class="description">{{graph.description | linebreaks}}</div>
@@ -159,17 +163,6 @@
                 </div>
                 {%endif%}
             </div>
-
-            
-            {% block edel %}
-                {% if user.username == case.author.username %}
-                    <a href="{% url 'hx_edit' case.slug %}" class="btn btn-warning" style="width:70px; font-size:16px; padding:4px; align-items:center">
-                        <span style="font-size:16px">ویرایش</span></a>
-                    <a href="{% url 'hx_delete' case.slug %}" class="btn btn-danger" style="width:70px; font-size:16px; padding:4px;align-items:center">
-                        <span style="font-size:16px">حذف</span></a>                
-                {% endif %}
-            {% endblock edel %}
-            
         
             <script>
                 const graphData{{ forloop.counter }} = '{{ graph.data|striptags|linebreaksbr }}'.split('<br>');
@@ -298,6 +291,20 @@
 
 {% endif %}
 </div>
+{% endblock content %}
+
+
+{% block edel %}
+{% if user.username == case.author.username %}
+<a href="{% url 'hx_edit' case.slug %}" class="btn btn-warning" style="width:70px; font-size:16px; padding:4px; align-items:center">
+    <span style="font-size:16px">ویرایش</span></a>
+
+<a href="{% url 'hx_delete' case.slug %}" class="btn btn-danger" style="width:70px; font-size:16px; padding:4px;align-items:center">
+    <span style="font-size:16px">حذف</span></a>
+{% endif %}
+{% endblock edel %}
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const likeForms = document.querySelectorAll('.like-form');
@@ -340,4 +347,3 @@
           }, 4000);
       }
 </script>
-{% endblock content %}
