@@ -1,19 +1,23 @@
-.ros-toggle-button {
+.helper-toggle-button {
     background-color: #FFAA80;
     font-size: 16px;
     padding: 0px 20px;
     border: 2px solid #1F132B;
     border-radius: 20px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     color: #1F132B;
     font-weight: 600;
     cursor: pointer;
     transition: 0.5s;
 }
 
-.ros-toggle-button:hover {
+.helper-toggle-button:hover {
     background-color: #FFAA99;
     border: 2px solid #55132B;
+    box-shadow: 3px 3px 0px 0px #aaa;
+    color: #55132B;
+    padding: 5px 25px;
+    border-radius: 25px;
 }
 
 .helperCloseBtn {
@@ -96,6 +100,49 @@
     cursor: pointer;
 }
 
-.phraseText {
-    margin-left: 10px;
+.tablinks.active {
+    font-weight: bold;
+}
+
+.optionButton {
+    display: inline-block;
+    margin: 2px 2px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.optionButton:hover {
+    background-color: #e0e0e0;
+    border-color: #bbb;
+}
+
+.optionButton:active {
+    background-color: #d0d0d0;
+    border-color: #aaa;
+}
+
+.phraseButton {
+    display: inline-block;
+    margin: 2px 0;
+    border: none;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    padding: 5px 10px;
+    transition: 0.5s;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.phraseButton:hover {
+    background-color: #e0e0e0;
+}
+
+.phrase-container-bot-border {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
 }
