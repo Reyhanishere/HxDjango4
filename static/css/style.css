@@ -1212,55 +1212,26 @@ text-align: center;
             grid-template-columns: 1fr;
             gap: 5px;
         }
+    }
+    
+    @media (min-device-width: 600px) and (max-device-width: 750px) {
         .twoColumnar {
             column-count: 1;
-            margin: 5px
         }
     }
     
-    .sidenav {
-        height: 100%;
-        width: 0;
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        background-color: #2f2f2f;
-        overflow-x: hidden;
-        transition: 0.5s;
-        padding-top: 60px;
-    }
-    
-    .sidenav a {
-        padding: 8px 8px 8px 32px;
-        text-decoration: none;
-        font-size: 25px;
-        color: #aaa;
-        display: block;
-        transition: 0.3s;
-    }
-    
-    .sidenav a:hover {
-        color: #fafafa;
-    }
-    
-    .sidenav .closebtn {
-        position: absolute;
-        top: 0;
-        right: 25px;
-        font-size: 36px;
-        margin-left: 50px;
-    }
-    
-    @media screen and (max-height: 450px) {
-        .sidenav {
-            padding-top: 15px;
-        }
-        .sidenav a {
-            font-size: 18px;
+    @media (min-device-width: 480px) and (max-device-width: 600px) {
+        .twoColumnar {
+            column-count: 2;
         }
     }
     
+    @media screen and (max-height: 480px) {
+        .twoColumnar {
+            column-count: 1;
+        }
+    }
+
     @media (max-width: 738px) {
         .imagePicaDetailCont {
             display: flex;
