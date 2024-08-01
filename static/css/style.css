@@ -238,6 +238,23 @@ gap: 10px; */
     .copyLink:hover {
         background-color: #ddd;
     }
+
+    .txtAlgnL {
+        text-align: left;
+    }
+    
+    .txtAlgnR {
+        text-align: right;
+    }
+    
+    .btnLikeSummary {
+        color: #6c757d;
+        padding: 0.1rem .5rem;
+        font-size: 1rem;
+        border-radius: .25rem;
+        margin: 2px;
+        border: 1px solid #6c757d;
+    }
     
     .comment {
         background-color: #eee;
