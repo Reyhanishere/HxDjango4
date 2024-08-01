@@ -10,7 +10,7 @@
 <div class="pad-15">
 {% if case.verified %}
 <h2 style="font-weight:600; padding-top:10px">{{ case.title }}</h2>
-<div dir="ltr">
+<div dir="ltr" class="txtAlgnL">
     <a href="{% url 'hx_presentation' case.slug %}" target="_blank" class="btn btn-secondary">Presentation Mode</a>
     <a href="{% url 'hx_graphs' case.slug %}" target="_blank" class="btn btn-secondary">
         See Lab Data
