@@ -70,13 +70,6 @@ function createTabs(data) {
         title.className = "tabTitle"
         phraseTitle.appendChild(title);
 
-        // const closeButton = document.createElement('span');
-        // closeButton.textContent = '×';
-        // closeButton.onclick = closeROSOpenTab;
-        // closeButton.className = "helperCloseBtn";
-
-        // phraseTitle.appendChild(closeButton);
-
         const phraseContAll = document.createElement('div');
         phraseContAll.className = "twoColumnar txtAlgnR"
         phrases.forEach(phrase => {
@@ -123,10 +116,18 @@ function createButtons(buttonData) {
         button.setAttribute('onclick', `openROS(event, '${key}')`);
         rostab.appendChild(button);
     }
+    const divider = document.createElement('span');
+    divider.className = 'tablinks';
+    divider.innerHTML = "---"
+    divider.setAttribute('onclick', "addROSDivider()");
+    rostab.appendChild(divider);
+}
+
+function addROSDivider() {
+    const ros_text = document.getElementById('id_ros')
+    ros_text.value += `------------\n`
 }
 // ----------------------------------------------------
-
-
 
 function AddPhESection() {
     const divIdPhE = document.getElementById('div_id_phe');
