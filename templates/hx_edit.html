@@ -27,23 +27,10 @@
 
 
 <script src="{% static '/scripts/Hx_Helper.js'%}"></script>
-<script>document.addEventListener("DOMContentLoaded", function() {
-    const divIdRos = document.getElementById('div_id_ros');
-    const labelElement = divIdRos.querySelector('label');
-
-    if (labelElement) {
-        labelElement.insertAdjacentHTML('afterend', `
-            <span class="ros-toggle-button" onclick="toggleROSTab()">کمکم کن!</span>
-            <div class="ROSTab" id="ROSTab"></div>
-            <div id="tabs-container"></div>
-        `);
-
-        // Initialize ROS buttons and tabs after injecting the container elements
-        createButtons(ROSButtonData);
-        createTabs(ROSData);
-    }
-});
-
+<script>
+    
+    document.addEventListener("DOMContentLoaded", AddROSSection())
+    document.addEventListener("DOMContentLoaded", AddPhESection())
 
 </script>
 {% endblock content %}
