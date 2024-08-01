@@ -16,9 +16,9 @@
 </div>
     <details class="pad-15" style="margin:10px">
         <summary style="font-size:16px; font-weight:600;">
-            راهنمای افزودن تصاویر
+            راهنمای افزودن تصاویر و آزمایش‌ها
         </summary>
-        پس از ثبت مطلب خود، در صفحۀ مربوط به آن می‌توانید روی دکمۀ "+ Images" کلیک کنید.
+        پس از ثبت مطلب خود، در صفحۀ مربوط به آن می‌توانید روی دکمه‌های  <span dir="ltr" class="btnLikeSummary">+ Images</span> و <span dir="ltr" class="btnLikeSummary">+ Lab Data</span> کلیک کنید.
 
     </details>
 <button class="btn btn-success ml-2" type="submit" id="save" >Submit</button>
@@ -27,24 +27,12 @@
 </div>
 
 <script src="{% static '/scripts/Hx_Helper.js'%}"></script>
-<script>document.addEventListener("DOMContentLoaded", function() {
-    const divIdRos = document.getElementById('div_id_ros');
-    const labelElement = divIdRos.querySelector('label');
-
-    if (labelElement) {
-        labelElement.insertAdjacentHTML('afterend', `
-            <span class="ros-toggle-button" onclick="toggleROSTab()">کمکم کن!</span>
-            <div class="ROSTab" id="ROSTab"></div>
-            <div id="tabs-container"></div>
-        `);
-
-        // Initialize ROS buttons and tabs after injecting the container elements
-        createButtons(ROSButtonData);
-        createTabs(ROSData);
-    }
-});
-
+{% comment %} {% if user.is_case_editor %} {% endcomment %}
+<script>
+    document.addEventListener("DOMContentLoaded", AddROSSection())
+    document.addEventListener("DOMContentLoaded", AddPhESection())
 </script>
+{% comment %} {% endif %} {% endcomment %}
 {% endblock content %}
 
 
