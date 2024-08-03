@@ -47,6 +47,24 @@ body {
   line-height: 2em;
 }
 
+h2{
+  text-align: center;
+}
+
+h2 a {
+  margin-right: 15px;
+  text-decoration: none;
+  left: 2px;
+  bottom: 10px;
+  height: 5%;
+  width: 50%;
+  color:#FFECEF;
+  text-align: left;
+}
+
+h2 a:hover{
+color:#E6B9A6
+}
 
 
 
@@ -72,20 +90,18 @@ display:block;
 }
 
 .stars {
-/* background:#000 url(https://raw.githubusercontent.com/EhsanKalateh/HxDjango4/main/static/images/about/stars.png) repeat top center; */
 background:#000 url(/static/images/about/stars.png) repeat top center;
 z-index:0;
 }
 
 .twinkling{
-/* background:transparent url(https://raw.githubusercontent.com/EhsanKalateh/HxDjango4/main/static/images/about/twinkling.png) repeat top center; */
 background:transparent url(/static/images/about/twinkling.png) repeat top center;
 z-index:1;
 animation:move-twink-back 200s linear infinite;
 }
 
 .clouds{
-  background:transparent url(https://raw.githubusercontent.com/EhsanKalateh/HxDjango4/main/static/images/about/clouds.png) repeat top center;
+  background:transparent url(/static/images/about/clouds.png) repeat top center;
   z-index:2;
   opacity: .4;
   animation:move-clouds-back 200s linear infinite;
@@ -99,9 +115,7 @@ animation:move-twink-back 200s linear infinite;
   background: -webkit-linear-gradient(#251B37,#372948 ,#FFCACA,#FFECEF);
   color: #FFECEF;
   padding: 50px 50px 0 50px ;
-  font-size: 20px;
   font-family: 'Noto Sans';
-  font-weight: bold;
   margin: 100px auto 0 auto;
   text-align: center;
   width: 80%;
@@ -111,61 +125,13 @@ animation:move-twink-back 200s linear infinite;
 }
 
 
-h2{
-  margin-top: 40px;
-  text-align: center;
-}
 
-h2 a {
-  margin-right: 15px;
-  text-decoration: none;
-  left: 2px;
-  bottom: 10px;
-  height: 5%;
-  width: 50%;
-  color:#FFECEF;
-  text-align: left;
-}
-
-h2 a:hover{
-color:#E6B9A6
-}
-
-.text{
-  font-size: 1.15em;
-  line-height: 1.7em;
-  text-align: left;
-}
-
-.farsi.head{
-  font-size: 1.5rem;
-}
 
 .image{
-  width: 20%;
   float: left;
   mix-blend-mode:multiply;
 }
 
-.geek.image{
-  float: right;
-  width: 30%;
-}
-
-.picasso.image{
-  float: right;
-  margin-left: 20px;
-}
-
-.contact.image{
-  width: 15%;
-}
-
-.reyhaneh{
-  font-weight:400;
-  line-height: 32px;
-  font-size: 21px;
-}
 
 .ex{
   color: #251B37;
@@ -200,14 +166,12 @@ color:#E6B9A6
 }
 
 .hrs{
-/* background:#000 url(https://raw.githubusercontent.com/EhsanKalateh/HxDjango4/main/static/images/about/stars.png) repeat top center; */
 background:#000 url(/static/images/about/stars.png) repeat top center;
 }
 
 .bottom-container{
   order: 3;
   background-color: #B2B2B2;
-  /* background:#000 url(https://raw.githubusercontent.com/EhsanKalateh/HxDjango4/main/static/images/about/stars.png) repeat top center; */
   background:#000 url(/static/images/about/stars.png) repeat top center;
   /* footer's background is diffrent from defult footer of the site */
   color: #EEEDEB;
@@ -236,7 +200,6 @@ background:#000 url(/static/images/about/stars.png) repeat top center;
   height: 5%;
   width: 50%;
   color:white;
-/*   text-align: left; */
 }
 
 a:hover{
@@ -248,3 +211,5 @@ color:#E6B9A6;
   font-family: "Noto Sans Arabic", sans-serif;
   text-align: right;
 }
+
+
