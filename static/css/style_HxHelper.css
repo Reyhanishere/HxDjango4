@@ -77,7 +77,16 @@
 
 .tabTitle {
     display: inline-block;
-    margin-left: 15px
+    margin-left: 15px;
+    border-radius: 10px;
+    background-color: #f1f1f1;
+    padding: 7px 12px;
+    transition: 0.5s;
+    cursor: pointer
+}
+
+.tabTitle:hover {
+    background-color: #ddd;
 }
 
 .phraseTitle {
