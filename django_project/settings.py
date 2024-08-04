@@ -35,9 +35,10 @@ INSTALLED_APPS = [
     # Local
     "accounts.apps.AccountsConfig",
     "pages.apps.PagesConfig",
-    "cases.apps.CasesConfig",
+    # "cases.apps.CasesConfig",
     "blogs.apps.BlogsConfig",
     "docs.apps.DocsConfig",
+    "cases",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
