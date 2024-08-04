@@ -65,9 +65,10 @@ function createTabs(data) {
         tabDiv.className = 'tabcontent';
         const phraseTitle = document.createElement('div');
         phraseTitle.className = "phraseTitle"
-        const title = document.createElement('h3');
+        const title = document.createElement('h4');
         title.textContent = key + ":";
         title.className = "tabTitle"
+        title.setAttribute('onclick', `addTitleToROSText('• ${key}:')`);
         phraseTitle.appendChild(title);
 
         const phraseContAll = document.createElement('div');
@@ -86,7 +87,7 @@ function createTabs(data) {
             addButton.innerHTML = '&#10133;';
             addButton.className = "pn"
             addButton.onclick = function() {
-                addToROSText(this, '➕');
+                addToROSText(this, '➕ ');
             };
             phraseContainer.appendChild(addButton);
 
@@ -94,7 +95,7 @@ function createTabs(data) {
             removeButton.innerHTML = '&#10134;';
             removeButton.className = "pn"
             removeButton.onclick = function() {
-                addToROSText(this, '➖');
+                addToROSText(this, '➖ ');
             };
             phraseContainer.appendChild(removeButton);
 
@@ -121,11 +122,44 @@ function createButtons(buttonData) {
     divider.innerHTML = "---"
     divider.setAttribute('onclick', "addROSDivider()");
     rostab.appendChild(divider);
+    const star = document.createElement('span');
+    star.className = 'tablinks';
+    star.innerHTML = "*"
+    star.setAttribute('onclick', "addROSStar()");
+    rostab.appendChild(star);
 }
 
 function addROSDivider() {
+    const textarea = document.getElementById('id_ros');
+    const dividerText = '\n------------\n';
+    const startPos = textarea.selectionStart;
+    const endPos = textarea.selectionEnd;
+    const textBefore = textarea.value.substring(0, startPos);
+    const textAfter = textarea.value.substring(endPos, textarea.value.length);
+    textarea.value = textBefore + dividerText + textAfter;
+    textarea.selectionStart = textarea.selectionEnd = startPos + dividerText.length;
+    textarea.focus();
+}
+
+function addROSStar() {
+    const textarea = document.getElementById('id_ros');
+    var starText = '*';
+    const startPos = textarea.selectionStart;
+    const endPos = textarea.selectionEnd;
+    var textBefore = textarea.value.substring(0, startPos);
+    if (textarea.value.length === endPos) {
+        textBefore = textarea.value.substring(0, startPos - 1);
+        starText = `*\n`
+    }
+    const textAfter = textarea.value.substring(endPos, textarea.value.length);
+    textarea.value = textBefore + starText + textAfter;
+    textarea.selectionStart = textarea.selectionEnd = startPos + starText.length;
+    textarea.focus();
+}
+
+function addTitleToROSText(title) {
     const ros_text = document.getElementById('id_ros')
-    ros_text.value += `------------\n`
+    ros_text.value += `${title}\n`
 }
 // ----------------------------------------------------
 
@@ -166,9 +200,10 @@ function createPhETabs(data) {
         const phraseTitle = document.createElement('div');
         phraseTitle.className = "phraseTitle";
 
-        const title = document.createElement('h3');
+        const title = document.createElement('h4');
         title.textContent = primary + ":";
         title.className = "tabTitle";
+        title.setAttribute('onclick', `addTitleToPhEText('• ${primary}:')`);
         phraseTitle.appendChild(title);
 
         const phraseContAll = document.createElement('div');
@@ -202,7 +237,7 @@ function createPhETabs(data) {
             });
 
             phraseContAll.appendChild(phraseContainer);
-        }
+        };
 
         tabDiv.appendChild(phraseTitle);
         tabDiv.appendChild(phraseContAll);
@@ -223,13 +258,19 @@ function createPhEButtons(buttonData) {
     const divider = document.createElement('span');
     divider.className = 'tablinks';
     divider.innerHTML = "---"
-    divider.setAttribute('onclick', "addToPhEText(this, `\n------------`)");
+    divider.setAttribute('onclick', "addPhEDivider()");
     phETab.appendChild(divider);
+
+    const star = document.createElement('span');
+    star.className = 'tablinks';
+    star.innerHTML = "*"
+    star.setAttribute('onclick', "addPhEStar()");
+    phETab.appendChild(star);
 }
 
 function addToPhEText(element, text) {
     const textarea = document.getElementById('id_phe');
-    textarea.value += (textarea.value ? '' : '') + text;
+    textarea.value += (textarea.value ? '' : '') + text + ' ';
 }
 
 function openPhE(evt, sectionName) {
@@ -247,6 +288,38 @@ function openPhE(evt, sectionName) {
     evt.currentTarget.className += ' active';
 }
 
+function addPhEDivider() {
+    const textarea = document.getElementById('id_phe');
+    const dividerText = '\n------------\n';
+    const startPos = textarea.selectionStart;
+    const endPos = textarea.selectionEnd;
+    const textBefore = textarea.value.substring(0, startPos);
+    const textAfter = textarea.value.substring(endPos, textarea.value.length);
+    textarea.value = textBefore + dividerText + textAfter;
+    textarea.selectionStart = textarea.selectionEnd = startPos + dividerText.length;
+    textarea.focus();
+}
+
+function addPhEStar() {
+    const textarea = document.getElementById('id_phe');
+    var starText = '*';
+    const startPos = textarea.selectionStart;
+    const endPos = textarea.selectionEnd;
+    var textBefore = textarea.value.substring(0, startPos);
+    if (textarea.value.length === endPos) {
+        textBefore = textarea.value.substring(0, startPos - 1);
+        starText = `*\n`
+    }
+    const textAfter = textarea.value.substring(endPos, textarea.value.length);
+    textarea.value = textBefore + starText + textAfter;
+    textarea.selectionStart = textarea.selectionEnd = startPos + starText.length;
+    textarea.focus();
+}
+
+function addTitleToPhEText(title) {
+    const ros_text = document.getElementById('id_phe')
+    ros_text.value += `${title}\n`
+}
 var ROSButtonData = {
     "General": "General &#128512;",
     "Skin": "Skin &#127773;",
@@ -272,8 +345,8 @@ var ROSButtonData = {
 };
 
 var ROSData = {
-    "General": ["کاهش وزن", "افزایش وزن", "تب", "تعریق شبانه", "ضعف و بی‌حالی"],
-    "Skin": ["خشکی پوست", "رطوبت پوست", "زخم", "افزایش رویش مو", "ریزش مو", "دانه", "لکه", "ترک", "زردی", "رنگ‌پریدگی"],
+    "General": ["کاهش وزن", "افزایش وزن", "تب", "تعریق شبانه", "ضعف و بی‌حالی", "سرگیجه"],
+    "Skin": ["خشکی پوست", "رطوبت پوست", "زخم", "افزایش رویش مو", "ریزش مو", "کبودی", "دانه", "لکه", "ترک", "زردی", "رنگ‌پریدگی"],
     "Eye": ["خشکی چشم", "درد چشم", "قرمزی چشم", "کاهش قدرت بینایی", ],
     "Ear": ["کاهش قدرت شنوایی", "گوش درد", "خروج ترشحات از گوش", ],
     "Nose": ["آبریزش بینی", "خون‌ریزی از بینی", "سینوزیت", ],
@@ -327,7 +400,7 @@ const PhEData = {
     },
 
     'Breast': {
-        'نگاه': ['inverted nipple', 'infalmation', ],
+        'نگاه': ['inverted nipple', 'inflamation', ],
         'لمس': ['توده', 'لنف نود آگزیلاری', ],
     },
 
