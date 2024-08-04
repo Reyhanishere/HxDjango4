@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load my_tags %}
 {% block title %} | {{case.title}}{%endblock title%}
 {% block desc %}شرح حالی از {{ case.author.first_name }} {{ case.author.last_name }}{% endblock desc%}
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link rel="stylesheet" href="{% static 'css/style_base.css' %}">
+<link rel="stylesheet" href="{% static 'css/style_hx.css' %}">
 
 <div class="pad-15">
 {% if case.verified %}
@@ -94,8 +96,10 @@
         {%if case.imagecase_set.all %} <a href="#images" style="color:#333;margin:5px;">تمام تصاویر در زیر برگۀ شرح حال</a>{% endif %}<hr/>{{ case.dat|linebreaks }}
         
     </div>
-    <div class="hx"><b>Review of Systems:</b> <br/><div class="twoColumnar">{{ case.ros|linebreaks}}</div></div>
-    <div class="hx"><b>Physical Examination:</b> <br/><div class="twoColumnar">{{ case.phe|linebreaks}}</div></div>
+
+    <div class="hx"><b>Review of Systems:</b> <br/><div class="twoColumnar">{{ case.ros|emphasize|safe }}</div></div>
+
+    <div class="hx"><b>Physical Examination:</b> <br/><div class="twoColumnar">{{ case.phe|emphasize|safe}}</div></div>
     <div class="hx" style="background-color:#ffd"><b>Summary: </b>{{ case.summary|linebreaks }}</div>
     <div class="hx">
         <details>
