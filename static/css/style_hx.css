@@ -1,0 +1,12 @@
+    .ros-phe-ttl-ppr {
+        color: #007;
+        text-decoration: underline 1px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin: 8px 0 5px 0;
+    }
+    
+    .red-txt-ros-phe {
+        color: #d22;
+        font-weight: bold;
+    }
