@@ -1,9 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
+{% load my_tags %}
 {% block title %} | {{case.title}}{%endblock title%}
 {% block desc %}شرح حالی از {{ case.author.first_name }} {{ case.author.last_name }}{% endblock desc%}
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/style_hx.css' %}">
+
 <style>
 .content {
     display: none;
@@ -17,6 +20,7 @@ h3{
     font-size:48px;
     text-align:center
 }
+.content .ros-phe-ttl-ppr{font-size:30px;}
 </style>
 <div class="pad-15">
 <div class="paper" style="min-height:60vh">
@@ -37,35 +41,26 @@ h3{
             <div id="PI" class="hx content"><b>PI: </b>{{ case.pi|linebreaks }}</div>
 
             <div id="PMH" class="hx content"><b>PMH: </b>{{ case.pmh|linebreaks }}</div>
-            
-            <div id="Drugs" class="hx content">
-                {% if case.drg %}
-                <b>Drugs: </b>{{ case.drg|linebreaks }}
+            {% if case.drg %}
+            <div id="Drugs" class="hx content"><b>Drugs: </b>{{ case.drg|linebreaks }}</div>
             {% else %}
             <p style="margin:20px">بیمار دارو یا مادۀ ویژه‌ای مصرف <u>نمی‌کند</u>.</p>
-            {% endif %}</div>
+            {% endif %}
         
-            <div id="SH" class="hx content">
-                {% if case.sh %}
-                <b>SH: </b>{{ case.sh|linebreaks }}
+            {% if case.sh %}
+            <div id="SH" class="hx content"><b>SH: </b>{{ case.sh|linebreaks }}</div>
             {% else %}
             <p style="margin:20px">بیمار Social Historyای را ذکر <u>نمی‌کند</u>.</p>
             {% endif %}
-
-            </div>
         
-            
-            <div id="FH" class="hx content">
             {% if case.fh %}
-                <b>FH: </b>{{ case.fh|linebreaks }}
+            <div id="FH" class="hx content"><b>FH: </b>{{ case.fh|linebreaks }}</div>
             {% else %}
-                <p style="margin:20px">بیمار Family Historyای را ذکر <u>نمی‌کند</u>.</p>
+            <p style="margin:20px">بیمار Family Historyای را ذکر <u>نمی‌کند</u>.</p>
             {% endif %}
-            </div>
             
-            
-            <div id="ROS" class="hx content"><b>Review of Systems:</b> <br/><div class="twoColumnar">{{ case.ros|linebreaks}}</div></div>  
-            <div id="PE" class="hx content"><b>Physical Examination:</b> <br/>{{ case.phe|linebreaks}}</div>
+            <div id="ROS" class="hx content"><b>Review of Systems:</b> <br/><div class="twoColumnar">{{ case.ros|emphasize|safe}}</div></div>  
+            <div id="PE" class="hx content"><b>Physical Examination:</b> <br/>{{ case.phe|emphasize|safe}}</div>
             <div id="Summary" class="hx content" style="background-color:#ffd"><b>Summary: </b>{{ case.summary|linebreaks }}</div>
             {% comment %} <div class="hx"><br/>{{ case.ddx }}</div> {% endcomment %}
             <div id="dDx" class="hx content">
