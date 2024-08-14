@@ -12,4 +12,4 @@ class SignUpView(CreateView):
 def self_user_cases(request):
     user = request.user
     hxs = Cases.Case.objects.filter(author=user)
-    return render(request, 'user/user_panel.html', {'hxs': hxs,})
+    return render(request, 'user/self_user_cases.html', {'hxs': hxs,})
