@@ -12,7 +12,7 @@ class CustomUser(AbstractUser):
     ]
     DEGREES = [
         ("Basic Sciences", "Basic Sciences"),
-        ("Physiopathology", "Physiopathology"),
+        ("Pathophysiology", "Pathophysiology"),
         ("Medical Extern", "Medical Extern"),
         ("Medical Intern", "Medical Intern"),
         ("General Practicioner", "General Practicioner"),
