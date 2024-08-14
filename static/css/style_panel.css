@@ -1,0 +1,146 @@
+body {
+    background-color: #FFF
+}
+
+#panelMainContainer {
+    margin: 20px;
+    background-color: #FDFCF8;
+    border-radius: 10px;
+    border: 1px solid #000;
+    min-height: 70vh;
+}
+
+#panelContTitle {
+    background-color: #4E388B;
+    color: #FFF;
+    font-size: 24px;
+    font-weight: 600;
+    padding: 10px 15px;
+    border-radius: 10px 10px 0 0;
+}
+
+#panelContItems {
+    padding: 5px;
+    margin-top: 10px;
+}
+
+.eachItem {
+    display: grid;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    grid-template-columns: 4fr 1.5fr 1fr 1fr 1fr 1fr;
+    gap: 4px;
+    justify-items: center;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #CCC;
+}
+
+.eachItem:hover {}
+
+.eachItem h4 {
+    justify-items: right;
+}
+
+.private {
+    background-color: #F0D9D9;
+    color: #B22;
+    border: 1px solid #600;
+}
+
+.public {
+    background-color: #D9F0D9;
+    color: #2B2;
+    border: 1px solid #060;
+}
+
+.public:hover {
+    color: #090;
+    background-color: #C0E9C0;
+    box-shadow: 0px 0px 0px 0px #999;
+}
+
+.private:hover {
+    color: #900;
+    background-color: #E9C0C0;
+    box-shadow: 0px 0px 0px 0px #999;
+}
+
+.itemBTN {
+    width: 100px;
+    height: 30px;
+    text-decoration: none;
+    border-radius: 15px;
+    padding: 2px;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0px 0px 0px 0.5px #999;
+    cursor: pointer;
+    transition: 0.3s
+}
+
+.edit {
+    text-decoration: none;
+    color: #4E388B;
+    background-color: #F6F4FF;
+    border: 1px solid #4E388B;
+}
+
+.edit:hover {
+    color: #3F287B;
+    background-color: #E6E4EF;
+    box-shadow: 0px 0px 0px 0px #999;
+}
+
+.delete {
+    text-decoration: none;
+    background-color: #FFAA80;
+    color: #8F4A20;
+    border: 1px solid #BF6A40;
+}
+
+.delete:hover {
+    color: #6F2A00;
+    background-color: #EF9A70;
+    box-shadow: 0px 0px 0px 0px #999;
+}
+
+.prsnt {
+    text-decoration: none;
+    color: #98948A;
+    background-color: #F8F4EA;
+    border: 1px solid #D8D4CA;
+}
+
+.prsnt:hover {
+    background-color: #D8D4CA;
+    color: #78746A;
+}
+
+@media(max-width: 900px) {
+    .eachItem {
+        display: grid;
+        margin-right: 20px;
+        margin-left: 20px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 10px;
+        justify-items: center;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #CCC;
+    }
+    h4 {
+        grid-column: span 3;
+    }
+}
+
+@media(max-width: 550px) {
+    .itemBTN {
+        width: 80px
+    }
+}
