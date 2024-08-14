@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% load my_tags %}
+{% block title %} | User Panel{%endblock title%}
+{% block desc %}تمام شرح‌حال‌های خود را اینجا ببینید و مدیریت کنید.{% endblock desc%}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/style_base.css' %}">
+<link rel="stylesheet" href="{% static 'css/style_panel.css' %}">
+
+<div id="panelMainContainer">
+    <div id="panelContTitle">لیست شرح‌حال‌های شما</div>
+    <div id="panelContItems">
+        {% for hx in hxs %}
+        <div class="eachItem">
+            <h4>{{hx.title}}</h4>
+            <span>{{hx.date_created|date:"d M"}}</span>
+            {% if hx.visible %}
+                <span class="itemBTN public">Public</span>
+            {% else %}
+                <span class="itemBTN private">Private</span>
+            {% endif %}
+            <a href="{% url 'hx_presentation' hx.slug %}" class="itemBTN prsnt">ارائه</a>
+            <a href="{% url 'hx_edit' hx.slug %}" class="itemBTN edit">ویرایش</a>
+            <a href="{% url 'hx_delete' hx.slug %}" class="itemBTN delete">پاک کردن</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
