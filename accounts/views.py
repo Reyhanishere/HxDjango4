@@ -10,7 +10,9 @@ class SignUpView(CreateView):
     success_url = reverse_lazy('login')
     template_name = "registration/signup.html"
 
+@login_required
 def self_user_cases(request):
     user = request.user
-    hxs = Cases.Case.objects.filter(author=user)
+    hxs = Cases.Case.objects.filter(author=user).order_by("-date_created")
     return render(request, 'user/self_user_cases.html', {'hxs': hxs,})
+
