@@ -429,6 +429,7 @@ class CasePublication(UpdateView, LoginRequiredMixin, UserPassesTestMixin):
     model= Case
     template_name='hx_edit.html'
     form_class=CasePubForm
+    success_url = "/accounts/dashboard/"
     def test_func(self):
         obj = self.get_object()
         return obj.author == self.request.user
