@@ -20,6 +20,31 @@ class CaseImageForm(ModelForm):
         model = ImageCase
         exclude = ("case", "verified", "visible")
 
+
+class ImageCaseEditForm(ModelForm):
+    image = forms.ImageField()
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if image:
+            max_size_kb = 256  # Max size in kilobytes
+            if image.size > max_size_kb *1024:
+                raise forms.ValidationError(f"حجم تصویری که بارگذاری می‌کنید نباید بیشتر از {max_size_kb} کیلوبایت باشد. حجم فایل شما، {round(image.size/1024, 1)} کیلوبایت است.")  
+        return image
+    class Meta:
+        model = ImageCase
+        exclude = ("case", "verified", "visible",)
+
+class CasePubForm(ModelForm):
+    class Meta:
+        fields = ("visible",)
+        model=Case
+        labels = {
+            'visible': ('نمایش عمومی'),
+        }
+        help_texts={
+            'visible': ('خوش‌حال می‌شویم اگر شرح‌حال خود را پس از کامل شدن برای همه به نمایش بگذارید تا از آن بهره ببرند. به یاد داشته باشید که هر شرح‌حالی ارزش خوانده شدن دارد و با درس‌هایی که از آن می‌گیرید می‌توانید به مرور پیشرفت کنید.'),
+        }
+
 class FreeGraphForm(ModelForm):
     class Meta:
         model = LabGraphSelection
