@@ -179,7 +179,7 @@ body {
         padding: 10px;
         border-bottom: 1px solid #CCC;
     }
-    h4 {
+    .title {
         grid-column: span 3;
     }
 }
@@ -205,7 +205,7 @@ body {
         padding: 10px;
         border-bottom: 1px solid #CCC;
     }
-    h4 {
+    .title {
         grid-column: span 4;
     }
     .itemBTN {
