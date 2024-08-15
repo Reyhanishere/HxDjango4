@@ -24,6 +24,17 @@ body {
     margin-top: 10px;
 }
 
+.noHx {
+    margin: 20px;
+    font-size: 22px;
+}
+
+.write {
+    padding: 0 15px;
+    border-radius: 25px;
+    line-height: 2.5;
+}
+
 .eachItem {
     display: grid;
     margin-right: 20px;
@@ -38,10 +49,44 @@ body {
     border-bottom: 1px solid #CCC;
 }
 
-.eachItem:hover {}
+.eachItem h4 a {
+    color: #000;
+    text-decoration: none;
+    transition: 0.3s
+}
 
-.eachItem h4 {
-    justify-items: right;
+.eachItem h4 a:hover {
+    color: #222;
+    text-decoration: 1px underline;
+}
+
+.tooltip-text {
+    position: absolute;
+    top: -45px;
+    left: 0;
+    z-index: 2;
+    width: 100px;
+    color: white;
+    font-size: 14px;
+    background-color: #192733;
+    border-radius: 10px;
+    padding: 10px 15px 10px 15px;
+}
+
+#fade {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.title:hover #fade {
+    opacity: 1;
+}
+
+.title {
+    position: relative;
+    display: inline-block;
+    margin: 40px;
+    text-align: center;
 }
 
 .private {
@@ -142,5 +187,35 @@ body {
 @media(max-width: 550px) {
     .itemBTN {
         width: 80px
+    }
+}
+
+@media(max-width: 450px) {
+    .eachItem {
+        display: grid;
+        margin-right: 20px;
+        margin-left: 20px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr auto auto;
+        gap: 10px;
+        justify-items: center;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #CCC;
+    }
+    h4 {
+        grid-column: span 4;
+    }
+    .itemBTN {
+        width: 100px;
+        height: 40px;
+        border-radius: 20px;
+        grid-column: span 2;
+        padding: 8px;
+    }
+    .date {
+        display: none;
     }
 }
