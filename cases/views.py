@@ -158,68 +158,22 @@ class CaseCreateView(LoginRequiredMixin, CreateView):  # new
     model = Case
     template_name = "hx_new.html"
     form_class = CaseCreateForm
-    # formset = LabTestForm
-    # fields = (
-    #     "title",
-    #     "rts",
-    #     "description",
-    #     "pretext",
-    #     "gender",
-    #     "location",
-    #     "job",
-    #     "dwelling",
-    #     "age",
-    #     "marriage",
-    #     "doctor",
-    #     "source",
-    #     "reliability",
-    #     "setting",
-    #     "cc",
-    #     "pi",
-    #     "pmh",
-    #     "drg",
-    #     "sh",
-    #     "fh",
-    #     "alg",
-    #     "ros",
-    #     "phe",
-    #     "dat",
-    #     "summary",
-    #     "ddx",
-    #     "pdx",
-    #     "act",
-    #     "post_text",
-    #     "tags",
-    #     "slug",
-    #     "suggests",
-    # )
-
-    success_url = "/cases/success/"
-
-    # def get_success_url(self):
-    #     case = self.get_object()
-    #     return case.slug #reverse("hx_detail", kwargs={"slug": case.slug})
-
+    success_url = "/accounts/dashboard/"
+    
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-    # def get_context_data(self, **kwargs):
-    #     data = super().get_context_data(**kwargs)
-    #     if self.request.POST:
-    #         data["formset"] = LabTestForm(self.request.POST)
-    #     else:
-    #         data["formset"] = LabTestForm()
-    #     print(data["formset"])  # Add this line to check formset contents
-    #     return data
 
-
-class CaseImageView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class CaseImageCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = ImageCase
     form_class = CaseImageForm
     template_name = "hx_add_img.html"
-    success_url = "/cases/success/"
 
+    def get_success_url(self):
+        case_slug = self.kwargs["case_slug"]
+        case = get_object_or_404(Case, slug=case_slug)
+        return f"/cases/hx/{case.slug}/"
     def form_valid(self, form):
         case_slug = self.kwargs["case_slug"]
         case = get_object_or_404(Case, slug=case_slug, author=self.request.user)
@@ -229,6 +183,32 @@ class CaseImageView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         case_slug = self.kwargs["case_slug"]
         case = get_object_or_404(Case, slug=case_slug, author=self.request.user)
         return case.author == self.request.user
+
+class ImageCaseEditView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
+    model=ImageCase
+    form_class=ImageCaseEditForm
+    template_name="hx/image_case_edit.html"
+    def test_func(self):
+        img_id=self.kwargs["pk"]
+        img=get_object_or_404(ImageCase, id=img_id)
+        return img.case.author == self.request.user
+    def get_success_url(self):
+        case_slug = self.kwargs["case_slug"]
+        case = get_object_or_404(Case, slug=case_slug)
+        return f"/cases/hx/{case.slug}/"
+
+class ImageCaseDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
+    model=ImageCase
+    template_name="hx/image_case_delete.html"
+    def test_func(self):
+        img_id=self.kwargs["pk"]
+        img=get_object_or_404(ImageCase, id=img_id)
+        return img.case.author == self.request.user
+    def get_success_url(self):
+        case_slug = self.kwargs["case_slug"]
+        case = get_object_or_404(Case, slug=case_slug)
+        return f"/cases/hx/{case.slug}/"
+
 
 class CasePresentationView(DetailView):
     model=Case
