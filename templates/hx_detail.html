@@ -120,12 +120,17 @@
         <summary class="pad-15">کلیک کنید</summary>
         <div class="imageCaseCont">
         {%for img in case.imagecase_set.all %}
-         {% comment %} {% if verified %} {% endcomment %}
             <div class="imageCaseCont">
                 <img src="{{img.image.url}}" width="300" class="imageCaseImg" alt="{{case.title}}, {{img.type}}"/>
                 <div>
                     <p dir="" class="imgType">{{img.type}}:</p>
-                    <p class="imageCaseP">{{img.text}}</p>
+                    <p class="imageCaseP">{{img.text|linebreaks}}</p>
+                        {%if case.author.username == user.username%}
+                        <div dir="ltr">
+                            <a href="{% url 'hx_edit_image' case.slug img.id %}" class="editGraph">Edit</a> |
+                            <a href="{% url 'hx_delete_image' case.slug img.id %}" class="editGraph" style="color:#c33">Delete</a>
+                        </div>
+                        {%endif%}
                 </div>
             </div>
             <hr/>
