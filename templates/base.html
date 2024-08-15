@@ -91,14 +91,16 @@
                         S410.1,523.1,512,523.1s184.6-82.6,184.6-184.6S613.9,154,512,154z"/>
                         </svg>
                     </div>
-                    <div class="dropdown-content" id="userDiv" dir="ltr">
-
+                    <div class="dropdown-content" id="userDiv" dir="rtl">
+                        <a class="dropdown-item" href="{% url 'self_user_cases'%}">
+                                                    کیس‌های من</a>
                         <a class="dropdown-item" href="{% url 'password_change'%}">
-                        Change password</a>
+                        تغییر گذرواژه</a>
+                        
                         
                             <form method="post" action="{% url 'logout' %}">
                                 {% csrf_token %}
-                                <button type="submit" class="dropdown-item">Log Out</button>
+                                <button type="submit" class="dropdown-item" style="color: #B22">خروج</button>
                             </form>
                     </div>
                 
