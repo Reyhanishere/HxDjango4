@@ -10,21 +10,30 @@
 
 <div id="panelMainContainer">
     <div id="panelContTitle">لیست شرح‌حال‌های شما</div>
+    {% if hxs %}
     <div id="panelContItems">
         {% for hx in hxs %}
         <div class="eachItem">
-            <h4>{{hx.title}}</h4>
-            <span>{{hx.date_created|date:"d M"}}</span>
+            <div class="title">
+                <h4><a href="{% url 'hx_detail' hx.slug%}">{{hx.title}}</a></h4>
+                <span class="tooltip-text" id="fade">{{hx.cc}}</span>
+            </div>
+            <span class="date">{{hx.date_created|date:"d M"}}</span>
             {% if hx.visible %}
-                <span class="itemBTN public">Public</span>
+                <a href="{%url 'hx_public' hx.slug %}" class="itemBTN public">Public</a>
             {% else %}
-                <span class="itemBTN private">Private</span>
+                <a href="{%url 'hx_public' hx.slug %}" class="itemBTN private">Private</a>
             {% endif %}
             <a href="{% url 'hx_presentation' hx.slug %}" class="itemBTN prsnt">ارائه</a>
             <a href="{% url 'hx_edit' hx.slug %}" class="itemBTN edit">ویرایش</a>
             <a href="{% url 'hx_delete' hx.slug %}" class="itemBTN delete">پاک کردن</a>
         </div>
         {% endfor %}
+
     </div>
+    {% else %}
+        <p class="noHx">شما هنوز شرح‌حالی ثبت نکرده‌اید.</p>
+        <p class="noHx">برای نوشتن شرح حال بر روی <a href="{%url 'hx_new' %}" class="itemBTN public write">نوشتن</a> بزنید.</p>
+    {% endif %}
 </div>
 {% endblock content %}
