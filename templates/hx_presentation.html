@@ -23,6 +23,7 @@ h3{
 .content .ros-phe-ttl-ppr{font-size:30px;}
 </style>
 <div class="pad-15">
+    {% if case.visible %}
 <div class="paper" style="min-height:60vh">
     <div class="spanTwo">
             <div id="ID" class="content infoTable spanTwo">
@@ -41,23 +42,30 @@ h3{
             <div id="PI" class="hx content"><b>PI: </b>{{ case.pi|linebreaks }}</div>
 
             <div id="PMH" class="hx content"><b>PMH: </b>{{ case.pmh|linebreaks }}</div>
+            
+            <div id="Drugs" class="hx content">
             {% if case.drg %}
-            <div id="Drugs" class="hx content"><b>Drugs: </b>{{ case.drg|linebreaks }}</div>
+            <b>Drugs: </b>{{ case.drg|linebreaks }}
             {% else %}
             <p style="margin:20px">بیمار دارو یا مادۀ ویژه‌ای مصرف <u>نمی‌کند</u>.</p>
             {% endif %}
-        
+            </div>
+
+            <div id="SH" class="hx content">
             {% if case.sh %}
-            <div id="SH" class="hx content"><b>SH: </b>{{ case.sh|linebreaks }}</div>
+            <b>SH: </b>{{ case.sh|linebreaks }}
             {% else %}
             <p style="margin:20px">بیمار Social Historyای را ذکر <u>نمی‌کند</u>.</p>
             {% endif %}
+            </div>
         
+            <div id="FH" class="hx content">
             {% if case.fh %}
-            <div id="FH" class="hx content"><b>FH: </b>{{ case.fh|linebreaks }}</div>
+            <b>FH: </b>{{ case.fh|linebreaks }}
             {% else %}
             <p style="margin:20px">بیمار Family Historyای را ذکر <u>نمی‌کند</u>.</p>
             {% endif %}
+            </div>
             
             <div id="ROS" class="hx content"><b>Review of Systems:</b> <br/><div class="twoColumnar">{{ case.ros|emphasize|safe}}</div></div>  
             <div id="PE" class="hx content"><b>Physical Examination:</b> <br/>{{ case.phe|emphasize|safe}}</div>
@@ -123,4 +131,10 @@ h3{
         document.getElementById(divId).style.display = 'block';
     }
 </script>
+
+{%else%}
+<div style="min-height: 80vh; padding: 30px 10px; font-size:20px">
+<p>برای دسترسی به حالت ارائه، باید شرح‌حال خود را از این <a href="{% url 'hx_public' case.slug%}">لینک</a> یا <a href="{% url 'self_user_cases'%}">پنل کاربری</a> خود همگانی (پابلیک) کنید.</p>
+</div>
+{%endif%}
 {% endblock content %}
