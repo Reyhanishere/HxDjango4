@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load social_share %}
 {% load crispy_forms_tags %}
 {% load static %}
 {% load my_tags %}
@@ -31,11 +30,12 @@
 </div>
 {% endblock content %}
 
-{% block edel %}
+
+    {% block edel %}
     {% if user.username == note.author.username %}
         <a href="{% url 'ex_edit' note.slug %}" class="btn btn-warning" style="width:70px; font-size:16px; padding:4px; align-items:center">
             <span style="font-size:16px">ویرایش</span></a>
         <a href="{% url 'ex_delete' note.slug %}" class="btn btn-danger" style="width:70px; font-size:16px; padding:4px;align-items:center">
             <span style="font-size:16px">حذف</span></a>
     {% endif %}
-{% endblock edel %}
+    {% endblock edel %}
