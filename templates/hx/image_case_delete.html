@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}| Hx{%endblock title%}
+{% block content %}
+<div class="pad-15">
+    <h1>حذف</h1>
+    <img src="{{imagecase.image.url}}" width="300" alt="{{imagecase.title}}" style="margin:20px 0"/>
+<form action="" method="post">{% csrf_token %}
+
+<p>آیا از حذف این تصویر اطمینان دارید؟</p>
+<button class="btn btn-danger ml-2" type="submit">زدودن</button>
+</form></div>
+{% endblock content %}
