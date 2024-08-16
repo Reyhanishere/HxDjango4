@@ -22,8 +22,14 @@
             <img id="dawsh-help" src="{% static '/images/Logo Color FFAA80.svg' %}" alt="medepartout-logo">
             <h1>Welcome to medepartout Website</h1>
             <h2>The Site is Under Construction</h2>
-            
         </div>
+        {% if user.is_authenticated %}
+        <p>Hi <b>{{user.first_name}}</b>! Proceed to Cases App or Your Personal Cases List!</p>
+        <div>
+            <a id="casesApp" href="{% url 'cases_main' %}">Cases App</a>
+            <a id="myCases" href="{% url 'self_user_cases' %}">My Cases</a>
+        </div>
+        {%else%}
         <h2 style="margin:10px 0"><a id="casesApp" href="{% url 'cases_main' %}">Cases App</a></h2>
         
         <p>Sign up to see our latest updates:</p>
@@ -31,6 +37,7 @@
             <a href="{% url 'signup' %}"><button id="b1">Sign Up</button></a>
             <a href="{% url 'login' %}"><button id="b2">Log In</button></a>
         </div>
+        {% endif %}
         <div class="footer">
             <div class="with">
                 <a href="{% url 'cases_main' %}">Cases App</a>
