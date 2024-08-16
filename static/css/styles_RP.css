@@ -139,7 +139,7 @@ a {
 
 .image-section {
     flex: 2;
-    background-image: url(./static/images/background/frog.jpg);
+    background-image: url(./static/images/frog.jpg);
     background-size: cover;
     background-position: center;
     clip-path: polygon(30% 0, 100% 0, 100% 100%, 0% 100%);
