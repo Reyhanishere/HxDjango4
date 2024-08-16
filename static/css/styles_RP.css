@@ -10,6 +10,8 @@ a {
 }
 
 #casesApp {
+    display: inline-block;
+    font-weight: 600;
     margin: 0;
     background-color: #FFAA80;
     border-radius: 5px;
@@ -19,6 +21,23 @@ a {
 }
 
 #casesApp:hover {
+    /* text-decoration: underline; */
+    color: #FFAA80;
+    background-color: #1F132B;
+}
+
+#myCases {
+    font-weight: 600;
+    display: inline-block;
+    margin: 0;
+    background-color: #FFAA80;
+    border-radius: 5px;
+    padding: 10px;
+    color: #1F132B;
+    transition: 0.5s;
+}
+
+#myCases:hover {
     /* text-decoration: underline; */
     color: #FFAA80;
     background-color: #1F132B;
@@ -120,7 +139,7 @@ a {
 
 .image-section {
     flex: 2;
-    background-image: url(https://raw.githubusercontent.com/EhsanKalateh/HxDjango4/main/static/images/frog.jpg);
+    background-image: url(./static/images/background/frog.jpg);
     background-size: cover;
     background-position: center;
     clip-path: polygon(30% 0, 100% 0, 100% 100%, 0% 100%);
