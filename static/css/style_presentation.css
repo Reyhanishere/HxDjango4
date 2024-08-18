@@ -1,0 +1,117 @@
+.content {
+    display: none;
+    font-size: 24px;
+    min-height: 55vh;
+}
+
+.content b {
+    font-size: 26px;
+}
+
+h3 {
+    font-size: 48px;
+    text-align: center
+}
+
+.content .ros-phe-ttl-ppr {
+    font-size: 24px;
+}
+
+.tabIndic {
+    position: relative;
+    top: 5px;
+    width: 5px;
+    background-color: #3A3;
+    height: 30px;
+    display: inline-block;
+    margin-right: 10px;
+    margin-left: 5px
+}
+
+.prsntTitle {
+    padding: 10px;
+    margin-bottom: 10px
+}
+
+.prsntText {
+    min-height: 60vh
+}
+
+.prsntSplit {
+    display: grid;
+    grid-template-columns: 7fr 1fr;
+}
+
+.btnsBox {
+    display: flex;
+    flex-direction: column;
+    padding: 0 10px;
+    min-width: 120px;
+}
+
+.prsntBtn {
+    display: inline-block;
+    border: 1px solid #555;
+    border-radius: 1rem;
+    margin: 2px;
+    padding: 5px;
+    min-width: 80px;
+    background-color: #f9f9f9;
+    color: #222;
+    text-decoration: none;
+    text-align: center;
+    transition: 0.3s;
+}
+
+#graphsBtn {
+    background-color: #ddd;
+    color: #000
+}
+
+#graphsBtn:hover {
+    background-color: #efefef;
+}
+
+.prsntBtn:hover {
+    background-color: #eee;
+    color: #111;
+}
+
+.textMidl {
+    display: grid;
+    align-items: center;
+}
+
+.prsntPaper {
+    background-color: #eee;
+    border-radius: 10px;
+    padding: 15px 10px;
+    display: grid;
+    width: 100%;
+    display: grid;
+    column-gap: 3px;
+    grid-template-columns: 1fr 1fr;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 8px;
+}
+
+.prsntTwoColumnar {
+    column-count: 2;
+}
+
+@media(max-width:660px) {
+    .prsntSplit {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+    }
+    .btnsBox {
+        display: block;
+        margin-top: 20px;
+    }
+}
+
+@media(max-width:750px) {
+    .prsntTwoColumnar {
+        column-count: 1;
+    }
+}
