@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>medepartout</title>
+    <link rel="icon" href="./images/icon/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .custom-height {
+          height: 32rem; 
+        }
+        .height-of-subscribe{
+          height:29rem;
+        }
+      
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+    extend: {
+
+      backgroundImage: theme => ({
+        'gradient-to-r': 'linear-gradient(to right, var(--tw-gradient-stops))',
+        // Add more gradient directions as needed
+      }),
+      gradientColorStops: theme => ({
+        'MedepartoutNavy': '#1F132B',
+        'MedepartoutPeach':'#FFAA80',
+        // Add more colors as needed
+      }),
+
+      colors: {
+        MedepartoutNavy: '#1F132B',
+        MedepartoutPeach:' #FFAA80',
+        MedepartoutReyhan: '#F8F4EA',
+        Medepartoutblue: '#EBF4F6',
+        Medepartoutpesteh:'#CCEEBC',
+        MedepartoutPurple1:'#C8A1E0',
+        MedepartoutPurple11:'#E2BFD9',
+
+        primary: '#FF6363',
+        secondary: {
+          100: '#E2E2D5',
+          200: '#888883',
+        }
+      },
+      fontFamily: {
+        body: ['Nunito'],
+        farsi: ['Noto Sans Arabic', 'sans-serif']
+      },
+    },
+  },
+      }
+    </script>
+    
+</head>
+
+<body class= " text-gray-600 font-body">
+
+
+    <div class="md:flex">
+      <nav class="text-right">
+        <div class="flex justify-between items-center">
+          <h1 class="font-bold uppercase p-4 border-b border-gray-100">
+            <a href="/" class="hover:text-gray-700 tracking-widest">Header</a>
+          </h1>
+          <div class="px-4 cursor-pointer md:hidden" id="burger">
+            <svg class="w-6 h-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+          </div>
+        </div>
+
+      </nav>
+    </div>
+
+
+
+
+
+
+  <main class="px-16 py-6 bg-MedepartoutReyhan ">
+
+
+    <header class="mt-4">
+      <h2 class="text-gray-700 text-6xl font-semibold leading-none tracking-wider text-center">What will you <span class="bg-clip-text text-transparent bg-gradient-to-r from-MedepartoutPeach via-secondary to-MedepartoutNavy">write</span> today?</h2>
+      <h3 class="text-2xl font-semibold tracking-wider mt-4 text-center">Medepartout makes it easy to write, present and share medical cases.</h3>
+    </header>
+
+
+   <div class="first relative p-0 lg:flex lg:flex-row lg:gap-14 w-full lg:items-stretch lg:custom-height " >
+
+                   <!-- the add yours card -->
+    <div class="mt-8 lg:flex-1 lg:flex-grow custom-height ">
+
+      <h4 class="font-bold pb-2 mt-12 border-b border-gray-200 text-center ">Add Your Case</h4>
+
+      <a href="https://medepartout.ir/accounts/dashboard/">
+      <div class="card relative hover:shadow-lg mt-12 custom-height lg:h-96">
+          
+          <div class="relative h-72 sm:h-64 w-full">
+              <img src="./img/writing.jpg" alt="Initial Image" class="absolute inset-0 object-cover transition-opacity duration-300 ease-in-out opacity-100 hover:opacity-0 w-full h-full">
+              <img src="./img/graph.JPG" alt="Hovered Image" class="absolute inset-0 object-cover transition-opacity duration-300 ease-in-out opacity-0 hover:opacity-100 w-full h-full">
+          </div></a>
+    
+          <div class="relative h-44 sm:h-40 text-center mt-8 py-4">
+              <span class=" block text-3xl text-MedepartoutNavy font-sans mb-6 ">Make your presentation</span>
+              <span class=" block text-MedepartoutNavy text-2xl "><a  class="linked" href="">Hx </a>|<a  class="linked" href=""> Pic </a>|<a class="linked" href=""> Note</a></span>
+          </div>
+          
+      </div>
+    </div>
+
+                         <!-- Public HXs -->
+        <div class=" mt-8 flex flex-col gap-20  lg:gap-10 lg:flex-none lg:flex-1 lg:w-1/3">
+          <h4 class="font-bold pb-0 lg:pb-2 mt-24 lg:mt-12 border-b border-gray-200 text-center ">Public HXs</h4>
+        
+          <div class="card hover:shadow-lg ">               
+            <div class="m-4 lg:pb-8 flex flex-col justify-between h-full">
+              <span class="font-bold block font-farsi bg-gradient-to-l from-MedepartoutPeach to-MedepartoutReyhan" dir="rtl">بیمار با شکایت تنگی نفس پس از ابتلا به سرماخوردگی</span>
+              <span class="block text-lg font-bold  font-farsi mt-4 px-1" dir="rtl">بیمار بستری بخش داخلی بیمارستان امام حسن بجنورد</span>
+              <span class="block text-gray-500 text-sm mt-auto"> behtarin adame donya</span>
+              
+            </div>
+            </div>
+
+        <div class="card hover:shadow-lg"> 
+          <div class="m-4 lg:pb-8 flex flex-col justify-between h-full">
+            <span class="font-bold block font-farsi bg-gradient-to-l from-MedepartoutPeach to-MedepartoutReyhan" dir="rtl">کاهش سطح هوشیاری در یک فرد با سابقۀ CVA >کاهش سطح هوشیاری در یک فرد با سابقۀ CVA</span>
+            <span class="block text-lg font-bold  font-farsi mt-4 px-1" dir="rtl">برخورد با بیمارانی که با کاهش سطح هوشیاری مواجه شده‌اند دشوار است و این مورد احتمالا دشوارتر از بقیه موارد.برخورد با بیمارانی که با کاهش سطح هوشیاری مواجه شده‌اند دشوار است و این مورد احتمالا دشوارتر از بقیه موارد.</span>
+            <span class="block text-gray-500 text-sm mt-auto"> behtarin adame donya num.2</span>
+            </div>
+        </div>
+        <div class="mt-5 flex justify-center">
+          <div class="btn py-2 px-3 text-xs bg-secondary-100 text-secondary-200 inline-block hover:shadow-inner transform hover:scale-125 hover:bg-opacity-50 transition ease-out duration-300">Load more</div>
+        </div>    
+      </div>
+
+
+
+
+    </div>
+
+    <!-- subscribe -->
+    <hr class="border-t-8 border-dashed border-Medepartoutpesteh my-6">      
+    <div class=" bg-Medepartoutpesteh rounded shadow-md relative hover:shadow-lg height-of-subscribe content-center my-20  inset-0 flex flex-col border-solid gap-1 py-6">
+      <img class="w-20 m-auto " src="./img/medical-symbol-icon-2048x2048-t5g00ol5.png" alt="">
+      <h1 style="color:#1B1919;" class=" text-secondary-200  text-4xl text-center m-auto tracking-wide">Get the best of Medepartout features for yourself !</h1>
+      <div class="mt-8 flex justify-center">
+        <div class="btn text-lg px-8 py-3 mb-2  bg-secondary-100 text-secondary-200 inline-block hover:shadow-inner transform hover:scale-125 hover:bg-opacity-50 transition ease-out duration-300"><a href="https://medepartout.ir/accounts/signup/">Sign UP</a></div>
+      </div>
+    </div>
+    <hr class="border-t-8 border-dashed border-Medepartoutpesteh my-6">
+
+    
+
+    <div class="third  p-0 m-0 lg:flex lg:flex-row lg:gap-14 ">
+
+      
+      <div class="mt-8 flex flex-col gap-20 lg:w-1/2">
+        <h4 class="font-bold pb-2 mt-20 lg:mt-12 border-b border-gray-500 text-center">Recent EXs</h4>
+        
+        
+          <div class="card hover:shadow-lg ">               
+            <div class="m-4 lg:pb-8 flex flex-col justify-between h-full">
+              <span class="font-bold block font-farsi bg-gradient-to-l from-MedepartoutPurple1 to-MedepartoutPurple11 text-gray-700" dir="rtl">چرا نمینویسیم؟ نوشتن بیان کننده ی تمام آن چیزی است</span>
+              <span class="block text-lg font-bold  font-farsi mt-4 px-1" dir="rtl">که در ذهنمان میگذرد به شرطی که هنرش زا داشته باشیم تا قلم را رام خویش کنیم. اینطور نیست؟ فرانگرفتن این هنر خیانتی به خود نیست؟ شایدم نه. هر چه باشد هر چه از دل برآید به دل نشیند؛ قدرت این قلم ها از قل</span>
+              <span class="block text-gray-500 text-sm mt-auto"> behtarin adame donya</span>
+              <div class="badge p-2.5">
+                <svg class="inline-block w-5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span>2 mins</span>
+              </div>
+              
+            </div>
+            </div>
+
+        <div class="card hover:shadow-lg"> 
+          <div class="m-4 lg:pb-8 flex flex-col justify-between h-full">
+            <span class="font-bold block font-farsi bg-gradient-to-l from-MedepartoutPurple1 to-MedepartoutPurple11 text-gray-700" dir="rtl">سینی انسولین</span>
+            <span class="block text-lg font-bold  font-farsi mt-4 px-1" dir="rtl">خانواده‌ای با شمار بالای افراد دیابتی</span>
+            <span class="block text-gray-500 text-sm mt-auto"> behtarin adame donya num.2</span>
+            <div class="badge p-2.5">
+              <svg class="inline-block w-5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span>1.5 mins</span>
+            </div>  
+          </div>
+        </div>
+        <div class="mt-5 flex justify-center">
+          <div class="btn py-2 px-3 text-xs bg-secondary-100 text-secondary-200 inline-block hover:shadow-inner transform hover:scale-125 hover:bg-opacity-50 transition ease-out duration-300">Load more</div>
+        </div>    
+      </div>
+        
+     
+<div class="mt-8  bg-MedepartoutPurple11 lg:w-1/2 hover:shadow-lg">
+    <!-- Slideshow Picasso-->
+  <h4 class="font-bold pb-2 mt-20 lg:mt-12 border-b border-gray-500 text-center">Picasso</h4>
+  <div class="bg-MedepartoutReyhan h-9"></div>
+
+<!-- Container for the image gallery -->
+<div class="container bg-MedepartoutReyhan my-0 py-0 ">
+
+<!-- Full-width images with number text -->
+<div class="mySlides ">
+  <div class="numbertext">1 / 6</div>
+    <img src="./img/0.png" class="w-1/2 m-auto" >
+    <div class="bg-MedepartoutReyhan h-9"></div>
+</div>
+
+<div class="mySlides">
+  <div class="numbertext">2 / 6</div>
+    <img src="./img/img1.jpg" class="w-1/2 m-auto">
+  <div class="bg-MedepartoutReyhan h-9"></div>
+    
+</div>
+
+<div class="mySlides">
+  <div class="numbertext">3 / 6</div>
+    <img src="./img/img2.jpg"  class="w-1/2 m-auto" >
+    <div class="bg-MedepartoutReyhan h-9"></div>
+</div>
+
+<div class="mySlides">
+  <div class="numbertext">4 / 6</div>
+    <img src="./img/photo_2024-08-29_19-41-14.jpg"  class="w-1/2 m-auto">
+    <div class="bg-MedepartoutReyhan h-9"></div>
+</div>
+
+<div class="mySlides">
+  <div class="numbertext">5 / 6</div>
+    <img src="./img/photo_2024-08-29_19-41-16.jpg"  class="w-1/2 m-auto">
+    <div class="bg-MedepartoutReyhan h-9"></div>
+</div>
+
+<div class="mySlides">
+  <div class="numbertext">6 / 6</div>
+    <img src="./img/photo_2024-08-29_19-41-17.jpg"  class="w-1/2 m-auto">
+    <div class="bg-MedepartoutReyhan h-9"></div>
+</div>
+
+<!-- Next and previous buttons -->
+<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+<a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+<div class="bg-MedepartoutPurple11">
+<!-- Image text -->
+<div class="caption-container mt-2 pt-4">
+  <p id="caption" class="font-bold block font-farsi bg-gradient-to-l from-MedepartoutPurple1 to-MedepartoutPurple11 text-gray-700 text-center"></p>
+</div>
+<!-- Extended Caption Container -->
+<div class="extended-caption-container ">
+  <p id="extended-caption" class="block text-lg text-lg font-farsi mt-4 px-1  text-center"></p>
+</div>
+</div>
+
+</div>
+<div class="mt-5 flex justify-center lg:mt-40">
+<div class="btn py-2 px-3 text-xs bg-white text-secondary-200 inline-block hover:shadow-inner transform hover:scale-125 hover:bg-opacity-50 transition ease-out duration-300">Load more picassos</div>
+</div>   
+
+
+</div>
+
+</div>
+
+
+
+</main>
+
+<script src="index.js"></script>
+
+</body>
+</html>
