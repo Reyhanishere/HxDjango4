@@ -271,10 +271,30 @@ def cases_main(request):
         verified=True, delete=False, visible=True
     ).order_by("-date_created")[:3]
     exs = Note.objects.filter(verified=True, delete=False, visible=True).order_by(
-        "-date_created"
-    )[:4]
+        "-date_created")[:4]
     return render(
         request, "cases_main.html", {"hxs": hxs, "picassos": picassos, "exs": exs}
+    ) 
+
+def cases_main_tw(request):
+    hxs = Case.objects.filter(verified=True, visible=True).order_by("-date_created")[:2]
+    picassos = Picasso.objects.filter(
+        verified=True, delete=False, visible=True
+    ).order_by("-date_created")[:6]
+    # time_est_pic=[]
+    # for pic in picassos:
+    #     pic_words=pic.text.split()
+    #     time_est_pic.append(round(len(pic_words)/200))
+
+    exs = Note.objects.filter(verified=True, delete=False, visible=True).order_by(
+        "-date_created")[:2]
+    
+    # time_est_ex=[]
+    # for ex in exs:
+    #     ex_words=ex.text.split()
+    #     time_est_ex.append(round(len(pic_words)/200))
+    return render(
+        request, "./pages/cases_main_tw.html", {"hxs": hxs, "picassos": picassos, "exs": exs}
     )
 
 
