@@ -4,7 +4,8 @@ from .views import *
 
 
 urlpatterns = [
-    path('', cases_main, name='cases_main'),
+    path('light/', cases_main, name='cases_main_light'),
+    path('', cases_main_tw, name='cases_main'),
     path("picasso/", PicassoListView.as_view(), name="picasso_list"),
     path("picasso/<slug:slug>/", PicassoDetailView.as_view(), name="picasso_detail"),
     path("picasso/new", PicassoCreateView.as_view(), name="picasso_new"),
