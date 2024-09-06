@@ -3,144 +3,85 @@
 {% block title %} | Cases{% endblock title %}
 {% block content %}
     <link rel="stylesheet" href="{% static 'css/style_tw.css' %}">
+
     <style>
-        .custom-height {
-          height: 32rem; 
-        }
-        .height-of-subscribe{
-          height:29rem;
-        }
-        #add-your-case{
-          height:28rem;
-        }
-        #newSVG{
-          display: inline;
-        }
-        
-.hxTWTitle {
-  transition: 0.5s;
-}
 
-.hxTWTitle:hover {
-  color: #2f1e40;
-}
-
-hxTWDesc {
-  transition: 0.5s;
-}
-
-hxTWDesc:hover {
-  color: #2f1e40;
-}
-.headerLogo{
-  height:40px
-}
     </style>
 
-  <main dir="ltr" class="px-16 py-6 bg-MedepartoutReyhan ">
-
-   <div class="first relative p-0 lg:flex lg:flex-row lg:gap-14 w-full lg:items-stretch lg:custom-height " >
-
-                   <!-- the add yours card -->
-    <div class="mt-8 lg:flex-1 lg:flex-grow custom-height ">
-
-      <h4 class="font-bold pb-2 mt-12 border-b border-gray-200 text-center ">Add Your Case</h4>
-
-      <a href="{% url 'self_user_cases'%}">
-      <div id="add-your-case" class="card relative hover:shadow-lg mt-12 custom-height lg:h-96">
-          
-          <div class="relative h-72 sm:h-64 w-full">
-              <img src="{% static './images/cases_main/writing.jpg'%}" alt="Initial Image" class="absolute inset-0 object-cover transition-opacity duration-300 ease-in-out opacity-100 hover:opacity-0 w-full h-full">
-              <img src="{% static './images/cases_main/graph.jpg'%}" alt="Hovered Image" class="absolute inset-0 object-cover transition-opacity duration-300 ease-in-out opacity-0 hover:opacity-100 w-full h-full">
-          </div></a>
+  <main dir="ltr" class="">
     
-          <div class="relative h-44 sm:h-40 text-center mt-8 py-4">
-              <span class=" block text-3xl text-MedepartoutNavy font-sans mb-6 ">Make Your Presentation</span>
-              <span class=" block text-MedepartoutNavy text-2xl ">
-                <a  class="linked" href="{% url 'hx_new' %}">Hx </a>|
-                <a  class="linked" href="{% url 'picasso_new' %}"> Pic </a>|
-                <a class="linked" href="{% url 'ex_new' %}"> Note</a></span>
-          </div>
-          
-      </div>
+    <header class="">
+      <h2 class="">What will you <span>write</span> today?</h2>
+      <h3 class="">Medepartout makes it easy to write, present and share medical cases.</h3>
+    </header>
+<div id="mainCont">
+  <div id="add-your-case">
+    <h3 class="mainSubt">Add Your Case</h3>
+    <div id="add-your-case-inner-box">
+      <a href="{% url 'self_user_cases'%}">
+        <div class="add-yours-images">
+            <img id="intImg" src="{% static './images/cases_main/writing.jpg'%}" alt="Initial Image" class="">
+            <img id="hovImg" src="{% static './images/cases_main/graph.jpg'%}" alt="Hovered Image" class="">
+        </div>
+      </a>
+  
+        <div id="subImgTextBox">
+          <a class="linkedTxt" href="{% url 'hx_new' %}">
+            <p id="subImgText">Make Your Presentation</p>
+          </a>
+        </div>     
     </div>
+  </div>
 
-                         <!-- Public HXs -->
-        <div class=" mt-8 flex flex-col gap-20  lg:gap-10 lg:flex-none lg:flex-1 lg:w-1/3">
-          <h4 class="font-bold pb-0 lg:pb-2 mt-24 lg:mt-12 border-b border-gray-200 text-center ">Public HXs</h4>
+    <div id="publicHxs">
+      <h3 class="mainSubt">Public HXs</h3>
+      <div id="hxsDiv">
         {% for hx in hxs %}
-          <div class="card hover:shadow-lg ">               
-            <div class="m-4 lg:pb-8 flex flex-col justify-between h-full">
-              <a href="{% url 'hx_detail' hx.slug %}" class="font-bold block font-farsi bg-gradient-to-l from-MedepartoutPeach to-MedepartoutReyhan hxTWTitle" dir="rtl">
+        <a href="{% url 'hx_detail' hx.slug %}">  
+        <div class="hxCard">               
+            <div class="hxTitleBox">
+               <p dir="rtl">
                 {{hx.title}}
-              </a>
-              <a href="{% url 'hx_detail' hx.slug %}" class="block text-lg font-bold  font-farsi mt-4 px-1 hxTWDesc" dir="rtl">{{hx.description}}</a>
-              <span class="block text-gray-500 text-sm mt-auto">{{hx.author.first_name}} {{hx.author.last_name}} | {{hx.author.degree}}</span> 
+               </p>
             </div>
-            </div>
+              
+              <p class="hxDesc" dir="rtl">
+                {% if hx.description%}
+                {{hx.description}}
+                {% endif %}
+              </p>
+              
+              <p class="hxAuthor">{{hx.author.first_name}} {{hx.author.last_name}} | {{hx.author.degree}}</p> 
+        </div>
+          </a>
             {% endfor %}
-
-        <div class="mt-5 flex justify-center">
-          <div class="btn py-2 px-3 text-xs bg-secondary-100 text-secondary-200 inline-block hover:shadow-inner transform hover:scale-125 hover:bg-opacity-50 transition ease-out duration-300">
-            <a href="{% url 'hx_list' %}">Load more</a>
-          </div>
-        </div>    
+      </div>
+      <div>
+        <a class="loadMore" href="{% url 'hx_list' %}">Load more</a>
       </div>
 
+  </div>
 
 
+</div>
 
-    </div>
 
+    {% if not user.is_authenticated %}
     <!-- subscribe -->
-    <hr class="border-t-8 border-dashed border-Medepartoutpesteh my-6">      
-    <div class=" bg-Medepartoutpesteh rounded shadow-md relative hover:shadow-lg height-of-subscribe content-center my-20  inset-0 flex flex-col border-solid gap-1 py-6">
-      <img class="w-20 m-auto " src="{% static './images/cases_main/subscribe.png'%}" alt="medepartout subscribe button">
-      <h1 style="color:#1B1919;" class=" text-secondary-200  text-4xl text-center m-auto tracking-wide">Get the best of Medepartout features for yourself !</h1>
-      <div class="mt-8 flex justify-center">
-        <div class="btn text-lg px-8 py-3 mb-2  bg-secondary-100 text-secondary-200 inline-block hover:shadow-inner transform hover:scale-125 hover:bg-opacity-50 transition ease-out duration-300"><a href="{% url 'signup'%}">Sign UP</a></div>
+    <hr id="hrSubs"/>      
+
+    <div id="subscribeDiv">
+      <img src="{% static './images/cases_main/subscribe.png'%}" alt="medepartout subscribe button">
+      <h3>Get the best of Medepartout features for yourself!</h3>
+      <div id="subsBtnCont">
+        <a href="{% url 'signup'%}">
+          <div class="subsBtn">Sign UP</div>
+        </a>
+        <a href="{% url 'login'%}">
+            <div class="subsBtn">Log IN</div>
+        </a>
       </div>
     </div>
+    {% endif %}
   </main>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-    extend: {
-
-      backgroundImage: theme => ({
-        'gradient-to-r': 'linear-gradient(to right, var(--tw-gradient-stops))',
-        // Add more gradient directions as needed
-      }),
-      gradientColorStops: theme => ({
-        'MedepartoutNavy': '#1F132B',
-        'MedepartoutPeach':'#FFAA80',
-        // Add more colors as needed
-      }),
-
-      colors: {
-        MedepartoutNavy: '#1F132B',
-        MedepartoutPeach:' #FFAA80',
-        MedepartoutReyhan: '#F8F4EA',
-        Medepartoutblue: '#EBF4F6',
-        Medepartoutpesteh:'#CCEEBC',
-        MedepartoutPurple1:'#C8A1E0',
-        MedepartoutPurple11:'#E2BFD9',
-
-        primary: '#FF6363',
-        secondary: {
-          100: '#E2E2D5',
-          200: '#888883',
-        }
-      },
-      fontFamily: {
-        body: ['Nunito'],
-        farsi: ['Noto Sans Arabic', 'sans-serif']
-      },
-    },
-  },
-      }
-    </script>
-
     {% endblock content %}
