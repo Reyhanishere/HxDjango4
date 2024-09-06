@@ -277,7 +277,7 @@ def cases_main(request):
     ) 
 
 def cases_main_tw(request):
-    hxs = Case.objects.filter(verified=True, visible=True).order_by("-date_created")[:2]
+    hxs = Case.objects.filter(verified=True, visible=True).order_by("-date_created")[:3]
     picassos = Picasso.objects.filter(
         verified=True, delete=False, visible=True
     ).order_by("-date_created")[:6]
