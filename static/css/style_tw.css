@@ -1766,4 +1766,9 @@ h2 span {
     background-color: rgb(236 236 223);
     color: #444
 }
+@media(max-width: 540px){
+   .new{
+    display: none
+  }
+}
   
