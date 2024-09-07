@@ -1457,6 +1457,10 @@ video {
   .demo {
     opacity: 0.6;
   }
+  .active,
+  .demo:hover {
+    opacity: 1;
+  }
 
 .custom-height {
     height: 32rem;
@@ -1685,7 +1689,7 @@ h2 span {
 }
 
 #subImgTextBox {
-    height: 8rem;
+    height: auto;
 }
 
 #subImgText {
@@ -1764,6 +1768,7 @@ h2 span {
     background-color: rgb(226 226 213);
     color: rgb(136 136 131);
     display: inline-block;
+    margin: 1.5rem 0 0 0;
 }
 
 .loadMore:hover {
@@ -1772,7 +1777,3 @@ h2 span {
     color: #444
 }
   
-  .active,
-  .demo:hover {
-    opacity: 1;
-  }
