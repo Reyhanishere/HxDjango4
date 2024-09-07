@@ -15,6 +15,10 @@
             grid-template-rows: 1fr 1fr;
         }
     }
+    #edel{
+    right: 20px;
+    left: auto;
+}
 
 </style>
 <div class="pad-15" dir="ltr">
@@ -156,3 +160,7 @@ beginAtZeroCheckbox.addEventListener('change', updateChart);
 </script>
 
 {% endblock content %}
+
+{% block edel %}
+    <a href="{% url 'doc_detail' 1%}" class="btn btn-warning">آموزش</a>
+{% endblock edel%}
