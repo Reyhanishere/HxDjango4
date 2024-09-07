@@ -13,6 +13,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
+    <meta property="og:image" content="{% static 'images/cards/mdpt_Cases_og.png' %}" />
+    <meta name="twitter:image" content="{% static 'images/cards/mdpt_Cases_og.png' %}" />
+
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icon/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icon//favicon-16x16.png' %}">
@@ -38,7 +41,11 @@
 
 <div style="background-color: #f5f5f5; margin: 10px; border-radius: 7px; padding: 15px 10px;" dir="rtl">
     <b>خلاصه: </b>{{ case.summary }}</div>
-
+    {%if case.author.username == user.username%}
+    <a href="{% url 'hx_graph_new' case.slug %}" target="_blank" class="btn btn-outline-secondary" style="margin-left:1.25rem">
+        Add More Lab Data
+    </a>
+    {% endif %}
     {% for graph in case.labgraphselection_set.all reversed%}
     <div class="thisContainer">
         <div class="chart-container">
