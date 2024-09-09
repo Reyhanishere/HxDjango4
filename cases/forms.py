@@ -249,7 +249,8 @@ class CaseCreateForm(ModelForm):
     alg=forms.CharField(widget=forms.Textarea(
     ),
         label="حساسیت‌ها",
-        help_text="حساسیت‌های دارویی و غذایی شناخته شده را وارد کنید."
+        help_text="حساسیت‌های دارویی و غذایی شناخته شده را وارد کنید.",
+        required=False,
     )
     field_order=['title', 'description','pretext','location']
     class Meta:
