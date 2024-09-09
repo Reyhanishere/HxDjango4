@@ -240,6 +240,9 @@ class ExCreateForm(ModelForm):
 
 
 class CaseCreateForm(ModelForm):
+    slug=forms.SlugField(widget=forms.TextInput(
+        attrs={"autocapitalize":"off"}
+    ))
     class Meta:
         model = Case
         exclude = (
