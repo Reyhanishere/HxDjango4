@@ -241,11 +241,22 @@ class ExCreateForm(ModelForm):
 
 class CaseCreateForm(ModelForm):
     slug=forms.SlugField(widget=forms.TextInput(
-        attrs={"autocapitalize":"off"}
-    ))
+        attrs={"autocapitalize":"off", 'autocomplete':'off'},
+    ),
+    label="لینک",
+    help_text="لینکی که می‌خواهید کیس شما با آن شناخته شود را وارد کنید. تلاش کنید لینکتان گویا و دقیق باشد، پس از این توانایی تغییر آن را نخواهید داشت. استفاده از فاصله (Space) مجاز نیست. می‌توانید به آموزش مراجعه کنید."
+    )
+    alg=forms.CharField(widget=forms.Textarea(
+    ),
+        label="حساسیت‌ها",
+        help_text="حساسیت‌های دارویی و غذایی شناخته شده را وارد کنید."
+    )
+    field_order=['title', 'description','pretext','location']
     class Meta:
         model = Case
         exclude = (
+            "doctor",
+            "rts",
             "verified",
             "author",
             "rating",
@@ -264,3 +275,5 @@ class CaseCreateForm(ModelForm):
         help_texts={
             'tags': ('دسته‌بندی بر اساس تظاهر بالینی اولیه. می‌توانید چند مورد را انتخاب کنید.'),
         }
+        
+
