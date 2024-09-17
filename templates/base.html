@@ -101,6 +101,8 @@
                     <div class="dropdown-content" id="userDiv" dir="rtl">
                         <a class="dropdown-item" href="{% url 'self_user_cases'%}">
                                                     کیس‌های من</a>
+                        <a class="dropdown-item" href="{% url 'change_user_info' user.id %}">
+                            ویرایش اطلاعات من</a>
                         <a class="dropdown-item" href="{% url 'password_change'%}">
                         تغییر گذرواژه</a>
                         
