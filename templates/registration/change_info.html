@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Change Info{% endblock title%}
+{% block content %}
+<div dir='rtl' class="pad-15">
+<h2>ویرایش اطلاعات شخصی</h2>
+<form dir="auto" method="post">{% csrf_token %}
+{{ form|crispy }}
+<button class="btn btn-success" type="submit">ثبت</button>
+</form>
+<br/>
+</div>
+{% endblock content %}
