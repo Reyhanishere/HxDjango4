@@ -19,6 +19,7 @@ class CustomUserAdmin(UserAdmin):
         "is_article_editor",
         "is_case_editor",
         "is_staff",
+        "en_name",
     ]
     fieldsets = UserAdmin.fieldsets + (
         (
