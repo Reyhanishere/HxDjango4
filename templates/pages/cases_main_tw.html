@@ -51,7 +51,13 @@
                 {% endif %}
               </p>
               
-              <p class="hxAuthor">{{hx.author.first_name}} {{hx.author.last_name}} | {{hx.author.degree}}</p> 
+            <p class="hxAuthor">
+                {% if hx.author.en_name%}
+                {{ hx.author.first_name }} {{ hx.author.last_name }} 
+                {% else %}
+                {{ hx.author.fn_fa }} {{ hx.author.ln_fa }} 
+                {% endif %}| {{hx.author.degree}}
+            </p> 
         </div>
           </a>
             {% endfor %}
