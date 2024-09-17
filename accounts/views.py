@@ -24,7 +24,7 @@ def self_user_cases(request):
 class UserChangeInfoView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model= CustomUser
     template_name='registration/change_info.html'
-    fields=['first_name', 'last_name', 'degree', 'university','fn_fa','ln_fa']
+    form_class=CustomUserChangeForm
     success_url=reverse_lazy('self_user_cases')
     def test_func(self):
         user_id = self.kwargs["pk"]
