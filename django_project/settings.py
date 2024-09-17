@@ -116,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-# LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "fa"
 
 TIME_ZONE = "Iran"
 
@@ -145,4 +145,4 @@ EMAIL_HOST_USER = os.getenv("EMAIL_USER")
 EMAIL_HOST_PASSWORD=os.getenv("EMAIL_PASSWORD")
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = os.getenv("Reset_Password_Email")
-LANGUAGE_CODE=os.getenv("LANGUAGE_CODE")
+
