@@ -19,7 +19,7 @@ class CustomUserAdmin(UserAdmin):
         "is_article_editor",
         "is_case_editor",
         "is_staff",
-        "en_name",
+        
     ]
     fieldsets = UserAdmin.fieldsets + (
         (
@@ -34,6 +34,7 @@ class CustomUserAdmin(UserAdmin):
                     "is_article_author",
                     "is_article_editor",
                     "is_case_editor",
+                    "en_name",
                     "about_me",
                 )
             },
