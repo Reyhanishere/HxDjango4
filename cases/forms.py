@@ -34,16 +34,43 @@ class ImageCaseEditForm(ModelForm):
         model = ImageCase
         exclude = ("case", "verified", "visible",)
 
-class CasePubForm(ModelForm):
+class CasePubForm(ModelForm):    
     class Meta:
-        fields = ("visible",)
         model=Case
+        fields = ("visible",'author')
         labels = {
             'visible': ('نمایش عمومی'),
         }
         help_texts={
             'visible': ('خوش‌حال می‌شویم اگر شرح‌حال خود را پس از کامل شدن برای همه به نمایش بگذارید تا از آن بهره ببرند. به یاد داشته باشید که هر شرح‌حالی ارزش خوانده شدن دارد و با درس‌هایی که از آن می‌گیرید می‌توانید به مرور پیشرفت کنید.'),
         }
+    def __init__(self, *args, **kwargs):
+        super(CasePubForm, self).__init__(*args, **kwargs)
+        self.fields['author'].widget = forms.HiddenInput()
+    def clean(self):
+
+        cleaned_data = super().clean()
+
+        # Calculate the current count of objects meeting the criteria
+        existing_count = Case.objects.filter(
+            author=self.cleaned_data['author'],
+            visible=False
+        ).count()
+
+        # Check if the form's visibility change would affect the count
+        if self.instance.id:  # If the form is for updating an existing object
+            if self.instance.visible and not cleaned_data['visible']:
+                existing_count += 1  # Increment count if visibility is changing from True to False
+            elif not self.instance.visible and cleaned_data['visible']:
+                existing_count -= 1  # Decrement count if visibility is changing from False to True
+
+        # Raise a ValidationError if the count exceeds 3
+        if existing_count > 3:
+            raise forms.ValidationError(
+                "شما نمی‌توانید بیش از سه شرح حال در حالت خصوصی داشته باشید. برای تبدیل این شرح حال به حالت خصوصی، ابتدا یک شرح حال دیگر را عمومی کنید."
+                )
+
+        return cleaned_data
 
 class FreeGraphForm(ModelForm):
     class Meta:
