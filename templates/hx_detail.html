@@ -3,7 +3,11 @@
 {% load static %}
 {% load my_tags %}
 {% block title %} | {{case.title}}{%endblock title%}
-{% block desc %}شرح حالی از {{ case.author.first_name }} {{ case.author.last_name }}{% endblock desc%}
+{% if case.author.en_name %}
+{% block desc %}شرح حالی از {{ case.author.first_name }} {{ case.author.last_name }}{% endblock desc %}
+{% else %}
+{% block desc %}شرح حالی از {{ case.author.fn_fa }} {{ case.author.ln_fa }}{% endblock desc %}
+{% endif %}
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link rel="stylesheet" href="{% static 'css/style_base.css' %}">
@@ -27,7 +31,12 @@
     {%endif%}
     <span style="color:#888" hidden>Share</span><button dir="rtl" onclick="copyToClipboard()" class="copyLink" id="copy"><img id="share"src="{% static 'images\share-icon.svg' %}" width="20px" alt="Copy case link to clipboard"></button>
 </div>
-    <p dir="ltr" style='margin:5px;'><span dir="rtl">{{ case.date_created|date:"d M Y" }}</span>  &emsp; By {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }} </p>
+    <p dir="ltr" style='margin:5px;'><span dir="rtl">{{ case.date_created|date:"d M Y" }}</span>  &emsp; 
+        {% if case.author.en_name %}
+        By {{ case.author.first_name }} {{ case.author.last_name }}
+        {% else %}
+        توسط {{ case.author.fn_fa }} {{ case.author.ln_fa }}
+        {% endif %}| {{ case.author.degree }} </p>
 
 <p style='margin-right:10px;'>
     {{ case.pretext|safe }}
