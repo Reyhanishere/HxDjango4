@@ -5,8 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
-from .forms import CustomUserCreationForm
+from .forms import *
 import cases.models as Cases
+from .models import CustomUser
+
 
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
