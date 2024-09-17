@@ -3,11 +3,14 @@
 {% load static %}
 {% load my_tags %}
 {% block title %} | {{case.title}}{%endblock title%}
-{% if case.author.en_name %}
-{% block desc %}شرح حالی از {{ case.author.first_name }} {{ case.author.last_name }}{% endblock desc %}
+
+{% block desc %}شرح حالی از 
+{% if case.author.en_name %}{{ case.author.first_name }} {{ case.author.last_name }}
 {% else %}
-{% block desc %}شرح حالی از {{ case.author.fn_fa }} {{ case.author.ln_fa }}{% endblock desc %}
+{{ case.author.fn_fa }} {{ case.author.ln_fa }}
 {% endif %}
+{% endblock desc %}
+
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link rel="stylesheet" href="{% static 'css/style_base.css' %}">
