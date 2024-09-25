@@ -105,7 +105,7 @@
                         <div class="tabIndic"></div>
                         <b>Physical Examination: </b>
                     </div>
-                    <div class="hx prsntText">{{ case.phe|emphasize|safe}}</div>
+                    <div class="hx prsntText prsntTwoColumnar">{{ case.phe|emphasize|safe}}</div>
                 </div>
 
                 <div id="Summary" class="content">
@@ -148,13 +148,19 @@
                                 <img src="{{img.image.url}}" style="border-radius:10px;" width="220" alt="{{img.text}}"/>
                             </a>
                             <p style="font-size:16px; padding:5px">{{img.text}}</p>
-                        </div>
-                        {% comment %} {% endif %} {% endcomment %}
-                        {% endfor%}
-                    </div>
+                            </div>
+                            {% comment %} {% endif %} {% endcomment %}
+                            {% endfor%}
+                            </div>
                     </div>
                 </div>
-
+                <div id="PDx" class="content">
+                    <div dir="ltr"  class="prsntTitle hx" style="text-align: left; display: block">
+                        <div class="tabIndic"></div>
+                        <b>Primary Diagnosis: </b>
+                    </div>
+                    <div class="hx prsntText">{{ case.pdx|linebreaks }}</div>
+                </div>
         </div>
     </div>
     </div>
@@ -169,11 +175,11 @@
         <button onclick="showDiv('ROS')" class="prsntBtn">ROS</button>
         <button onclick="showDiv('PE')" class="prsntBtn">PE</button>
         <button onclick="showDiv('Summary')" class="prsntBtn">Summary</button>
-        <button onclick="showDiv('dDx')" class="prsntBtn">dDx</button>
-        <button onclick="showDiv('Action')" class="prsntBtn">Action</button>
         <button onclick="showDiv('OD')" class="prsntBtn">Other Data</button>
         <a href="graphs" target="_blank" class="prsntBtn" id="graphsBtn">See Lab Data</a>
-    
+        <button onclick="showDiv('dDx')" class="prsntBtn">dDx</button>
+        <button onclick="showDiv('Action')" class="prsntBtn">Action</button>
+        <button onclick="showDiv('PDx')" class="prsntBtn">Primary Dx</button>
     </div>
 </div>
 
