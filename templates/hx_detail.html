@@ -27,7 +27,7 @@
         + Images
     </a>
     {%endif%}
-    <span style="color:#888" hidden>Share</span><button dir="rtl" onclick="copyToClipboard()" class="copyLink" id="copy"><img id="share"src="{% static 'images\share-icon.svg' %}" width="20px" alt="Copy case link to clipboard"></button>
+    <span style="color:#888" hidden>Share</span><button dir="rtl" onclick="copyToClipboard()" class="copyLink noPrint" id="copy"><img id="share"src="{% static 'images\share-icon.svg' %}" width="20px" alt="Copy case link to clipboard"></button>
 </div>
     <p dir="ltr" style='margin:5px;'><span dir="rtl">{{ case.date_created|date:"d M Y" }}</span>  &emsp; 
         By {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }} </p>
@@ -80,10 +80,10 @@
     <div class="hx"><b>Other Data: </b><br/>
         <div style="padding:5px;">
             {%if user.username == case.author.username %}
-            <a href="graphs/new" style="color:#333;margin:5px; font-size:16px">
+            <a href="graphs/new" style="color:#333;margin:5px; font-size:16px" class='noPrint'>
                 آزمایش‌های کیس خود را اضافه کنید.
             </a><br/>
-            <a href="add-image" style="color:#333;margin:5px; font-size:16px">
+            <a href="add-image" style="color:#333;margin:5px; font-size:16px" class='noPrint'>
                 تصاویر کیس خود را اضافه کنید.
             </a><br/>
 
@@ -94,7 +94,7 @@
             {% endif %}
             {% endfor%}
         </div>
-        {%if case.labgraphselection_set.all %} <a href="graphs" style="color:#333;margin:5px;">نمودار و جدول آزمایش‌های بیمار</a><br/>{% endif %}
+        {%if case.labgraphselection_set.all %} <a href="graphs" style="color:#333;margin:5px;" class='noPrint'>نمودار و جدول آزمایش‌های بیمار</a><br/>{% endif %}
         {%if case.labgraphselection_set.all %} <a href="#labData" style="color:#333;margin:5px;">جدول آزمایش‌های بیمار در زیر برگۀ شرح حال</a><br/>{% endif %}
         {%if case.imagecase_set.all %} <a href="#images" style="color:#333;margin:5px;">تمام تصاویر در زیر برگۀ شرح حال</a>{% endif %}<hr/>{{ case.dat|linebreaks }}
         
@@ -226,12 +226,12 @@
     {{ case.post_text|linebreaks }}
 </p>
 </div>
-<p style="color:#888; text-align:center">با کلیک بر روی
+<p style="color:#888; text-align:center" class='noPrint'>با کلیک بر روی
 <button dir="rtl" onclick="copyToClipboard()" class="copyLink"><img id="shareDown"src="{% static 'images\share-icon.svg' %}" width="20px" alt="Copy case link to clipboard"></button>
 لینک مطلب را کپی کنید.
 <span id="copied" hidden>(کپی شد!)</span>
 </p>
-<div>
+<div class='noPrint'>
     {% if user.is_authenticated %}
     <h4>دیدگاهی بیفزایید:</h4>
     <form method="post">
