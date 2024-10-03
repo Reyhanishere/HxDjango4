@@ -1,11 +1,3 @@
-function openNav() {
-    document.getElementById("mySidenav").style.width = "250px";
-}
-
-function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-}
-
 function addMarkdown(type) {
     const textarea = document.getElementById('md_text_editor');
     const start = textarea.selectionStart;
@@ -86,4 +78,16 @@ function createMarkdownButtons(divName) {
         const markdownButtonsContainer = document.getElementById("buttons-div");
         markdownButtonsContainer.appendChild(button);
     });
+}
+function copyToClipboard(slug) {
+    // Get the text field
+    var copyText = `https://mdpt.ir/cases/hx/${slug}`;
+
+    // Copy the text inside the text field
+    navigator.clipboard.writeText(copyText);
+    var copied = document.getElementById("copied");
+    copied.hidden = false;
+    setTimeout(() => {
+        copied.hidden = true;
+    }, 4000);
 }
