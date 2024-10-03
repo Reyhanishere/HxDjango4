@@ -27,7 +27,7 @@
         + Images
     </a>
     {%endif%}
-    <span style="color:#888" hidden>Share</span><button dir="rtl" onclick="copyToClipboard()" class="copyLink noPrint" id="copy"><img id="share"src="{% static 'images\share-icon.svg' %}" width="20px" alt="Copy case link to clipboard"></button>
+    <span style="color:#888" hidden>Share</span><button dir="rtl" onclick="copyToClipboard('{{case.slug}}')" class="copyLink noPrint" id="copy"><img id="share"src="{% static 'images\share-icon.svg' %}" width="20px" alt="Copy case link to clipboard"></button>
 </div>
     <p dir="ltr" style='margin:5px;'><span dir="rtl">{{ case.date_created|date:"d M Y" }}</span>  &emsp; 
         By {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }} </p>
@@ -227,7 +227,7 @@
 </p>
 </div>
 <p style="color:#888; text-align:center" class='noPrint'>با کلیک بر روی
-<button dir="rtl" onclick="copyToClipboard()" class="copyLink"><img id="shareDown"src="{% static 'images\share-icon.svg' %}" width="20px" alt="Copy case link to clipboard"></button>
+<button dir="rtl" onclick="copyToClipboard('{{case.slug}}')" class="copyLink"><img id="shareDown"src="{% static 'images\share-icon.svg' %}" width="20px" alt="Copy case link to clipboard"></button>
 لینک مطلب را کپی کنید.
 <span id="copied" hidden>(کپی شد!)</span>
 </p>
@@ -345,17 +345,4 @@
             });
         });
     });
-
-    function copyToClipboard() {
-        // Get the text field
-        var copyText = "https://mdpt.ir/cases/hx/{{case.slug}}";
-      
-         // Copy the text inside the text field
-        navigator.clipboard.writeText(copyText);
-        var copied = document.getElementById("copied");
-        copied.hidden=false;
-        setTimeout(() => {
-            copied.hidden=true;
-          }, 4000);
-      }
 </script>
