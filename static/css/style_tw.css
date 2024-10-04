@@ -1625,7 +1625,7 @@ h2 span {
     margin: auto;
 }
 
-#hrSubs {
+.hrSubs {
     background-color: transparent;
     border-top-color: rgb(204 238 188);
     border-top-width: 7px;
