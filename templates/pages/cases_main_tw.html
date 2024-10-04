@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load my_tags %}
 {% block title %} | Cases{% endblock title %}
 {% block content %}
     <link rel="stylesheet" href="{% static 'css/style_tw.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <style>
 
@@ -65,25 +67,68 @@
   </div>
 
 
+{% if not user.is_authenticated %}
+  <!-- subscribe -->
+  <hr class="hrSubs"/>      
+
+  <div id="subscribeDiv">
+    <img src="{% static './images/cases_main/subscribe.png'%}" alt="medepartout subscribe button">
+    <h3>Get the best of Medepartout features for yourself!</h3>
+    <div id="subsBtnCont">
+      <a href="{% url 'signup'%}">
+        <div class="subsBtn">Sign UP</div>
+      </a>
+      <a href="{% url 'login'%}">
+          <div class="subsBtn">Log IN</div>
+      </a>
+    </div>
+  </div>
+  {% endif %}
+  <hr class="hrSubs"/>      
+
+  <div id='exs'></div>
+
+  <div id="picassosSlides" class="carousel slide mt-4" data-bs-ride="carousel" style='background-color: #E2BFD9; border-radius: 10px'>
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#picassosSlides" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#picassosSlides" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#picassosSlides" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      <button type="button" data-bs-target="#picassosSlides" data-bs-slide-to="3" aria-label="Slide 4"></button>
+      <button type="button" data-bs-target="#picassosSlides" data-bs-slide-to="4" aria-label="Slide 5"></button>
+      <button type="button" data-bs-target="#picassosSlides" data-bs-slide-to="5" aria-label="Slide 6"></button>
+
+    </div>
+    <div class="carousel-inner p-2">
+      
+    {% for pic in picassos %}
+    {% if forloop.counter == 1%}
+      <div  class="carousel-item active">
+    {% else %}
+      <div  class="carousel-item ">
+    {% endif %}
+        <img src="{{pic.image.url}}" class="d-block w-100" alt="{{pic.title}}" style='border-radius: 10px' />
+        <div class="carousel-caption d-md-block">
+          <div class='picTitleBox'>
+          <a href="{% url 'picasso_detail' pic.slug %}" class='slideLinks'><h5>{{pic.title}}</h5></a>
+          <p style='margin: 0'>{{pic.description}}</p></div>
+        </div>
+      </div>
+    {% endfor %}
+
+      
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#picassosSlides" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#picassosSlides" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
 </div>
 
+</main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-    {% if not user.is_authenticated %}
-    <!-- subscribe -->
-    <hr id="hrSubs"/>      
-
-    <div id="subscribeDiv">
-      <img src="{% static './images/cases_main/subscribe.png'%}" alt="medepartout subscribe button">
-      <h3>Get the best of Medepartout features for yourself!</h3>
-      <div id="subsBtnCont">
-        <a href="{% url 'signup'%}">
-          <div class="subsBtn">Sign UP</div>
-        </a>
-        <a href="{% url 'login'%}">
-            <div class="subsBtn">Log IN</div>
-        </a>
-      </div>
-    </div>
-    {% endif %}
-  </main>
     {% endblock content %}
