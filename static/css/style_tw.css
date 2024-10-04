@@ -1669,7 +1669,7 @@ h2 span {
     text-align: center;
     margin: 2rem 0;
     gap: 15px;
-    align-items: baseline;
+    align-items: normal;
 }
 
 #mainCont .mainSubt {
@@ -1835,7 +1835,23 @@ h2 span {
 a {
     text-decoration: none;
 }
-
+.exTitleBox {
+      background: linear-gradient(to right, #E2BFD9, #C8A1E0);
+      border-radius: 5px 5px 0 0;
+      font-size: 1.25rem;
+      text-align: justify;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      color: #373c51;
+      transition: 0.5s;
+  }
+  #picassosSlides{
+    background: linear-gradient(to right, #E2BFD9, #C8A1E0);
+    border-radius: 10px;
+  }
+  #exs{
+    margin-top: 1.5rem
+  }
 @media(max-width: 900px) {
     #subscribeDiv>div {
         grid-template-columns: 1fr;
