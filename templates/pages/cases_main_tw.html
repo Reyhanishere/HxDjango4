@@ -86,9 +86,40 @@
   {% endif %}
   <hr class="hrSubs"/>      
 
-  <div id='exs'></div>
+  <div id='exs'>
+    <h3 class="mainSubt">Public EXs (Notes)</h3>
+    {% for ex in exs %}
+    <a href="{% url 'ex_detail' ex.slug %}">  
+    <div class="hxCard">               
+        <div class="exTitleBox">
+           <p dir="rtl">
+            {{ex.title}}
+           </p>
+        </div>
+          
+          <p class="hxDesc" dir="rtl">
+            {% if ex.description%}
+            {{ex.description}}
+            
+            {% endif %}
+          </p>
+          
+          <p class="hxAuthor">
+            
+            {{ ex.author.first_name }} {{ ex.author.last_name }} 
+            
+            | {{ex.author.degree}}
+          </p> 
+    </div>
+      </a>
+        {% endfor %}
+        <a class="loadMore" href="{% url 'ex_list' %}">Load more</a>
 
-  <div dir='auto' id="picassosSlides" class="carousel slide mt-4" data-bs-ride="carousel" style='background-color: #E2BFD9; border-radius: 10px'>
+  </div>
+
+  <div>
+    <h3 class="mainSubt mt-4">Public Picassos</h3>
+    <div dir='auto' id="picassosSlides" class="carousel slide" data-bs-ride="carousel" style=''>
     <div class="carousel-indicators">
       <button type="button" data-bs-target="#picassosSlides" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
       <button type="button" data-bs-target="#picassosSlides" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -109,7 +140,7 @@
         <img src="{{pic.image.url}}" class="d-block w-100" alt="{{pic.title}}" style='border-radius: 10px' />
         <div class="carousel-caption d-md-block">
           <div class='picTitleBox'>
-          <a href="{% url 'picasso_detail' pic.slug %}" class='slideLinks'><h5>{{pic.title}}</h5></a>
+          <a href="{% url 'picasso_detail' pic.slug %}" class='slideLinks'><h4>{{pic.title}}</h4></a>
           <p style='margin: 0'>{{pic.description}}</p></div>
         </div>
       </div>
@@ -125,7 +156,10 @@
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
     </button>
+
   </div>
+  <a class="loadMore" href="{% url 'picasso_list' %}">Load more</a>
+</div>
 </div>
 
 </main>
