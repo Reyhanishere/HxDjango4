@@ -287,7 +287,7 @@ def cases_main_tw(request):
     #     time_est_pic.append(round(len(pic_words)/200))
 
     exs = Note.objects.filter(verified=True, delete=False, visible=True).order_by(
-        "-date_created")[:2]
+        "-date_created")[:3]
     
     # time_est_ex=[]
     # for ex in exs:
