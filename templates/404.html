@@ -1,0 +1,68 @@
+{% extends 'base.html'%}
+{% block title %}| 404 Not Found!{% endblock title %}
+{% block desc %}این صفحه اکنون در سایت مدوپارتو وجود ندارد.{% endblock desc %}
+{% block content %}
+<style>
+    h2{
+        font-size: 15rem;
+        font-family: fantasy;
+        color: #2B456A;
+        line-height: 1;
+        padding-top: 6rem
+    }
+    h2 span {
+        -webkit-text-stroke: 5px white;
+    }
+
+    .zero{
+        position: relative;
+        left: -1.5rem;
+
+    }
+    .four{
+        position: relative;
+        left: -3rem;
+
+    }
+    h3{
+        font-size: 3rem;
+        font-family: fantasy;
+        color: #2F486D;
+        font-weight: 400
+    }
+    .goBack{
+        cursor: pointer;
+        color: white;
+        background-color: #2F486D;
+        border-radius: 100px;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        margin: 1rem;
+        display: inline-block;
+        inset: 0;
+        transition: 0.5s
+
+    }
+    .goBack:hover{
+        color: #eee;
+        background-color: #2B456A;
+        inset: 5px;
+        box-shadow: 3px 3px 0 0px rgba(10, 10, 20, 0.4)
+
+    }
+    p{
+        margin: 0
+
+    }
+</style>
+
+<div dir='ltr' style='text-align: center;'>
+    <h2><em><span>4</span><span class='zero'>0</span><span class='four'>4</span></em></h2>
+    <h3>Oops!</h3>
+    
+    <p>Page Not Found</p>
+    <p>We couldn't find the page you're looking for. :/</p>
+    <a href="{% url 'cases_main' %}" class='goBack'>Go Back To Cases App</a>
+</div>
+
+{% endblock content %}
