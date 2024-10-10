@@ -102,3 +102,4 @@ class CustomUser(AbstractUser):
         blank=True,
         null=True,
     )
+    en_name= models.BooleanField(default=True)
