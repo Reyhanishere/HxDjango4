@@ -1,19 +1,67 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% block title %}| Edit Graph{% endblock title %}
+{% block desc %}ویرایش نمودار و داده‌های آزمایشگاهی{% endblock desc %}
 {% block content %}
 
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
+<style>
+    .preview{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+    @media(max-width:800px){
+        .preview{
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr 1fr;
+        }
+    }
+#edel{
+    right: 20px;
+    left: auto;
+}
+</style>
+
 <div dir="ltr" class="pad-15">
 <h1 dir="rtl">ویرایش</h1>
 
-    <form action="" method="post" autocomplete="off">{% csrf_token %}
-        {{ form|crispy }}
-            <div class="text-center" style="justify-contents:center"><button class="btn btn-info" id="primaryButton" type="submit">Update</button></div>
-    </div>
+    <form action="" method="post" autocomplete="off">
+        {% csrf_token %}
+        <div class="createForm" autocomplete="off">
+            {{ form|crispy }}
+        </div>
+            <div class="text-center" style="justify-contents:center">
+                <button class="btn btn-info" id="primaryButton" type="submit">Update</button>
+            </div>
     </form>
+    <div class="text-center" style="justify-contents:center">
+        <button class="btn btn-primary ml-2 mt-2" id="refresh-btn">Preview</button>
+    </div>
 
+    <div class="preview" dir="ltr">
+        <div id="chart-container" style='display: none'>
+            <canvas id="myChart" style="width: 400px; height: 200px;"></canvas>
+        </div>
+        <div id="table-container" style="display: none;">
+            <table id="data-table">
+                <thead>
+                    <tr>
+                        <th>Label</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'scripts/Chart_Maker.js' %}"></script>
 
 {% endblock content %}
+
+{% block edel %}
+    <a href="{% url 'doc_detail' 1%}" class="btn btn-warning">آموزش</a>
+{% endblock edel%}
