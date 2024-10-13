@@ -1,68 +1,82 @@
 {% extends 'base.html'%}
+{% load static %}
 {% block title %}| 404 Not Found!{% endblock title %}
 {% block desc %}این صفحه اکنون در سایت مدوپارتو وجود ندارد.{% endblock desc %}
 {% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400&display=swap" rel="stylesheet">
 <style>
-    h2{
-        font-size: 15rem;
-        font-family: fantasy;
-        color: #2B456A;
-        line-height: 1;
-        padding-top: 6rem
-    }
-    h2 span {
-        -webkit-text-stroke: 5px white;
-    }
-
-    .zero{
+    .main{
+        margin:0;
+        padding:0;
+        height:100vh;
+        background-image: linear-gradient(to top, #EEEDEB, #FFEFEF);
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        overflow:hidden;
+        font-family: 'Roboto', sans-serif;
+      }
+    
+      h1 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 8rem;
+        font-weight: bold;
+        background-image: url({% static 'images\background\404_text_bg.jpg' %});
+        background-size: cover;
+        color: transparent;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
         position: relative;
-        left: -1.5rem;
-
-    }
-    .four{
-        position: relative;
-        left: -3rem;
-
-    }
-    h3{
-        font-size: 3rem;
-        font-family: fantasy;
-        color: #2F486D;
-        font-weight: 400
-    }
-    .goBack{
-        cursor: pointer;
-        color: white;
-        background-color: #2F486D;
-        border-radius: 100px;
-        text-decoration: none;
-        padding: 0.5rem 1rem;
-        margin: 1rem;
-        display: inline-block;
-        inset: 0;
-        transition: 0.5s
-
-    }
-    .goBack:hover{
-        color: #eee;
-        background-color: #2B456A;
-        inset: 5px;
-        box-shadow: 3px 3px 0 0px rgba(10, 10, 20, 0.4)
-
-    }
-    p{
-        margin: 0
-
-    }
+        z-index: 1;
+      }
+    
+      .center {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        height: 100%;
+        max-width: 50em;
+        margin: 0 auto;
+      }
+      
+      .error {
+        text-align: center;
+      }
+      
+      .error__title {
+        font-family: "Montserrat";
+        font-size: 18rem;
+        font-weight: 200;
+        margin: 0;
+      }
+      .error__type {
+        color: #000;
+        font-weight: 600;
+        font-size: 2.75rem;
+        letter-spacing: 0.125em;
+        margin: 0;
+        text-transform: uppercase;
+      }
+      .error__cta {
+        color: #000;
+        font-family: "Source Sans Pro";
+        font-size: 1.25rem;
+        font-weight: 300;
+        line-height: 2;
+      }
+    
+    
 </style>
 
-<div dir='ltr' style='text-align: center;'>
-    <h2><em><span>4</span><span class='zero'>0</span><span class='four'>4</span></em></h2>
-    <h3>Oops!</h3>
-    
-    <p>Page Not Found</p>
-    <p>We couldn't find the page you're looking for. :/</p>
-    <a href="{% url 'cases_main' %}" class='goBack'>Go Back To Cases App</a>
+<div class='main' dir='ltr'>
+<div class="center">
+    <section class="error">
+      <h1 class="error__title">OOPS!</h1>
+      <h2 class="error__type">Page not found</h2>
+      <p dir="rtl" class="error__cta">متأسفیم. صفحه‌ای که به دنبال آن هستید، در دسترس نیست.</p>
+    </section>
+  </div>
 </div>
 
 {% endblock content %}
