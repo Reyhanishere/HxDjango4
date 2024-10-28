@@ -468,14 +468,17 @@ def cc_tot_ai(request):
     if request.user.is_authenticated and request.user.hx_cc_ai_permission and request.user.hx_cc_ai_use_count<use_limit:
         if request.method == 'POST':
             symptom = request.POST.get('cc_fa')
-            Data = {
-            'message':{
-                'content': f"{symptom}",
-                'type':'USER'
-                },
-            }
-            message_url = f'{API_URL}/chat/session/{SESSION_CODE}/message'
-            response = requests.post(message_url, headers=Headers, data=json.dumps(Data))
+            if len(symptom)>3:
+                Data = {
+                'message':{
+                    'content': f"{symptom}",
+                    'type':'USER'
+                    },
+                }
+                message_url = f'{API_URL}/chat/session/{SESSION_CODE}/message'
+                response = requests.post(message_url, headers=Headers, data=json.dumps(Data))
+            else:
+                return JsonResponse({'error': 'Enter Chief Complaint First!'}, status=400)
 
             if response.status_code == 200:
                 cct_ai_response = response.json().get('content')
