@@ -3,7 +3,7 @@ function AddCCAI() {
     const textElement = document.createElement("p");
     textElement.textContent = "دکمه را بزنید تا به کمک هوش مصنوعی شکایت بیمار به مدیکال ترمینولوژی تبدیل شود.";
     textElement.id = "cc_ai_p";
-    textElement.class = "ai_p";
+    textElement.className = "ai_p";
     const buttonElement = document.createElement("div");
     // const buttonElement = document.createElement("button");
     buttonElement.className = "aiBtn";
