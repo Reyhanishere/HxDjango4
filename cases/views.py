@@ -464,20 +464,34 @@ def cc_tot_ai(request):
     'Authorization':settings.AI_API_KEY,
     'content-type':'application/json'
     }
-    if request.method == 'POST':
-        symptom = request.POST.get('cc_fa')
-        Data = {
-        'message':{
-            'content': f"{symptom}?",
-            'type':'USER'
-        },
-        }
-        message_url = f'{API_URL}/chat/session/{SESSION_CODE}/message'
-        response = requests.post(message_url, headers=Headers, data=json.dumps(Data))
+    use_limit=100
+    if request.user.is_authenticated and request.user.hx_cc_ai_permission and request.user.hx_cc_ai_use_count<use_limit:
+        if request.method == 'POST':
+            symptom = request.POST.get('cc_fa')
+            Data = {
+            'message':{
+                'content': f"{symptom}",
+                'type':'USER'
+                },
+            }
+            message_url = f'{API_URL}/chat/session/{SESSION_CODE}/message'
+            response = requests.post(message_url, headers=Headers, data=json.dumps(Data))
 
-        if response.status_code == 200:
-            cct_ai_response = response.json().get('content')
-            return JsonResponse({'cct_ai_response': cct_ai_response})
-        else:
-            return JsonResponse({'error': 'API call failed'}, status=500)
+            if response.status_code == 200:
+                cct_ai_response = response.json().get('content')
+                request.user.hx_cc_ai_use_count+=1
+                request.user.save()
+                new_log = AIReqResLog(
+                    user=request.user,
+                    request_content=Data["message"]['content'],
+                    response_content=cct_ai_response
+                )
+                new_log.save()
+
+                return JsonResponse({'cct_ai_response': cct_ai_response})
+            else:
+                return JsonResponse({'error': 'API call failed'}, status=500)
+    elif request.user.is_authenticated and request.user.hx_cc_ai_permission and request.user.hx_cc_ai_use_count>use_limit:
+        return JsonResponse({'error': f'You have exceeded use limit.({use_limit})'}, status=400)
+
     return JsonResponse({'error': 'Invalid request'}, status=400)
