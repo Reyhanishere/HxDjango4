@@ -103,3 +103,9 @@ class CustomUser(AbstractUser):
         null=True,
     )
     en_name= models.BooleanField(default=True)
+
+    hx_cc_ai_permission=models.BooleanField(default=False)
+    hx_cc_ai_use_count=models.PositiveIntegerField(default=0)
+
+    hx_pi_ai_permission=models.BooleanField(default=False)
+    hx_pi_ai_use_count=models.PositiveIntegerField(default=0)
