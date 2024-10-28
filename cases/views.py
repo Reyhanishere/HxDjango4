@@ -1,4 +1,6 @@
 from itertools import chain
+import requests
+import json
 
 from django.views import View
 from django.views.generic import ListView, DetailView, FormView, TemplateView
@@ -6,6 +8,7 @@ from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import JsonResponse
+from django.conf import settings
 
 from django.db.models import Q
 
@@ -453,3 +456,28 @@ class CasePublication(UpdateView, LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
         obj = self.get_object()
         return obj.author == self.request.user
+
+def cc_tot_ai(request):
+    API_URL='https://api.metisai.ir/api/v1'
+    SESSION_CODE='47f58cce-ed0b-4b77-9ff3-ef5cf457eab4'
+    Headers={
+    'Authorization':settings.AI_API_KEY,
+    'content-type':'application/json'
+    }
+    if request.method == 'POST':
+        symptom = request.POST.get('cc_fa')
+        Data = {
+        'message':{
+            'content': f"{symptom}?",
+            'type':'USER'
+        },
+        }
+        message_url = f'{API_URL}/chat/session/{SESSION_CODE}/message'
+        response = requests.post(message_url, headers=Headers, data=json.dumps(Data))
+
+        if response.status_code == 200:
+            cct_ai_response = response.json().get('content')
+            return JsonResponse({'cct_ai_response': cct_ai_response})
+        else:
+            return JsonResponse({'error': 'API call failed'}, status=500)
+    return JsonResponse({'error': 'Invalid request'}, status=400)
