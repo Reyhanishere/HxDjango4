@@ -26,7 +26,7 @@ def verify_case(Case, request, queryset):
     queryset.update(verified=True)
 
 class CaseAdmin(admin.ModelAdmin):  # new
-    inlines = [FollowUpInline, CommentInline, CaseImageInline, LabGraphInline]
+    inlines = [CommentInline, CaseImageInline, LabGraphInline]
     list_display = ["title", "author", "date_created", "verified","visible"]
     actions = [verify_case,deverify_case]
 
