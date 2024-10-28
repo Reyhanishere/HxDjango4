@@ -1,3 +1,9 @@
+#cc_ai_btn_output_div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .aiBtn {
     border: none;
     margin: 0.5rem;
