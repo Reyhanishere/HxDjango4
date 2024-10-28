@@ -72,13 +72,14 @@
 {% comment %} {% endif %} {% endcomment %}
 
 {% if user.is_case_editor %}
-<script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
-<script src="{% static 'scripts/Hx_AI.js' %}"></script>
-<input type="hidden" id="csrf_token" value="{{ csrf_token }}">
-
-<script>
-    document.addEventListener("DOMContentLoaded", AddCCAI())
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+    <script src="{% static 'scripts/Hx_AI.js' %}"></script>
+    <input type="hidden" id="csrf_token" value="{{ csrf_token }}">
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", AddCCAI())
+    </script>
+{% endif %}
 
 {% endblock content %}
 
