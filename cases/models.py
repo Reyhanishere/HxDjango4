@@ -562,63 +562,10 @@ class LabGraphSelection(models.Model):
         else:
             return str(self.title) + " FREE by " + str(self.author)
 
-# class LabTestItem(models.Model):
-#     cat_choice = [
-#         ("Blood", "Blood"),
-#         ("Biochemistry", "Biochemistry"),
-#         ("U/A", "U/A"),
-#         ("Serologic", "Serologic"),
-#         ("Other", "Other"),
-#     ]
-#     flg_choice = [
-#         ("NL", "NL"),
-#         ("H", "H"),
-#         ("L", "L"),
-#         ("Positive", "Positive"),
-#         ("Negative", "Negative"),
-#         ("Other", "Other"),
-#     ]
-#     case = models.ForeignKey(Case, on_delete=models.CASCADE)
-#     day = models.SmallIntegerField(default=0, null=True, blank=True)
-#     item_abbr = models.CharField(
-#         "مخفف نام", help_text="eg: WBC", max_length=16, null=False, blank=False
-#     )
-#     item_full = models.CharField(
-#         "نام کامل",
-#         help_text="eg: White Blood Cell",
-#         max_length=50,
-#         null=True,
-#         blank=True,
-#     )
-#     category = models.CharField(
-#         "دسته",
-#         max_length=25,
-#         choices=cat_choice,
-#         default="Blood",
-#         null=False,
-#         blank=False,
-#     )
-#     value = models.CharField("مقدار", default="", max_length=8, null=False, blank=False)
-#     unit = models.CharField(
-#         "واحد", default="10^3/µL", max_length=16, null=False, blank=False
-#     )
-#     ref_rng = models.CharField(
-#         "بازۀ مرجع",
-#         default="",
-#         help_text="eg: 3.8 - 5.4",
-#         max_length=16,
-#         null=False,
-#         blank=False,
-#     )
-#     flag = models.CharField(
-#         "وضعیت",
-#         max_length=25,
-#         choices=flg_choice,
-#         default="Other",
-#         null=False,
-#         blank=False,
-#     )
-#     related_name = "lab"
-
-#     def __str__(self):
-#         return self.item_abbr[:32]
+class AIReqResLog(models.Model):
+    request_content=models.TextField(blank=False, null=False)
+    response_content=models.TextField(blank=False, null=False)
+    user=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.request_content[:20]}: {self.response_content[:20]} by {self.user.username}"
