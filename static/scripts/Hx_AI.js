@@ -67,7 +67,7 @@ function CCtoT() {
         })
         .catch(error => {
             document.getElementById('cc_terminology_input').style.color = '#444';
-            document.getElementById('cc_terminology_input').placeholder = "Connection Failed );";
+            document.getElementById('cc_terminology_input').placeholder = "Connection Failed /;";
             document.getElementById('cc_terminology_input').value = "";
 
         });
