@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import CustomUser
+from .models import *
 
 
 class CustomUserAdmin(UserAdmin):
@@ -12,12 +12,9 @@ class CustomUserAdmin(UserAdmin):
         "username",
         "first_name",
         "last_name",
-        "field",
         "degree",
         "university",
-        "is_article_author",
-        "is_article_editor",
-        "is_case_editor",
+        "hx_cc_ai_permission",
         "is_staff",
         
     ]
@@ -34,31 +31,21 @@ class CustomUserAdmin(UserAdmin):
                     "is_article_author",
                     "is_article_editor",
                     "is_case_editor",
+                    "about_me",
                     "en_name",
-                    "about_me",
+
+                    "hx_cc_ai_permission",
+                    "hx_cc_ai_use_count",
+
+                    "hx_pi_ai_permission",
+                    "hx_pi_ai_use_count",
                 )
             },
         ),
     )
-    add_fieldsets = UserAdmin.add_fieldsets + (
-        (
-            None,
-            {
-                "fields": (
-                    "field",
-                    "university",
-                    "degree",
-                    "fn_fa",
-                    "ln_fa",
-                    "is_article_author",
-                    "is_article_editor",
-                    "is_case_editor",
-                    "about_me",
-                )
-            },
-        ),
-    )
+
     list_display_links = ("username",)
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
+
