@@ -25,6 +25,7 @@ function AddCCAI() {
     textboxElement.placeholder = "Enter CC Terminology OR Press AI!";
     textboxElement.id = 'cc_terminology_input';
     textboxElement.dir = "ltr";
+    textboxElement.maxLength = '48'
     const ccAIBtnOutputDiv = document.createElement("div");
     ccAIBtnOutputDiv.id = "cc_ai_btn_output_div";
     ccAIBtnOutputDiv.appendChild(buttonElement)
@@ -54,21 +55,157 @@ function CCtoT() {
         })
         .then(response => response.json())
         .then(data => {
+            const cc_terminology_input = document.getElementById('cc_terminology_input')
             if (data.cct_ai_response) {
-                document.getElementById('cc_terminology_input').value = data.cct_ai_response;
-                document.getElementById('cc_terminology_input').placeholder = "Enter CC Terminology OR Press AI!"
-                document.getElementById('cc_terminology_input').style.color = '#444';
+                cc_terminology_input.value = data.cct_ai_response;
+                cc_terminology_input.placeholder = "Enter CC Terminology OR Press AI!"
+                cc_terminology_input.style.color = '#444';
             } else {
-                document.getElementById('cc_terminology_input').placeholder = "Error: " + data.error;
-                document.getElementById('cc_terminology_input').value = "";
+                cc_terminology_input.placeholder = "Error: " + data.error;
+                cc_terminology_input.value = "";
 
-                document.getElementById('cc_terminology_input').style.color = '#444';
+                cc_terminology_input.style.color = '#444';
             }
         })
         .catch(error => {
-            document.getElementById('cc_terminology_input').style.color = '#444';
-            document.getElementById('cc_terminology_input').placeholder = "Connection Failed /;";
-            document.getElementById('cc_terminology_input').value = "";
+            cc_terminology_input.style.color = '#444';
+            cc_terminology_input.placeholder = "Connection Failed /:";
+            cc_terminology_input.value = "";
 
         });
+}
+
+function CreatePullUp() {
+    const mainContent = document.getElementById("mainContent");
+    const floatingDiv = document.createElement("div");
+    floatingDiv.id = "floatingDiv";
+    floatingDiv.dir = "ltr"
+    const pullUpBar = document.createElement("div");
+    pullUpBar.id = "pullUpBar";
+    const pullText = document.createElement("p");
+    pullText.id = "pullText";
+    pullText.textContent = "Click For AI";
+    const aiResponse = document.createElement("div");
+    aiResponse.id = "aiResponse";
+    const aiDescription = document.createElement("div");
+    aiDescription.id = "aiDescription";
+    aiDescription.innerHTML = "You're chat hisory won't be stored!<br/>Powered by: OpenAI, Metis, Medepartout";
+    aiResponse.appendChild(aiDescription);
+
+    pullUpBar.appendChild(pullText);
+    floatingDiv.appendChild(pullUpBar);
+    floatingDiv.appendChild(aiResponse);
+    mainContent.parentNode.appendChild(floatingDiv);
+    let isExpanded = false;
+
+
+    pullUpBar.addEventListener("click", () => {
+        const edel = document.getElementById("edel");
+        isExpanded = !isExpanded;
+        floatingDiv.style.transform = isExpanded ? "translateY(-50vh)" : "translateY(-80px)";
+        pullText.textContent = isExpanded ? "Click to minimize" : "Click for AI";
+        if (isExpanded === True) {
+            edel.style.display = "none";
+        } else {
+            edel.style.display = "block";
+
+        }
+
+    });
+};
+
+const floatingDiv = document.getElementById("floatingDiv");
+const pullUpBar = document.getElementById("pullUpBar");
+const pullText = document.getElementById("pullText");
+
+let isExpanded = false;
+
+pullUpBar.addEventListener("click", () => {
+    isExpanded = !isExpanded;
+    floatingDiv.style.transform = isExpanded ? "translateY(-50vh)" : "translateY(-80px)";
+    pullText.textContent = isExpanded ? "Click to minimize" : "Click for AI";
+});
+
+function bounce() {
+    const floatingDiv = document.getElementById("floatingDiv");
+    floatingDiv.style.transform = "translateY(-90px)";
+    setTimeout(() => {
+        floatingDiv.style.transform = "translateY(-75px)";
+    }, 700);
+}
+
+function PIQueAI() {
+    const cc = document.getElementById('cc_terminology_input').value;
+    const aiResponse = document.getElementById("aiResponse");
+    const aiReqMsg = document.createElement("div");
+    aiReqMsg.className = 'aiMsg aiReqMsg';
+    const aiReqMsgP = document.createElement("p");
+    aiReqMsgP.textContent = "What can I ask for a patient with " + cc + "?";
+    aiReqMsg.style.opacity = 0;
+    aiReqMsg.appendChild(aiReqMsgP);
+    aiResponse.appendChild(aiReqMsg);
+    aiReqMsg.style.opacity = 1;
+    bounce();
+    const formData = new FormData();
+    formData.append('cc_term', cc);
+
+    // Get CSRF token from hidden input
+    const csrfToken = document.getElementById('csrf_token').value;
+
+    fetch('pi_que_ai/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': csrfToken,
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+
+
+            if (data.piq_ai_response) {
+                const mdpi = window.markdownit();
+
+                const htmlContent = mdpi.render(data.piq_ai_response);
+                const aiRespMsg = document.createElement("div");
+                aiRespMsg.className = 'aiMsg aiRespMsg';
+                const aiRespMsgP = document.createElement("p");
+                aiRespMsgP.innerHTML = htmlContent;
+                aiRespMsg.style.opacity = 0;
+                aiRespMsg.appendChild(aiRespMsgP);
+                aiResponse.appendChild(aiRespMsg);
+                aiRespMsg.style.opacity = 1;
+
+            } else {
+
+                const aiErrorMsg = document.createElement("div");
+                aiErrorMsg.className = 'aiErrorMsg';
+                const aiErrorMsgP = document.createElement("p");
+                aiErrorMsgP.textContent = "Error: " + data.error;
+                aiErrorMsg.style.opacity = 0;
+
+                aiErrorMsg.appendChild(aiErrorMsgP);
+                aiResponse.appendChild(aiErrorMsg);
+                aiErrorMsg.style.opacity = 1;
+
+            }
+        })
+        .catch(error => {
+            const aiErrorMsg = document.createElement("div");
+            aiErrorMsg.className = 'aiErrorMsg';
+            const aiErrorMsgP = document.createElement("p");
+            aiErrorMsgP.textContent = "Error: Connection Failed /:";
+            aiErrorMsg.style.opacity = 0;
+            aiErrorMsg.appendChild(aiErrorMsgP);
+            aiResponse.appendChild(aiErrorMsg);
+            aiErrorMsg.style.opacity = 1;
+        });
+}
+
+
+function AddPIAI() {
+    const pi_div = document.getElementById("div_id_pi");
+    const labelElementPI = pi_div.querySelector('label');
+    labelElementPI.insertAdjacentHTML('afterend', `
+        <span class="helper-toggle-button" onclick="PIQueAI()">کمکم کن! (AI)</span>`)
 }
