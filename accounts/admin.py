@@ -31,6 +31,7 @@ class CustomUserAdmin(UserAdmin):
         "degree",
         "university",
         "hx_cc_ai_permission",
+        "hx_pi_ai_permission",
         "is_staff",
         
     ]
