@@ -11,11 +11,19 @@ def permit_CC_AI(CustomUser, request, queryset):
 def forbid_CC_AI(CustomUser, request, queryset):
     queryset.update(hx_cc_ai_permission=False)
 
+@admin.action(description="Permit to Use PI AI")
+def permit_PI_AI(CustomUser, request, queryset):
+    queryset.update(hx_pi_ai_permission=True)
+
+@admin.action(description="Forbid to Use PI AI")
+def forbid_PI_AI(CustomUser, request, queryset):
+    queryset.update(hx_pi_ai_permission=False)
+
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
-    actions=[permit_CC_AI, forbid_CC_AI]
+    actions=[permit_CC_AI, permit_PI_AI, forbid_CC_AI, forbid_PI_AI]
     list_display = [
         "username",
         "first_name",
