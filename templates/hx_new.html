@@ -2,42 +2,47 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block title %}| New Hx{%endblock title%}
-{% block content %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
-<link rel="stylesheet" href="{% static 'css/style_HxHelper.css' %}">
-<link rel="stylesheet" href="{% static 'css/style_hx_ai.css' %}">
 
-<style>
-    #smaller-grid{
-        padding: 1rem 0.5rem;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 0.125rem
-    }
-
-    @media (max-width: 600px) {
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style_HxHelper.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style_hx_ai.css' %}">
+    <style>
         #smaller-grid{
             padding: 1rem 0.5rem;
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 0.125rem
         }
-        .createForm {
-            display: flex;
-            gap: 5px;
-            flex-direction: column;
+    
+        @media (max-width: 600px) {
+            #smaller-grid{
+                padding: 1rem 0.5rem;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.125rem
+            }
+            .createForm {
+                display: flex;
+                gap: 5px;
+                flex-direction: column;
+            }
         }
-    }
+        #edel{
+            bottom: auto;
+            top:60px; 
+            z-index: 2;
+            display: block;
+            opacity: 0.3;
+        }
+    
+    </style>
+{% endblock imports %}
 
-    #input-id{
-        margin: 2rem 0;
-        border-radius: 1em; 
-        padding:1rem; 
-        background-color: #efefef;
-    }
-</style>
+{% block content %}
+<button onclick='addsomechat()' style="width: 2rem; height: 4rem;">Hi</button>
 
-<div class="pad-15">
+<div class="pad-15" id="mainContent">
 <h1>کیس جدید</h1>
 
 <form action="" method="post">{% csrf_token %}
@@ -50,11 +55,8 @@
             راهنمای افزودن تصاویر و آزمایش‌ها
         </summary>
         پس از ثبت مطلب خود، در صفحۀ مربوط به آن می‌توانید روی دکمه‌های  <span dir="ltr" class="btnLikeSummary">+ Images</span> و <span dir="ltr" class="btnLikeSummary">+ Lab Data</span> کلیک کنید.
-
     </details>
-
 </form>
-
 </div>
 
 <script src="{% static '/scripts/Hx_Helper.js'%}"></script>
@@ -70,20 +72,29 @@
     });
 </script>
 {% comment %} {% endif %} {% endcomment %}
+<input type="hidden" id="csrf_token" value="{{ csrf_token }}">
 
 {% if user.hx_cc_ai_permission %}
-    <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
-    <script src="{% static 'scripts/Hx_AI.js' %}"></script>
-    <input type="hidden" id="csrf_token" value="{{ csrf_token }}">
-    
-    <script>
-        document.addEventListener("DOMContentLoaded", AddCCAI())
-    </script>
+<script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+<script src="{% static 'scripts/Hx_AI.js' %}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", AddCCAI());
+</script>
+{% endif %}
+
+{% if user.hx_pi_ai_permission %}
+<script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", AddPIAI());
+    document.addEventListener("DOMContentLoaded", CreatePullUp());
+</script>
 {% endif %}
 
 {% endblock content %}
 
 {% block edel %}
-    <a href="{% url 'doc_detail' 2%}" class="btn btn-warning" style="width: 75px;" target="_blank">آموزش</a>
+    <a href="{% url 'doc_detail' 2%}" class="btn btn-warning" style="width: 75px;">آموزش</a>
     <button dir="ltr" class="btn btn-success" type="submit" onclick="document.getElementById('save').click()" style="margin: 0 5px; width: 75px;">ثبت</button>
 {% endblock edel%}
