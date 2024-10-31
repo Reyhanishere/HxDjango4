@@ -563,9 +563,25 @@ class LabGraphSelection(models.Model):
             return str(self.title) + " FREE by " + str(self.author)
 
 class AIReqResLog(models.Model):
+    AI_MODELS=[        
+        ("CC", "CC" ),
+        ("PI", "PI" ),
+        ("ROS", "ROS" ),
+        ("PhE", "PhE" ),
+        ("Sum", "Sum" ),
+        ("DDx", "DDx" ),
+        ("Act", "Act" ),
+        ]
     request_content=models.TextField(blank=False, null=False)
     response_content=models.TextField(blank=False, null=False)
     user=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    ai_model = models.CharField(
+        max_length=10,
+        choices=AI_MODELS,
+        null=True,
+        blank=True,
+    )
+    
     def __str__(self):
-        return f"{self.request_content[:20]}: {self.response_content[:20]} by {self.user.username}"
+        return f"{self.ai_model}: {self.request_content[:20]} | {self.response_content[:20]} by {self.user.username}"
