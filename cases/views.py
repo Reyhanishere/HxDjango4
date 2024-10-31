@@ -487,7 +487,8 @@ def cc_tot_ai(request):
                 new_log = AIReqResLog(
                     user=request.user,
                     request_content=Data["message"]['content'],
-                    response_content=cct_ai_response
+                    ai_model="CC",
+                    response_content=cct_ai_response,
                 )
                 new_log.save()
 
@@ -498,6 +499,7 @@ def cc_tot_ai(request):
         return JsonResponse({'error': f'You have exceeded use limit.({use_limit})'}, status=400)
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
 
 def pi_que_ai(request):
     API_URL='https://api.metisai.ir/api/v1'
@@ -528,9 +530,9 @@ def pi_que_ai(request):
                 request.user.save()
                 new_log = AIReqResLog(
                     user=request.user,
-                    request_content='PI'+Data["message"]['content'], #CC
+                    request_content=Data["message"]['content'],
+                    ai_model="PI",
                     response_content=piq_ai_response,
-                    # model_name='cc'
                 )
                 new_log.save()
 
