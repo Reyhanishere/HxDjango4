@@ -117,8 +117,8 @@ function CreatePullUp() {
 
 function bounce() {
     const pullText = document.getElementById("pullText");
+    const floatingDiv = document.getElementById("floatingDiv");
     if (pullText.textContent === "Click to open") {
-        const floatingDiv = document.getElementById("floatingDiv");
         floatingDiv.style.transform = "translateY(-90px)";
         setTimeout(() => {
             floatingDiv.style.transform = "translateY(-75px)";
@@ -129,6 +129,8 @@ function bounce() {
 function PIQueAI() {
     const cc = document.getElementById('cc_terminology_input').value;
     const aiResponse = document.getElementById("aiResponse");
+
+    // Create the request message element
     const aiReqMsg = document.createElement("div");
     aiReqMsg.className = 'aiMsg aiReqMsg';
     const aiReqMsgP = document.createElement("p");
@@ -138,6 +140,16 @@ function PIQueAI() {
     aiResponse.appendChild(aiReqMsg);
     aiReqMsg.style.opacity = 1;
     bounce();
+
+    const loadingIndicator = document.createElement("div");
+    loadingIndicator.className = "spinnerCont";
+    loadingIndicator.innerHTML = `
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    `;
+    loadingIndicator.style.display = "flex";
+    aiResponse.appendChild(loadingIndicator);
+
     const formData = new FormData();
     formData.append('cc_term', cc);
 
@@ -153,12 +165,12 @@ function PIQueAI() {
         })
         .then(response => response.json())
         .then(data => {
-
+            loadingIndicator.style.display = "none";
 
             if (data.piq_ai_response) {
                 const mdpi = window.markdownit();
-
                 const htmlContent = mdpi.render(data.piq_ai_response);
+
                 const aiRespMsg = document.createElement("div");
                 aiRespMsg.className = 'aiMsg aiRespMsg';
                 const aiRespMsgP = document.createElement("p");
@@ -167,9 +179,7 @@ function PIQueAI() {
                 aiRespMsg.appendChild(aiRespMsgP);
                 aiResponse.appendChild(aiRespMsg);
                 aiRespMsg.style.opacity = 1;
-
             } else {
-
                 const aiErrorMsg = document.createElement("div");
                 aiErrorMsg.className = 'aiErrorMsg';
                 const aiErrorMsgP = document.createElement("p");
@@ -179,10 +189,11 @@ function PIQueAI() {
                 aiErrorMsg.appendChild(aiErrorMsgP);
                 aiResponse.appendChild(aiErrorMsg);
                 aiErrorMsg.style.opacity = 1;
-
             }
         })
         .catch(error => {
+            loadingIndicator.style.display = "none";
+
             const aiErrorMsg = document.createElement("div");
             aiErrorMsg.className = 'aiErrorMsg';
             const aiErrorMsgP = document.createElement("p");
@@ -192,8 +203,10 @@ function PIQueAI() {
             aiResponse.appendChild(aiErrorMsg);
             aiErrorMsg.style.opacity = 1;
         });
-    document.getElementById("pullText").textContent = "Show AI Response!"
+
+    document.getElementById("pullText").textContent = "Show AI Response!";
 }
+
 
 
 function AddPIAI() {
