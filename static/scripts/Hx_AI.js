@@ -89,7 +89,7 @@ function CreatePullUp() {
     aiResponse.id = "aiResponse";
     const aiDescription = document.createElement("div");
     aiDescription.id = "aiDescription";
-    aiDescription.innerHTML = "You're chat hisory won't be stored!<br/>Powered by: OpenAI, Metis, Medepartout";
+    aiDescription.innerHTML = "Your chat history won't be stored!<br/>Powered by: OpenAI, Metis, Medepartout";
     aiResponse.appendChild(aiDescription);
 
     pullUpBar.appendChild(pullText);
@@ -102,36 +102,28 @@ function CreatePullUp() {
     pullUpBar.addEventListener("click", () => {
         const edel = document.getElementById("edel");
         isExpanded = !isExpanded;
+        // floatingDiv.classList.toggle("open");
         floatingDiv.style.transform = isExpanded ? "translateY(-50vh)" : "translateY(-80px)";
-        pullText.textContent = isExpanded ? "Click to minimize" : "Click for AI";
+        pullText.textContent = isExpanded ? "Click to minimize" : "Click to open";
         if (isExpanded === True) {
             edel.style.display = "none";
         } else {
             edel.style.display = "block";
 
         }
-
     });
 };
 
-const floatingDiv = document.getElementById("floatingDiv");
-const pullUpBar = document.getElementById("pullUpBar");
-const pullText = document.getElementById("pullText");
-
-let isExpanded = false;
-
-pullUpBar.addEventListener("click", () => {
-    isExpanded = !isExpanded;
-    floatingDiv.style.transform = isExpanded ? "translateY(-50vh)" : "translateY(-80px)";
-    pullText.textContent = isExpanded ? "Click to minimize" : "Click for AI";
-});
 
 function bounce() {
-    const floatingDiv = document.getElementById("floatingDiv");
-    floatingDiv.style.transform = "translateY(-90px)";
-    setTimeout(() => {
-        floatingDiv.style.transform = "translateY(-75px)";
-    }, 700);
+    const pullText = document.getElementById("pullText");
+    if (pullText.textContent === "Click to open") {
+        const floatingDiv = document.getElementById("floatingDiv");
+        floatingDiv.style.transform = "translateY(-90px)";
+        setTimeout(() => {
+            floatingDiv.style.transform = "translateY(-75px)";
+        }, 700);
+    };
 }
 
 function PIQueAI() {
@@ -200,6 +192,7 @@ function PIQueAI() {
             aiResponse.appendChild(aiErrorMsg);
             aiErrorMsg.style.opacity = 1;
         });
+    document.getElementById("pullText").textContent = "Show AI Response!"
 }
 
 
