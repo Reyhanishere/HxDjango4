@@ -80,12 +80,13 @@
     padding: 7px 15px;
     box-sizing: border-box;
     border: 1px solid #ddd;
-    border-radius: 20px;
+    border-radius: 25px;
     background-color: #eee;
     color: #444;
     font-weight: 600;
     opacity: 1;
     transition: 1s;
+    line-height: 0.5rem;
 }
 
 .ai_p {
@@ -132,11 +133,12 @@
     padding: 15px;
     color: #373533;
     background-color: #fffbed;
-    min-height: 43vh;
+    /* min-height: 43vh; */
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #d2c8a2 #fffbed;
     z-index: 3;
+    height: 43vh;
     /* overflow-y: auto; */
 }
 
@@ -148,7 +150,7 @@
 }
 
 .aiReqMsg {
-    margin: 0.7rem 2rem 0.7rem 3rem;
+    margin: 0.7rem 4rem 0.7rem 0.5rem;
     border: 1px solid rgb(0, 121, 255);
     color: rgb(0, 42, 88);
     /* color: rgb(0, 121, 255); */
@@ -156,7 +158,7 @@
 }
 
 .aiRespMsg {
-    margin: 0.7rem 4rem 0.7rem 0.5rem;
+    margin: 0.7rem 2rem 0.7rem 3rem;
     border: 1px solid rgb(0, 223, 162);
     color: rgb(0, 88, 42);
     /* color: rgb(0, 121, 255); */
