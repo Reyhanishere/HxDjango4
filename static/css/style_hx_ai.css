@@ -150,7 +150,7 @@
 }
 
 .aiReqMsg {
-    margin: 0.7rem 4rem 0.7rem 0.5rem;
+    margin: 0.7rem 3rem 0.7rem 0.5rem;
     border: 1px solid rgb(0, 121, 255);
     color: rgb(0, 42, 88);
     /* color: rgb(0, 121, 255); */
@@ -158,7 +158,7 @@
 }
 
 .aiRespMsg {
-    margin: 0.7rem 2rem 0.7rem 3rem;
+    margin: 0.7rem 0.5rem 0.7rem 3rem;
     border: 1px solid rgb(0, 223, 162);
     color: rgb(0, 88, 42);
     /* color: rgb(0, 121, 255); */
@@ -172,7 +172,7 @@
 }
 
 .aiMsg {
-    line-height: 1.5rem;
+    line-height: 1.65rem;
     border-radius: 25px;
     font-size: 16px;
     font-weight: 400;
@@ -203,4 +203,49 @@
     text-align: center;
     font-size: 12px;
     margin-bottom: 20px;
+}
+
+
+/* Less margins for smartphones view: */
+
+@media (max-width: 500px) {
+    .aiRespMsg {
+        margin: 0.7rem 0rem;
+    }
+    .aiReqMsg {
+        margin: 0.7rem 0rem
+    }
+}
+
+
+/* Let's add some animation while loading thanks to chat-gpt*/
+
+.spinnerCont {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(139, 139, 139);
+    font-weight: bold;
+    text-align: center;
+    padding: 20px;
+    flex-direction: column;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    color: rgb(60, 60, 60);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
