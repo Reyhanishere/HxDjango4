@@ -9,6 +9,7 @@ urlpatterns = [
 
     path('hx/cc_tot_ai/', cc_tot_ai, name='cc_tot_ai'),
     path('hx/pi_que_ai/', pi_que_ai, name='pi_que_ai'),
+    path('hx/ros_ai/', ros_ai, name='ros_ai'),
     
     path("picasso/", PicassoListView.as_view(), name="picasso_list"),
     path("picasso/<slug:slug>/", PicassoDetailView.as_view(), name="picasso_detail"),
