@@ -93,6 +93,12 @@
 </script>
 {% endif %}
 
+{% if user.hx_ros_ai_permission %}
+<script>
+    document.addEventListener("DOMContentLoaded", AddROSAI());
+</script>
+{% endif %}
+
 {% endblock content %}
 
 {% block edel %}
