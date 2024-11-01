@@ -543,3 +543,77 @@ def pi_que_ai(request):
         return JsonResponse({'error': f'You have exceeded use limit.({use_limit})'}, status=400)
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+def ros_ai(request):
+    API_URL='https://api.metisai.ir/api/v1'
+    SESSION_CODE= 'c67fd155-0221-45ef-8e7d-a6e64711cfe1'
+    Headers={
+    'Authorization':settings.AI_API_KEY,
+    'content-type':'application/json'
+    }
+    use_limit=60
+    if request.user.is_authenticated and request.user.hx_ros_ai_permission and request.user.hx_ros_ai_use_count<use_limit: ###
+        if request.method == 'POST':
+            cc = request.POST.get('cc')
+            pi = request.POST.get('pi')
+            if request.POST.get('pmh'):
+                pmh = request.POST.get('pmh')
+            else:
+                pmh='None'
+
+            if request.POST.get('dh'):
+                dh = request.POST.get('dh')
+            else:
+                dh='None'
+
+            if request.POST.get('fh'):
+                fh = request.POST.get('fh')
+            else:
+                fh='None'            
+            if request.POST.get('sh'):
+                sh = request.POST.get('sh')
+            else:
+                sh='None'            
+            
+            if request.POST.get('ah'):
+                ah = request.POST.get('ah')
+            else:
+                ah='None'
+
+            content=f"CC: {cc}\nPI:\n{pi}\n\nPMH:\n{pmh}\n\nDH:\n{dh}\n\nFH:\n{fh}\n\nSH:\n{sh}\n\nAH:\n{ah}"
+
+            if len(cc)<4:
+                return JsonResponse({'error': 'Enter Proper Chief Complaint First!'}, status=400)
+
+            elif len(pi.split())<10:
+                return JsonResponse({'error': 'Enter Proper Present Illness (PI)!'}, status=400)
+
+            else:
+                Data = {
+                'message':{
+                    'content': content,
+                    'type':'USER'
+                    },
+                }
+                message_url = f'{API_URL}/chat/session/{SESSION_CODE}/message'
+                response = requests.post(message_url, headers=Headers, data=json.dumps(Data))
+
+            if response.status_code == 200:
+                ros_ai_response = response.json().get('content')
+                request.user.hx_ros_ai_use_count+=1
+                request.user.save()
+                new_log = AIReqResLog(
+                    user=request.user,
+                    request_content=Data["message"]['content'],
+                    ai_model="ROS",
+                    response_content=ros_ai_response,
+                )
+                new_log.save()
+
+                return JsonResponse({'ros_ai_response': ros_ai_response})
+            else:
+                return JsonResponse({'error': 'API call failed'}, status=500)
+    elif request.user.is_authenticated and request.user.hx_ros_ai_permission and request.user.hx_ros_ai_use_count>use_limit:
+        return JsonResponse({'error': f'You have exceeded use limit.({use_limit})'}, status=400)
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)
