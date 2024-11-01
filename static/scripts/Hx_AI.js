@@ -230,7 +230,10 @@ function AddROSAI() {
     const ros_div = document.getElementById("div_id_ros");
     const labelElementROS = ros_div.querySelector('label');
     labelElementROS.insertAdjacentHTML('afterend', `
-        <span class="helper-toggle-button" onclick="ROSAI()" id="ROSAIHelp">کمکم کن! (AI)</span>`)
+        <span class="helper-toggle-button" onclick="ROSAI()" id="ROSAIHelp">کمکم کن! (AI)</span>`);
+    ros_div.style.display = "grid";
+    ros_div.style.justifyItems = "start";
+    ros_div.style.lineHeight = "2";
 }
 
 function ROSAI() {
