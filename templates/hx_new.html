@@ -63,7 +63,6 @@
 <script src="{% static '/scripts/Hx_Helper.js'%}"></script>
 <script src="{% static '/scripts/Hx_Divs_Move.js'%}"></script>
 
-{% comment %} {% if user.is_case_editor %} {% endcomment %}
 <script>
     document.addEventListener("DOMContentLoaded", AddROSSection())
     document.addEventListener("DOMContentLoaded", AddPhESection())
@@ -72,7 +71,7 @@
         moveElementsToNewDiv(movingDivsIds);
     });
 </script>
-{% comment %} {% endif %} {% endcomment %}
+
 <input type="hidden" id="csrf_token" value="{{ csrf_token }}">
 
 {% if user.hx_cc_ai_permission %}
