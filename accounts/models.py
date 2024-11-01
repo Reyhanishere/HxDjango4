@@ -109,3 +109,15 @@ class CustomUser(AbstractUser):
 
     hx_pi_ai_permission=models.BooleanField(default=False)
     hx_pi_ai_use_count=models.PositiveIntegerField(default=0)
+    
+    hx_ros_ai_permission=models.BooleanField(default=False)
+    hx_ros_ai_use_count=models.PositiveIntegerField(default=0)
+
+    hx_phe_ai_permission=models.BooleanField(default=False)
+    hx_phe_ai_use_count=models.PositiveIntegerField(default=0)
+
+    hx_sum_ai_permission=models.BooleanField(default=False)
+    hx_sum_ai_use_count=models.PositiveIntegerField(default=0)
+    
+    hx_ddx_ai_permission=models.BooleanField(default=False)
+    hx_ddx_ai_use_count=models.PositiveIntegerField(default=0)
