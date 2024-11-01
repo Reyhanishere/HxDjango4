@@ -43,7 +43,6 @@ function CCtoT() {
     const formData = new FormData();
     formData.append('cc_fa', cc);
 
-    // Get CSRF token from hidden input
     const csrfToken = document.getElementById('csrf_token').value;
 
     fetch('cc_tot_ai/', {
@@ -153,7 +152,6 @@ function PIQueAI() {
     const formData = new FormData();
     formData.append('cc_term', cc);
 
-    // Get CSRF token from hidden input
     const csrfToken = document.getElementById('csrf_token').value;
 
     fetch('pi_que_ai/', {
@@ -214,4 +212,122 @@ function AddPIAI() {
     const labelElementPI = pi_div.querySelector('label');
     labelElementPI.insertAdjacentHTML('afterend', `
         <span class="helper-toggle-button" onclick="PIQueAI()">کمکم کن! (AI)</span>`)
+}
+
+function createROSAITab(buttonData) {
+    const rostab = document.getElementById('ROSTab');
+
+    for (const [key, value] of Object.entries(buttonData)) {
+        const button = document.createElement('span');
+        button.className = 'tablinks';
+        button.innerHTML = value;
+        button.setAttribute('onclick', `openROS(event, '${key}')`);
+        rostab.appendChild(button);
+    }
+}
+
+function AddROSAI() {
+    const ros_div = document.getElementById("div_id_ros");
+    const labelElementROS = ros_div.querySelector('label');
+    labelElementROS.insertAdjacentHTML('afterend', `
+        <span class="helper-toggle-button" onclick="ROSAI()" id="ROSAIHelp">کمکم کن! (AI)</span>`)
+}
+
+function ROSAI() {
+    const cc = document.getElementById('cc_terminology_input').value;
+    const pi = document.getElementById('id_pi').value;
+    const pmh = document.getElementById('id_pmh').value;
+    const dh = document.getElementById('id_drg').value;
+    const fh = document.getElementById('id_fh').value;
+    const sh = document.getElementById('id_sh').value;
+    const ah = document.getElementById('id_alg').value;
+
+    const aiResponse = document.getElementById("aiResponse");
+
+    const aiReqMsg = document.createElement("div");
+    aiReqMsg.className = 'aiMsg aiReqMsg';
+    const aiReqMsgP = document.createElement("p");
+    aiReqMsgP.textContent = "What are important questions I can ask in Review of Systems according to the Hx I've written till now?";
+    // aiReqMsg.style.opacity = 0;
+    aiReqMsg.appendChild(aiReqMsgP);
+    aiResponse.appendChild(aiReqMsg);
+
+    const loadingIndicator = document.createElement("div");
+    loadingIndicator.className = "spinnerCont";
+    loadingIndicator.innerHTML = `
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    `;
+    loadingIndicator.style.display = "flex";
+    aiResponse.appendChild(loadingIndicator);
+
+    const formData = new FormData();
+    formData.append('cc', cc);
+    formData.append('pi', pi);
+    formData.append('pmh', pmh);
+    formData.append('dh', dh);
+    formData.append('fh', fh);
+    formData.append('sh', sh);
+    formData.append('ah', ah);
+
+
+    const csrfToken = document.getElementById('csrf_token').value;
+
+    fetch('ros_ai/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': csrfToken,
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadingIndicator.style.display = "none";
+
+            if (data.ros_ai_response) {
+                const responseAI = data.ros_ai_response;
+                const aiRespMsg = document.createElement("div");
+                aiRespMsg.className = 'aiMsg aiRespMsg';
+                const aiRespMsgP = document.createElement("p");
+                aiRespMsgP.textContent = "Check AI Tab in Review of Systems Helper!";
+                aiRespMsg.style.opacity = 0;
+                aiRespMsg.appendChild(aiRespMsgP);
+                aiResponse.appendChild(aiRespMsg);
+                aiRespMsg.style.opacity = 1;
+                var rosList = responseAI.split('  ');
+                const AIBtnData = { "AI": "&#129302; AI &#129504;", }
+                createROSAITab(AIBtnData);
+                createTabs({ "AI": rosList });
+                // const ROSAIHelp = document.getElementById("ROSAIHelp");
+                // ROSAIHelp.removeAttribute('onclick');
+                // setTimeout(() => {
+                //     ROSAIHelp.onclick = "ROSAI()";
+                // }, 10000);
+
+            } else {
+                const aiErrorMsg = document.createElement("div");
+                aiErrorMsg.className = 'aiErrorMsg';
+                const aiErrorMsgP = document.createElement("p");
+                aiErrorMsgP.textContent = "Error: " + data.error;
+                aiErrorMsg.style.opacity = 0;
+
+                aiErrorMsg.appendChild(aiErrorMsgP);
+                aiResponse.appendChild(aiErrorMsg);
+                aiErrorMsg.style.opacity = 1;
+            }
+        })
+        .catch(error => {
+            loadingIndicator.style.display = "none";
+
+            const aiErrorMsg = document.createElement("div");
+            aiErrorMsg.className = 'aiErrorMsg';
+            const aiErrorMsgP = document.createElement("p");
+            aiErrorMsgP.textContent = "Error: Connection Failed /:";
+            aiErrorMsg.style.opacity = 0;
+            aiErrorMsg.appendChild(aiErrorMsgP);
+            aiResponse.appendChild(aiErrorMsg);
+            aiErrorMsg.style.opacity = 1;
+        });
+
+    document.getElementById("pullText").textContent = "Show AI Response!";
 }
