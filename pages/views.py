@@ -13,3 +13,6 @@ class TermsPageView(TemplateView):
 
 class GraphsPageView(TemplateView):
     template_name = "pages/graph.html"
+
+class PremiumPageView(TemplateView):
+    template_name = "pages/premium_page.html"
