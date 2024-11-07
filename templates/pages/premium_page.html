@@ -1,0 +1,110 @@
+<html lang="en">
+  {% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>medepartout | Premium</title>
+  <link rel="icon" href="./images/icon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icon/apple-touch-icon.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icon/favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icon/favicon-16x16.png' %}">
+  <link rel="manifest" href="/site.webmanifest">
+
+<style type="text/tailwindcss">
+   @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap');
+   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+   
+   @tailwind base;
+   @tailwind components;
+   @tailwind utilities;
+   
+   .card{
+     @apply rounded bg-white border-gray-200 shadow-md relative;
+   }
+
+   .btn{
+     @apply rounded-full  uppercase font-bold tracking-wider cursor-pointer;
+   }
+ 
+   </style>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+    extend: {
+
+      backgroundImage: theme => ({
+        'gradient-to-r': 'linear-gradient(to right, var(--tw-gradient-stops))',
+      }),
+      gradientColorStops: theme => ({
+        'MedepartoutNavy': '#1F132B',
+        'MedepartoutPeach':'#FFAA80',
+      }),
+
+      colors: {
+        MedepartoutNavy: '#1F132B',
+        MedepartoutPeach:' #FFAA80',
+        MedepartoutReyhan: '#F8F4EA',
+        primary: '#FF6363',
+        secondary: {
+          100: '#E2E2D5',
+          200: '#888883',
+        }
+      },
+      fontFamily: {
+        body: ['Nunito'],
+        farsi: ['Noto Sans Arabic', 'sans-serif']
+      },
+    },
+  },
+  }
+</script>
+</head>
+
+
+<body class= " text-gray-600 font-body ">
+
+    <main class=" px-16 py-6 bg-MedepartoutReyhan min-h-screen ">
+
+
+
+      <div class="uppercase text-sm font-bold tracking-wider cursor-pointer px-1 py-3 mb-2  bg-MedepartoutReyhan text-secondary-200 inline-block hover:shadow-inner hover:bg-secondary-100 transform  hover:bg-opacity-50 transition ease-out duration-300"><a href="{% url 'cases_main' %}">&#8592; Back to HX page</a></div>
+      </div>
+
+      <div class="mt-10 mx-auto ">
+        <h2 class="text-gray-700 text-4xl font-semibold leading-none tracking-wider text-center">Upgrade to Premium</h2>
+        <h3 class="text-xl font-semibold tracking-wider mt-4 text-center">Unlock all features and enjoy<span class="bg-clip-text text-transparent bg-gradient-to-r from-MedepartoutPeach via-secondary to-MedepartoutNavy"> unlimited </span>access</h3>
+      </div>
+
+
+      <!-- upgrade card -->
+      <div class="mx-auto my-10 dark:bg-gray-800 bg-white rounded-2xl md:w-2/5 shadow-md relative  hover:shadow-lg border-solid">
+        <!-- <div class="mt-8 flex justify-center"> -->
+        <div class="p-8">
+          <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200">Premium Plan</h2>
+          <div class="mt-4">
+            <span class="text-4xl font-bold text-slate-800 dark:text-slate-200">Free</span>
+            <span class="text-slate-600 dark:text-slate-400 ml-2">during beta</span>
+          </div>
+          
+          <ul class="mt-8 space-y-4">
+            <li class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check h-5 w-5 text-emerald-500"><path d="M20 6 9 17l-5-5"></path></svg><span class="text-slate-600 dark:text-slate-400">When you cried, I'd wipe away all of your tears</span></li>
+            <li class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check h-5 w-5 text-emerald-500"><path d="M20 6 9 17l-5-5"></path></svg><span class="text-slate-600 dark:text-slate-400">When you'd scream, I'd fight away all of your fears</span></li>
+            <li class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check h-5 w-5 text-emerald-500"><path d="M20 6 9 17l-5-5"></path></svg><span class="text-slate-600 dark:text-slate-400">And I held your hand through all of these years</span></li>
+            <li class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check h-5 w-5 text-emerald-500"><path d="M20 6 9 17l-5-5"></path></svg><span class="text-slate-600 dark:text-slate-400">But you still have all of me</span></li>
+            <li class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check h-5 w-5 text-emerald-500"><path d="M20 6 9 17l-5-5"></path></svg><span class="text-slate-600 dark:text-slate-400">Dark Mode Support</span></li>
+          </ul>
+          
+          <!-- <div class="btn text-lg px-8 py-3 mb-2  bg-secondary-100 text-secondary-200 inline-block hover:shadow-inner transform hover:scale-125 hover:bg-opacity-50 transition ease-out duration-300"><a href="https://medepartout.ir/accounts/signup/">Sign UP</a>
+          </div>  -->
+          <!-- The button should be replaced by the above div after Premium Plan is created. -->
+          <button class="bg-secondary-100 text-secondary-200 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 dark:ring-offset-gray-950 dark:focus-visible:ring-gray-300 bg-gray-900 hover:bg-gray-900/90 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 h-11 rounded-md px-8 w-full mt-8 bg-gradient-to-r from-emerald-500 to-teal-500 text-white opacity-50 cursor-not-allowed" disabled="">Coming Soon</button>
+        </div>
+      </div>
+
+   
+      
+</main>
+</body>
+</html>
