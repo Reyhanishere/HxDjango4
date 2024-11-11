@@ -38,11 +38,16 @@
         #mainContent{
             margin-bottom:2rem;
         }
+        .spinnerLogo{
+            background-image: url({% static 'images\Logo Prime.svg' %});
+        }
     
     </style>
 {% endblock imports %}
 
 {% block content %}
+{% comment %} <button dir="ltr" class="btn btn-success" type="submit" id="" style="height: 50px; margin-top: 2rem;" onclick="ROSAI()" >Create</button> {% endcomment %}
+
 <div class="pad-15" id="mainContent">
 <h1>کیس جدید</h1>
 
@@ -97,6 +102,13 @@
     document.addEventListener("DOMContentLoaded", AddROSAI());
 </script>
 {% endif %}
+
+{% if user.hx_phe_ai_permission %}
+<script>
+    document.addEventListener("DOMContentLoaded", AddPhEAI());
+</script>
+{% endif %}
+
 
 {% endblock content %}
 
