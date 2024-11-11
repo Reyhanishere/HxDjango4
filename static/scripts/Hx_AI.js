@@ -104,7 +104,7 @@ function CreatePullUp() {
         // floatingDiv.classList.toggle("open");
         floatingDiv.style.transform = isExpanded ? "translateY(-50vh)" : "translateY(-80px)";
         pullText.textContent = isExpanded ? "Click to minimize" : "Click to open";
-        if (isExpanded === True) {
+        if (isExpanded == True) {
             edel.style.display = "none";
         } else {
             edel.style.display = "block";
@@ -143,7 +143,7 @@ function PIQueAI() {
     const loadingIndicator = document.createElement("div");
     loadingIndicator.className = "spinnerCont";
     loadingIndicator.innerHTML = `
-        <div class="spinner"></div>
+        <div class="spinnerLogo"></div>
         <p>Loading...</p>
     `;
     loadingIndicator.style.display = "flex";
@@ -211,7 +211,7 @@ function AddPIAI() {
     const pi_div = document.getElementById("div_id_pi");
     const labelElementPI = pi_div.querySelector('label');
     labelElementPI.insertAdjacentHTML('afterend', `
-        <span class="helper-toggle-button" onclick="PIQueAI()">کمکم کن! (AI)</span>`)
+        <span class="helper-toggle-button" onclick="PIQueAI()">کمکم کن! (AI)</span>`);
 }
 
 function createROSAITab(buttonData) {
@@ -226,6 +226,18 @@ function createROSAITab(buttonData) {
     }
 }
 
+function createPhEAITab(buttonData) {
+    const rostab = document.getElementById('PhETab');
+
+    for (const [key, value] of Object.entries(buttonData)) {
+        const button = document.createElement('span');
+        button.className = 'tablinks';
+        button.innerHTML = value;
+        button.setAttribute('onclick', `openPhE(event, '${key}_PhE')`);
+        rostab.appendChild(button);
+    }
+}
+
 function AddROSAI() {
     const ros_div = document.getElementById("div_id_ros");
     const labelElementROS = ros_div.querySelector('label');
@@ -234,6 +246,16 @@ function AddROSAI() {
     ros_div.style.display = "grid";
     ros_div.style.justifyItems = "start";
     ros_div.style.lineHeight = "2";
+}
+
+function AddPhEAI() {
+    const phe_div = document.getElementById("div_id_phe");
+    const labelElementPhE = phe_div.querySelector('label');
+    labelElementPhE.insertAdjacentHTML('afterend', `
+        <span class="helper-toggle-button" onclick="PhEAI()" id="PhEAIHelp">کمکم کن! (AI)</span>`);
+    phe_div.style.display = "grid";
+    phe_div.style.justifyItems = "start";
+    phe_div.style.lineHeight = "2";
 }
 
 function ROSAI() {
@@ -258,7 +280,7 @@ function ROSAI() {
     const loadingIndicator = document.createElement("div");
     loadingIndicator.className = "spinnerCont";
     loadingIndicator.innerHTML = `
-        <div class="spinner"></div>
+        <div class="spinnerLogo"></div>
         <p>Loading...</p>
     `;
     loadingIndicator.style.display = "flex";
@@ -298,14 +320,117 @@ function ROSAI() {
                 aiResponse.appendChild(aiRespMsg);
                 aiRespMsg.style.opacity = 1;
                 var rosList = responseAI.split('  ');
+                rosList.pop()
                 const AIBtnData = { "AI": "&#129302; AI &#129504;", }
                 createROSAITab(AIBtnData);
                 createTabs({ "AI": rosList });
-                // const ROSAIHelp = document.getElementById("ROSAIHelp");
-                // ROSAIHelp.removeAttribute('onclick');
-                // setTimeout(() => {
-                //     ROSAIHelp.onclick = "ROSAI()";
-                // }, 10000);
+                toggleROSTab()
+                    // const ROSAIHelp = document.getElementById("ROSAIHelp");
+                    // ROSAIHelp.removeAttribute('onclick');
+                    // setTimeout(() => {
+                    //     ROSAIHelp.onclick = "ROSAI()";
+                    // }, 10000);
+
+            } else {
+                const aiErrorMsg = document.createElement("div");
+                aiErrorMsg.className = 'aiErrorMsg';
+                const aiErrorMsgP = document.createElement("p");
+                aiErrorMsgP.textContent = "Error: " + data.error;
+                aiErrorMsg.style.opacity = 0;
+
+                aiErrorMsg.appendChild(aiErrorMsgP);
+                aiResponse.appendChild(aiErrorMsg);
+                aiErrorMsg.style.opacity = 1;
+            }
+        })
+        .catch(error => {
+            loadingIndicator.style.display = "none";
+
+            const aiErrorMsg = document.createElement("div");
+            aiErrorMsg.className = 'aiErrorMsg';
+            const aiErrorMsgP = document.createElement("p");
+            aiErrorMsgP.textContent = "Error: Connection Failed /:";
+            aiErrorMsg.style.opacity = 0;
+            aiErrorMsg.appendChild(aiErrorMsgP);
+            aiResponse.appendChild(aiErrorMsg);
+            aiErrorMsg.style.opacity = 1;
+        });
+
+    document.getElementById("pullText").textContent = "Show AI Response!";
+}
+
+function PhEAI() {
+    const cc = document.getElementById('cc_terminology_input').value;
+    const pi = document.getElementById('id_pi').value;
+    const pmh = document.getElementById('id_pmh').value;
+    const dh = document.getElementById('id_drg').value;
+    const fh = document.getElementById('id_fh').value;
+    const sh = document.getElementById('id_sh').value;
+    const ah = document.getElementById('id_alg').value;
+
+    const aiResponse = document.getElementById("aiResponse");
+
+    const aiReqMsg = document.createElement("div");
+    aiReqMsg.className = 'aiMsg aiReqMsg';
+    const aiReqMsgP = document.createElement("p");
+    aiReqMsgP.textContent = "What are important Physical Exams I can do according to the Hx I've written till now?";
+    // aiReqMsg.style.opacity = 0;
+    aiReqMsg.appendChild(aiReqMsgP);
+    aiResponse.appendChild(aiReqMsg);
+
+    const loadingIndicator = document.createElement("div");
+    loadingIndicator.className = "spinnerCont";
+    loadingIndicator.innerHTML = `
+        <div class="spinnerLogo"></div>
+        <p>Loading...</p>
+    `;
+    loadingIndicator.style.display = "flex";
+    aiResponse.appendChild(loadingIndicator);
+
+    const formData = new FormData();
+    formData.append('cc', cc);
+    formData.append('pi', pi);
+    formData.append('pmh', pmh);
+    formData.append('dh', dh);
+    formData.append('fh', fh);
+    formData.append('sh', sh);
+    formData.append('ah', ah);
+
+
+    const csrfToken = document.getElementById('csrf_token').value;
+
+    fetch('phe_ai/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': csrfToken,
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadingIndicator.style.display = "none";
+
+            if (data.phe_ai_response) {
+                const responseAI = data.phe_ai_response;
+                const aiRespMsg = document.createElement("div");
+                aiRespMsg.className = 'aiMsg aiRespMsg';
+                const aiRespMsgP = document.createElement("p");
+                aiRespMsgP.textContent = "Check AI Tab in Physical Examination Helper!";
+                // aiRespMsgP.textContent = responseAI;
+                aiRespMsg.style.opacity = 0;
+                aiRespMsg.appendChild(aiRespMsgP);
+                aiResponse.appendChild(aiRespMsg);
+                aiRespMsg.style.opacity = 1;
+                // var pheList = responseAI.split('  ');
+                const AIBtnData = { "AI": "&#129302; AI &#129504;", }
+                createPhEAITab(AIBtnData);
+                createPhETabs({ "AI": JSON.parse(responseAI) });
+                togglePhETab()
+                    // const ROSAIHelp = document.getElementById("ROSAIHelp");
+                    // ROSAIHelp.removeAttribute('onclick');
+                    // setTimeout(() => {
+                    //     ROSAIHelp.onclick = "ROSAI()";
+                    // }, 10000);
 
             } else {
                 const aiErrorMsg = document.createElement("div");
