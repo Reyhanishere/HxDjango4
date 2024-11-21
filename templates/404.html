@@ -3,12 +3,12 @@
 {% block title %}| 404 Not Found!{% endblock title %}
 {% block desc %}این صفحه اکنون در سایت مدوپارتو وجود ندارد.{% endblock desc %}
 {% block content %}
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
 <style>
     .main{
         margin:0;
         padding:0;
-        height:100vh;
+        height:90vh;
         background-image: linear-gradient(to top, #EEEDEB, #FFEFEF);
         display:flex;
         justify-content:center;
@@ -66,6 +66,31 @@
         line-height: 2;
       }
     
+      @media (min-device-width: 600px) and (max-device-width: 1000px) {
+
+        .error__title {
+          font-size: 11rem;
+        }
+        .error__type {
+          font-size: 2.25rem;
+        }
+        .error__cta {
+          font-size: 1rem;
+        }
+      }
+
+      @media (max-device-width: 600px) {
+
+        .error__title {
+          font-size: 6rem;
+        }
+        .error__type {
+          font-size: 1.25rem;
+        }
+        .error__cta {
+          font-size: 0.75rem;
+        }
+      }
     
 </style>
 
