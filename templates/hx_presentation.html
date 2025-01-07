@@ -124,7 +124,7 @@
                     <div class="hx prsntText" dir="auto">{{ case.ddx|linebreaks }}</div>
                 </div>
 
-
+                {% if case.act %}
                 <div id="Action" class="content">
                     <div dir="ltr"  class="prsntTitle hx" style="text-align: left; display: block">
                         <div class="tabIndic"></div>
@@ -132,6 +132,7 @@
                     </div>
                     <div class="hx prsntText">{{ case.act|linebreaks }}</div>
                 </div>
+                {% endif %}
 
                 <div id="OD" class="content">
                     <div dir="ltr"  class="prsntTitle hx" style="text-align: left; display: block">
