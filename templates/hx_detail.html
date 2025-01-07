@@ -110,9 +110,14 @@
         <p>{{ case.ddx|linebreaks}}</p>
         </details>
     </div>
-    <div class="hx"><details><summary><b>Primary Dx:</b></summary>
-        <p style="margin:10px">{{ case.pdx }}</p></details></div>
-    <div class="hx"><b>Action:</b> <br/>{{ case.act|linebreaks }}</div>
+    {% if case.pdx %}
+        <div class="hx"><details><summary><b>Primary Dx:</b></summary>
+            <p style="margin:10px">{{ case.pdx }}</p></details>
+        </div>
+    {% endif %}
+    {% if case.act %}
+        <div class="hx"><b>Action:</b> <br/>{{ case.act|linebreaks }}</div>
+    {% endif %}
 
 </div>
 <br/>
