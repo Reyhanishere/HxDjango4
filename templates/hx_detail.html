@@ -78,7 +78,7 @@
     {% endif %}
 
     <div class="hx"><b>Other Data: </b><br/>
-        <div style="padding:5px;">
+        <div style="padding:5px;" dir="auto">
             {%if user.username == case.author.username %}
             <a href="graphs/new" style="color:#333;margin:5px; font-size:16px" class='noPrint'>
                 آزمایش‌های کیس خود را اضافه کنید.
@@ -103,16 +103,18 @@
     <div class="hx"><b>Review of Systems:</b> <br/><div class="twoColumnar">{{ case.ros|emphasize|safe }}</div></div>
 
     <div class="hx"><b>Physical Examination:</b> <br/><div class="twoColumnar">{{ case.phe|emphasize|safe}}</div></div>
-    <div class="hx" style="background-color:#ffd"><b>Summary: </b>{{ case.summary|linebreaks }}</div>
+    <div class="hx" style="background-color:#ffd"><b>Summary: </b>
+        {{ case.summary|linebreaks }}
+    </div>
     <div class="hx">
         <details>
             <summary><b>Diffrential Dx:</b></summary>
-        <p>{{ case.ddx|linebreaks}}</p>
+        <p dir="auto">{{ case.ddx|linebreaks}}</p>
         </details>
     </div>
     {% if case.pdx %}
         <div class="hx"><details><summary><b>Primary Dx:</b></summary>
-            <p style="margin:10px">{{ case.pdx }}</p></details>
+            <p style="margin:10px" dir="auto">{{ case.pdx }}</p></details>
         </div>
     {% endif %}
     {% if case.act %}
