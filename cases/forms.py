@@ -81,9 +81,10 @@ class GraphUpdateForm(ModelForm):
     description = forms.CharField(
         widget=forms.Textarea(
             attrs={
-                "dir": "rtl",
+                "dir": "auto",
             }
-        )
+        ),
+        required=False
     )
     class Meta:
         model=LabGraphSelection
