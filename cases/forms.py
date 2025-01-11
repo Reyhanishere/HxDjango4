@@ -12,7 +12,7 @@ class CaseImageForm(ModelForm):
     def clean_image(self):
         image = self.cleaned_data.get('image')
         if image:
-            max_size_kb = 256  # Max size in kilobytes
+            max_size_kb = 2048  # Max size in kilobytes
             if image.size > max_size_kb *1024:
                 raise forms.ValidationError(f"حجم تصویری که بارگذاری می‌کنید نباید بیشتر از {max_size_kb} کیلوبایت باشد. حجم فایل شما، {round(image.size/1024, 1)} کیلوبایت است.")  
         return image
@@ -26,7 +26,7 @@ class ImageCaseEditForm(ModelForm):
     def clean_image(self):
         image = self.cleaned_data.get('image')
         if image:
-            max_size_kb = 256  # Max size in kilobytes
+            max_size_kb = 2048  # Max size in kilobytes
             if image.size > max_size_kb *1024:
                 raise forms.ValidationError(f"حجم تصویری که بارگذاری می‌کنید نباید بیشتر از {max_size_kb} کیلوبایت باشد. حجم فایل شما، {round(image.size/1024, 1)} کیلوبایت است.")  
         return image
