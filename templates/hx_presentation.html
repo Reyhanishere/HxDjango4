@@ -7,7 +7,15 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link rel="stylesheet" href="{% static 'css/style_hx.css' %}">
 <link rel="stylesheet" href="{% static 'css/style_presentation.css' %}">
-
+<style>
+.ODImgDesc p{
+    padding:5px
+    }
+.ODImgDesc a{
+    color:#555;
+    padding:5px
+    }
+</style>
 {% if case.visible %}
 <div class="pad-15 prsntSplit">
     <div>
@@ -148,7 +156,7 @@
                             <a href="{{img.image.url}}" target="_blank">
                                 <img src="{{img.image.url}}" style="border-radius:10px;" width="220" alt="{{img.text}}"/>
                             </a>
-                            <p style="font-size:16px; padding:5px" dir="auto">{{img.text|urlize|linebreaks}}</p>
+                            <div style="font-size:16px" dir="auto" class="ODImgDesc">{{img.text|urlizetrunc:15|linebreaks}}</div>
                             </div>
                             {% comment %} {% endif %} {% endcomment %}
                             {% endfor%}
