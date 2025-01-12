@@ -148,7 +148,7 @@
                             <a href="{{img.image.url}}" target="_blank">
                                 <img src="{{img.image.url}}" style="border-radius:10px;" width="220" alt="{{img.text}}"/>
                             </a>
-                            <p style="font-size:16px; padding:5px">{{img.text}}</p>
+                            <p style="font-size:16px; padding:5px" dir="auto">{{img.text|urlize|linebreaks}}</p>
                             </div>
                             {% comment %} {% endif %} {% endcomment %}
                             {% endfor%}
