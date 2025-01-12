@@ -140,7 +140,7 @@
                         <b>Other Data: </b><br/>
                     </div>
                     <div style="padding:10px 15px;" class="hx prsntText">
-                        <div style="font-size:18px;">{{ case.dat|linebreaks }}</div>
+                        <div style="font-size:18px;">{{ case.dat|urlize|linebreaks }}</div>
                         <div style="display: flex; flex-wrap: wrap; justify-content: space-evenly;">
                             {%for img in case.imagecase_set.all %}
                             {% comment %} {%if img.verified %} {% endcomment %}
