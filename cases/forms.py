@@ -106,6 +106,7 @@ class CaseUpdateForm(ModelForm):
             "visible",
             "premium",
             "suggests",
+            "setting",
         )
         labels = {
             'tags': ('دسته‌بندی تظاهرات'),
@@ -260,20 +261,13 @@ class ExCreateForm(ModelForm):
             "suggests",
         )
 
-
-# class FollowUpForm(ModelForm):
-#     class Meta:
-#         model = FollowUp
-#         fields = ('date',"text",)
-
-
 class CaseCreateForm(ModelForm):
-    slug=forms.SlugField(widget=forms.TextInput(
-        attrs={"autocapitalize":"off", 'autocomplete':'off'},
-    ),
-    label="لینک",
-    help_text="لینکی که می‌خواهید کیس شما با آن شناخته شود را وارد کنید. تلاش کنید لینکتان گویا و دقیق باشد، پس از این توانایی تغییر آن را نخواهید داشت. استفاده از فاصله (Space) مجاز نیست. می‌توانید به آموزش مراجعه کنید."
-    )
+    # slug=forms.SlugField(widget=forms.TextInput(
+    #     attrs={"autocapitalize":"off", 'autocomplete':'off'},
+    # ),
+    # label="لینک",
+    # help_text="لینکی که می‌خواهید کیس شما با آن شناخته شود را وارد کنید. تلاش کنید لینکتان گویا و دقیق باشد، پس از این توانایی تغییر آن را نخواهید داشت. استفاده از فاصله (Space) مجاز نیست. می‌توانید به آموزش مراجعه کنید."
+    # )
     alg=forms.CharField(widget=forms.Textarea(
     ),
         label="حساسیت‌ها",
@@ -296,6 +290,8 @@ class CaseCreateForm(ModelForm):
             "visible",
             "premium",
             "suggests",
+            "slug",
+            "setting",
         )
         labels = {
             'tags': ('دسته‌بندی تظاهرات'),
