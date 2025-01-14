@@ -89,26 +89,6 @@ class Case(models.Model):
         upload_to="cases/hx/uploads/%Y%m%d/", null=True, blank=True
     )
 
-    # rts = [
-    #     ("ریه", "ریه"),
-    #     ("هماتولوژی و انکولوژی", "هماتولوژی و انکولوژی"),
-    #     ("روماتولوژی", "روماتولوژی"),
-    #     ("غدد", "غدد"),
-    #     ("گوارش", "گوارش"),
-    #     ("نفرولوژی", "نفرولوژی"),
-    #     ("جنرال", "جنرال"),
-    #     ("قلب", "قلب"),
-    #     ("پوست", "پوست"),
-    #     ("اطفال", "اطفال"),
-    #     ("زنان", "زنان"),
-    #     ("اعصاب", "اعصاب"),
-    #     ("روان", "روان"),
-    #     ("ENT", "ENT"),
-    #     ("عفونی", "عفونی"),
-    #     ("چشم", "چشم"),
-    #     ("مسمومین", "مسمومین"),
-    # ]
-
     title = models.CharField(
         ("عنوان:"),
         max_length=50,
@@ -292,7 +272,13 @@ class Case(models.Model):
         blank=False,
         help_text="لینک مورد علاقه برای کیس خود را وارد کنید. تلاش کنید لینکتان گویا و دقیق باشد، پس از این توانایی تغییر آن را نخواهید داشت. استفاده از فاصله (Space) مجاز نیست.",
     )
-
+    
+    def save(self, *args, **kwargs):
+        today = now().strftime('%y%m%d')
+        count = Case.objects.filter(date_created__date=now().date()).count() + 1
+        self.slug = f"{today}{count:02}"
+        super().save(*args, **kwargs)
+        
     def __str__(self):
         return self.title
 
