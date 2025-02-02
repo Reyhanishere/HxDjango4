@@ -11,27 +11,62 @@
         border: none;
         padding: 10px
     }
+    h1{
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    
+    #smaller-grid{
+        padding: 1rem 0.5rem;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.125rem
+    }
+
+    @media (max-width: 600px) {
+        #smaller-grid{
+            padding: 1rem 0.5rem;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.125rem
+        }
+        .createForm {
+            display: flex;
+            gap: 5px;
+            flex-direction: column;
+        }
+    }
+    
+    #input-id{
+        margin: 15px 0;
+        background-color: #eee;
+        padding: 0.75rem;
+        border-radius: 1rem;
+    }
 
 </style>
 <div class="pad-15">
 <h1>ویرایش</h1>
 
     <form action="" method="post" autocomplete="off">{% csrf_token %}
-        <div class="createForm">
+        <div class="createForm" style="margin:10px">
         {{ form|crispy }}
             <div class="text-center" style="justify-contents:center"><button class="btn btn-info" id="primaryButton" type="submit">بروزرسانی</button></div>
-
-    </div>
+        </div>
     </form>
 </div>
 
-
 <script src="{% static '/scripts/Hx_Helper.js'%}"></script>
+<script src="{% static '/scripts/Hx_Divs_Move.js'%}"></script>
+
 <script>
     
+    document.addEventListener("DOMContentLoaded", function() {
+        moveElementsToNewDiv(movingDivsIds);
+    });
+
     document.addEventListener("DOMContentLoaded", AddROSSection())
     document.addEventListener("DOMContentLoaded", AddPhESection())
 
 </script>
 {% endblock content %}
-
