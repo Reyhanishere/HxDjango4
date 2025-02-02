@@ -5,6 +5,7 @@
 
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link rel="stylesheet" href="{% static 'css/style_HxHelper.css' %}">
+<link rel="stylesheet" href="{% static 'css/style_hx_new_edit.css' %}">
 
 <style>    
     button {
@@ -16,38 +17,9 @@
         margin-bottom: 20px;
     }
     
-    #smaller-grid{
-        padding: 1rem 0.5rem;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 0.125rem
-    }
-
-    @media (max-width: 600px) {
-        #smaller-grid{
-            padding: 1rem 0.5rem;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.125rem
-        }
-        .createForm {
-            display: flex;
-            gap: 5px;
-            flex-direction: column;
-        }
-    }
-    
-    #input-id{
-        margin: 15px 0;
-        background-color: #eee;
-        padding: 0.75rem;
-        border-radius: 1rem;
-    }
-
 </style>
 <div class="pad-15">
 <h1>ویرایش</h1>
-
     <form action="" method="post" autocomplete="off">{% csrf_token %}
         <div class="createForm" style="margin:10px">
         {{ form|crispy }}
