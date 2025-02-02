@@ -7,27 +7,14 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/style_HxHelper.css' %}">
     <link rel="stylesheet" href="{% static 'css/style_hx_ai.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style_hx_new_edit.css' %}">
+
     <style>
-        #smaller-grid{
-            padding: 1rem 0.5rem;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0.125rem
+        
+        .spinnerLogo {
+            background-image: url({% static 'images\Logo Prime.svg' %});
         }
-    
-        @media (max-width: 600px) {
-            #smaller-grid{
-                padding: 1rem 0.5rem;
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.125rem
-            }
-            .createForm {
-                display: flex;
-                gap: 5px;
-                flex-direction: column;
-            }
-        }
+
         #edel{
             bottom: auto;
             top:60px; 
@@ -38,15 +25,7 @@
         #mainContent{
             margin-bottom:2rem;
         }
-        .spinnerLogo{
-            background-image: url({% static 'images\Logo Prime.svg' %});
-        }
-        #input-id{
-            margin: 15px 0;
-            background-color: #eee;
-            padding: 0.75rem;
-            border-radius: 1rem;
-        }
+
     </style>
 {% endblock imports %}
 
@@ -74,6 +53,7 @@
 <script src="{% static '/scripts/Hx_Divs_Move.js'%}"></script>
 
 <script>
+    
     document.addEventListener("DOMContentLoaded", AddROSSection())
     document.addEventListener("DOMContentLoaded", AddPhESection())
 
