@@ -1,0 +1,27 @@
+#smaller-grid {
+    padding: 1rem 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.125rem
+}
+
+@media (max-width: 600px) {
+    #smaller-grid {
+        padding: 1rem 0.5rem;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.125rem
+    }
+    .createForm {
+        display: flex;
+        gap: 5px;
+        flex-direction: column;
+    }
+}
+
+#input-id {
+    margin: 15px 0;
+    background-color: #eee;
+    padding: 0.75rem;
+    border-radius: 1rem;
+}
