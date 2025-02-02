@@ -15,6 +15,10 @@ def forbid_CC_AI(CustomUser, request, queryset):
 def permit_PI_AI(CustomUser, request, queryset):
     queryset.update(hx_pi_ai_permission=True)
 
+@admin.action(description="Permit to Use PhE AI")
+def permit_PhE_AI(CustomUser, request, queryset):
+    queryset.update(hx_phe_ai_permission=True)
+
 @admin.action(description="Forbid to Use PI AI")
 def forbid_PI_AI(CustomUser, request, queryset):
     queryset.update(hx_pi_ai_permission=False)
@@ -27,9 +31,6 @@ def permit_ROS_AI(CustomUser, request, queryset):
 def forbid_ROS_AI(CustomUser, request, queryset):
     queryset.update(hx_ros_ai_permission=False)
 
-@admin.action(description="Permit to Use PhE AI")
-def permit_PhE_AI(CustomUser, request, queryset):
-    queryset.update(hx_phe_ai_permission=True)
 
 @admin.action(description="Forbid to Use PhE AI")
 def forbid_PhE_AI(CustomUser, request, queryset):
@@ -39,7 +40,7 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
-    actions=[permit_CC_AI, permit_PI_AI, permit_ROS_AI, forbid_CC_AI, forbid_PI_AI, forbid_ROS_AI, permit_PhE_AI, forbid_PhE_AI]
+    actions=[permit_CC_AI, permit_PI_AI, permit_ROS_AI, permit_PhE_AI, forbid_CC_AI, forbid_PI_AI, forbid_ROS_AI, forbid_PhE_AI]
 
     list_display = [
         "username",
@@ -52,8 +53,10 @@ class CustomUserAdmin(UserAdmin):
         "hx_ros_ai_permission",
         "hx_phe_ai_permission",
         "is_staff",
+        "join_date_day",
         
     ]
+    ordering = ('-date_joined',)
     fieldsets = UserAdmin.fieldsets + (
         (
             None,
