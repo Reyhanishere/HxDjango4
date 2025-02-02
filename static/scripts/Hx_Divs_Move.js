@@ -1,29 +1,24 @@
 function moveElementsToNewDiv(elementIds) {
-    // Create a new details element
     const newDiv = document.createElement('details');
     newDiv.id = 'input-id';
     newDiv.className = "spanTwo"
 
     const summary = document.createElement('summary');
-    summary.innerHTML = '<strong>اطلاعات هویتی و غیره</strong>';
+    summary.innerHTML = '<strong>اطلاعات هویتی و غیره &#128100;</strong>';
     newDiv.appendChild(summary);
 
-    // Append a smaller grid to the new div
     const smallerGrid = document.createElement('div');
     smallerGrid.id = 'smaller-grid';
 
     newDiv.appendChild(smallerGrid);
 
-    // Move the specified elements inside the smaller grid
     elementIds.forEach(function(id) {
         const element = document.getElementById(id);
         if (element) {
-            // Append each element to the smaller grid
             smallerGrid.appendChild(element);
         }
     });
 
-    // Insert the new details element before the cc element
     const cc = document.getElementById('div_id_cc');
     if (cc && cc.parentElement) {
         cc.parentElement.insertBefore(newDiv, cc);
