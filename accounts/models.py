@@ -121,3 +121,6 @@ class CustomUser(AbstractUser):
     
     hx_ddx_ai_permission=models.BooleanField(default=False)
     hx_ddx_ai_use_count=models.PositiveIntegerField(default=0)
+
+    def join_date_day(self):
+        return self.date_joined.date()
