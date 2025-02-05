@@ -2,6 +2,15 @@
 <html lang="en">
 {% load static %}
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J839JNTNCE"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-J839JNTNCE');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="نمودارهای داده‌های آزمایشگاهی شرح‌حال {{case.title}}"/>
@@ -12,9 +21,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
-    <meta property="og:image" content="{% static 'images/cards/mdpt_Cases_og.png' %}" />
-    <meta name="twitter:image" content="{% static 'images/cards/mdpt_Cases_og.png' %}" />
 
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icon/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icon/favicon-32x32.png' %}">
@@ -49,96 +55,102 @@
         Add More Lab Data
     </a>
     {% endif %}
-    {% for graph in case.labgraphselection_set.all reversed%}
-    <div class="thisContainer">
-        <div class="chart-container">
-            <img src="{% static 'images\Logo Prime.svg' %}" width="25px" alt="medepartout Logo" style="margin:0 0 12px 0;opacity: 0.7;">
-            <h3 style="display:inline-block; margin:0 0 0 2px">{{ graph.title }}</h3>
-            {%if graph.author.username == user.username%}
-            <a href="{{graph.id}}/edit" class="editGraph">Edit</a>
-            <a href="{% url 'hx_graph_delete' graph.case.slug graph.pk %}" class="editGraph" style="color:#c33">Delete</a>
-            {%endif%}
-            <canvas id="chart-{{ forloop.counter }}"></canvas>
-        </div>
-        <div class="divider" id="divider-{{ forloop.counter }}"></div>
-        <div class="table-container">
-            <table id="table-{{ forloop.counter }}">
-                <tbody>
-                    <!-- Data will be inserted here by JavaScript -->
-                </tbody>
-            </table>
-            {%if graph.description%}<div dir="rtl" class="description">{{graph.description | linebreaks}}</div>{%endif%}
-        </div>
-    
+    {% if case.labgraphselection_set.all %}
+        {% for graph in case.labgraphselection_set.all reversed%}
+        <div class="thisContainer">
+            <div class="chart-container">
+                <img src="{% static 'images\Logo Prime.svg' %}" width="25px" alt="medepartout Logo" style="margin:0 0 12px 0;opacity: 0.7;">
+                <h3 style="display:inline-block; margin:0 0 0 2px">{{ graph.title }}</h3>
+                {%if graph.author.username == user.username%}
+                <a href="{{graph.id}}/edit" class="editGraph">Edit</a>
+                <a href="{% url 'hx_graph_delete' graph.case.slug graph.pk %}" class="editGraph" style="color:#c33">Delete</a>
+                {%endif%}
+                <canvas id="chart-{{ forloop.counter }}"></canvas>
+            </div>
+            <div class="divider" id="divider-{{ forloop.counter }}"></div>
+            <div class="table-container">
+                <table id="table-{{ forloop.counter }}">
+                    <tbody>
+                        <!-- Data will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+                {%if graph.description%}<div dir="rtl" class="description">{{graph.description | linebreaks}}</div>{%endif%}
+            </div>
+        
 
 
-    <script>
-    const graphData{{ forloop.counter }} = '{{ graph.data|striptags|linebreaksbr }}'.split('<br>');
-    const datasets{{ forloop.counter }} = [];
+        <script>
+        const graphData{{ forloop.counter }} = '{{ graph.data|striptags|linebreaksbr }}'.split('<br>');
+        const datasets{{ forloop.counter }} = [];
 
-    graphData{{ forloop.counter }}.forEach(line => {
-        const [label, values] = line.split(': ');
-        const dataPoints = values.split(', ').map(val => val === '-' ? null : parseFloat(val.trim()));
-        datasets{{ forloop.counter }}.push({
-            label: label.trim(),
-            data: dataPoints,
-            borderWidth: 2
+        graphData{{ forloop.counter }}.forEach(line => {
+            const [label, values] = line.split(': ');
+            const dataPoints = values.split(', ').map(val => val === '-' ? null : parseFloat(val.trim()));
+            datasets{{ forloop.counter }}.push({
+                label: label.trim(),
+                data: dataPoints,
+                borderWidth: 2
+            });
         });
-    });
 
-    const chartLabels{{ forloop.counter }} = Array.from({ length: datasets{{ forloop.counter }}[0].data.length }, (_, i) => (i + 1).toString());
+        const chartLabels{{ forloop.counter }} = Array.from({ length: datasets{{ forloop.counter }}[0].data.length }, (_, i) => (i + 1).toString());
 
-    const ctx{{ forloop.counter }} = document.getElementById('chart-{{ forloop.counter }}').getContext('2d');
+        const ctx{{ forloop.counter }} = document.getElementById('chart-{{ forloop.counter }}').getContext('2d');
 
-    new Chart(ctx{{ forloop.counter }}, {
-        type: 'line',
-        data: {
-            labels: chartLabels{{ forloop.counter }},
-            datasets: datasets{{ forloop.counter }}
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero:{% if graph.zero %} true{%else%} false{%endif%}
+        new Chart(ctx{{ forloop.counter }}, {
+            type: 'line',
+            data: {
+                labels: chartLabels{{ forloop.counter }},
+                datasets: datasets{{ forloop.counter }}
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero:{% if graph.zero %} true{%else%} false{%endif%}
+                    }
                 }
             }
-        }
-    });
+        });
 
-    // Create table
-    const tableBody{{ forloop.counter }} = document.getElementById('table-{{ forloop.counter }}').querySelector('tbody');
-    graphData{{ forloop.counter }}.forEach(line => {
-        const [label, values] = line.split(': ');
-        const dataPoints = values.split(', ').map(val => val === '-' ? null : parseFloat(val.trim()));
-        addToTable(label, dataPoints, tableBody{{ forloop.counter }});
-    });
+        // Create table
+        const tableBody{{ forloop.counter }} = document.getElementById('table-{{ forloop.counter }}').querySelector('tbody');
+        graphData{{ forloop.counter }}.forEach(line => {
+            const [label, values] = line.split(': ');
+            const dataPoints = values.split(', ').map(val => val === '-' ? null : parseFloat(val.trim()));
+            addToTable(label, dataPoints, tableBody{{ forloop.counter }});
+        });
 
-    function addToTable(label, dataPoints, tableBody) {
-        const rowCount = tableBody.rows.length;
+        function addToTable(label, dataPoints, tableBody) {
+            const rowCount = tableBody.rows.length;
 
-        if (rowCount === 0) {
-            // Create header row
-            const headerRow = tableBody.insertRow(-1);
-            const labelHeader = headerRow.insertCell(0);
-            labelHeader.textContent = 'Day:';
+            if (rowCount === 0) {
+                // Create header row
+                const headerRow = tableBody.insertRow(-1);
+                const labelHeader = headerRow.insertCell(0);
+                labelHeader.textContent = 'Day:';
+                for (let i = 0; i < dataPoints.length; i++) {
+                    const dataHeader = headerRow.insertCell(-1);
+                    dataHeader.textContent = 'D' + (i + 1).toString();
+                }
+            }
+
+            // Insert label and data points
+            const dataRow = tableBody.insertRow(-1);
+            const labelCell = dataRow.insertCell(0);
+            labelCell.textContent = label;
             for (let i = 0; i < dataPoints.length; i++) {
-                const dataHeader = headerRow.insertCell(-1);
-                dataHeader.textContent = 'D' + (i + 1).toString();
+                const dataCell = dataRow.insertCell(-1);
+                dataCell.textContent = dataPoints[i];
             }
         }
-
-        // Insert label and data points
-        const dataRow = tableBody.insertRow(-1);
-        const labelCell = dataRow.insertCell(0);
-        labelCell.textContent = label;
-        for (let i = 0; i < dataPoints.length; i++) {
-            const dataCell = dataRow.insertCell(-1);
-            dataCell.textContent = dataPoints[i];
-        }
-    }
-</script>
-</div>
-    {% endfor %}
+        </script>
+        </div>
+        {% endfor %}
+    {% else %}
+    <div dir="auto" style="font-size: 24px; text-align: center; color: #777">
+    نموداری اضافه نشده است.
+    </div>
+    {% endif %}
 </div>
     <div class="myFoot" dir="ltr"><p style="color:white; padding:13px; margin:7px 10px">medepartout | All Right Reserved &copy; 2024</p></div>
     
