@@ -186,9 +186,13 @@
         <button onclick="showDiv('PE')" class="prsntBtn">PE</button>
         <button onclick="showDiv('Summary')" class="prsntBtn">Summary</button>
         <button onclick="showDiv('OD')" class="prsntBtn">Other Data</button>
+        {% if case.labgraphselection_set.all %}
         <a href="graphs" target="_blank" class="prsntBtn" id="graphsBtn">See Lab Data</a>
+        {% endif %}
         <button onclick="showDiv('dDx')" class="prsntBtn">dDx</button>
+        {% if case.act %}
         <button onclick="showDiv('Action')" class="prsntBtn">Action</button>
+        {% endif %}
         <button onclick="showDiv('PDx')" class="prsntBtn">Primary Dx</button>
     </div>
 </div>
