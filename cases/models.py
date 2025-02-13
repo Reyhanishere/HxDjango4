@@ -278,6 +278,9 @@ class Case(models.Model):
         today = now().strftime('%y%m%d')
         count = Case.objects.filter(date_created__date=now().date()).count() + 1
         self.slug = f"{today}{count:02}"
+        while Case.objects.filter(slug=self.slug).exists():
+            count += 1
+            self.slug = f"{today}{count:02}"
         super().save(*args, **kwargs)
         
     def __str__(self):
