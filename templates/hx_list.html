@@ -1,47 +1,91 @@
-{% extends "base.html" %}
-{%load humanize%}
+{% extends 'base.html' %}
 {% load static %}
-{% block title %}| Hx{%endblock title%}
-{% block content %}
-<div id="hx" class='pad-15'>
-    <div class="hxTitle">
-        <h2 style="font-weight:800">Hx</h2>
-        <p>Histories and Physical Examinations</p>
-    </div>
-    {% for case in case_list reversed %}
-        <div class="myCard">
-            <a href="{% url 'hx_detail' case.slug %}" class="caseLink">
-                <p class="caseTitle">{{ case.title }}</p>
-            </a>
-            <div dir="rtl" class="cardDetail">
-                <a href="{% url 'hx_detail' case.slug %}" style="text-align:right;" class="caseLink">
-                    <p dir="rtl" style="text-align:right; color:#666;  padding:10px" class=""> 
-                    توسط {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }}
-                    &emsp;<span dir="ltr" >{{ case.date_created|naturaltime}}</span>
-                    </p>
-                </a>
-                <p style="margin-bottom:5px; padding-left: 5px;" dir="ltr">
-                    <a href="{% url 'hx_detail' case.slug %}" class="caseLink">
-                        {% if case.comment_set.all %}
-                        {{ case.comment_set.all|length }} Comment{{ case.comment_set.all|pluralize }}
-                        {% endif %}
-                    </a>
-                    <span>
-                    {% if user.username == case.author.username %}
-                    <a href="{% url 'hx_edit' case.slug %}">Edit</a> | 
-                    <a href="{% url 'hx_delete' case.slug %}">Delete</a>
-                    {% endif %}
-                    </span>
+{% load my_tags %}
+{% block title %} | Cases{% endblock title %}
+{% block imports %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/style_tw.css' %}">
+    <style>
+        .eta{
+            background-color: #677B92;
+            color: #FFF;
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 100px;
+            position: absolute;
+            top: -1.5rem;
+            left: -1.25rem;
+        }
+    {% comment %} Picasso Link Outer, ETA added {% endcomment %}
+    #mainCont{
+        grid-template-columns: 1fr;
+    }
+    #add-your-case {
+        min-height: 8rem;
+        margin: 2rem 0;
+    }
+    </style>
+{% endblock imports %}
 
-                 </p>
-            </div>
+{% block content %}
+<main dir="ltr" class="">
+    <header class="">
+      <h2 class="">What will you <span>write</span> today?</h2>
+      <h3 class="">Medepartout makes it easy to write, present and share medical cases.</h3>
+    </header>
+<div id="mainCont">
+
+    <div id="publicHxs">
+        <h3 class="mainSubt">Public HXs</h3>
+        <div id="hxsDiv">
+            {% for hx in case_list %}
+                <a href="{% url 'hx_detail' hx.slug %}">  
+                    <div class="hxCard">               
+                        <div class="hxTitleBox">
+                            <p dir="auto">{{hx.title}}</p>
+                        </div>
+                    
+                        <p class="hxDesc" dir="rtl">
+                            {% if hx.description%}
+                                {{hx.description}}
+                            {% endif %}
+                        </p>
+                    
+                        <p class="hxAuthor">
+                            {% comment %} {% if hx.author.en_name%} {% endcomment %}
+                            {{ hx.author.first_name }} {{ hx.author.last_name }} 
+                            {% comment %} {% else %} {% endcomment %}
+                            {% comment %} {{ hx.author.fn_fa }} {{ hx.author.ln_fa }}  {% endcomment %}
+                            {% comment %} {% endif %}| {{hx.author.degree}} {% endcomment %}
+                        </p> 
+                    </div>
+                </a>
+                {% if forloop.counter|divisibleby:3 and not forloop.last %}
+
+                    <div id="add-your-case">
+                        <div id="add-your-case-inner-box">
+                            {% comment %} <a href="{% url 'self_user_cases'%}">
+                                <div class="add-your-images">
+                                    <img id="intImg" src="{% static './images/cases_main/writing.jpg'%}" alt="Initial Image" class="">
+                                    <img id="hovImg" src="{% static './images/cases_main/graph.jpg'%}" alt="Hovered Image" class="">
+                                </div>
+                            </a> {% endcomment %}
+                
+                            <div id="subImgTextBox">
+                                <a class="linkedTxt" href="{% url 'hx_new' %}">
+                                    <p id="subImgText">Make Your Presentation</p>
+                                </a>
+                            </div>     
+                        </div>
+                    </div>
+                
+                {% endif %}
+            {% endfor %}
         </div>
-    {% endfor %}
-    <div class="down">
-        <br/>
-        <a href="{% url 'cases_main'%}">
-        <h5 dir="ltr" style="font-weight:600"> &#9664; Back to Cases</h5>
-        </a>
+        {% comment %} <div>
+            <a class="loadMore" href="{% url 'hx_list' %}">Load more</a>
+        </div> {% endcomment %}
     </div>
 </div>
+</main>
 {% endblock content %}
