@@ -24,7 +24,7 @@ class CasesListView(ListView):
     template_name = "hx_list.html"
 
 def cases_list_vv(request):
-    cases = Case.objects.filter(visible=True, verified=True)
+    cases = Case.objects.filter(visible=True, verified=True).order_by('-date_created')
     return render(request, 'hx_list.html', {'case_list': cases})
 
 class CommentGet(DetailView):  # new
