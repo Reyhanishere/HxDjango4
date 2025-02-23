@@ -4,7 +4,7 @@
 {% load my_tags %}
 {% block title %} | {{case.title}}{%endblock title%}
 
-{% block desc %}شرح حالی از {{ case.author.first_name }} {{ case.author.last_name }}{% endblock desc %}
+{% block desc %}شرح حالی از {{ case.author.get_name }}{% endblock desc %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -29,8 +29,9 @@
     {%endif%}
     <span style="color:#888" hidden>Share</span><button dir="rtl" onclick="copyToClipboard('{{case.slug}}')" class="copyLink noPrint" id="copy"><img id="share"src="{% static 'images\share-icon.svg' %}" width="20px" alt="Copy case link to clipboard"></button>
 </div>
-    <p dir="ltr" style='margin:5px;'><span dir="rtl">{{ case.date_created|date:"d M Y" }}</span>  &emsp; 
-        By {{ case.author.first_name }} {{ case.author.last_name }} | {{ case.author.degree }} </p>
+    <p dir="ltr" style='margin:5px;'><span dir="rtl">{{ case.date_created|date:"d M Y" }}</span>
+        &emsp; توسط <b>{{ case.author.get_name }}</b> | {{ case.author.degree }} </p>
+
 
 <p style='margin-right:10px;'>
     {{ case.pretext|safe }}
