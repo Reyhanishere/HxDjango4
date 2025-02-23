@@ -103,6 +103,11 @@ class CustomUser(AbstractUser):
         null=True,
     )
     en_name= models.BooleanField(default=True)
+    def get_name(self):
+        if self.en_name:
+            return f"{self.first_name} {self.last_name}"
+        else:
+            return f"{self.fn_fa} {self.ln_fa}"
 
     hx_cc_ai_permission=models.BooleanField(default=False)
     hx_cc_ai_use_count=models.PositiveIntegerField(default=0)
