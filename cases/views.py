@@ -217,8 +217,15 @@ class ImageCaseDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
 
 
 class CasePresentationView(DetailView):
-    model=Case
-    template_name="hx_presentation.html"
+    model = Case
+
+    def get_template_names(self):
+        case = self.get_object()
+
+        if case.is_pedi:
+            return ["hx/hx_prsnt_pdtr.html"]
+        else:
+            return ["hx_presentation.html"]
 
 class PicassoListView(ListView):
     model = Picasso
