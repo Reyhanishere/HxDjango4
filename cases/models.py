@@ -279,7 +279,7 @@ class Case(models.Model):
         if self.is_pedi:
             if self.gender=='آقا':
                 return "پسر"
-            elif self.gender=='آقا':
+            elif self.gender=='خانم':
                 return "دختر"
             else:
                 return self.gender
