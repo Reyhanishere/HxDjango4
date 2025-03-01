@@ -118,7 +118,9 @@ class Case(models.Model):
         blank=True,
         help_text="اگر خواستید، می‌توانید مقدمه‌ای دربارۀ شرح‌حال خود بنویسید.",
     )
-
+    
+    is_pedi=models.BooleanField(("آیا کیس کودک است؟"), default=False)
+    
     gender = models.CharField(
         ("جنسیت"),
         max_length=5,
@@ -273,7 +275,17 @@ class Case(models.Model):
         blank=False,
         help_text="لینک مورد علاقه برای کیس خود را وارد کنید. تلاش کنید لینکتان گویا و دقیق باشد، پس از این توانایی تغییر آن را نخواهید داشت. استفاده از فاصله (Space) مجاز نیست.",
     )
-    
+    def sex_pedi(self):
+        if self.is_pedi:
+            if self.gender=='آقا':
+                return "پسر"
+            elif self.gender=='آقا':
+                return "دختر"
+            else:
+                return self.gender
+        else:
+            return self.gender
+            
     def save(self, *args, **kwargs):
         today = now().strftime('%y%m%d')
         count = Case.objects.filter(date_created__date=now().date()).count() + 1
