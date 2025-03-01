@@ -1,0 +1,376 @@
+{% extends "base.html" %}
+{% load static %}
+{% load my_tags %}
+{% block title %} | {{case.title}}{%endblock title%}
+{% block desc %}شرح حالی از {{ case.author.first_name }} {{ case.author.last_name }}{% endblock desc%}
+{% block imports %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/style_hx.css' %}">
+<link rel="stylesheet" href="{% static 'css/style_presentation.css' %}">
+
+<style>
+
+    .content {
+        display: none;
+        font-size:24px;
+        min-height:55vh;
+    }
+    .content b{
+        font-size:26px;
+    }
+    h3{
+        font-size:48px;
+        text-align:center
+    }
+    
+    .content .ros-phe-ttl-ppr{font-size:24px;}
+    .tabIndic{
+        position: relative;
+        top: 5px;
+        width:5px;
+        background-color: #F89;
+        height: 30px;
+        display: inline-block;
+        margin-right: 10px;
+        margin-left: 5px 
+    }
+    .prsntTitle{
+        padding: 10px;
+        margin-bottom: 10px;
+        background: rgb(255,110,127);
+        background: linear-gradient(15deg, rgba(255,110,127,0.3) 0%, rgba(191,233,255,0.4) 100%);
+    }
+    .prsntText{
+        min-height: 60vh
+    }
+    .prsntSplit{
+        display: grid;
+        grid-template-columns: 7fr 1fr;
+    }
+    .btnsBox{
+        display: flex;
+        flex-direction: column;
+        padding: 0 10px;
+        min-width: 120px;
+    }
+    .prsntBtn{
+        display: inline-block;
+        border: 1px solid #555;
+        border-radius: 1rem;
+        margin: 2px;
+        padding: 5px;
+        min-width: 80px;
+        background-color: #f9f9f9;
+        color: #222;
+        text-decoration: none;
+        text-align: center;
+        transition: 0.3s;
+    }
+    #graphsBtn{
+        background-color: #ddd;
+        color: #000
+    }
+    #graphsBtn:hover{
+        background-color: #efefef;
+    }
+    .prsntBtn:hover {
+        background-color: #eee;
+        color: #111;
+    }
+    .textMidl{
+        display: grid;
+        align-items: center;
+    }
+    .prsntPaper{
+        background-color: #eee;
+        border-radius: 10px;
+        padding: 15px 10px;
+        display: grid;
+        width: 100%;
+        display: grid;
+        column-gap: 3px;
+        grid-template-columns: 1fr 1fr;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 8px;
+    }
+    .prsntTwoColumnar{
+        column-count: 2;
+    }
+    .watermark{
+        opacity: 0.03;
+        position: absolute;
+        height: 40%;
+        left: 13.5rem;
+        bottom: 4.8rem;
+    }
+    .clouds{
+        opacity: 0.7;
+        position: absolute;
+        height: 10%;
+        right: 1.5rem;
+        top: 4rem;
+    }
+    .flowers{
+        opacity: 0.4;
+        position: absolute;
+        height: 25%;
+        right: 1.25rem;
+        bottom: 4.75rem;
+    }
+    
+    @media(max-width:750px){
+        .prsntTwoColumnar{
+            column-count: 1;
+        }
+    }
+    @media(max-width:660px){
+        .prsntSplit{
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto;
+        }
+        .btnsBox{
+            display: block;
+            margin-top: 20px;
+        }
+        .watermark{
+            left: 5rem;
+            bottom: 4rem;
+        }
+    }
+    @media(max-width:470px){
+        .watermark{
+            height: 30%;
+            left: 2rem;
+            bottom: 4rem;
+        }
+        .clouds{
+            height: 7%;
+            right: 2rem;
+            top: 5rem;
+        }
+        .flowers{
+            height: 25%;
+            right: 1.75rem;
+            bottom: 4.75rem;
+        }
+    }
+    .ODImgDesc p{
+        padding:5px
+        }
+    .ODImgDesc a{
+        color:#555;
+        padding:5px
+        }
+    
+</style>
+{% endblock imports %}
+
+{% block content %}
+{% if case.visible %}
+<div class="pad-15 prsntSplit">
+    <div>
+    <div class="prsntPaper" style="min-height:80vh">
+        <div class="spanTwo textMidl">
+            <div id="intro" style="font-size:20px; text-align: center">بر روی یکی از دکمه‌ها کلیک کنید.</div>
+                <div id="ID" class="content spanTwo">
+                    <div class="cell"> جنسیت: <b>{{ case.sex_pedi }}</b> </div> 
+                    <div class="cell"> محل مراجعه: <b>{{ case.location }}</b> </div>
+                    <div class="cell"><b>{{ case.age }}</b> ساله </div>
+                    <hr/ class="myHR" style="grid-column: span 5;">
+                    <div class="cell">منبع شرح حال: <b>{{ case.source }}</b> </div>
+                    <div class="cell"> محل زندگی: <b>{{ case.dwelling }}</b> </div>
+                    <div class="cell"> میزان قابل اعتماد بودن: <b>{{ case.reliability }}</b>/5</div>
+                    <button class="flower-button">Click Me</button>
+                </div>
+                
+                <div id="CC" class="content">
+                    <div dir="ltr"  class="prsntTitle hx" style="text-align: left; display: block">
+                        <div class="tabIndic"></div>
+                        <b>Cheif Complaint: </b>
+                    </div>
+                    <div class="hx prsntText textMidl" style=""><h3 style="margin-bottom:5rem">{{ case.cc }}</h3></div>
+                </div>                
+
+                <div id="PI" class="content">
+                    <div dir="ltr"  class="prsntTitle hx" style="text-align: left; display: block">
+                        <div class="tabIndic"></div>
+                        <b>Present Illness: </b>
+                    </div>
+                    <div class="hx prsntText">{{ case.pi|linebreaks }}</div>
+                </div>
+
+                <div id="PMH" class="content">
+                    <div dir="ltr"  class="prsntTitle hx" style="text-align: left; display: block">
+                        <div class="tabIndic"></div>
+                        <b>Past Medical History: </b>
+                    </div>
+                    <div class="hx prsntText" dir='auto'>{{ case.pmh|emphasize|safe}}</div>
+                </div>
+                
+                <div id="Drugs" class=" content">
+                    <div dir="ltr"  class="prsntTitle hx" style="text-align: left; display: block">
+                        <div class="tabIndic"></div>
+                        <b>Drug History: </b>
+                    </div>
+                    <div class="hx prsntText" dir='auto'>
+                        {% if case.drg %}
+                            {{ case.drg|emphasize|safe }}
+                        {% else %}
+                            <p style="margin:20px; text-align: center">بیمار دارو یا مادۀ ویژه‌ای مصرف <u>نمی‌کند</u>.</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div id="SH" class=" content">
+                    <div dir="ltr"  class="prsntTitle hx" style="text-align: left; display: block">
+                        <div class="tabIndic"></div>
+                        <b>Social History: </b>
+                    </div>
+                    <div class="hx prsntText" dir='auto'>
+                        {% if case.sh %}
+                            {{ case.sh|emphasize|safe}}
+                        {% else %}
+                            <p style="margin:20px; text-align: center">بیمار Social Historyای را ذکر <u>نمی‌کند</u>.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            
+                <div id="FH" class=" content">
+                    <div dir="ltr"  class="prsntTitle hx" style="text-align: left; display: block">
+                        <div class="tabIndic"></div>
+                        <b>Family History: </b>
+                    </div>
+                    <div class="hx prsntText" dir='auto'>
+                        {% if case.fh %}
+                            {{ case.fh|emphasize|safe }}
+                        {% else %}
+                            <p style="margin:20px; text-align: center">بیمار Family Historyای را ذکر <u>نمی‌کند</u>.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div id="ROS" class="content">
+                    <div dir="ltr"  class="prsntTitle hx" style="text-align: left; display: block">
+                        <div class="tabIndic"></div>
+                        <b>Review of Systems: </b>
+                    </div>
+                    <div class="hx prsntText prsntTwoColumnar">{{ case.ros|emphasize|safe}}</div>
+                </div>
+                
+                <div id="PE" class="content">
+                    <div dir="ltr"  class="prsntTitle hx" style="text-align: left; display: block">
+                        <div class="tabIndic"></div>
+                        <b>Physical Examination: </b>
+                    </div>
+                    <div class="hx prsntText prsntTwoColumnar">{{ case.phe|emphasize|safe}}</div>
+                </div>
+
+                <div id="Summary" class="content">
+                    <div dir="ltr"  class="prsntTitle hx" style="text-align: left; display: block;">
+                        <div class="tabIndic"></div>
+                        <b>Summary: </b>
+                    </div>
+                    <div class="hx prsntText">{{ case.summary|linebreaks }}</div>
+                </div>
+
+                <div id="dDx" class="content">
+                    <div dir="ltr"  class="prsntTitle hx" style="text-align: left; display: block">
+                        <div class="tabIndic"></div>
+                        <b>Diffrential Dx: </b>
+                    </div>
+                    <div class="hx prsntText" dir="auto">{{ case.ddx|linebreaks }}</div>
+                </div>
+
+                {% if case.act %}
+                <div id="Action" class="content">
+                    <div dir="ltr"  class="prsntTitle hx" style="text-align: left; display: block">
+                        <div class="tabIndic"></div>
+                        <b>Action: </b>
+                    </div>
+                    <div class="hx prsntText">{{ case.act|linebreaks }}</div>
+                </div>
+                {% endif %}
+
+                <div id="OD" class="content">
+                    <div dir="ltr"  class="prsntTitle hx" style="text-align: left; display: block">
+                        <div class="tabIndic"></div>
+                        <b>Other Data: </b><br/>
+                    </div>
+                    <div style="padding:10px 15px;" class="hx prsntText">
+                        <div style="font-size:18px;">{{ case.dat|urlize|linebreaks }}</div>
+                        <div style="display: flex; flex-wrap: wrap; justify-content: space-evenly;">
+                            {%for img in case.imagecase_set.all %}
+                            {% comment %} {%if img.verified %} {% endcomment %}
+                            <div class="m-2" style="background-color:#eee; border-radius:10px; max-width:220px; display:inline-block">
+                            <a href="{{img.image.url}}" target="_blank">
+                                <img src="{{img.image.url}}" style="border-radius:10px;" width="220" alt="{{img.text}}"/>
+                            </a>
+                            <div style="font-size:16px" dir="auto" class="ODImgDesc">{{img.text|urlizetrunc:15|linebreaks}}</div>
+                            </div>
+                            {% comment %} {% endif %} {% endcomment %}
+                            {% endfor%}
+                            </div>
+                    </div>
+                </div>
+                <div id="PDx" class="content">
+                    <div dir="ltr"  class="prsntTitle hx" style="text-align: left; display: block">
+                        <div class="tabIndic"></div>
+                        <b>Primary Diagnosis: </b>
+                    </div>
+                    <div class="hx prsntText" dir="auto">{{ case.pdx|linebreaks }}</div>
+                </div>
+        </div>
+        <img src='{%static '/images/Logo Prime.svg'%}' loading='lazy' class='watermark' alt='medepartout logo watermark'class='clouds' alt='clouds watermark'/>
+        <img src='{%static '/images/presentation/clouds_ped.png'%}' loading='lazy' class='clouds' alt='clouds watermark'/>
+        <img src='{%static '/images/presentation/flowers_ped.png'%}' loading='lazy' class='flowers' alt='flowers watermark'/>
+
+
+    </div>
+    </div>
+    <div dir="ltr" class="btnsBox" style="text-align: left">
+        <button onclick="showDiv('ID')" class="prsntBtn">ID</button>
+        <button onclick="showDiv('CC')" class="prsntBtn">CC</button>
+        <button onclick="showDiv('PI')" class="prsntBtn">PI</button>
+        <button onclick="showDiv('PMH')" class="prsntBtn">PMH</button>
+        <button onclick="showDiv('Drugs')" class="prsntBtn">Drugs</button>
+        <button onclick="showDiv('SH')" class="prsntBtn">SH</button>
+        <button onclick="showDiv('FH')" class="prsntBtn">FH</button>
+        <button onclick="showDiv('ROS')" class="prsntBtn">ROS</button>
+        <button onclick="showDiv('PE')" class="prsntBtn">PE</button>
+        <button onclick="showDiv('Summary')" class="prsntBtn">Summary</button>
+        {% if case.labgraphselection_set.all %}
+        <a href="graphs" target="_blank" class="prsntBtn" id="graphsBtn">See Lab Data</a>
+        {% endif %}
+        <button onclick="showDiv('dDx')" class="prsntBtn">dDx</button>
+        {% if case.act %}
+        <button onclick="showDiv('Action')" class="prsntBtn">Action</button>
+        {% endif %}
+        <button onclick="showDiv('OD')" class="prsntBtn">Other Data</button>
+        <button onclick="showDiv('PDx')" class="prsntBtn">Primary Dx</button>
+        
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+        document.getElementById('dropup-toggle').style.display = 'none';
+    };
+
+    function showDiv(divId) {
+        // Hide all content divs
+        var contentDivs = document.getElementsByClassName('content');
+        for (var i = 0; i < contentDivs.length; i++) {
+            contentDivs[i].style.display = 'none';
+        }
+        document.getElementById("intro").style.display = 'none';
+        // Show the selected div
+        document.getElementById(divId).style.display = 'block';
+    }
+</script>
+
+{%else%}
+<div style="display: grid; align-items: center; min-height: 80vh; padding: 30px 30px; font-size:20px; text-align: center">
+<p>برای دسترسی به حالت ارائه، باید شرح‌حال خود را از این <a href="{% url 'hx_public' case.slug%}">لینک</a> یا <a href="{% url 'self_user_cases'%}">پنل کاربری</a> خود همگانی (پابلیک) کنید.</p>
+</div>
+{%endif%}
+{% endblock content %}
