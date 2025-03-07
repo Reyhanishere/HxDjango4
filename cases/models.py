@@ -276,7 +276,7 @@ class Case(models.Model):
         if self.age > 5:
             return f"{self.age} ساله"
         else:
-            return f"{self.age} و {self.age_m}ماهه"
+            return f"{self.age} سال و {self.age_m} ماهه"
         
         
     def save(self, *args, **kwargs):
