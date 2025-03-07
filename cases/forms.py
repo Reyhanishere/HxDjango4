@@ -7,6 +7,64 @@ from PIL import Image
 
 from .models import *
 
+class CaseCreateForm(ModelForm):
+    alg=forms.CharField(widget=forms.Textarea(
+    ),
+        label="حساسیت‌ها",
+        help_text="حساسیت‌های دارویی و غذایی شناخته شده را وارد کنید.",
+        required=False,
+    )
+    field_order=['title', 'description','pretext','location','is_pedi']
+    class Meta:
+        model = Case
+        exclude = (
+            # "rts",
+            "verified",
+            "author",
+            "rating",
+            "lang",
+            "cover",
+            "choice",
+            "done",
+            "visible",
+            "premium",
+            "suggests",
+            "slug",
+        )
+        labels = {
+            'tags': ('دسته‌بندی تظاهرات'),
+            'rts':('بخش'),
+        }
+        help_texts={
+            'tags': ('دسته‌بندی بر اساس تظاهر بالینی اولیه. می‌توانید چند مورد را انتخاب کنید.'),
+        }
+    
+class CaseUpdateForm(ModelForm):
+    field_order=['title', 'description','pretext','location','is_pedi']
+    class Meta:
+        model = Case
+        exclude = (
+            "slug",
+            # "rts",
+            "verified",
+            "author",
+            "rating",
+            "lang",
+            "cover",
+            "choice",
+            "done",
+            "visible",
+            "premium",
+            "suggests",
+        )
+        labels = {
+            'tags': ('دسته‌بندی تظاهرات'),
+            'rts':('بخش'),
+        }
+        help_texts={
+            'tags': ('دسته‌بندی بر اساس تظاهر بالینی اولیه. می‌توانید چند مورد را انتخاب کنید.'),
+        }
+
 class CaseImageForm(ModelForm):
     image = forms.ImageField()
     def clean_image(self):
@@ -89,33 +147,7 @@ class GraphUpdateForm(ModelForm):
     class Meta:
         model=LabGraphSelection
         exclude=("author", "case")
-
-
-class CaseUpdateForm(ModelForm):
-    class Meta:
-        model = Case
-        exclude = (
-            "slug",
-            "verified",
-            "author",
-            "rating",
-            "lang",
-            "cover",
-            "choice",
-            "done",
-            "visible",
-            "premium",
-            "suggests",
-            "setting",
-        )
-        labels = {
-            'tags': ('دسته‌بندی تظاهرات'),
-            'rts':('بخش'),
-        }
-        help_texts={
-            'tags': ('دسته‌بندی بر اساس تظاهر بالینی اولیه. می‌توانید چند مورد را انتخاب کنید.'),
-        }
-
+        
 
 class CommentForm(ModelForm):
     class Meta:
@@ -261,44 +293,4 @@ class ExCreateForm(ModelForm):
             "suggests",
         )
 
-class CaseCreateForm(ModelForm):
-    # slug=forms.SlugField(widget=forms.TextInput(
-    #     attrs={"autocapitalize":"off", 'autocomplete':'off'},
-    # ),
-    # label="لینک",
-    # help_text="لینکی که می‌خواهید کیس شما با آن شناخته شود را وارد کنید. تلاش کنید لینکتان گویا و دقیق باشد، پس از این توانایی تغییر آن را نخواهید داشت. استفاده از فاصله (Space) مجاز نیست. می‌توانید به آموزش مراجعه کنید."
-    # )
-    alg=forms.CharField(widget=forms.Textarea(
-    ),
-        label="حساسیت‌ها",
-        help_text="حساسیت‌های دارویی و غذایی شناخته شده را وارد کنید.",
-        required=False,
-    )
-    field_order=['title', 'description','pretext','location']
-    class Meta:
-        model = Case
-        exclude = (
-            "doctor",
-            "rts",
-            "verified",
-            "author",
-            "rating",
-            "lang",
-            "cover",
-            "choice",
-            "done",
-            "visible",
-            "premium",
-            "suggests",
-            "slug",
-            "setting",
-        )
-        labels = {
-            'tags': ('دسته‌بندی تظاهرات'),
-            'rts':('بخش'),
-        }
-        help_texts={
-            'tags': ('دسته‌بندی بر اساس تظاهر بالینی اولیه. می‌توانید چند مورد را انتخاب کنید.'),
-        }
-        
 
