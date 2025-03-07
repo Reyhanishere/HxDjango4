@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/style_hx_ai.css' %}">
     <link rel="stylesheet" href="{% static 'css/style_hx_new_edit.css' %}">
 
-    <style>
-        
+    <style>        
         .spinnerLogo {
             background-image: url({% static 'images\Logo Prime.svg' %});
         }
@@ -30,11 +29,15 @@
             padding: 0.5rem;
             border-radius: 20px;
             padding-right: 0.75rem;
+            margin-bottom:0;
+            margin-top:1rem;
         }
         .hidden {
             display: none;
         }
+
     </style>
+    
 {% endblock imports %}
 
 {% block content %}
@@ -103,25 +106,31 @@
 {% endif %}
 
 <script>
-    // Get references to the checkbox and the divs
     const checkbox = document.getElementById('id_is_pedi');
     const divJob = document.getElementById('div_id_job');
     const divMarriage = document.getElementById('div_id_marriage');
+    const marriageState = document.getElementById('id_marriage')
+    const divAgeM = document.getElementById('div_id_age_m');
+    const age=document.getElementById('id_age')
 
-    // Add an event listener to the checkbox
+
     checkbox.addEventListener('change', function() {
         if (this.checked) {
-            // If the checkbox is checked, hide the divs
             divJob.classList.add('hidden');
+            marriageState.value='مجرد'
             divMarriage.classList.add('hidden');
+            divAgeM.style.display='block';
+            if (age.value > 20) {
+                age.value=10
+            }
         } else {
-            // If the checkbox is unchecked, show the divs
             divJob.classList.remove('hidden');
             divMarriage.classList.remove('hidden');
+            divAgeM.style.display='none'
+
         }
     });
 </script>
-
 {% endblock content %}
 
 {% block edel %}
