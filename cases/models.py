@@ -6,19 +6,6 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
-# class CRSModel(models.Model):
-#     class Meta:
-#         abstract=True
-
-#     def allow_comments(self):
-#         return True
-    
-#     def allow_reviews(self):
-#         return True
-    
-#     def allow_suggests(self):
-#         return True
-
 class Choice(models.Model):
     name = models.CharField(max_length=36)
 
@@ -118,9 +105,8 @@ class Case(models.Model):
         blank=True,
         help_text="اگر خواستید، می‌توانید مقدمه‌ای دربارۀ شرح‌حال خود بنویسید.",
     )
-    
-    is_pedi=models.BooleanField(("آیا کیس کودک است؟"), default=False)
-    
+    is_pedi=models.BooleanField(("آیا کیس کودک است؟"),default=False)
+
     gender = models.CharField(
         ("جنسیت"),
         max_length=5,
@@ -144,7 +130,8 @@ class Case(models.Model):
     )
     job = models.CharField(("پیشه (شغل)"), max_length=20, null=True, blank=True, default="",)
     dwelling = models.CharField(("محل زندگی"), max_length=20, null=True, blank=True, default="")
-    age = models.PositiveSmallIntegerField(("سن"), null=False, blank=False, default=40)
+    age = models.PositiveSmallIntegerField(("سن به سال"), null=False, blank=False, default=40)
+    age_m= models.PositiveSmallIntegerField(("باقی سن به ماه"), null=False, blank=False, default=0)
     marriage = models.CharField(
         ("وضعیت تاهل"),
         max_length=15,
@@ -158,9 +145,8 @@ class Case(models.Model):
         blank=True,
         default="متاهل"
     )
-    # date_of_admission=models.DateField(null=True, blank=True)
-    doctor = models.CharField(("پزشک درمانگر"), max_length=20, null=True, blank=True)
-    source = models.CharField(("منبع شرح حال"), max_length=10, null=True, blank=True, default="")
+
+    source = models.CharField(("منبع شرح حال"), max_length=20, null=True, blank=True, default="")
     reliability = models.CharField(
         ("میزان قابل اعتماد بودن بیمار از 5"),
         max_length=1,
@@ -174,7 +160,7 @@ class Case(models.Model):
         null=True,
         blank=True,
     )
-    setting = models.CharField(("مرکز درمانی"), max_length=30, null=True, blank=True)
+
     cc = models.CharField(
         ("شکایت اصلی"), max_length=100, null=False, blank=False, default="", help_text="Chief Complaint"
     )
@@ -222,7 +208,7 @@ class Case(models.Model):
 
     )
     dat = models.TextField(
-        ("داده‌های پاراکلینیکی"),
+        ("دیگر داده‌ها"),
         null=True,
         blank=True,
         help_text=(
@@ -279,13 +265,20 @@ class Case(models.Model):
         if self.is_pedi:
             if self.gender=='آقا':
                 return "پسر"
-            elif self.gender=='خانم':
+            elif self.gender=='آقا':
                 return "دختر"
             else:
                 return self.gender
         else:
             return self.gender
-            
+    
+    def get_age(self):
+        if self.age > 5:
+            return f"{self.age} ساله"
+        else:
+            return f"{self.age} و {self.age_m}ماهه"
+        
+        
     def save(self, *args, **kwargs):
         if not self.pk:
             today = now().strftime('%y%m%d')
@@ -295,13 +288,12 @@ class Case(models.Model):
                 count += 1
                 self.slug = f"{today}{count:02}"
         super().save(*args, **kwargs)
-        
+    
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         return reverse("hx_detail", args=[str(self.slug)])
-
 
 class FollowUp(models.Model):
     case = models.ForeignKey(Case, on_delete=models.CASCADE)
