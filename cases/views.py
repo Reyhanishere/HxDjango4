@@ -1,6 +1,6 @@
 from itertools import chain
 import requests
-import json
+import json, math
 
 from django.views import View
 from django.views.generic import ListView, DetailView, FormView, TemplateView
@@ -17,6 +17,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import *
 from .forms import *
+from .utils import *
 
 
 class CasesListView(ListView):
@@ -703,3 +704,42 @@ def phe_ai(request):
         return JsonResponse({'error': f'You have exceeded use limit.({use_limit})'}, status=400)
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+class CalculateWeightZScoreView(View):
+    def get(self, request):
+        gender = request.GET.get('gender')
+        age_months = int(request.GET.get('age_months'))
+        X = float(request.GET.get('weight'))
+
+        if gender not in ['1', '2']:
+            return JsonResponse({'error': 'Choose Male or Female as a gender.'}, status=400)
+        if X < 0.5 or X > 300:
+            return JsonResponse({'error': 'This weight is not valid for a kid.'}, status=400)
+
+
+        age_key = str(age_months)
+        if age_key in weight_data[gender]:
+            L, M, S = weight_data[gender][age_key]
+            z_score = self.calculate_z_score(X, L, M, S)
+            return JsonResponse({'z_score': z_score})
+        else:
+            lower_age = str(age_months - 0.5)
+            upper_age = str(age_months + 0.5)
+
+            try:
+                L_lower, M_lower, S_lower = weight_data[gender][lower_age]
+                L_upper, M_upper, S_upper = weight_data[gender][upper_age]
+            except KeyError:
+                return JsonResponse({'error': 'No data found for the nearest ages.'}, status=404)
+
+            z_score_lower = self.calculate_z_score(X, L_lower, M_lower, S_lower)
+            z_score_upper = self.calculate_z_score(X, L_upper, M_upper, S_upper)
+
+            average_z_score = round(((z_score_lower + z_score_upper) / 2), 2)
+            return JsonResponse({'z_score': average_z_score})
+
+    def calculate_z_score(self, X, L, M, S):
+        if L == 0:
+            return ((math.log(X / M)) / S)
+        else:
+            return (((X / M) ** L - 1) / (L * S))
