@@ -1,3 +1,120 @@
+function AddWZScore() {
+    const isPediCheckbox = document.getElementById('id_is_pedi');
+    const labelForPmh = document.querySelector('label[for="id_pmh"]');
+
+    labelForPmh.insertAdjacentHTML('afterend', `
+        <span id="toggle-WZS" style="">Calculate Z-Score</span>
+        <div id='pmhHelpBox' dir='ltr' style=>
+        <div style='display: inline-block'>
+        <label for="weight" style="display: none;">وزن (kg):</label>
+        <input type="number" id="weight" name="weight" min="0.5" max="300" step="0.1" value="" required style="display: none;">
+        <span id="calculate-button" class="calculateBtn">حساب کن</span>
+        </div>
+        <div style='display: inline-block'>
+        <div id="answer-box"></div>
+        <div id="add-to-pmh" class='addToPmh'>Add to PMH &darr;</div>
+        </div></div>
+    `);
+    const pmhHelpBox = document.getElementById('pmhHelpBox')
+
+    const calculateButton = document.getElementById('calculate-button');
+    const toggleWZSBtn = document.getElementById('toggle-WZS');
+    const answerBox = document.getElementById('answer-box');
+    const addToPmhButton = document.getElementById('add-to-pmh');
+    const weightInput = document.getElementById('weight');
+    const weightLabel = document.querySelector('label[for="weight"]');
+    const resultElement = answerBox;
+
+    let zScore = null;
+
+    isPediCheckbox.addEventListener('change', function() {
+        const isChecked = isPediCheckbox.checked;
+        toggleWZSBtn.style.display = isChecked ? 'inline-block' : 'none'; // Show toggle span only
+        pmhHelpBox.style.display = 'none';
+        addToPmhButton.style.display = 'none';
+        calculateButton.style.display = 'none';
+        weightLabel.style.display = 'none';
+        weightInput.style.display = 'none';
+        answerBox.style.display = 'none';
+    });
+
+    toggleWZSBtn.addEventListener('click', function() {
+
+        const isVisible = weightLabel.style.display === 'inline';
+        pmhHelpBox.style.display = isVisible ? 'none' : 'block';
+        weightLabel.style.display = isVisible ? 'none' : 'inline';
+        weightInput.style.display = isVisible ? 'none' : 'inline';
+        calculateButton.style.display = isVisible ? 'none' : 'inline-block';
+    });
+
+    // Calculate Z-score
+    calculateButton.addEventListener('click', function() {
+        var ageY = parseFloat(document.getElementById('id_age').value);
+        var ageM = parseFloat(document.getElementById('id_age_m').value);
+        var gender_fa = document.getElementById('id_gender').value; // Gender
+        var gender = '0';
+        if (gender_fa == 'آقا') {
+            gender = '1';
+        } else if (gender_fa == 'خانم') {
+            gender = '2';
+        }
+        var weight = parseFloat(document.getElementById('weight').value);
+
+        // Validate inputs
+        if (isNaN(ageY) || isNaN(ageM) || isNaN(weight)) {
+            resultElement.textContent = 'Error: Please enter valid numbers for age and weight.';
+            resultElement.style.background = 'red';
+            return;
+        }
+
+        var totalAgeMonths = ageY * 12 + ageM;
+        calculateButton.style.pointerEvents = 'none';
+        calculateButton.style.opacity = '0.5';
+        resultElement.textContent = 'Calculating...';
+        resultElement.style.background = 'none';
+
+        fetch(`../calculi/pedi_w_zscore/?gender=${gender}&age_months=${totalAgeMonths}&weight=${weight}`)
+            .then(response => {
+                if (!response.ok) {
+                    // Parse the response body as JSON to extract the error message
+                    return response.json().then(errorData => {
+                        // Throw an error with the message from the API
+                        throw new Error(`${errorData.error}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                resultElement.textContent = `Z-Score: ${data.z_score}`;
+                resultElement.style.background = 'linear-gradient(90deg, #4CAF50, #2196F3)'; // Gradient for success
+                resultElement.style.display = 'inline-block';
+                addToPmhButton.style.display = 'inline-block';
+                zScore = data.z_score;
+            })
+            .catch(error => {
+                resultElement.textContent = `Error: ${error.message}`;
+                resultElement.style.background = 'red';
+                resultElement.style.display = 'inline-block';
+                addToPmhButton.style.display = 'none';
+
+
+            })
+            .finally(() => {
+                calculateButton.style.pointerEvents = 'auto';
+                calculateButton.style.opacity = '1';
+            });
+    });
+
+    // Add Z-score to PMH
+    addToPmhButton.addEventListener('click', function() {
+        if (zScore !== null) {
+            const pmhTextarea = document.getElementById('id_pmh');
+            if (pmhTextarea) {
+                pmhTextarea.value += ` Z-Score: ${zScore}\n`;
+            }
+        }
+    });
+};
 function AddROSSection() {
 
     const divIdRos = document.getElementById('div_id_ros');
