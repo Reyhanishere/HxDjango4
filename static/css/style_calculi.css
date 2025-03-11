@@ -1,0 +1,110 @@
+h2 .title {
+    margin: 0 3rem 3rem 3rem;
+    color: #333;
+}
+
+.floatingCal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: rgba(240, 240, 240, 0.5);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 330px;
+    text-align: center;
+    align-items: center;
+    justify-items: center;
+}
+
+.gender-switch button {
+    width: 100px;
+    margin: 15px 0;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 30px;
+    background-color: rgb(121, 208, 255);
+    color: #222;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: 0.5s;
+}
+
+.gender-switch button:hover {
+    background-color: rgb(95, 190, 241);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.gender-switch button.female {
+    background-color: rgb(255, 110, 127);
+    color: white;
+}
+
+.gender-switch button.female:hover {
+    background-color: rgb(225, 85, 101);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.age-input,
+.weight-input {
+    margin: 15px 0;
+}
+
+.age-input input,
+.weight-input input {
+    width: 50px;
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#calculate-btn {
+    border: none;
+    border-radius: 20px;
+    background-color: rgba(245, 245, 245, 0.3);
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    grid-column: span 2;
+    margin: 15px 0;
+    transition: 0.5s;
+}
+
+#calculate-btn:hover {
+    background-color: rgba(200, 200, 200, 0.3);
+}
+
+#result-box {
+    display: none;
+    color: #333;
+    background: linear-gradient(45deg, rgba(176, 176, 176, 0.2), rgba(233, 233, 233, 0.3));
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 10px 12px;
+    border-radius: 20px 5px;
+}
+
+#copy-btn {
+    display: none;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px 20px;
+    background: rgba(108, 117, 125, 1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: #eee;
+    cursor: pointer;
+    font-size: 16px;
+    width: 120px;
+}
+
+@media (max-width: 350px) {
+    .floatingCal {
+        width: 280px;
+    }
+    .gender-switch {
+        grid-column: span 2;
+    }
+    .weight-input {
+        grid-column: span 2;
+    }
+}
