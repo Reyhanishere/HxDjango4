@@ -275,9 +275,12 @@ class Case(models.Model):
     def get_age(self):
         if self.age > 5:
             return f"{self.age} ساله"
+        elif self.age == 0:
+            return f"{self.age_m} ماهه"
+        elif self.age_m ==0:
+            return f"{self.age} ساله"
         else:
             return f"{self.age} سال و {self.age_m} ماهه"
-        
         
     def save(self, *args, **kwargs):
         if not self.pk:
