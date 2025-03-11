@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} | Weight Z Score Calculator {%endblock title%}
+{% block desc %}Calculate the Z-score for kids' weight, aged up to 20 years.{% endblock desc%}
+
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style_calculi.css' %}">
+    
+    <style>
+        .myMain {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, rgba(255, 110, 127, 0.6) 0%, rgba(191, 233, 255, 0.8) 100%);
+            flex-direction: column;
+        }
+    </style>
+{% endblock imports %}
+
+{% block content %}
+    <h2 class='title' dir='ltr'>Weight Z Score Calculator For Kids Up To 20 Years.</h2>
+    <div class="floatingCal" dir="ltr">
+        <div class="gender-switch">
+            <button id="gender-switch-btn">Male</button>
+        </div>
+        <div class="weight-input">
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" min="0.5" max="300" value="20">
+        </div>
+        <div class="age-input">
+            <label for="years">Years:</label>
+            <input type="number" id="years" min="0" max="20" step="1" value="8">
+        </div>
+        <div class="age-input">
+            <label for="months">Months:</label>
+            <input type="number" id="months" min="0" max="11.5" step="0.5" value="0">
+        </div>
+    
+        <img src="{% static '/images/calculi/calculate_btn_2.png' %}" height='39' id="calculate-btn" alt='calculate button'/>
+
+        <div id="result-box"></div>
+        <button id="copy-btn" onclick="copyZScore()">Copy</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const genderSwitchBtn = document.getElementById('gender-switch-btn');
+            genderSwitchBtn.addEventListener('click', () => {
+                if (genderSwitchBtn.textContent == 'Male') {
+                    genderSwitchBtn.textContent = 'Female';
+                    genderSwitchBtn.classList.add('female');
+                } else {
+                    genderSwitchBtn.textContent = 'Male';
+                    genderSwitchBtn.classList.remove('female');
+                }
+            });
+        });
+
+        const calculateBtn = document.getElementById('calculate-btn');
+        const resultElement = document.getElementById('result-box');
+
+        let zScore = null;
+
+        calculateBtn.addEventListener('click', function() {
+            const copyBtn = document.getElementById('copy-btn');
+            copyBtn.style.display='none'
+            const genderSwitchBtn = document.getElementById('gender-switch-btn');
+            var genderTxt = genderSwitchBtn.textContent.toLowerCase();
+            var gender = 1;
+            if (genderTxt == 'male') {
+                gender=1
+            } else {
+                gender=2
+            };
+            var years = parseInt(document.getElementById('years').value);
+            var months = parseFloat(document.getElementById('months').value);
+            var weight = parseFloat(document.getElementById('weight').value);
+            var totalAgeMonths = years * 12 + months;
+        
+            if (isNaN(years) || isNaN(months) || isNaN(weight)) {
+            resultElement.textContent = 'Error: Please enter valid numbers for age and weight.';
+            resultElement.style.background = 'red';
+            return;
+        };
+        
+            fetch(`../../calculi/pedi_w_zscore/?gender=${gender}&age_months=${totalAgeMonths}&weight=${weight}`)
+            
+            
+            .then(response => {
+                if (!response.ok) {
+                    // Parse the response body as JSON to extract the error message
+                    return response.json().then(errorData => {
+                        // Throw an error with the message from the API
+                        throw new Error(`${errorData.error}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                resultElement.textContent = `Z-Score: ${data.z_score}`;
+                resultElement.style.background = 'linear-gradient(45deg, rgba(176, 176, 176, 0.2), rgba(233, 233, 233, 0.3))';
+                resultElement.style.display = 'inline-block';
+                resultElement.style.gridColumn = 'span 1';
+                resultElement.style.color = 'black';
+                copyBtn.style.display='block'
+                zScore = data.z_score;
+            })
+            .catch(error => {
+                resultElement.textContent = `Error: ${error.message}`;
+                resultElement.style.background = '#8e0000c7';
+                resultElement.style.color = 'white';
+                resultElement.style.display = 'inline-block';
+                resultElement.style.gridColumn = 'span 2';
+            })
+            .finally(() => {
+                calculateBtn.style.pointerEvents = 'auto';
+                calculateBtn.style.opacity = '1';
+            });
+        });
+
+
+
+        function copyZScore() {
+            const text = resultElement.innerText;
+            const copyBtn = document.getElementById('copy-btn');
+            navigator.clipboard.writeText(text)
+            .then(() => {
+                copyBtn.innerText = "Copied!";
+                setTimeout(() => {
+                    copyBtn.innerText = "Copy";
+                }, 2000);
+            })
+            .catch((err) => {
+                console.error("Failed to copy text: ", err);
+            });
+        }
+    </script>
+{% endblock content %}
