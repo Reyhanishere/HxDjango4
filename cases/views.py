@@ -708,20 +708,23 @@ def phe_ai(request):
 class CalculateWeightZScoreView(View):
     def get(self, request):
         gender = request.GET.get('gender')
-        age_months = int(request.GET.get('age_months'))
+        age_months = float(request.GET.get('age_months'))
         X = float(request.GET.get('weight'))
 
         if gender not in ['1', '2']:
             return JsonResponse({'error': 'Choose Male or Female as a gender.'}, status=400)
         if X < 0.5 or X > 300:
             return JsonResponse({'error': 'This weight is not valid for a kid.'}, status=400)
-
+        if age_months%0.5!=0:
+            return JsonResponse({'error': 'The only acceptable decimal is 5.'}, status=400)
+        if age_months>240:
+            return JsonResponse({'error': "This calculator doesn't work for those who are older than 20 years."}, status=400)
 
         age_key = str(age_months)
         if age_key in weight_data[gender]:
             L, M, S = weight_data[gender][age_key]
             z_score = self.calculate_z_score(X, L, M, S)
-            return JsonResponse({'z_score': z_score})
+            return JsonResponse({'z_score': round(z_score, 2)})
         else:
             lower_age = str(age_months - 0.5)
             upper_age = str(age_months + 0.5)
@@ -743,3 +746,6 @@ class CalculateWeightZScoreView(View):
             return ((math.log(X / M)) / S)
         else:
             return (((X / M) ** L - 1) / (L * S))
+        
+class CalculateWeightZScorePageView(TemplateView):
+    template_name='calculi/pedi_WZS.html'
