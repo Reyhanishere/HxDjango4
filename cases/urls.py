@@ -8,6 +8,7 @@ urlpatterns = [
     path('', cases_main_tw, name='cases_main'),
 
     path('calculi/pedi_w_zscore/', CalculateWeightZScoreView.as_view(), name='cal_wzs'),
+    path('calculi/pedi_w_zscore_page/', CalculateWeightZScorePageView.as_view(), name='cal_wzs_pg'),
 
     path('hx/cc_tot_ai/', cc_tot_ai, name='cc_tot_ai'),
     path('hx/pi_que_ai/', pi_que_ai, name='pi_que_ai'),
