@@ -724,7 +724,8 @@ class CalculateWeightZScoreView(View):
         if age_key in weight_data[gender]:
             L, M, S = weight_data[gender][age_key]
             z_score = self.calculate_z_score(X, L, M, S)
-            return JsonResponse({'z_score': round(z_score, 2)})
+            average_z_score=z_score
+
         else:
             lower_age = str(age_months - 0.5)
             upper_age = str(age_months + 0.5)
@@ -739,7 +740,16 @@ class CalculateWeightZScoreView(View):
             z_score_upper = self.calculate_z_score(X, L_upper, M_upper, S_upper)
 
             average_z_score = round(((z_score_lower + z_score_upper) / 2), 2)
-            return JsonResponse({'z_score': average_z_score})
+        
+        if average_z_score < -3.9:
+            percentile = 0
+        elif average_z_score > 3.9:
+            percentile=100
+        else:
+            percentile = z_score_table_data[str(round(average_z_score, 1))]
+            percentile = round(float(percentile)*100,1)
+        return JsonResponse({'z_score': round(average_z_score, 2),
+                            'percentile': percentile})
 
     def calculate_z_score(self, X, L, M, S):
         if L == 0:
