@@ -15,11 +15,57 @@
             background: linear-gradient(45deg, rgba(255, 110, 127, 0.6) 0%, rgba(191, 233, 255, 0.8) 100%);
             flex-direction: column;
         }
+        .copyBtn{
+            display: none;
+            padding: 7px 20px;
+            margin: 3px 0;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            color: #eee;
+            cursor: pointer;
+            font-size: 16px;
+            width: 120px;
+        }
+        #copy-btn {
+            border-radius: 20px 5px;
+            background: rgba(108, 117, 125, 1);
+        }
+        #copy-btn-all{
+            border-radius: 5px 20px;
+            background: rgba(108, 117, 125, 1);
+        }
+        details{
+            margin: 2rem 2rem;
+            max-width: 400px
+
+        }
+        summary{
+            padding: 5px 10px;
+            background-color: rgba(250, 250, 250, 0.5);
+            border-radius: 10px;
+            margin-bottom: 10px;
+
+        }
+        details a{
+            text-decoration: underline 0.5px;
+            color: #555;
+            background: rgba(150, 150, 150, 0.5);
+            border-radius: 5px;
+            padding: 0 3px;
+            transition: 0.5s;
+        }
+        details a:hover{
+            color: #333;
+        }
+        details p{
+            line-height: 2;
+            font-size: 14px;
+        }
     </style>
 {% endblock imports %}
 
 {% block content %}
-    <h2 class='title' style='margin: 0 3rem 3rem 3rem' dir='ltr'>Weight Z Score Calculator For Kids Up To 20 Years.</h2>
+    <h2 class='title' style='margin: 3rem' dir='ltr'>Weight Z Score Calculator For Kids Up To 20 Years.</h2>
     <div class="floatingCal" dir="ltr">
         <div class="gender-switch">
             <button id="gender-switch-btn">Male</button>
@@ -40,8 +86,16 @@
         <img src="{% static '/images/calculi/calculate_btn_2.png' %}" height='39' id="calculate-btn" alt='calculate button'/>
 
         <div id="result-box"></div>
-        <button id="copy-btn" onclick="copyZScore()">Copy</button>
+        <div>
+            <button class="copyBtn" id="copy-btn" onclick="copyZScore()">Copy Z&P</button>
+            <button class="copyBtn" id="copy-btn-all" onclick="copyZScoreWeightPecentile()">Copy All</button>
+        </div>
     </div>
+    <details style="" dir="ltr"><summary>About this calculator</summary>
+        <p>This calculator uses data from the CDC Growth Charts Data Files <a href="https://www.cdc.gov/growthcharts/cdc-data-files.htm">(Open)</a> to assess growth Z Scores.
+            The percentiles are calculated using Z-scores, with reference to a Z-score table prepared by the The Department of Mathematics at the University of Arizona<a href="https://math.arizona.edu/~rsims/ma464/standardnormaltable.pdf">(Download)</a>.
+        </p>
+    </details>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const genderSwitchBtn = document.getElementById('gender-switch-btn');
@@ -63,7 +117,9 @@
 
         calculateBtn.addEventListener('click', function() {
             const copyBtn = document.getElementById('copy-btn');
+            const copyBtnAll = document.getElementById('copy-btn-all');
             copyBtn.style.display='none'
+            copyBtnAll.style.display='none'
             const genderSwitchBtn = document.getElementById('gender-switch-btn');
             var genderTxt = genderSwitchBtn.textContent.toLowerCase();
             var gender = 1;
@@ -97,12 +153,13 @@
                 return response.json();
             })
             .then(data => {
-                resultElement.textContent = `Z-Score: ${data.z_score}`;
+                resultElement.textContent = `Z-Score: ${data.z_score}\nPercentile: ${data.percentile}`;
                 resultElement.style.background = 'linear-gradient(45deg, rgba(176, 176, 176, 0.2), rgba(233, 233, 233, 0.3))';
                 resultElement.style.display = 'inline-block';
                 resultElement.style.gridColumn = 'span 1';
                 resultElement.style.color = 'black';
                 copyBtn.style.display='block'
+                copyBtnAll.style.display='block'
                 zScore = data.z_score;
             })
             .catch(error => {
@@ -121,13 +178,28 @@
 
 
         function copyZScore() {
-            const text = resultElement.innerText;
+            // const text = `Weight: ${weight.value} kg\n(${resultElement.innerText})`;
+            const text = resultElement.innerText;    
             const copyBtn = document.getElementById('copy-btn');
             navigator.clipboard.writeText(text)
             .then(() => {
                 copyBtn.innerText = "Copied!";
                 setTimeout(() => {
-                    copyBtn.innerText = "Copy";
+                    copyBtn.innerText = "Copy Z&P";
+                }, 2000);
+            })
+            .catch((err) => {
+                console.error("Failed to copy text: ", err);
+            });
+        }
+        function copyZScoreWeightPecentile() {
+            const text = `Weight: ${weight.value} kg\n(${resultElement.innerText})`;
+            const copyBtnAll = document.getElementById('copy-btn-all');
+            navigator.clipboard.writeText(text)
+            .then(() => {
+                copyBtnAll.innerText = "Copied!";
+                setTimeout(() => {
+                    copyBtnAll.innerText = "Copy All";
                 }, 2000);
             })
             .catch((err) => {
