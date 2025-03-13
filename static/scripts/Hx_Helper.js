@@ -85,11 +85,12 @@ function AddWZScore() {
                 return response.json();
             })
             .then(data => {
-                resultElement.textContent = `Z-Score: ${data.z_score}`;
+                resultElement.textContent = `Z-Score: ${data.z_score}, Percentile: ${data.percentile}`;
                 resultElement.style.background = 'linear-gradient(90deg, #4CAF50, #2196F3)'; // Gradient for success
                 resultElement.style.display = 'inline-block';
                 addToPmhButton.style.display = 'inline-block';
                 zScore = data.z_score;
+                percentile = data.percentile
             })
             .catch(error => {
                 resultElement.textContent = `Error: ${error.message}`;
@@ -110,13 +111,13 @@ function AddWZScore() {
         if (zScore !== null) {
             const pmhTextarea = document.getElementById('id_pmh');
             if (pmhTextarea) {
-                pmhTextarea.value += ` Z-Score: ${zScore}\n`;
+                pmhTextarea.value += `Weight: ${weight.value} kg\n(Z-Score: ${zScore}, Percentile: ${percentile})\n`;
             }
         }
     });
 };
-function AddROSSection() {
 
+function AddROSSection() {
     const divIdRos = document.getElementById('div_id_ros');
     const labelElement = divIdRos.querySelector('label');
 
