@@ -1,0 +1,251 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} | Weight Z Score Calculator {%endblock title%}
+{% block desc %}Calculate the Z-score for kids' weight, aged up to 20 years.{% endblock desc%}
+
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style_calculi.css' %}">
+    
+    <style>
+        .myMain {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, rgba(255, 110, 127, 0.6) 0%, rgba(191, 233, 255, 0.8) 100%);
+            flex-direction: column;
+        }
+        .floatingCal{
+            grid-template-columns: 0.7fr 1fr;
+        }
+        #length{
+            width: 70px;
+        }
+        .copyBtn{
+            display: none;
+            padding: 7px 20px;
+            margin: 3px 0;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            color: #eee;
+            cursor: pointer;
+            font-size: 16px;
+            width: 120px;
+        }
+        #copy-btn {
+            border-radius: 20px 5px;
+            background: rgba(108, 117, 125, 1);
+        }
+        #copy-btn-all{
+            border-radius: 5px 20px;
+            background: rgba(108, 117, 125, 1);
+        }
+        .calculusLinks {
+            text-decoration: underline 0.5px;            
+            margin: 5px;
+            color: #444;
+            background: rgba(150, 150, 150, 0.2);
+            border-radius: 10px;
+            padding: 2px 10px;
+            transition: 0.5s;
+            box-shadow: -0.5px 1px 3px 0px #999;
+        }
+        .calculusLinks:hover{
+            color: #222;
+            box-shadow: 0 0 4px 0px #999;
+            background: rgba(150, 150, 150, 0.1);
+
+        }
+        details{
+            margin: 2rem 2rem;
+            max-width: 400px
+
+        }
+        summary{
+            padding: 5px 10px;
+            background-color: rgba(250, 250, 250, 0.5);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+        }
+        details a{
+            text-decoration: underline 0.5px;
+            color: #555;
+            background: rgba(150, 150, 150, 0.5);
+            border-radius: 5px;
+            padding: 0 3px;
+            transition: 0.5s;
+        }
+        details a:hover{
+            color: #333;
+        }
+        details p{
+            line-height: 2;
+            font-size: 14px;
+        }
+    </style>
+{% endblock imports %}
+
+{% block content %}
+    <h2 class='title' style='margin: 3rem' dir='ltr'>Length Z Score Calculator For Kids Up To 20 Years.</h2>
+    <div class="floatingCal" dir="ltr">
+        <div class="gender-switch">
+            <button id="gender-switch-btn">Male</button>
+        </div>
+        <div class="weight-input">
+            <label for="length" style="font-size:16px;">Length (cm):</label>
+            <input type="number" id="length" min="20" max="250" value="100"  step="1">
+        </div>
+        <div class="age-input">
+            <label for="years">Years:</label>
+            <input type="number" id="years" min="0" max="20" step="1" value="4">
+        </div>
+        <div class="age-input">
+            <label for="months">Months:</label>
+            <input type="number" id="months" min="0" max="11.5" step="0.5" value="0">
+        </div>
+    
+        <img src="{% static '/images/calculi/calculate_btn_2.png' %}" height='39' id="calculate-btn" alt='calculate button'/>
+
+        <div id="result-box"></div>
+        <div>
+            <button class="copyBtn" id="copy-btn" onclick="copyZScore()">Copy Z&P</button>
+            <button class="copyBtn" id="copy-btn-all" onclick="copyZScoreLengthPecentile()">Copy All</button>
+        </div>
+    </div>
+    <div style="margin-top: 1.5rem">
+        <h5 dir="ltr" style="margin-bottom: 1rem; color: #555">Other Calculus:</h5>
+        <a href="{% url 'cal_wzs_pg'%}" class="calculusLinks">Weight Z-Score Calculator</a>
+        <a href="{% url 'cal_lzs_pg'%}" class="calculusLinks">BMI Z-Score Calculator</a>
+    </div>
+    <details style="" dir="ltr"><summary>About this calculator</summary>
+        <p>This calculator uses data from the CDC Growth Charts Data Files <a href="https://www.cdc.gov/growthcharts/cdc-data-files.htm">(Open)</a> to assess growth Z Scores.
+            The percentiles are calculated using Z-scores, with reference to a Z-score table prepared by the The Department of Mathematics at the University of Arizona <a href="https://math.arizona.edu/~rsims/ma464/standardnormaltable.pdf">(Download)</a>.
+        </p>
+    </details>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const genderSwitchBtn = document.getElementById('gender-switch-btn');
+            genderSwitchBtn.addEventListener('click', () => {
+                if (genderSwitchBtn.textContent == 'Male') {
+                    genderSwitchBtn.textContent = 'Female';
+                    genderSwitchBtn.classList.add('female');
+                } else {
+                    genderSwitchBtn.textContent = 'Male';
+                    genderSwitchBtn.classList.remove('female');
+                }
+            });
+        });
+
+        const calculateBtn = document.getElementById('calculate-btn');
+        const resultElement = document.getElementById('result-box');
+
+        let zScore = null;
+
+        function calculateLZScore () {
+            const copyBtn = document.getElementById('copy-btn');
+            const copyBtnAll = document.getElementById('copy-btn-all');
+            copyBtn.style.display='none'
+            copyBtnAll.style.display='none'
+            const genderSwitchBtn = document.getElementById('gender-switch-btn');
+            var genderTxt = genderSwitchBtn.textContent.toLowerCase();
+            var gender = 1;
+            if (genderTxt == 'male') {
+                gender=1
+            } else {
+                gender=2
+            };
+            var years = parseInt(document.getElementById('years').value);
+            var months = parseFloat(document.getElementById('months').value);
+            var length = parseFloat(document.getElementById('length').value);
+            var totalAgeMonths = years * 12 + months;
+        
+            if (isNaN(years) || isNaN(months) || isNaN(length)) {
+            resultElement.textContent = 'Error: Please enter valid numbers for age and length.';
+            resultElement.style.background = '#8e0000c7';
+            resultElement.style.color = 'white';
+            resultElement.style.display = 'inline-block';
+            resultElement.style.gridColumn = 'span 2';
+            return;
+        };
+        
+            fetch(`../../calculi/pedi_l_zscore/?gender=${gender}&age_months=${totalAgeMonths}&length=${length}`)
+            
+            
+            .then(response => {
+                if (!response.ok) {
+                    // Parse the response body as JSON to extract the error message
+                    return response.json().then(errorData => {
+                        // Throw an error with the message from the API
+                        throw new Error(`${errorData.error}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                resultElement.textContent = `Z-Score: ${data.z_score}\nPercentile: ${data.percentile}`;
+                resultElement.style.background = 'linear-gradient(45deg, rgba(176, 176, 176, 0.2), rgba(233, 233, 233, 0.3))';
+                resultElement.style.display = 'inline-block';
+                resultElement.style.gridColumn = 'span 1';
+                resultElement.style.color = 'black';
+                copyBtn.style.display='block'
+                copyBtnAll.style.display='block'
+                zScore = data.z_score;
+            })
+            .catch(error => {
+                resultElement.textContent = `Error: ${error.message}`;
+                resultElement.style.background = '#8e0000c7';
+                resultElement.style.color = 'white';
+                resultElement.style.display = 'inline-block';
+                resultElement.style.gridColumn = 'span 2';
+            })
+            .finally(() => {
+                calculateBtn.style.pointerEvents = 'auto';
+                calculateBtn.style.opacity = '1';
+            });
+        }
+
+        calculateBtn.addEventListener('click', calculateLZScore);
+
+
+        document.addEventListener('keydown', function(event) {
+
+            if (event.key === 'Enter') {
+                calculateLZScore();
+            }
+        });
+
+        function copyZScore() {
+            // const text = `Weight: ${weight.value} kg\n(${resultElement.innerText})`;
+            const text = resultElement.innerText;    
+            const copyBtn = document.getElementById('copy-btn');
+            navigator.clipboard.writeText(text)
+            .then(() => {
+                copyBtn.innerText = "Copied!";
+                setTimeout(() => {
+                    copyBtn.innerText = "Copy Z&P";
+                }, 2000);
+            })
+            .catch((err) => {
+                console.error("Failed to copy text: ", err);
+            });
+        }
+        function copyZScoreLengthPecentile() {
+            var length = parseFloat(document.getElementById('length').value);
+            const text = `Length: ${length} cm\n(${resultElement.innerText})`;
+            const copyBtnAll = document.getElementById('copy-btn-all');
+            navigator.clipboard.writeText(text)
+            .then(() => {
+                copyBtnAll.innerText = "Copied!";
+                setTimeout(() => {
+                    copyBtnAll.innerText = "Copy All";
+                }, 2000);
+            })
+            .catch((err) => {
+                console.error("Failed to copy text: ", err);
+            });
+        }
+    </script>
+{% endblock content %}
