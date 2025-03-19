@@ -10,6 +10,15 @@ weight_data = load_pedi_weight_data()
 
 #### ------------------ ####
 
+def load_pedi_length_data():
+    json_file_path = os.path.join(os.path.dirname(__file__), '../static/data/length_MLS_0-240.json')
+    with open(json_file_path, 'r') as file:
+        return json.load(file)
+
+length_data = load_pedi_length_data()
+
+#### ------------------ ####
+
 def load_z_score_table():
     json_file_path = os.path.join(os.path.dirname(__file__), '../static/data/z_table_abstract.json')
     with open(json_file_path, 'r') as file:
