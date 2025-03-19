@@ -18,6 +18,9 @@
         .floatingCal{
             grid-template-columns: 0.7fr 1fr;
         }
+        #weight{
+            width: 70px;
+        }
         .copyBtn{
             display: none;
             padding: 7px 20px;
@@ -43,7 +46,7 @@
             color: #444;
             background: rgba(150, 150, 150, 0.2);
             border-radius: 10px;
-            padding: 2px 10px;
+            padding: 7px 15px;
             transition: 0.5s;
             box-shadow: -0.5px 1px 3px 0px #999;
         }
@@ -104,10 +107,12 @@
     
         <img src="{% static '/images/calculi/calculate_btn_2.png' %}" height='39' id="calculate-btn" alt='calculate button'/>
 
-        <div id="result-box"></div>
-        <div>
-            <button class="copyBtn" id="copy-btn" onclick="copyZScore()">Copy Z&P</button>
-            <button class="copyBtn" id="copy-btn-all" onclick="copyZScoreWeightPecentile()">Copy All</button>
+        <div style="grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr; justify-items: end; align-items: center;">
+            <div id="result-box"></div>
+            <div>
+                <button class="copyBtn" id="copy-btn" onclick="copyZScore()">Copy Z&P</button>
+                <button class="copyBtn" id="copy-btn-all" onclick="copyZScoreWeightPecentile()">Copy All</button>
+            </div>
         </div>
     </div>
     <div style="margin-top: 1.5rem">
