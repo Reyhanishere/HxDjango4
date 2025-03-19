@@ -716,7 +716,7 @@ class CalculateWeightZScoreView(View):
         if X < 0.5 or X > 300:
             return JsonResponse({'error': 'This weight is not valid for a kid.'}, status=400)
         if age_months%0.5!=0:
-            return JsonResponse({'error': 'The only acceptable decimal is 5.'}, status=400)
+            return JsonResponse({'error': 'The only acceptable decimal for Months is 5.'}, status=400)
         if age_months>240:
             return JsonResponse({'error': "This calculator doesn't work for those who are older than 20 years."}, status=400)
 
@@ -759,3 +759,59 @@ class CalculateWeightZScoreView(View):
         
 class CalculateWeightZScorePageView(TemplateView):
     template_name='calculi/pedi_WZS.html'
+
+class CalculateLengthZScoreView(View):
+    def get(self, request):
+        gender = request.GET.get('gender')
+        age_months = float(request.GET.get('age_months'))
+        X = float(request.GET.get('length'))
+
+        if gender not in ['1', '2']:
+            return JsonResponse({'error': 'Choose Male or Female as a gender.'}, status=400)
+        if X < 22 or X > 250:
+            return JsonResponse({'error': 'This lenght is not valid for a kid. Please check if you have entered the length in centimeters (cm).'}, status=400)
+        if age_months%0.5!=0:
+            return JsonResponse({'error': 'The only acceptable decimal for Months is 5.'}, status=400)
+        if age_months>240:
+            return JsonResponse({'error': "This calculator doesn't work for those who are older than 20 years."}, status=400)
+
+        age_key = str(age_months)
+        if age_key in length_data[gender]:
+            L, M, S = length_data[gender][age_key]
+            z_score = self.calculate_z_score(X, L, M, S)
+            average_z_score=z_score
+
+        else:
+            lower_age = str(age_months - 0.5)
+            upper_age = str(age_months + 0.5)
+
+            try:
+                L_lower, M_lower, S_lower = length_data[gender][lower_age]
+                L_upper, M_upper, S_upper = length_data[gender][upper_age]
+            except KeyError:
+                return JsonResponse({'error': 'No data found for the nearest ages.'}, status=404)
+
+            z_score_lower = self.calculate_z_score(X, L_lower, M_lower, S_lower)
+            z_score_upper = self.calculate_z_score(X, L_upper, M_upper, S_upper)
+
+            average_z_score = round(((z_score_lower + z_score_upper) / 2), 2)
+        
+        if average_z_score < -3.9:
+            percentile = 0
+        elif average_z_score > 3.9:
+            percentile=100
+        else:
+            percentile = z_score_table_data[str(round(average_z_score, 1))]
+            percentile = round(float(percentile)*100,1)
+        return JsonResponse({'z_score': round(average_z_score, 2),
+                            'percentile': percentile})
+
+    def calculate_z_score(self, X, L, M, S):
+        if L == 0:
+            return ((math.log(X / M)) / S)
+        else:
+            return (((X / M) ** L - 1) / (L * S))
+        
+class CalculateLengthZScorePageView(TemplateView):
+    template_name='calculi/pedi_LZS.html'
+
