@@ -109,16 +109,18 @@
     
         <img src="{% static '/images/calculi/calculate_btn_2.png' %}" height='39' id="calculate-btn" alt='calculate button'/>
 
-        <div id="result-box"></div>
-        <div>
-            <button class="copyBtn" id="copy-btn" onclick="copyZScore()">Copy Z&P</button>
-            <button class="copyBtn" id="copy-btn-all" onclick="copyZScoreLengthPecentile()">Copy All</button>
+        <div style="grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr; justify-items: end; align-items: center;">
+            <div id="result-box"></div>
+            <div>
+                <button class="copyBtn" id="copy-btn" onclick="copyZScore()">Copy Z&P</button>
+                <button class="copyBtn" id="copy-btn-all" onclick="copyZScoreLengthPecentile()">Copy All</button>
+            </div>
         </div>
     </div>
     <div style="margin-top: 1.5rem">
         <h5 dir="ltr" style="margin-bottom: 1rem; color: #555">Other Calculus:</h5>
         <a href="{% url 'cal_wzs_pg'%}" class="calculusLinks">Weight Z-Score Calculator</a>
-        <a href="{% url 'cal_lzs_pg'%}" class="calculusLinks">BMI Z-Score Calculator</a>
+        <a class="calculusLinks">BMI Z-Score Calculator</a>
     </div>
     <details style="" dir="ltr"><summary>About this calculator</summary>
         <p>This calculator uses data from the CDC Growth Charts Data Files <a href="https://www.cdc.gov/growthcharts/cdc-data-files.htm">(Open)</a> to assess growth Z Scores.
