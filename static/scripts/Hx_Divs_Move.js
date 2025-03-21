@@ -25,4 +25,4 @@ function moveElementsToNewDiv(elementIds) {
     }
 }
 
-const movingDivsIds = ['div_id_gender', 'div_id_job', 'div_id_dwelling', 'div_id_age', 'div_id_marriage', 'div_id_source', 'div_id_reliability', 'div_id_setting'];
+const movingDivsIds = ['div_id_gender', 'div_id_job', 'div_id_dwelling', 'div_id_age', 'div_age_m', 'div_id_marriage', 'div_id_source', 'div_id_reliability', 'div_id_setting'];
