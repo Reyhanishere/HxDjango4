@@ -1,12 +1,17 @@
 
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} | Head Circumference Z Score Calculator {%endblock title%}
-{% block desc %}Calculate the Z-score for kids' head circumference, aged up to 3 years.{% endblock desc%}
+{% block title %} | Weight Z Score Calculator {%endblock title%}
+{% block desc %}Calculate the Z-score for kids' weight, aged up to 20 years.{% endblock desc%}
 
 {% block imports %}
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <META HTTP-EQUIV="EXPIRES" CONTENT="Mon, 29 Apr 2002 8:35:00 GMT">
+
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/style_calculi.css' %}">
+
+    <script src="{% static 'scripts/Calculi.js'%}"></script>
 
     
     <style>
@@ -17,18 +22,11 @@
             background: linear-gradient(45deg, rgba(255, 110, 127, 0.6) 0%, rgba(191, 233, 255, 0.8) 100%);
             flex-direction: column;
         }
-        .floatingCal{
-            grid-template-columns: 0.7fr 1fr;
-        }
-        #hc{
-            width: 60px;
-        }
+
         .myFooter {
             background-color: #66899c;
             height: 2.65rem;
         }
-
-
 
     </style>
 {% endblock imports %}
@@ -53,38 +51,39 @@
         </div>
     
         <img src="{% static '/images/calculi/calculate_btn_2.png' %}" height='39' id="calculate-btn" alt='calculate button'/>
-
-        <div style="grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr; justify-items: end; align-items: center;">
+        <div id="chartContainer" style="grid-column: span 2;">
+            <div class="highlightContainer">
+              <div class="" id="chart"></div>
+              <div class="highlightOverlay" id="highlightOverlay"></div>
+        
+            </div>
+            <div class="valueMarker" id="valueMarker"></div>
+            <div class="" id="midMarker"></div>
+        </div>
+        <div style="grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr; justify-items: center; align-items: center; transform: translate(0, -1rem);">
             <div id="result-box"></div>
             <div>
                 <button class="copyBtn" id="copy-btn" onclick="copyZScore()">Copy Z&P</button>
                 <button class="copyBtn" id="copy-btn-all" onclick="copyZScoreHCPecentile()">Copy All</button>
             </div>
         </div>
-
     </div>
-    <div style="margin-top: 1.5rem">
+
+    <div style="margin: 1.5rem" dir='ltr'>
         <h5 dir="ltr" style="margin-bottom: 1rem; color: #555">Other Calculus:</h5>
         <a href="{% url 'cal_wzs_pg'%}" class="calculusLinks">Weight Z-Score Calculator</a>
         <a href="{% url 'cal_lzs_pg'%}" class="calculusLinks">Length Z-Score Calculator</a>
     </div>
+    
     <details style="" dir="ltr"><summary>About this calculator</summary>
         <p>This calculator uses data from the CDC Growth Charts Data Files <a href="https://www.cdc.gov/growthcharts/cdc-data-files.htm">(Open)</a> to assess growth Z Scores.
             The percentiles are calculated using Z-scores, with reference to a Z-score table prepared by the The Department of Mathematics at the University of Arizona <a href="https://math.arizona.edu/~rsims/ma464/standardnormaltable.pdf">(Download)</a>.
         </p>
     </details>
+    
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const genderSwitchBtn = document.getElementById('gender-switch-btn');
-            genderSwitchBtn.addEventListener('click', () => {
-                if (genderSwitchBtn.textContent == 'Male') {
-                    genderSwitchBtn.textContent = 'Female';
-                    genderSwitchBtn.classList.add('female');
-                } else {
-                    genderSwitchBtn.textContent = 'Male';
-                    genderSwitchBtn.classList.remove('female');
-                }
-            });
+            genderSwitch('gender-switch-btn');
         });
 
         const calculateBtn = document.getElementById('calculate-btn');
@@ -92,108 +91,14 @@
 
         let zScore = null;
 
-        function calculateLZScore () {
-            const copyBtn = document.getElementById('copy-btn');
-            const copyBtnAll = document.getElementById('copy-btn-all');
-            copyBtn.style.display='none'
-            copyBtnAll.style.display='none'
-            const genderSwitchBtn = document.getElementById('gender-switch-btn');
-            var genderTxt = genderSwitchBtn.textContent.toLowerCase();
-            var gender = 1;
-            if (genderTxt == 'male') {
-                gender=1
-            } else {
-                gender=2
-            };
-            var years = parseInt(document.getElementById('years').value);
-            var months = parseFloat(document.getElementById('months').value);
-            var hc = parseFloat(document.getElementById('hc').value);
-            var totalAgeMonths = years * 12 + months;
-        
-            if (isNaN(years) || isNaN(months) || isNaN(hc)) {
-            resultElement.textContent = 'Error: Please enter valid numbers for age and head circumference.';
-            resultElement.style.background = '#8e0000c7';
-            resultElement.style.color = 'white';
-            resultElement.style.display = 'inline-block';
-            resultElement.style.gridColumn = 'span 2';
-            return;
-        };
-        
-            fetch(`../../calculi/pedi_hc_zscore/?gender=${gender}&age_months=${totalAgeMonths}&hc=${hc}`)
-            
-            
-            .then(response => {
-                if (!response.ok) {
-                    // Parse the response body as JSON to extract the error message
-                    return response.json().then(errorData => {
-                        // Throw an error with the message from the API
-                        throw new Error(`${errorData.error}`);
-                    });
-                }
-                return response.json();
-            })
-            .then(data => {
-                resultElement.textContent = `Z-Score: ${data.z_score}\nPercentile: ${data.percentile}`;
-                resultElement.style.background = 'linear-gradient(45deg, rgba(176, 176, 176, 0.2), rgba(233, 233, 233, 0.3))';
-                resultElement.style.display = 'inline-block';
-                resultElement.style.gridColumn = 'span 1';
-                resultElement.style.color = 'black';
-                copyBtn.style.display='block'
-                copyBtnAll.style.display='block'
-                zScore = data.z_score;
-            })
-            .catch(error => {
-                resultElement.textContent = `Error: ${error.message}`;
-                resultElement.style.background = '#8e0000c7';
-                resultElement.style.color = 'white';
-                resultElement.style.display = 'inline-block';
-                resultElement.style.gridColumn = 'span 2';
-            })
-            .finally(() => {
-                calculateBtn.style.pointerEvents = 'auto';
-                calculateBtn.style.opacity = '1';
-            });
-        }
-
-        calculateBtn.addEventListener('click', calculateLZScore);
-
+        calculateBtn.addEventListener('click', calculateHCZScore);
 
         document.addEventListener('keydown', function(event) {
 
             if (event.key === 'Enter') {
-                calculateLZScore();
+                calculateHCZScore();
             }
-        });
-
-        function copyZScore() {
-            // const text = `Weight: ${weight.value} kg\n(${resultElement.innerText})`;
-            const text = resultElement.innerText;    
-            const copyBtn = document.getElementById('copy-btn');
-            navigator.clipboard.writeText(text)
-            .then(() => {
-                copyBtn.innerText = "Copied!";
-                setTimeout(() => {
-                    copyBtn.innerText = "Copy Z&P";
-                }, 2000);
-            })
-            .catch((err) => {
-                console.error("Failed to copy text: ", err);
-            });
-        }
-        function copyZScoreHCPecentile() {
-            var hc = parseFloat(document.getElementById('hc').value);
-            const text = `Head Circumference: ${hc} cm\n(${resultElement.innerText})`;
-            const copyBtnAll = document.getElementById('copy-btn-all');
-            navigator.clipboard.writeText(text)
-            .then(() => {
-                copyBtnAll.innerText = "Copied!";
-                setTimeout(() => {
-                    copyBtnAll.innerText = "Copy All";
-                }, 2000);
-            })
-            .catch((err) => {
-                console.error("Failed to copy text: ", err);
-            });
-        }
+        });      
     </script>
+
 {% endblock content %}
