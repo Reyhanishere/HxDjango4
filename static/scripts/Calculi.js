@@ -217,6 +217,8 @@ function calculateWZScore() {
         .finally(() => {
             calculateBtn.style.pointerEvents = 'auto';
             calculateBtn.style.opacity = '1';
+            calculateBtn.style.zIndex = '3';
+
         });
 };
 
