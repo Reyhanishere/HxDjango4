@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} | BMI Z Score Calculator {%endblock title%}
+{% block desc %}Calculate the Z-score for kids' BMI, aged up to 20 years.{% endblock desc%}
+
+{% block imports %}
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <META HTTP-EQUIV="EXPIRES" CONTENT="Mon, 29 Apr 2002 8:35:00 GMT">
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style_calculi.css' %}">
+
+    <script src="{% static 'scripts/Calculi.js'%}"></script>
+
+    <style>
+        .myMain {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, rgba(255, 110, 127, 0.6) 0%, rgba(191, 233, 255, 0.8) 100%);
+            flex-direction: column;
+        }
+        
+        .myFooter {
+            background-color: #66899c;
+        }
+    </style>
+{% endblock imports %}
+
+{% block content %}
+    <h2 class='title' style='margin: 3rem' dir='ltr'>BMI (Body Mass Index) Z Score Calculator For Kids 2 to 20 Years.</h2>
+    <div class="floatingCal" dir="ltr">
+        <div class="gender-switch"  style="grid-column: span 2;">
+            <button id="gender-switch-btn" style="width: 10rem">Male</button>
+        </div>
+        <div class="weight-input">
+            <label for="weightB" style="font-size:14px;">Weight:</label>
+            <input type="number" id="weightB" min="5" max="300" value="20"  step="1">
+        </div>
+        <div class="weight-input">
+            <label for="length" style="font-size:14px;">Length:</label>
+            <input type="number" id="length" min="50" max="250" value="100"  step="1">
+        </div>
+        <div class="age-input">
+            <label for="years">Years:</label>
+            <input type="number" id="years" min="2" max="20" step="1" value="10">
+        </div>
+        <div class="age-input">
+            <label for="months">Months:</label>
+            <input type="number" id="months" min="0" max="11.5" step="0.5" value="0">
+        </div>
+    
+        <img src="{% static '/images/calculi/calculate_btn_2.png' %}" height='39' id="calculate-btn" alt='calculate button'/>
+        <div id="chartContainer" style="grid-column: span 2;">
+            <div class="highlightContainer">
+              <div class="" id="chart"></div>
+              <div class="highlightOverlay" id="highlightOverlay"></div>
+        
+            </div>
+            <div class="valueMarker" id="valueMarker"></div>
+            <div class="" id="midMarker"></div>
+        </div>
+        <div id="resCopyDiv">
+            <div id="result-box"></div>
+            <div>
+                <button class="copyBtn" id="copy-btn-all" onclick="copyZScoreBMIPecentile()">Copy</button>
+            </div>
+        </div>
+
+    </div>
+    <div style="margin: 1.5rem" dir="ltr">
+        <h5 dir="ltr" style="margin-bottom: 1rem; color: #555">Other Calculus:</h5>
+        <a href="{% url 'cal_wzs_pg'%}" class="calculusLinks">Weight Z-Score Calculator</a>
+        <a href="{% url 'cal_lzs_pg'%}" class="calculusLinks">Length Z-Score Calculator</a>
+        <a href="{% url 'cal_hczs_pg'%}" class="calculusLinks">Head Circumference Z-Score Calculator</a>
+
+    </div>
+    <details style="" dir="ltr"><summary>About this calculator</summary>
+        <p>This calculator uses data from the CDC Growth Charts Data Files <a href="https://www.cdc.gov/growthcharts/cdc-data-files.htm">(Open)</a> to assess growth Z Scores.
+            The percentiles are calculated using Z-scores, with reference to a Z-score table prepared by the The Department of Mathematics at the University of Arizona <a href="https://math.arizona.edu/~rsims/ma464/standardnormaltable.pdf">(Download)</a>.
+        </p>
+    </details>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            genderSwitch('gender-switch-btn');
+        });
+
+        const calculateBtn = document.getElementById('calculate-btn');
+        const resultElement = document.getElementById('result-box');
+
+        let zScore = null;
+
+        calculateBtn.addEventListener('click', calculateBMIZScore);
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                calculateBMIZScore();
+            }
+        });
+    </script>
+{% endblock content %}
