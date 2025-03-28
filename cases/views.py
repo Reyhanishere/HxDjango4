@@ -791,3 +791,29 @@ class CalculateBMIZScoreView(View):
         
         return find_LMS(bmi, head_circumference_data, gender, age_months)
 
+class CalculateBMIZScoreView(View):
+    def get(self, request):
+        gender = request.GET.get('gender')
+        age_months = float(request.GET.get('age_months'))
+        length = float(request.GET.get('length'))
+        weight = float(request.GET.get('weight'))
+
+        if gender not in ['1', '2']:
+            return JsonResponse({'error': 'Choose Male or Female as a gender.'}, status=400)
+        if length < 30 or length > 250:
+            return JsonResponse({'error': 'This length is not valid for a kid. Please check if you have entered the length in centimeters (cm).'}, status=400)
+        if weight < 0.5 or weight > 300:
+            return JsonResponse({'error': 'This weight is not valid for a kid. Please check if you have entered the weight in kilograms (kg).'}, status=400)
+        if age_months%0.5!=0:
+            return JsonResponse({'error': 'The only acceptable decimal for Months is 5.'}, status=400)
+        if age_months>240.5:
+            return JsonResponse({'error': "This calculator doesn't work for those who are older than 20 years."}, status=400)
+        elif  age_months < 24:
+            return JsonResponse({'error': "This calculator doesn't work for those who are younger than 2 years."}, status=400)
+
+        bmi=round(((weight)/((length/100)**2)), 2)
+        response = find_LMS(bmi, bmi_data, gender, age_months)
+        return response
+    
+class CalculateBMIZScorePageView(TemplateView):
+    template_name='calculi/pedi_BMIZS.html'
