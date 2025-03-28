@@ -222,6 +222,87 @@ function calculateWZScore() {
         });
 };
 
+function calculateBMIZScore() {
+    const copyBtnAll = document.getElementById('copy-btn-all');
+    copyBtnAll.style.display = 'none'
+    const genderSwitchBtn = document.getElementById('gender-switch-btn');
+    var genderTxt = genderSwitchBtn.textContent.toLowerCase();
+    var gender = 1;
+    if (genderTxt == 'male') {
+        gender = 1
+    } else {
+        gender = 2
+    };
+    var years = parseInt(document.getElementById('years').value);
+    var months = parseFloat(document.getElementById('months').value);
+    var weight = parseFloat(document.getElementById('weightB').value);
+    var length = parseFloat(document.getElementById('length').value);
+
+    var totalAgeMonths = years * 12 + months;
+
+    if (isNaN(years) || isNaN(months) || isNaN(weight) || isNaN(length)) {
+        resultElement.textContent = 'Error: Please enter valid numbers for age, weight and length.';
+        resultElement.style.background = '#8e0000c7';
+        resultElement.style.color = 'white';
+        resultElement.style.display = 'inline-block';
+        resultElement.style.gridColumn = 'span 2';
+        return;
+    };
+
+    fetch(`../../calculi/pedi_bmi_zscore/?gender=${gender}&age_months=${totalAgeMonths}&weight=${weight}&length=${length}`)
+
+
+    .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(`${errorData.error}`);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            resultElement.textContent = `BMI: ${data.value}\nZ-Score: ${data.z_score}\nPercentile: ${data.percentile}`;
+            resultElement.style.background = 'linear-gradient(45deg, rgba(176, 176, 176, 0.2), rgba(233, 233, 233, 0.3))';
+            resultElement.style.display = 'inline-block';
+            resultElement.style.gridColumn = 'span 1';
+            resultElement.style.color = 'black';
+            copyBtnAll.style.display = 'block'
+            zScore = data.z_score;
+            resultElement.style.transform = 'translate(0 px, 0 px)';
+            showGraph(data.z_score);
+
+        })
+        .catch(error => {
+            resultElement.textContent = `Error: ${error.message}`;
+            resultElement.style.background = '#8e0000c7';
+            resultElement.style.color = 'white';
+            resultElement.style.display = 'inline-block';
+            resultElement.style.gridColumn = 'span 2';
+            resultElement.style.transform = 'translate(0 px, -10 px)';
+        })
+        .finally(() => {
+            calculateBtn.style.pointerEvents = 'auto';
+            calculateBtn.style.opacity = '1';
+            calculateBtn.style.zIndex = '3';
+
+        });
+}
+
+function copyZScoreBMIPecentile() {
+    const text = `${resultElement.innerText}`;
+    const copyBtnAll = document.getElementById('copy-btn-all');
+    navigator.clipboard.writeText(text)
+        .then(() => {
+            copyBtnAll.innerText = "Copied!";
+            setTimeout(() => {
+                copyBtnAll.innerText = "Copy";
+            }, 2000);
+        })
+        .catch((err) => {
+            console.error("Failed to copy text: ", err);
+        });
+}
+
 function copyZScore() {
     // const text = `Weight: ${weight.value} kg\n(${resultElement.innerText})`;
     const text = resultElement.innerText;
