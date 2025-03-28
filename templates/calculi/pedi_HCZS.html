@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="{% static 'css/style_calculi.css' %}">
 
     <script src="{% static 'scripts/Calculi.js'%}"></script>
-
     
     <style>
         .myMain {
@@ -24,7 +23,6 @@
 
         .myFooter {
             background-color: #66899c;
-            height: 2.65rem;
         }
 
     </style>
@@ -59,7 +57,7 @@
             <div class="valueMarker" id="valueMarker"></div>
             <div class="" id="midMarker"></div>
         </div>
-        <div style="grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr; justify-items: center; align-items: center; transform: translate(0, -1rem);">
+        <div id="resCopyDiv">
             <div id="result-box"></div>
             <div>
                 <button class="copyBtn" id="copy-btn" onclick="copyZScore()">Copy Z&P</button>
@@ -72,6 +70,7 @@
         <h5 dir="ltr" style="margin-bottom: 1rem; color: #555">Other Calculus:</h5>
         <a href="{% url 'cal_wzs_pg'%}" class="calculusLinks">Weight Z-Score Calculator</a>
         <a href="{% url 'cal_lzs_pg'%}" class="calculusLinks">Length Z-Score Calculator</a>
+        <a href="{% url 'cal_bmizs_pg'%}" class="calculusLinks">BMI Z-Score Calculator</a>
     </div>
     
     <details style="" dir="ltr"><summary>About this calculator</summary>
