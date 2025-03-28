@@ -28,6 +28,13 @@ def load_pedi_head_circumference_data():
 
 head_circumference_data = load_pedi_head_circumference_data()
 
+def load_pedi_bmi_data():
+    json_file_path = os.path.join(os.path.dirname(__file__), '../static/data/bmi_LMS_24-240.json')
+    with open(json_file_path, 'r') as file:
+        return json.load(file)
+
+bmi_data = load_pedi_bmi_data()
+
 #### ------------------ ####
 
 def load_z_score_table():
@@ -74,5 +81,6 @@ def find_LMS(value, data_set, gender, age_months,):
     else:
         percentile = z_score_table_data[str(round(average_z_score, 1))]
         percentile = round(float(percentile)*100,1)
-    return JsonResponse({'z_score': round(average_z_score, 2),
+    return JsonResponse({'value':value,
+                        'z_score': round(average_z_score, 2),
                         'percentile': percentile})
