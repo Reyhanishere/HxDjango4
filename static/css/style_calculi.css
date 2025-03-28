@@ -71,6 +71,10 @@ h2 .title {
     width: 60px;
 }
 
+#weightB {
+    width: 60px;
+}
+
 #calculate-btn {
     border: none;
     border-radius: 20px;
@@ -95,6 +99,7 @@ h2 .title {
     padding: 10px 12px;
     border-radius: 20px 5px;
     text-align: left;
+    white-space: break-spaces;
 }
 
 .copyBtn {
@@ -235,6 +240,16 @@ details p {
     background: rgba(100, 100, 100, 0.4);
 }
 
+#resCopyDiv {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    transform: translate(0, -1rem);
+    gap: 10px;
+}
+
 @media (max-width: 350px) {
     .floatingCal {
         width: 280px;
@@ -244,5 +259,16 @@ details p {
     }
     .weight-input {
         grid-column: span 2;
+    }
+    .age-input {
+        grid-column: span 2;
+    }
+    .copyBtn {
+        padding: 7px 20px;
+        margin: 3px 10px;
+        width: 100px;
+    }
+    label {
+        font-size: 16px;
     }
 }
