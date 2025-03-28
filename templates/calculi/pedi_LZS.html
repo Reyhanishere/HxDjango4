@@ -25,7 +25,6 @@
 
         .myFooter {
             background-color: #66899c;
-            height: 2.65rem;
         }
 
     </style>
@@ -61,7 +60,7 @@
             <div class="" id="midMarker"></div>
         </div>
 
-        <div style="grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr; justify-items: center; align-items: center;">
+        <div id="resCopyDiv">
             <div id="result-box"></div>
             <div>
                 <button class="copyBtn" id="copy-btn" onclick="copyZScore()">Copy Z&P</button>
@@ -74,6 +73,8 @@
         <h5 dir="ltr" style="margin-bottom: 1rem; color: #555">Other Calculus:</h5>
         <a href="{% url 'cal_wzs_pg'%}" class="calculusLinks">Weight Z-Score Calculator</a>
         <a href="{% url 'cal_hczs_pg'%}" class="calculusLinks">Head Circumference Z-Score Calculator</a>
+        <a href="{% url 'cal_bmizs_pg'%}" class="calculusLinks">BMI Z-Score Calculator</a>
+
     </div>
     <details style="" dir="ltr"><summary>About this calculator</summary>
         <p>This calculator uses data from the CDC Growth Charts Data Files <a href="https://www.cdc.gov/growthcharts/cdc-data-files.htm">(Open)</a> to assess growth Z Scores.
@@ -81,7 +82,6 @@
         </p>
     </details>
     <script>
-
         document.addEventListener('DOMContentLoaded', () => {
             genderSwitch('gender-switch-btn');
         });
@@ -99,6 +99,5 @@
                 calculateLZScore();
             }
         });
-
     </script>
 {% endblock content %}
