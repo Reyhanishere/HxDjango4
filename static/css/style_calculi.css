@@ -3,6 +3,50 @@ h2 .title {
     color: #333;
 }
 
+#category {
+    text-decoration: underline 0.5px;
+    margin: 0 5px 0 15px;
+    color: #444;
+    background: rgba(190, 190, 190, 0.2);
+    border-radius: 20px;
+    padding: 5px 15px;
+    transition: 0.5s;
+    box-shadow: -0.5px 1px 2px 0px #888;
+    display: inline-block;
+    font-size: 16px;
+}
+
+#category:hover {
+    color: #222;
+    box-shadow: 0 0 4px 0px #999;
+    background: rgba(150, 150, 150, 0.1);
+}
+
+#likeBtn {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    border-radius: 10px;
+    background-color: #eee;
+    transition: all 0.3s ease;
+    line-height: 2;
+    padding: 0 10px;
+    border-color: #ccc;
+    cursor: pointer;
+}
+
+#likeBtn:hover {
+    box-shadow: 0px 0px 5px 0px #4444
+}
+
+#likeBtn.liked {
+    color: #c33;
+}
+
+#likeBtn.unliked {
+    color: #bbb
+}
+
 .floatingCal {
     display: grid;
     grid-template-columns: 0.7fr 1fr;
