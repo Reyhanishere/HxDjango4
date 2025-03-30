@@ -24,7 +24,48 @@ function showGraph(zScore) {
     const position = ((zScore + 4) / 8) * 100;
     marker.style.left = `${position}%`;
     highlightOverlay.style.width = `${position}%`;
+    // var colooor = 'green'
+    // if (position < 20) { colooor = 'red' }
+    // highlightOverlay.style.background = colooor
+
 }
+
+function likeCalculi(likeBtn, likeUrl, csrfToken) {
+    likeBtn.addEventListener('click', function() {
+        const calculink = likeBtn.dataset.calculink;
+        const action = likeBtn.dataset.action;
+
+        fetch(likeUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrfToken
+                },
+                body: `calculink=${calculink}&action=${action}`
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'ok') {
+
+                    const newAction = action === 'like' ? 'unlike' : 'like';
+                    likeBtn.dataset.action = newAction;
+
+                    likeBtn.classList.toggle('liked', newAction === 'unlike');
+                    likeBtn.classList.toggle('unliked', newAction === 'like');
+
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+}
+
 
 function calculateHCZScore() {
     const copyBtn = document.getElementById('copy-btn');
@@ -53,14 +94,12 @@ function calculateHCZScore() {
         return;
     };
 
-    fetch(`../../calculi/pedi_hc_zscore/?gender=${gender}&age_months=${totalAgeMonths}&hc=${hc}`)
+    fetch(`../pedi_hc_zscore/?gender=${gender}&age_months=${totalAgeMonths}&hc=${hc}`)
 
 
     .then(response => {
             if (!response.ok) {
-                // Parse the response body as JSON to extract the error message
                 return response.json().then(errorData => {
-                    // Throw an error with the message from the API
                     throw new Error(`${errorData.error}`);
                 });
             }
@@ -118,14 +157,12 @@ function calculateLZScore() {
         return;
     };
 
-    fetch(`../../calculi/pedi_l_zscore/?gender=${gender}&age_months=${totalAgeMonths}&length=${length}`)
+    fetch(`../pedi_l_zscore/?gender=${gender}&age_months=${totalAgeMonths}&length=${length}`)
 
 
     .then(response => {
             if (!response.ok) {
-                // Parse the response body as JSON to extract the error message
                 return response.json().then(errorData => {
-                    // Throw an error with the message from the API
                     throw new Error(`${errorData.error}`);
                 });
             }
@@ -183,14 +220,12 @@ function calculateWZScore() {
         return;
     };
 
-    fetch(`../../calculi/pedi_w_zscore/?gender=${gender}&age_months=${totalAgeMonths}&weight=${weight}`)
+    fetch(`../pedi_w_zscore/?gender=${gender}&age_months=${totalAgeMonths}&weight=${weight}`)
 
 
     .then(response => {
             if (!response.ok) {
-                // Parse the response body as JSON to extract the error message
                 return response.json().then(errorData => {
-                    // Throw an error with the message from the API
                     throw new Error(`${errorData.error}`);
                 });
             }
@@ -249,7 +284,7 @@ function calculateBMIZScore() {
         return;
     };
 
-    fetch(`../../calculi/pedi_bmi_zscore/?gender=${gender}&age_months=${totalAgeMonths}&weight=${weight}&length=${length}`)
+    fetch(`../pedi_bmi_zscore/?gender=${gender}&age_months=${totalAgeMonths}&weight=${weight}&length=${length}`)
 
 
     .then(response => {
