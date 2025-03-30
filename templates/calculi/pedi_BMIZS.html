@@ -1,12 +1,22 @@
+
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} | BMI Z Score Calculator {%endblock title%}
-{% block desc %}Calculate the Z-score for kids' BMI, aged up to 20 years.{% endblock desc%}
+{% block title %} | {{calculi.html_title}} {%endblock title%}
+{% block desc %}{{calculi.title}}{% endblock desc%}
 
 {% block imports %}
     <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
     <META HTTP-EQUIV="EXPIRES" CONTENT="Mon, 29 Apr 2002 8:35:00 GMT">
-
+    <meta name="keywords" content="{{calculi.html_title}}, child growth, medical calculator">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "{{calculi.html_title}}",
+        "description": "An online tool for calculating BMI Z-score and percentile based on CDC standards.",
+        "url": "https://medepartout.ir/calculus/calculi/{{calculi.link}}_page/"
+    }
+    </script>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/style_calculi.css' %}">
 
@@ -24,11 +34,24 @@
         .myFooter {
             background-color: #66899c;
         }
+
     </style>
 {% endblock imports %}
 
 {% block content %}
-    <h2 class='title' style='margin: 3rem' dir='ltr'>BMI (Body Mass Index) Z Score Calculator For Kids 2 to 20 Years.</h2>
+    <h2 class='title' style='margin: 3rem' dir='ltr'>
+        {{calculi.title}}
+        <a href="../../calcate/{{calculi.category.link}}" id="category">{{calculi.category}}</a>           
+        {% if user.is_authenticated %}
+            <span id="likeBtn" 
+                    data-calculink="{{ calculi.link }}"
+                    data-action="{% if request.user in calculi.likes.all %}unlike{% else %}like{% endif %}"
+                    class="{% if request.user in calculi.likes.all %}liked{% else %}unliked{% endif %}">
+                    &#x2764;
+            </span>
+        {% endif %}
+    </h2>
+
     <div class="floatingCal" dir="ltr">
         <div class="gender-switch"  style="grid-column: span 2;">
             <button id="gender-switch-btn" style="width: 10rem">Male</button>
@@ -66,20 +89,29 @@
                 <button class="copyBtn" id="copy-btn-all" onclick="copyZScoreBMIPecentile()">Copy</button>
             </div>
         </div>
-
     </div>
+
     <div style="margin: 1.5rem" dir="ltr">
         <h5 dir="ltr" style="margin-bottom: 1rem; color: #555">Other Calculus:</h5>
-        <a href="{% url 'cal_wzs_pg'%}" class="calculusLinks">Weight Z-Score Calculator</a>
-        <a href="{% url 'cal_lzs_pg'%}" class="calculusLinks">Length Z-Score Calculator</a>
-        <a href="{% url 'cal_hczs_pg'%}" class="calculusLinks">Head Circumference Z-Score Calculator</a>
-
+        {% for link in relatedLinks%}
+            <a href="../{{link.link}}_page/" class="calculusLinks">{{link.html_title}}</a>
+        {% endfor %}
     </div>
+
     <details style="" dir="ltr"><summary>About this calculator</summary>
-        <p>This calculator uses data from the CDC Growth Charts Data Files <a href="https://www.cdc.gov/growthcharts/cdc-data-files.htm">(Open)</a> to assess growth Z Scores.
-            The percentiles are calculated using Z-scores, with reference to a Z-score table prepared by the The Department of Mathematics at the University of Arizona <a href="https://math.arizona.edu/~rsims/ma464/standardnormaltable.pdf">(Download)</a>.
-        </p>
+        <p>{{calculi.description|safe}}</p>
     </details>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            likeCalculi(
+                document.getElementById('likeBtn'),
+                '{% url "calculi_like" %}',
+                '{{ csrf_token }}'
+            );
+        });
+    </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             genderSwitch('gender-switch-btn');
@@ -93,9 +125,12 @@
         calculateBtn.addEventListener('click', calculateBMIZScore);
 
         document.addEventListener('keydown', function(event) {
+        
             if (event.key === 'Enter') {
                 calculateBMIZScore();
             }
         });
+        
     </script>
+
 {% endblock content %}
