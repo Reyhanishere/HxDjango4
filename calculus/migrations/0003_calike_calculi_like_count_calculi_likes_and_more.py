@@ -8,7 +8,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0015_department_subdepartment_studentprofile_and_more'),
+        ('accounts', '0014_customuser_hx_ddx_ai_permission_and_more'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('calculus', '0002_remove_calculi_page_title_calcate_date_created_and_more'),
     ]
