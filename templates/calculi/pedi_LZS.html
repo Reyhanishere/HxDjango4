@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'calculi/calculi_base.html' %}
 {% load static %}
 {% block title %} | {{calculi.html_title}} {%endblock title%}
 {% block desc %}{{calculi.title}}{% endblock desc%}
@@ -17,12 +17,6 @@
     }
     </script>    
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style_calculi.css' %}">
-
-    <script src="{% static 'scripts/Calculi.js'%}"></script>
-
-    
     <style>
         .myMain {
             display: flex;
