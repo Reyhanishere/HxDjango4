@@ -4,22 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="enamad" content="16057720" />
     <title>medepartout</title>
     <meta name="description" content="مدوپارتو | سرک‌کشی به گوشه‌های پزشکی"/>
     <link rel="stylesheet" href="{% static '/css/styles_RP.css' %}">
     
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icon/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icon/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icon//favicon-16x16.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icon/favicon-16x16.png' %}">
     <link rel="manifest" href="/site.webmanifest">
 
     <link href='https://fonts.googleapis.com/css?family=Noto Sans' rel='stylesheet'>
-    <style>
-    .image-section {
-        background-image: url({% static 'images\frog.jpg' %});
-    }
-    </style>
+
+<style>
+.image-section {
+    background-image: url({% static 'images\background\frog.jpg' %});
+}
+
+</style>
+
 </head>
 <body>
 <div class="container">
@@ -28,12 +30,14 @@
             <img id="dawsh-help" src="{% static '/images/Logo Color FFAA80.svg' %}" alt="medepartout-logo">
             <h1>Welcome to medepartout Website</h1>
             <h2>The Site is Under Construction</h2>
+            
         </div>
         {% if user.is_authenticated %}
-        <p>Hi <b>{{user.first_name}}</b>! Proceed to Cases App or Your Personal Cases List!</p>
+        <p>Hi <b>{{user.first_name}}</b>! Proceed to Cases App, Use Medical Caculators or Your Personal Cases List!</p>
         <div>
-            <a id="casesApp" href="{% url 'cases_main' %}">Cases App</a>
-            <a id="myCases" href="{% url 'self_user_cases' %}">My Cases</a>
+            <a href="{% url 'cases_main' %}" class="mainPageBtn">Cases App</a>
+            <a href="{% url 'calculus_main' %}" class="mainPageBtn">Calculus App</a>
+            <a href="{% url 'self_user_cases' %}" class="mainPageBtn">My Cases</a>
         </div>
         {%else%}
         <h2 style="margin:10px 0"><a id="casesApp" href="{% url 'cases_main' %}">Cases App</a></h2>
@@ -47,10 +51,11 @@
         <div class="footer">
             <div class="with">
                 <a href="{% url 'cases_main' %}">Cases App</a>
-                <a href="{% url 'docs_list' %}">Docs</a>
+                <a href="{% url 'calculus_main' %}">Calculus App</a>
+                {% comment %} <a href="{% url 'docs_list' %}">Docs</a> {% endcomment %}
                 <a href="{% url 'about' %}">About</a>
             </div>
-            <p>medepartout | All Right Reserved © 2024</p>           
+            <p>medepartout | All Right Reserved © 2025</p>           
 
         </div>
     </div>
