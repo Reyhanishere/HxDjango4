@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html dir="rtl">
+<html dir="ltr">
 {% load static %}
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <meta property="og:title" content="medepartout | Calculus">
+
+    <meta property="og:title" content="medepartout">
     <meta property="og:url" content="https://medepartout.ir/calculus">
     <meta property="og:image" content="{% static 'images/cards/mdpt_Calculus_twitter.png' %}">
     <meta property="og:description" content="ماشین حساب‌های پزشکی مدوپارتو | Use medepartout as your medical calculator | {% block desc %}{% endblock desc %}">
@@ -14,7 +14,7 @@
     <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
     <META HTTP-EQUIV="EXPIRES" CONTENT="Mon, 29 Apr 2002 8:35:00 GMT">
 
-    <title>medepartout{% block title %}{% endblock title %}</title>
+    <title>medepartout | {% block title %}{% endblock title %}</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,62 +33,28 @@
 
     {% block imports %}{% endblock imports %}
 
-    <style></style>
+    <style>    
+    </style>
 </head>
 
 <body>
     <div id="header" class="flx" dir="ltr">
         <div id="LogoSearchDiv">
             <div id="logo">
-                <a aria-label="Homepage" rel="noopener follow" href="{% url 'cases_main'%}">
+                <a aria-label="Homepage" rel="noopener follow" href="{% url 'home'%}">
                     <img class="headerLogo" src="{% static '/images/Logo with Typo Light.svg' %}" alt=" medepartout " height="40px" /></a>
-            </div>
-            <div id="search">
-                <form class="d-flex m-2" action="{% url 'search_results' %}" method="get" autocomplete="off">
-                <div id="searchBar" class="flx">
-                    <button id="searchBTN" type="submit">
-                    
-                        <div style="margin:0 12px;">
-                            <svg width=" 24 " height="24 " viewBox="0 0 24 24 " fill="none ">
-                                <path style="fill: #6B6B6B;" fill-rule="evenodd " clip-rule="evenodd " d="M4.1 11.06a6.95 6.95 0 1 1 13.9 0 6.95 6.95 0 0 1-13.9 0zm6.94-8.05a8.05 8.05 0 1 0 5.13 14.26l3.75 3.75a.56.56
-                                0 1 0 .8-.79l-3.74-3.73A8.05 8.05 0 0 0 11.04 3v.01z " fill="currentColor "></path>
-                            </svg>
-                        </div>
-                    </button>
-                    
-                    <input id="searchInput" class= "smallSRCH" type="search" name="q" placeholder="" aria-label="Search"/>
-                    <input id="searchInput" class= "largeSRCH" type="search" name="q" placeholder="Search" aria-label="Search"/>
-
-
-                </div>
-            </form>
-
             </div>
         </div>
         <div class="flx">
             <div class="flx newBox">
                 <div class="dropdown">
                     <div class="dropbtn" id="newBTN">
-                            <span class="new">New</span>
-                            <svg id="newSVG" width=" 24 " height="24 " viewBox="0 0 24 24 " fill="none " aria-label="New ">
-                            <path  d="M14.5,7.5L6,16C6,16,6,16,6,16.1l-0.8,2.5c-0.1,0.2,0.1,0.4,0.3,0.3L7.9,18C8,18,8,18,8,18l8.5-8.5 M14.5,7.5 l2.3-2.3c0.1-0.1,0.3-0.1,0.4,0l1.6,1.6c0.1,0.1,0.1,0.3,0,0.4l-2.3,2.3
-                            M14.5,7.5l2,2 "/>
-                            </svg>
-                    </div>
-                                     
-                    <div class="dropdown-content" id="newDiv" dir="ltr">
-                        <a class="dropdown-item" href="{%url "hx_new"%}">Hx</a>
-                        <a class="dropdown-item" href="{%url "picasso_new"%}">Picasso</a>
-                        <a class="dropdown-item" href="{%url "ex_new"%}">Ex</a>
                     </div>
                 </div>
-            
             </div>
             <div>
             </div>
-            <!-- <div style="margin-right: 32px; color:white; cursor:default;">
-                N
-            </div> -->
+
             {%if user.is_authenticated %}
             <div class="dropdown" id="userIcon">
                     <div class="dropbtn" id="userBTN">
@@ -106,6 +72,8 @@
                     <div class="dropdown-content" id="userDiv" dir="rtl">
                         <a class="dropdown-item" href="{% url 'self_user_cases'%}">
                                                     کیس‌های من</a>
+                        <a class="dropdown-item" href="{% url 'favorite_calculus'%}">
+                            ماشین‌حساب‌های من</a>
                         <a class="dropdown-item" href="{% url 'change_user_info' user.id %}">
                             ویرایش اطلاعات من</a>
                         <a class="dropdown-item" href="{% url 'password_change'%}">
@@ -146,7 +114,7 @@
             {%endif%}
         </div>
     </div>
-        <div class="myMain" style="min-height:86vh; margin-top:0;background-color: #fff;">
+        <div class="myMain" style="min-height:86vh; margin-top:0;">
             {% block content %}
             {% endblock content %}
         </div>
@@ -157,12 +125,13 @@
         </div>
 
         <div class="myFooter" dir="ltr">
-            <p class="footerPs">medepartout | All Right Reserved &copy; 2024</p>
+            <p class="footerPs">medepartout | All Right Reserved &copy; 2025</p>
             <p class="footerPs" id="footerPHide">|</p>
 
             <div class="footerLinks" style="display: inline-block; right:20px; margin:2px 0 4px 0">
                 <a href="{% url 'cases_main' %}">Cases App</a>
-                <a href="{% url 'docs_list' %}">Docs</a>
+                <a href="{% url 'calculus_main' %}">Calculus App</a>
+                {% comment %} <a href="{% url 'docs_list' %}">Docs</a> {% endcomment %}
                 <a href="{% url 'about' %}">About</a>
             </div>
         </div>
@@ -180,17 +149,12 @@
                 });
             });
             
-            document.getElementById('newBTN').addEventListener('click', function(event) {
-                event.stopPropagation();
-                var dropdownContent = document.getElementById('newDiv');
-                toggleDropdown(dropdownContent);
-            });
-            
             document.getElementById('userBTN').addEventListener('click', function(event) {
                 event.stopPropagation();
                 var dropdownContent = document.getElementById('userDiv');
                 toggleDropdown(dropdownContent);
             });
+            
             function toggleDropdown(dropdownContent) {
                 var isVisible = dropdownContent.style.display === 'block';
                 closeAllDropdowns();
@@ -205,4 +169,4 @@
             }
            </script> 
     </body>
-    </html>
+</html>
