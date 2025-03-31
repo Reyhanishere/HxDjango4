@@ -2,8 +2,7 @@ import json
 from datetime import datetime
 
 from django.views import View
-from django.views.generic import TemplateView
-from django.views.generic import DetailView
+from django.views.generic import ListView, DetailView
 from django.views.decorators.http import require_POST
 
 from django.contrib.auth.decorators import login_required
@@ -23,9 +22,6 @@ def calculi_page_view(request, link):
     is_active=True
     ).exclude(id=obj.id).order_by('?')[:4]
     return render(request, f"calculi/{obj.html}.html", {'calculi': obj, 'relatedLinks':random_related})
-
-
-
 
 @require_POST
 @login_required
@@ -53,6 +49,36 @@ def like_calculi(request):
             pass
     
     return JsonResponse({'status': 'error'}, status=400)
+
+class CalculusListView(ListView):
+    model=CalCate
+    template_name="calculi/calculus_list.html"
+
+class CalcCateDetailView(DetailView):
+    model=CalCate
+    template_name="calculi/calcate_list.html"
+    context_object_name = 'category'
+    slug_url_kwarg = 'link'
+    context_object_name = 'category'
+    
+    def get_object(self, queryset=None):
+        slug = self.kwargs.get(self.slug_url_kwarg)
+        return get_object_or_404(CalCate, link=slug)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['calculus'] = Calculi.objects.filter(category=self.object)
+        context['category'] = self.object
+        return context
+
+@login_required
+def favorite_calculus(request):
+    liked_calculus = request.user.liked_calculus.all().order_by('-date_created')
+    
+    context = {
+        'liked_calculus': liked_calculus,
+    }
+    return render(request, 'calculi/fave_list.html', context)
 
 
 class CalculateWeightZScoreView(View):
