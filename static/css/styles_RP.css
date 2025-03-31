@@ -43,6 +43,23 @@ a {
     background-color: #1F132B;
 }
 
+.mainPageBtn {
+    font-weight: 600;
+    display: inline-block;
+    margin: 0;
+    background-color: #FFAA80;
+    border-radius: 5px;
+    padding: 10px;
+    color: #1F132B;
+    transition: 0.5s;
+    margin: 0.5rem 0.25rem;
+}
+
+.mainPageBtn :hover {
+    color: #FFAA80;
+    background-color: #1F132B;
+}
+
 .container {
     display: flex;
     height: 100vh;
