@@ -36,7 +36,8 @@ h2 .title {
 }
 
 #likeBtn:hover {
-    box-shadow: 0px 0px 5px 0px #4444
+    box-shadow: 0px 0px 5px 0px #4444;
+    background-color: #eee2;
 }
 
 #likeBtn.liked {
@@ -292,6 +293,86 @@ details p {
     align-items: center;
     transform: translate(0, -1rem);
     gap: 10px;
+}
+
+.caLikk {
+    text-decoration: none;
+    color: rgb(112, 144, 94);
+    padding: 2px 12px;
+    margin: 0.5rem;
+    border-radius: 20px;
+    background: linear-gradient(120deg, #FDFAF6, #FAF1E6);
+    box-shadow: 0 0 4px 0 #99BC85;
+    border: solid 1px #E4EFE7;
+    transition: 0.3s;
+    display: inline-grid;
+    line-height: 2;
+}
+
+.caLikk:hover {
+    color: #99BC85;
+    background: linear-gradient(30deg, #FDFAF6, #FAF1E6);
+}
+
+#browseCalc {
+    text-decoration: none;
+    color: rgb(112, 144, 94);
+    padding: 0px 10px;
+    border-radius: 20px;
+    background: linear-gradient(30deg, #FDFAF6, #FAF1E6);
+    border: solid 1px #E4EFE7;
+    transition: 0.3s;
+}
+
+#browseCalc:hover {
+    box-shadow: 0 0 2px 0 #99BC85;
+}
+
+#noFave {
+    position: relative;
+    padding: 1rem 1rem;
+    margin: 4rem 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    color: #055160;
+    background-color: #cff4fc;
+    border-color: #b6effb;
+    box-shadow: 0 0 10px 1px #cff4fccc;
+}
+
+.caList {
+    text-decoration: none;
+    color: #006A71;
+    padding: 5px 12px;
+    margin: 0.5rem;
+    border-radius: 20px;
+    background: linear-gradient(60deg, #F2EFE7, #9ACBD099);
+    border: solid 1px #9ACBD0;
+    transition: 0.3s;
+    display: block;
+}
+
+.caList:hover {
+    color: #48A6A7;
+    background: linear-gradient(30deg, #F2EFE7, #9ACBD0);
+}
+
+.cateList {
+    text-decoration: none;
+    color: #3D0301;
+    padding: 7px 20px;
+    margin: 0.5rem;
+    border-radius: 30px;
+    background: linear-gradient(60deg, #EBE8DB, #D76C8299);
+    border: solid 1px #B03052;
+    transition: 0.3s;
+    display: inline-block;
+}
+
+.cateList:hover {
+    color: #B03052;
+    background: linear-gradient(120deg, #EBE8DB, #D76C8299);
+    border: solid 1px #3D0301;
 }
 
 @media (max-width: 350px) {
