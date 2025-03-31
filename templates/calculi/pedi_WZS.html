@@ -1,11 +1,10 @@
 {% extends 'calculi/calculi_base.html' %}
 {% load static %}
-{% block title %} | {{calculi.html_title}} {%endblock title%}
+{% block title %}{{calculi.html_title}} {%endblock title%}
 {% block desc %}{{calculi.title}}{% endblock desc%}
 
 {% block imports %}
-    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
-    <META HTTP-EQUIV="EXPIRES" CONTENT="Mon, 29 Apr 2002 8:35:00 GMT">
+
     <meta name="keywords" content="{{calculi.html_title}}, child growth, medical calculator">
     <script type="application/ld+json">
     {
