@@ -1,0 +1,31 @@
+{% extends 'calculi/calculi_base.html' %}
+{% block title %}My Favorite Calculus{% endblock title %}
+{% block desc %}List of Calculus that I've liked.{% endblock desc %}
+{% block imports %}
+<style>
+    body{
+        background: linear-gradient(45deg, #fff, #efefef);
+    }
+</style>
+
+{% endblock imports %}
+{% block content %}
+<div class="" style="padding: 2rem;">
+    <h2 style="border-bottom: solid 1px #0002; padding-bottom: 1rem;">My Favorite Calculus <span style='color: #c33'>&#x2764;</span></h2>
+    
+    {% if liked_calculus %}
+        <div class="" style="margin: 1rem; line-height: 3.5;">
+            {% for calculi in liked_calculus %}
+                <a href="../calculi/{{calculi.link}}_page" class="caLikk">{{ calculi.html_title }}</a> <span style="color:#999; font-size:12px">| {{ calculi.category }}</span><br/>
+            {% endfor %}
+        </div>      
+    {% else %}
+        <div id="noFave">
+            You haven't liked any calculators yet. 
+        </div>
+    {% endif %}
+    <div style="margin-top: 2rem; margin-left: 1rem; line-height: 2;">
+        <a href="{% url 'calculus_main' %}" id="browseCalc">Browse Calculus</a> to find some you like!
+    </div>
+</div>
+{% endblock %}

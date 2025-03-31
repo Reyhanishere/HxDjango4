@@ -1,0 +1,26 @@
+{% extends 'calculi/calculi_base.html' %}
+{% block title %}My Favorite Calculus{% endblock title %}
+{% block desc %}List of medepartout Calculus.{% endblock desc %}
+{% block imports %}
+<style>
+    body{
+        background: linear-gradient(45deg, #fff, #efefef);
+    }
+
+</style>
+{% endblock imports %}
+{% block content %}
+<div class="" style="padding: 2rem;">
+    <h2 style="border-bottom: solid 1px #0002; padding-bottom: 1rem;">Calculus <span style='color: #c33'>&#129518;</span></h2>
+    {% for cate in calcate_list %}
+        <div class="" style="margin: 1rem;">
+            <h4><a href="calcate/{{cate.link}}/" class="cateList">{{ cate }}</a></h4>
+            <div style="display: flex; flex-wrap: wrap; padding-bottom: 1rem; border-bottom: solid 1px #0001;">
+                {% for calculi in cate.calculi_set.all %}
+                    <a href="calculi/{{calculi.link}}_page" class="caList">{{ calculi.html_title }}</a><br/>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

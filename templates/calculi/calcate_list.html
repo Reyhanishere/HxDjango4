@@ -1,0 +1,56 @@
+{% extends 'calculi/calculi_base.html' %}
+{% block title %}{{ category.title }} Calculus{% endblock title %}
+{% block desc %}List of medepartout {{ category.title }} Calculus.{% endblock desc %}
+{% block imports %}
+<style>
+    body{
+        background: linear-gradient(45deg, #fff, #efefef);
+    }
+    .caList {
+        text-decoration: none;
+        color: #006A71;
+        padding: 5px 12px;
+        margin: 0.5rem;
+        border-radius: 20px;
+        background: linear-gradient(60deg, #F2EFE7, #9ACBD099);
+        border: solid 1px #9ACBD0;
+        transition: 0.3s;
+        display: block;
+    }
+    
+    .caList:hover {
+        color: #48A6A7;
+        background: linear-gradient(30deg, #F2EFE7, #9ACBD0);   
+    }
+    .cateList {
+        text-decoration: none;
+        color: #3D0301;
+        padding: 7px 20px;
+        margin: 0.5rem;
+        border-radius: 30px;
+        background: linear-gradient(60deg, #EBE8DB, #D76C8299);
+        border: solid 1px #B03052;
+        transition: 0.3s;
+        display: inline-block;
+    }
+    
+    .cateList:hover {
+        color: #B03052;
+        background: linear-gradient(120deg, #EBE8DB, #D76C8299);
+        border: solid 1px #3D0301;
+    }
+</style>
+{% endblock imports %}
+{% block content %}
+<div class="" style="padding: 2rem;">
+    <h2 style="border-bottom: solid 1px #0002; padding-bottom: 1rem;">{{ category.title }} Calculus <span style='color: #c33'>&#129518;</span></h2>
+    <div class="" style="margin: 1rem;">
+        <div style="display: flex; flex-wrap: wrap;">
+            {% for calculi in calculus %}
+            <a href="../../calculi/{{calculi.link}}_page" class="caList">{{ calculi.html_title }}</a><br/>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<a href="{% url 'calculus_main' %}" class="cateList" style="margin: 1rem 3rem; font-size: 14px; padding: 2px 15px;">Back to All Calculus</a>
+{% endblock %}
