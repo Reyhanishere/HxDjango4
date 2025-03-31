@@ -1,6 +1,6 @@
 {% extends 'calculi/calculi_base.html' %}
 {% load static %}
-{% block title %} | {{calculi.html_title}} {%endblock title%}
+{% block title %}{{calculi.html_title}} {%endblock title%}
 {% block desc %}{{calculi.title}}{% endblock desc%}
 
 {% block imports %}
@@ -16,6 +16,12 @@
         "url": "https://medepartout.ir/calculus/calculi/{{calculi.link}}_page/"
     }
     </script>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style_calculi.css' %}">
+
+    <script src="{% static 'scripts/Calculi.js'%}"></script>
+
     
     <style>
         .myMain {
