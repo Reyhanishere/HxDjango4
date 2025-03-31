@@ -32,7 +32,7 @@
         </div>
         {% if user.is_authenticated %}
         <p>Hi <b>{{user.first_name}}</b>! Proceed to Cases App, Use Medical Caculators or Your Personal Cases List!</p>
-        <div>
+        <div style="margin-bottom: 1rem;">
             <a href="{% url 'cases_main' %}" class="mainPageBtn">Cases App</a>
             <a href="{% url 'calculus_main' %}" class="mainPageBtn">Calculus App</a>
             <a href="{% url 'self_user_cases' %}" class="mainPageBtn">My Cases</a>
