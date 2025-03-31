@@ -1,8 +1,6 @@
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
-from django.contrib.auth.models import User
-
 
 class CalCate(models.Model):
     title=models.CharField(max_length=64, null= False, blank= False)
@@ -10,7 +8,7 @@ class CalCate(models.Model):
     date_created= models.DateField(auto_now_add=True)
     
     def get_absolute_url(self):
-        return reverse("calcate", kwargs={"slug": self.link})
+        return reverse("calcates_detail", kwargs={"link": self.link})
     
     def __str__(self):
         return str(self.title)
