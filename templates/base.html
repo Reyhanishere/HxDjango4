@@ -2,25 +2,10 @@
 <html dir="rtl">
 {% load static %}
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J839JNTNCE"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      gtag('config', 'G-J839JNTNCE');
-    </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--     <meta name="description" content="A Social Media for Cases and Medical Geeks. Share and Read Cases from All Over the World Here."/> -->
-    <meta name="description" content="بهینه‌تر و ساده‌تر شرح حال بگیرید، آن را ارائه دهید و با دیگران به اشتراک بگذارید."/>
+    <meta name="description" content="A Social Media for Cases and Medical Geeks. Share and Read Cases from All Over the World Here."/>
     <meta name="description" content="{% block desc %}{% endblock desc %}"/>
-
-    <meta property="og:title" content="medepartout">
-    <meta property="og:url" content="https://medepartout.ir/cases">
-    <meta property="og:image" content="{% static 'images/cards/mdpt_Cases_twitter.png' %}">
-    <meta property="og:description" content="بهینه‌تر و ساده‌تر شرح حال بگیرید، آن را ارائه دهید و با دیگران به اشتراک بگذارید.">
-    <meta name="twitter:card" content="summary_large_image">
 
     <title>medepartout{% block title %}{% endblock title %}</title>
     
@@ -35,37 +20,37 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icon/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icon//favicon-16x16.png' %}">
-    <link rel="manifest" href="/site.webmanifest">
+
     {% block imports %}{% endblock imports %}
+    <style>
+        
+    </style>
 </head>
 
 <body>
     <div id="header" class="flx" dir="ltr">
         <div id="LogoSearchDiv">
             <div id="logo">
-                <a aria-label="Homepage" rel="noopener follow" href="{% url 'cases_main'%}">
-                    <img class="headerLogo" src="{% static '/images/Logo with Typo Light.svg' %}" alt=" medepartout " height="40px " /></a>
+                <a aria-label="Homepage" rel="noopener follow" href="{% url 'home'%}">
+                    <img class="headerLogo" src="{% static '/images/Logo with Typo Light.svg' %}" alt=" medepartout " height="40px" /></a>
             </div>
             <div id="search">
                 <form class="d-flex m-2" action="{% url 'search_results' %}" method="get" autocomplete="off">
-                <div id="searchBar" class="flx">
-                    <button id="searchBTN" type="submit">
-                    
-                        <div style="margin:0 12px;">
-                            <svg width=" 24 " height="24 " viewBox="0 0 24 24 " fill="none ">
-                                <path style="fill: #6B6B6B;" fill-rule="evenodd " clip-rule="evenodd " d="M4.1 11.06a6.95 6.95 0 1 1 13.9 0 6.95 6.95 0 0 1-13.9 0zm6.94-8.05a8.05 8.05 0 1 0 5.13 14.26l3.75 3.75a.56.56
-                                0 1 0 .8-.79l-3.74-3.73A8.05 8.05 0 0 0 11.04 3v.01z " fill="currentColor "></path>
-                            </svg>
-                        </div>
-                    </button>
-                    
-                    <input id="searchInput" class= "smallSRCH" type="search" name="q" placeholder="" aria-label="Search"/>
-                    <input id="searchInput" class= "largeSRCH" type="search" name="q" placeholder="Search" aria-label="Search"/>
-
-
-                </div>
-            </form>
-
+                    <div id="searchBar" class="flx">
+                        <button id="searchBTN" type="submit">
+                        
+                            <div style="margin:0 12px;">
+                                <svg width=" 24 " height="24 " viewBox="0 0 24 24 " fill="none ">
+                                    <path style="fill: #6B6B6B;" fill-rule="evenodd " clip-rule="evenodd " d="M4.1 11.06a6.95 6.95 0 1 1 13.9 0 6.95 6.95 0 0 1-13.9 0zm6.94-8.05a8.05 8.05 0 1 0 5.13 14.26l3.75 3.75a.56.56
+                                    0 1 0 .8-.79l-3.74-3.73A8.05 8.05 0 0 0 11.04 3v.01z " fill="currentColor "></path>
+                                </svg>
+                            </div>
+                        </button>
+                        
+                        <input id="searchInput" class= "smallSRCH" type="search" name="q" placeholder="" aria-label="Search"/>
+                        <input id="searchInput" class= "largeSRCH" type="search" name="q" placeholder="Search" aria-label="Search"/>
+                    </div>
+                </form>
             </div>
         </div>
         <div class="flx">
@@ -89,9 +74,7 @@
             </div>
             <div>
             </div>
-            <!-- <div style="margin-right: 32px; color:white; cursor:default;">
-                N
-            </div> -->
+
             {%if user.is_authenticated %}
             <div class="dropdown" id="userIcon">
                     <div class="dropbtn" id="userBTN">
@@ -108,13 +91,17 @@
                     </div>
                     <div class="dropdown-content" id="userDiv" dir="rtl">
                         <a class="dropdown-item" href="{% url 'self_user_cases'%}">
-                                                    کیس‌های من</a>
+                            کیس‌های من
+                        </a>
+                        <a class="dropdown-item" href="{% url 'favorite_calculus'%}">
+                            ماشین‌حساب‌های من
+                        </a>
                         <a class="dropdown-item" href="{% url 'change_user_info' user.id %}">
-                            ویرایش اطلاعات من</a>
+                            ویرایش اطلاعات من
+                        </a>
                         <a class="dropdown-item" href="{% url 'password_change'%}">
-                        تغییر گذرواژه</a>
-                        
-                        
+                        تغییر گذرواژه
+                        </a>
                             <form method="post" action="{% url 'logout' %}">
                                 {% csrf_token %}
                                 <button type="submit" class="dropdown-item" style="color: #B22">خروج</button>
@@ -124,88 +111,84 @@
             </div>
             {% else %}
             <div class="dropdown" id="userIcon">
-                    <div class="dropbtn" id="userBTN">
-            
-                        <svg id="userSVG" width="24 " height="24 " viewBox="0 0 1024 1024 " fill="#000" aria-label="Notifications ">
-                        <path style="stroke:#FFFFFF; stroke-width:30; stroke-miterlimit:10;" d="M901.5,911.1c0,0.6,0.1,1.3,0.1,1.9h-0.3c-1.5,21.6-19.3,38.7-41.3,38.7c-22,0-39.7-17.1-41.3-38.7h-0.7
-                        c0-1,0.2-2,0.2-3.1c0-83.9-33.3-159.8-87.1-215.4l0.1-0.1c-7.4-7.3-12-17.4-12-28.6c0-22.1,17.9-40,40-40c11.7,0,22.2,5.2,29.5,13.2
-                        c68.3,69.1,111.1,163.6,112.7,268.1c0.1,1,0.3,1.9,0.3,2.9C901.6,910.5,901.5,910.8,901.5,911.1z M512,605.5
-                        c-11.2,0-22.3-0.9-33.1-2.3c-153.5,16.7-273.1,147.6-273.1,306.7c0,0.1,0,0.2,0,0.3c0,0,0,0.1,0,0.1c0,0.9,0.1,1.8,0.1,2.7h-0.4
-                        c-1.5,21.6-19.3,38.7-41.3,38.7c-22,0-39.7-17.1-41.3-38.7h-0.6c0-160.1,96.7-297.5,234.8-357.5c-67.6-48.4-111.7-127.3-111.7-216.7
-                        c0-147.2,119.4-266.6,266.6-266.6s266.6,119.3,266.6,266.6S659.2,605.5,512,605.5z M512,154c-101.9,0-184.6,82.6-184.6,184.6
-                        S410.1,523.1,512,523.1s184.6-82.6,184.6-184.6S613.9,154,512,154z"/>
-                        </svg>
-                        <div style="background-color:#e33; position: relative; width:5px; height:5px; border-radius: 100%; right:-22px; top:-22px"></div>
-                    <div class="dropdown-content" id="userDiv" dir="ltr">
-
-                            <a class="dropdown-item" href="{% url 'login'%}">
-                            Login</a>
-                            <a class="dropdown-item" href="{% url 'signup'%}">
-                                SignUp</a>
-                        
+                <div class="dropbtn" id="userBTN">
+                    <svg id="userSVG" width="24 " height="24 " viewBox="0 0 1024 1024 " fill="#000" aria-label="Notifications ">
+                    <path style="stroke:#FFFFFF; stroke-width:30; stroke-miterlimit:10;" d="M901.5,911.1c0,0.6,0.1,1.3,0.1,1.9h-0.3c-1.5,21.6-19.3,38.7-41.3,38.7c-22,0-39.7-17.1-41.3-38.7h-0.7
+                    c0-1,0.2-2,0.2-3.1c0-83.9-33.3-159.8-87.1-215.4l0.1-0.1c-7.4-7.3-12-17.4-12-28.6c0-22.1,17.9-40,40-40c11.7,0,22.2,5.2,29.5,13.2
+                    c68.3,69.1,111.1,163.6,112.7,268.1c0.1,1,0.3,1.9,0.3,2.9C901.6,910.5,901.5,910.8,901.5,911.1z M512,605.5
+                    c-11.2,0-22.3-0.9-33.1-2.3c-153.5,16.7-273.1,147.6-273.1,306.7c0,0.1,0,0.2,0,0.3c0,0,0,0.1,0,0.1c0,0.9,0.1,1.8,0.1,2.7h-0.4
+                    c-1.5,21.6-19.3,38.7-41.3,38.7c-22,0-39.7-17.1-41.3-38.7h-0.6c0-160.1,96.7-297.5,234.8-357.5c-67.6-48.4-111.7-127.3-111.7-216.7
+                    c0-147.2,119.4-266.6,266.6-266.6s266.6,119.3,266.6,266.6S659.2,605.5,512,605.5z M512,154c-101.9,0-184.6,82.6-184.6,184.6
+                    S410.1,523.1,512,523.1s184.6-82.6,184.6-184.6S613.9,154,512,154z"/>
+                    </svg>
+                    <div style="background-color:#e33; position: relative; width:5px; height:5px; border-radius: 100%; right:-22px; top:-22px"></div>
+                        <div class="dropdown-content" id="userDiv" dir="ltr">
+                            <a class="dropdown-item" href="{% url 'login'%}">Login</a>
+                            <a class="dropdown-item" href="{% url 'signup'%}">SignUp</a>   
+                        </div>
                     </div>
                 </div>
-            </div>
             {%endif%}
+            </div>
+        </div>
+    <div class="myMain" style="min-height:86vh; margin-top:0;background-color: #fff;">
+        {% block content %}
+        {% endblock content %}
+    </div>
+
+    <div id="edel">
+        {% block edel %}
+        {% endblock edel %}
+    </div>
+
+    <div class="myFooter" dir="ltr">
+        <p class="footerPs">medepartout | All Right Reserved &copy; 2025</p>
+        <p class="footerPs" id="footerPHide">|</p>
+
+        <div class="footerLinks" style="display: inline-block; right:20px; margin:2px 0 4px 0">
+            <a href="{% url 'cases_main' %}">Cases App</a>
+            <a href="{% url 'calculus_main' %}">Calculus App</a>
+            {% comment %} <a href="{% url 'docs_list' %}">Docs</a> {% endcomment %}
+            <a href="{% url 'about' %}">About</a>
         </div>
     </div>
-        <div class="myMain" style="min-height:86vh; margin-top:0;background-color: #fff;">
-            {% block content %}
-            {% endblock content %}
-        </div>
-
-        <div id="edel">
-            {% block edel %}
-            {% endblock edel %}
-        </div>
-
-        <div class="myFooter" dir="ltr">
-            <p class="footerPs">medepartout | All Right Reserved &copy; 2025</p>
-            <p class="footerPs" id="footerPHide">|</p>
-
-            <div class="footerLinks" style="display: inline-block; right:20px; margin:2px 0 4px 0">
-                <a href="{% url 'cases_main' %}">Cases App</a>
-                <a href="{% url 'docs_list' %}">Docs</a>
-                <a href="{% url 'about' %}">About</a>
-            </div>
-        </div>
             
-        <script src="{% static '/scripts/index.js' %}"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-           <script>
-            
-            document.addEventListener('click', function(event) {
-                var dropdowns = document.querySelectorAll('.dropdown-content');
-                dropdowns.forEach(function(dropdown) {
-                    if (!event.target.closest('.dropdown')) {
-                        dropdown.style.display = 'none';
-                    }
-                });
-            });
-            
-            document.getElementById('newBTN').addEventListener('click', function(event) {
-                event.stopPropagation();
-                var dropdownContent = document.getElementById('newDiv');
-                toggleDropdown(dropdownContent);
-            });
-            
-            document.getElementById('userBTN').addEventListener('click', function(event) {
-                event.stopPropagation();
-                var dropdownContent = document.getElementById('userDiv');
-                toggleDropdown(dropdownContent);
-            });
-            function toggleDropdown(dropdownContent) {
-                var isVisible = dropdownContent.style.display === 'block';
-                closeAllDropdowns();
-                dropdownContent.style.display = isVisible ? 'none' : 'block';
+    <script src="{% static '/scripts/index.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+    
+    document.addEventListener('click', function(event) {
+        var dropdowns = document.querySelectorAll('.dropdown-content');
+        dropdowns.forEach(function(dropdown) {
+            if (!event.target.closest('.dropdown')) {
+                dropdown.style.display = 'none';
             }
-            
-            function closeAllDropdowns() {
-                var dropdowns = document.querySelectorAll('.dropdown-content');
-                dropdowns.forEach(function(dropdown) {
-                    dropdown.style.display = 'none';
-                });
-            }
-           </script> 
-    </body>
-    </html>
+        });
+    });
+    
+    document.getElementById('newBTN').addEventListener('click', function(event) {
+        event.stopPropagation();
+        var dropdownContent = document.getElementById('newDiv');
+        toggleDropdown(dropdownContent);
+    });
+    
+    document.getElementById('userBTN').addEventListener('click', function(event) {
+        event.stopPropagation();
+        var dropdownContent = document.getElementById('userDiv');
+        toggleDropdown(dropdownContent);
+    });
+    function toggleDropdown(dropdownContent) {
+        var isVisible = dropdownContent.style.display === 'block';
+        closeAllDropdowns();
+        dropdownContent.style.display = isVisible ? 'none' : 'block';
+    }
+    
+    function closeAllDropdowns() {
+        var dropdowns = document.querySelectorAll('.dropdown-content');
+        dropdowns.forEach(function(dropdown) {
+            dropdown.style.display = 'none';
+        });
+    }
+    </script> 
+</body>
+</html>
