@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <META HTTP-EQUIV="EXPIRES" CONTENT="Mon, 29 Apr 2002 8:35:00 GMT">
     <title>medepartout</title>
     <meta name="description" content="مدوپارتو | سرک‌کشی به گوشه‌های پزشکی"/>
     <link rel="stylesheet" href="{% static '/css/styles_RP.css' %}">
@@ -38,8 +40,10 @@
             <a href="{% url 'self_user_cases' %}" class="mainPageBtn">My Cases</a>
         </div>
         {%else%}
-        <h2 style="margin:10px 0"><a id="casesApp" href="{% url 'cases_main' %}">Cases App</a></h2>
-        
+        <h2 style="margin:10px 0">
+            <a href="{% url 'cases_main' %}" class="mainPageBtn" id="casesApp">Cases App</a>
+            <a href="{% url 'calculus_main' %}" class="mainPageBtn">Calculus App</a>
+        </h2>        
         <p>Sign up to see our latest updates:</p>
         <div class="butt">
             <a href="{% url 'signup' %}"><button id="b1">Sign Up</button></a>
