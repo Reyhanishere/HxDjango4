@@ -88,29 +88,48 @@ h3 {
     padding: 15px 10px;
     display: grid;
     width: 100%;
-    display: grid;
     column-gap: 3px;
     grid-template-columns: 1fr 1fr;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 8px;
 }
 
 .prsntTwoColumnar {
-    column-count: 3;
+    column-count: 2;
 }
 
-.watermark{
-        opacity: 0.03;
-        position: absolute;
-        height: 40%;
-        left: 13.5rem;
-        bottom: 4.8rem;
-    }
-
-@media(mix-width:750px) and (max-width:1100px) {
-    .prsntTwoColumnar {
-        column-count: 2;
-    }
+.ODImgDesc p {
+    padding: 5px
 }
+
+.ODImgDesc a {
+    color: #555;
+    padding: 5px
+}
+
+.watermark {
+    opacity: 0.03;
+    position: absolute;
+    height: 40%;
+    left: 13.5rem;
+    bottom: 4.8rem;
+}
+
+.clouds {
+    opacity: 0.7;
+    position: absolute;
+    height: 10%;
+    right: 1.5rem;
+    top: 4rem;
+}
+
+.flowers {
+    opacity: 0.4;
+    position: absolute;
+    height: 25%;
+    right: 1.25rem;
+    bottom: 4.75rem;
+}
+
 @media(max-width:750px) {
     .prsntTwoColumnar {
         column-count: 1;
@@ -127,16 +146,26 @@ h3 {
         display: block;
         margin-top: 20px;
     }
-    .watermark{
+    .watermark {
         left: 5rem;
         bottom: 4rem;
     }
 }
 
-@media(max-width:470px){
-    .watermark{
+@media(max-width:470px) {
+    .watermark {
         height: 30%;
         left: 2rem;
         bottom: 4rem;
+    }
+    .clouds {
+        height: 7%;
+        right: 2rem;
+        top: 5rem;
+    }
+    .flowers {
+        height: 25%;
+        right: 1.75rem;
+        bottom: 4.75rem;
     }
 }
