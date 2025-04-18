@@ -2,20 +2,21 @@
 {% load static %}
 {% load my_tags %}
 {% block title %} | {{case.title}}{%endblock title%}
-{% block desc %}شرح حالی از {{ case.author.first_name }} {{ case.author.last_name }}{% endblock desc%}
+{% block desc %}شرح حالی از {{ case.author.first_name }} {{ case.author.last_name }}{% endblock desc %}
 {% block content %}
+{% block imports %}
+
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+<META HTTP-EQUIV="EXPIRES" CONTENT="Mon, 29 Apr 2002 8:35:00 GMT">
+
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link rel="stylesheet" href="{% static 'css/style_hx.css' %}">
 <link rel="stylesheet" href="{% static 'css/style_presentation.css' %}">
+
 <style>
-.ODImgDesc p{
-    padding:5px
-    }
-.ODImgDesc a{
-    color:#555;
-    padding:5px
-    }
 </style>
+{% endblock imports %}
+
 {% if case.visible %}
 <div class="pad-15 prsntSplit">
     <div>
@@ -55,7 +56,7 @@
                         <div class="tabIndic"></div>
                         <b>Past Medical History: </b>
                     </div>
-                    <div class="hx prsntText" dir='auto'>{{ case.pmh|emphasize|safe}}</div>
+                    <div class="hx prsntText" dir='auto'>{{ case.pmh|emphasize|safe }}</div>
                 </div>
                 
                 <div id="Drugs" class=" content">
@@ -105,7 +106,7 @@
                         <div class="tabIndic"></div>
                         <b>Review of Systems: </b>
                     </div>
-                    <div class="hx prsntText prsntTwoColumnar">{{ case.ros|emphasize|safe}}</div>
+                    <div class="hx prsntText prsntTwoColumnar">{{ case.ros|emphasize|safe }}</div>
                 </div>
                 
                 <div id="PE" class="content">
@@ -113,7 +114,7 @@
                         <div class="tabIndic"></div>
                         <b>Physical Examination: </b>
                     </div>
-                    <div class="hx prsntText prsntTwoColumnar">{{ case.phe|emphasize|safe}}</div>
+                    <div class="hx prsntText prsntTwoColumnar">{{ case.phe|emphasize|safe }}</div>
                 </div>
 
                 <div id="Summary" class="content">
@@ -156,12 +157,13 @@
                             <a href="{{img.image.url}}" target="_blank">
                                 <img src="{{img.image.url}}" style="border-radius:10px;" width="220" alt="{{img.text}}"/>
                             </a>
-                            <div style="font-size:16px" dir="auto" class="ODImgDesc">{{img.text|urlizetrunc:15|linebreaks}}</div>
+                            <div style="font-size:16px" dir="auto" class="ODImgDesc">{{ img.text|urlizetrunc:15|linebreaks }}</div>
                             </div>
                             {% comment %} {% endif %} {% endcomment %}
                             {% endfor%}
                             </div>
                     </div>
+                    <img src='{%static '/images/Logo Prime.svg'%}' id="logoForOD" draggable="false" loading='lazy' class='watermark' alt='medepartout logo watermark'/>
                 </div>
                 <div id="PDx" class="content">
                     <div dir="ltr"  class="prsntTitle hx" style="text-align: left; display: block">
@@ -171,7 +173,7 @@
                     <div class="hx prsntText" dir="auto">{{ case.pdx|linebreaks }}</div>
                 </div>
         </div>
-        <img src='{%static '/images/Logo Prime.svg'%}' loading='lazy' class='watermark' alt='medepartout logo watermark'/>
+        <img src='{%static '/images/Logo Prime.svg'%}' id="logoForAll" draggable="false" loading='lazy' class='watermark' alt='medepartout logo watermark'/>
     </div>
     </div>
     <div dir="ltr" class="btnsBox" style="text-align: left">
@@ -185,7 +187,6 @@
         <button onclick="showDiv('ROS')" class="prsntBtn">ROS</button>
         <button onclick="showDiv('PE')" class="prsntBtn">PE</button>
         <button onclick="showDiv('Summary')" class="prsntBtn">Summary</button>
-        <button onclick="showDiv('OD')" class="prsntBtn">Other Data</button>
         {% if case.labgraphselection_set.all %}
         <a href="graphs" target="_blank" class="prsntBtn" id="graphsBtn">See Lab Data</a>
         {% endif %}
@@ -193,17 +194,20 @@
         {% if case.act %}
         <button onclick="showDiv('Action')" class="prsntBtn">Action</button>
         {% endif %}
+        <button onclick="showDiv('OD')" class="prsntBtn">Other Data</button>
         <button onclick="showDiv('PDx')" class="prsntBtn">Primary Dx</button>
     </div>
 </div>
 
 <script>
-    window.onload = function() {
-        document.getElementById('dropup-toggle').style.display = 'none';
-    };
-
     function showDiv(divId) {
-        // Hide all content divs
+        const logoAll = document.getElementById("logoForAll")
+        if (divId == "OD") {
+            logoAll.style.display="none"
+        } else {
+            logoAll.style.display="block"
+        }
+        // Hide all other divs
         var contentDivs = document.getElementsByClassName('content');
         for (var i = 0; i < contentDivs.length; i++) {
             contentDivs[i].style.display = 'none';
@@ -215,8 +219,8 @@
 </script>
 
 {%else%}
-<div style="display: grid; align-items: center; min-height: 80vh; padding: 30px 30px; font-size:20px; text-align: center">
-<p>برای دسترسی به حالت ارائه، باید شرح‌حال خود را از این <a href="{% url 'hx_public' case.slug%}">لینک</a> یا <a href="{% url 'self_user_cases'%}">پنل کاربری</a> خود همگانی (پابلیک) کنید.</p>
-</div>
+    <div style="display: grid; align-items: center; min-height: 80vh; padding: 30px 30px; font-size:20px; text-align: center">
+        <p>برای دسترسی به حالت ارائه، باید شرح‌حال خود را از این <a href="{% url 'hx_public' case.slug%}">لینک</a> یا <a href="{% url 'self_user_cases'%}">پنل کاربری</a> خود همگانی (پابلیک) کنید.</p>
+    </div>
 {%endif%}
 {% endblock content %}
