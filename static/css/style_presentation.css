@@ -113,6 +113,7 @@ h3 {
     height: 40%;
     left: 13.5rem;
     bottom: 4.8rem;
+    z-index: 1;
 }
 
 .clouds {
@@ -129,6 +130,15 @@ h3 {
     height: 25%;
     right: 1.25rem;
     bottom: 4.75rem;
+}
+
+.odImgCard {
+    background-color: #eee;
+    border-radius: 10px;
+    max-width: 220px;
+    display: inline-block;
+    margin: 0.5rem;
+    z-index: 2;
 }
 
 @media(max-width:750px) {
