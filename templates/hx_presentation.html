@@ -16,7 +16,17 @@
 <style>
 </style>
 {% endblock imports %}
-
+.odImgCard{
+        background-color:#eee;
+        border-radius:10px;
+        max-width:220px;
+        display:inline-block;
+        margin: 0.5rem;
+        z-index: 2;
+    }
+.watermark {
+        z-index: 1;
+    }
 {% if case.visible %}
 <div class="pad-15 prsntSplit">
     <div>
@@ -153,7 +163,7 @@
                         <div style="display: flex; flex-wrap: wrap; justify-content: space-evenly;">
                             {%for img in case.imagecase_set.all %}
                             {% comment %} {%if img.verified %} {% endcomment %}
-                            <div class="m-2" style="background-color:#eee; border-radius:10px; max-width:220px; display:inline-block">
+                            <div class="odImgCard">
                             <a href="{{img.image.url}}" target="_blank">
                                 <img src="{{img.image.url}}" style="border-radius:10px;" width="220" alt="{{img.text}}"/>
                             </a>
