@@ -116,7 +116,9 @@
                         <div class="tabIndic"></div>
                         <b>Review of Systems: </b>
                     </div>
-                    <div class="hx prsntText prsntTwoColumnar">{{ case.ros|emphasize|safe }}</div>
+                    <div class="hx prsntText">
+                        <div class="prsntTwoColumnar">{{ case.ros|emphasize|safe}}</div>
+                    </div>
                 </div>
                 
                 <div id="PE" class="content">
@@ -124,7 +126,9 @@
                         <div class="tabIndic"></div>
                         <b>Physical Examination: </b>
                     </div>
-                    <div class="hx prsntText prsntTwoColumnar">{{ case.phe|emphasize|safe }}</div>
+                    <div class="hx prsntText">
+                        <div class="prsntTwoColumnar">{{ case.phe|emphasize|safe}}</div>
+                    </div>
                 </div>
 
                 <div id="Summary" class="content">
