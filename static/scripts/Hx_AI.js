@@ -211,7 +211,7 @@ function AddPIAI() {
     const pi_div = document.getElementById("div_id_pi");
     const labelElementPI = pi_div.querySelector('label');
     labelElementPI.insertAdjacentHTML('afterend', `
-        <span class="helper-toggle-button" onclick="PIQueAI()">کمکم کن! (AI)</span>`);
+        <span class="AIHelperBtn" onclick="PIQueAI()">&#x2726; AI Help &#x2726;</span>`);
 }
 
 function createROSAITab(buttonData) {
@@ -239,23 +239,15 @@ function createPhEAITab(buttonData) {
 }
 
 function AddROSAI() {
-    const ros_div = document.getElementById("div_id_ros");
-    const labelElementROS = ros_div.querySelector('label');
-    labelElementROS.insertAdjacentHTML('afterend', `
-        <span class="helper-toggle-button" onclick="ROSAI()" id="ROSAIHelp">کمکم کن! (AI)</span>`);
-    ros_div.style.display = "grid";
-    ros_div.style.justifyItems = "start";
-    ros_div.style.lineHeight = "2";
+    const ros_div = document.getElementById("ROSHelperDiv");
+    ros_div.insertAdjacentHTML('beforeend', `
+        <span class="AIHelperBtn" onclick="ROSAI()" id="ROSAIHelp">&#x2726; AI Help &#x2726;</span>`);
 }
 
 function AddPhEAI() {
-    const phe_div = document.getElementById("div_id_phe");
-    const labelElementPhE = phe_div.querySelector('label');
-    labelElementPhE.insertAdjacentHTML('afterend', `
-        <span class="helper-toggle-button" onclick="PhEAI()" id="PhEAIHelp">کمکم کن! (AI)</span>`);
-    phe_div.style.display = "grid";
-    phe_div.style.justifyItems = "start";
-    phe_div.style.lineHeight = "2";
+    const phe_div = document.getElementById("PhEHelperDiv");
+    phe_div.insertAdjacentHTML('beforeend', `
+        <span class="AIHelperBtn" onclick="PhEAI()" id="PhEAIHelp">&#x2726; AI Help &#x2726;</span>`);
 }
 
 function ROSAI() {
