@@ -73,7 +73,7 @@ function AddWZScore() {
         resultElement.textContent = 'Calculating...';
         resultElement.style.background = 'none';
 
-        fetch(`../calculi/pedi_w_zscore/?gender=${gender}&age_months=${totalAgeMonths}&weight=${weight}`)
+        fetch(`../../calculus/calculi/pedi_w_zscore/?gender=${gender}&age_months=${totalAgeMonths}&weight=${weight}`)
             .then(response => {
                 if (!response.ok) {
                     // Parse the response body as JSON to extract the error message
