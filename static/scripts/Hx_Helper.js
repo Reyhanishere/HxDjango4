@@ -123,12 +123,13 @@ function AddROSSection() {
 
     if (labelElement) {
         labelElement.insertAdjacentHTML('afterend', `
+            <div id="ROSHelperDiv" class="helperDivs">
             <span class="helper-toggle-button" onclick="toggleROSTab()">کمکم کن!</span>
             <div class="ROSTab" id="ROSTab"></div>
             <div id="tabs-container"></div>
+            </div>
         `);
 
-        // Initialize ROS buttons and tabs after injecting the container elements
         createButtons(ROSButtonData);
         createTabs(ROSData);
     };
@@ -287,9 +288,11 @@ function AddPhESection() {
 
     if (labelElement) {
         labelElement.insertAdjacentHTML('afterend', `
+            <div id="PhEHelperDiv" class="helperDivs">
             <span class="helper-toggle-button" onclick="togglePhETab()">کمکم کن!</span>
             <div class="ROSTab" id="PhETab"></div>
             <div id="PhE-container"></div>
+            </div>
         `);
 
         createPhEButtons(PhEButtonData);
