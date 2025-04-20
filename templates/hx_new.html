@@ -98,12 +98,6 @@
 {% endif %}
 
 <script>
-
-    document.addEventListener('DOMContentLoaded', function() {
-        TogglePediId();
-        checkbox.addEventListener('change', TogglePediId);
-    });
-
     function TogglePediId() {
         const checkbox = document.getElementById('id_is_pedi');
         const divJob = document.getElementById('div_id_job');
@@ -126,8 +120,10 @@
 
         }
     };
-    checkbox.addEventListener('change', TogglePediId())
-    checkbox.addEventListener('load', TogglePediId())
+    document.addEventListener('DOMContentLoaded', function() {
+        TogglePediId();
+        checkbox.addEventListener('change', TogglePediId);
+    });
 </script>
 
 <script>
