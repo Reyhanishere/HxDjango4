@@ -30,7 +30,6 @@ INSTALLED_APPS = [
     # 3rd Party
     "crispy_forms",
     "crispy_bootstrap5",
-    "django_social_share",
     "markdown",
     # Local
     "accounts.apps.AccountsConfig",
