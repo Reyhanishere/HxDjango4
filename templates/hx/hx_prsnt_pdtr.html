@@ -53,17 +53,20 @@
     z-index: 2;
 }
 .prsntText{
-        overflow-y: scroll;
-        max-height: 70vh;
-    }
+    overflow-y: scroll;
+    height: 60vh;
+}
     
-    .tabIndic{
-        background-color: #F89;
-    }
-    .prsntTitle{
-        background: rgb(255,110,127);
-        background: linear-gradient(15deg, rgba(255,110,127,0.3) 0%, rgba(191,233,255,0.4) 100%);
-    }
+.tabIndic{
+    background-color: #F89;
+}
+.prsntTitle{
+    background: rgb(255,110,127);
+    background: linear-gradient(15deg, rgba(255,110,127,0.3) 0%, rgba(191,233,255,0.4) 100%);
+}
+.content {
+    min-height: 40vh;
+}
 </style>
 {% endblock imports %}
 
@@ -89,7 +92,7 @@
                         <div class="tabIndic"></div>
                         <b>Cheif Complaint: </b>
                     </div>
-                    <div class="hx prsntText textMidl" style=""><h3 style="margin-bottom:5rem">{{ case.cc }}</h3></div>
+                    <div class="hx prsntText textMidl" style="overflow-y: auto;"><h3 style="">{{ case.cc }}</h3></div>
                 </div>                
 
                 <div id="PI" class="content">
