@@ -89,6 +89,95 @@
 
 {% if user.hx_pi_ai_permission %}
 <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+<script>
+    function PIQueAI() {
+        const cc = document.getElementById('cc_terminology_input').value;
+        const pi = document.getElementById('id_pi').value;
+        const aiResponse = document.getElementById("aiResponse");
+    
+        // Create the request message element
+        const aiReqMsg = document.createElement("div");
+        aiReqMsg.className = 'aiMsg aiReqMsg';
+        const aiReqMsgP = document.createElement("p");
+        if (pi != ''){
+            aiReqMsgP.textContent = "What can I ask for a patient with " + cc + "?"}
+        else{
+            aiReqMsgP.textContent = "What can I ask for a patient with " + cc + "and entered PI?"
+        }
+        
+        aiReqMsg.style.opacity = 0;
+        aiReqMsg.appendChild(aiReqMsgP);
+        aiResponse.appendChild(aiReqMsg);
+        aiReqMsg.style.opacity = 1;
+        bounce();
+    
+        const loadingIndicator = document.createElement("div");
+        loadingIndicator.className = "spinnerCont";
+        loadingIndicator.innerHTML = `
+            <div class="spinnerLogo"></div>
+            <p>Loading...</p>
+        `;
+        loadingIndicator.style.display = "flex";
+        aiResponse.appendChild(loadingIndicator);
+    
+        const formData = new FormData();
+        formData.append('cc_term', cc);
+        formData.append('incomplete_pi', pi);
+    
+    
+        const csrfToken = document.getElementById('csrf_token').value;
+    
+        fetch('pi_que_ai/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                loadingIndicator.style.display = "none";
+    
+                if (data.piq_ai_response) {
+                    const mdpi = window.markdownit();
+                    const htmlContent = mdpi.render(data.piq_ai_response);
+    
+                    const aiRespMsg = document.createElement("div");
+                    aiRespMsg.className = 'aiMsg aiRespMsg';
+                    const aiRespMsgP = document.createElement("p");
+                    aiRespMsgP.innerHTML = htmlContent;
+                    aiRespMsg.style.opacity = 0;
+                    aiRespMsg.appendChild(aiRespMsgP);
+                    aiResponse.appendChild(aiRespMsg);
+                    aiRespMsg.style.opacity = 1;
+                } else {
+                    const aiErrorMsg = document.createElement("div");
+                    aiErrorMsg.className = 'aiErrorMsg';
+                    const aiErrorMsgP = document.createElement("p");
+                    aiErrorMsgP.textContent = "Error: " + data.error;
+                    aiErrorMsg.style.opacity = 0;
+    
+                    aiErrorMsg.appendChild(aiErrorMsgP);
+                    aiResponse.appendChild(aiErrorMsg);
+                    aiErrorMsg.style.opacity = 1;
+                }
+            })
+            .catch(error => {
+                loadingIndicator.style.display = "none";
+    
+                const aiErrorMsg = document.createElement("div");
+                aiErrorMsg.className = 'aiErrorMsg';
+                const aiErrorMsgP = document.createElement("p");
+                aiErrorMsgP.textContent = "Error: Connection Failed /:";
+                aiErrorMsg.style.opacity = 0;
+                aiErrorMsg.appendChild(aiErrorMsgP);
+                aiResponse.appendChild(aiErrorMsg);
+                aiErrorMsg.style.opacity = 1;
+            });
+        
+        document.getElementById("pullText").textContent = "Show AI Response!";
+        }
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", AddPIAI());
