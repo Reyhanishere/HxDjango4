@@ -845,6 +845,7 @@ gap: 10px; */
     }
     
     .hx {
+        overflow: auto;
         background-color: #f9f9f9;
         padding: 20px;
         margin: 5px 10px;
