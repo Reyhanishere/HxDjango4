@@ -127,13 +127,19 @@ function bounce() {
 
 function PIQueAI() {
     const cc = document.getElementById('cc_terminology_input').value;
+    const pi = document.getElementById('id_pi').value;
     const aiResponse = document.getElementById("aiResponse");
 
     // Create the request message element
     const aiReqMsg = document.createElement("div");
     aiReqMsg.className = 'aiMsg aiReqMsg';
     const aiReqMsgP = document.createElement("p");
-    aiReqMsgP.textContent = "What can I ask for a patient with " + cc + "?";
+    if (pi != ''){
+        aiReqMsgP.textContent = "What can I ask for a patient with " + cc + "?"}
+    else{
+        aiReqMsgP.textContent = "What can I ask for a patient with " + cc + "and entered PI?"
+    }
+    
     aiReqMsg.style.opacity = 0;
     aiReqMsg.appendChild(aiReqMsgP);
     aiResponse.appendChild(aiReqMsg);
@@ -151,6 +157,8 @@ function PIQueAI() {
 
     const formData = new FormData();
     formData.append('cc_term', cc);
+    formData.append('incomplete_pi', pi);
+
 
     const csrfToken = document.getElementById('csrf_token').value;
 
@@ -201,9 +209,9 @@ function PIQueAI() {
             aiResponse.appendChild(aiErrorMsg);
             aiErrorMsg.style.opacity = 1;
         });
-
+    
     document.getElementById("pullText").textContent = "Show AI Response!";
-}
+    }
 
 
 
