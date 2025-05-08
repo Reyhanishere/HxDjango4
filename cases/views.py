@@ -76,8 +76,12 @@ class CaseDetailView(View):
         case = Case.objects.get(slug=kwargs.get('slug'))
         comments = Comment.objects.filter(case=case)
         context = {'case': case, 'comments': comments, 'comment_form': CommentForm(), 'reply_form': ReplyForm()}
-        return render(request, 'hx_detail.html', context)
-
+        if case.is_pedi:
+            tmplt_name = "hx/hx_detail_pedi.html"
+        else:
+            tmplt_name = "hx_detail.html"
+        return render(request, tmplt_name, context)
+        
     def post(self, request, *args, **kwargs):
         case_slug = kwargs.get('slug')
         case = Case.objects.get(slug=case_slug)
