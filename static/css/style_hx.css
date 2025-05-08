@@ -10,6 +10,28 @@
         color: #d22;
         font-weight: bold;
     }
+    /* Hx Detail Pedi Styles */
+    
+    .infoTablePedi {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        row-gap: 1.75rem;
+        margin: 1rem 0;
+        padding: 10px;
+    }
+    
+    @media(max-width:650px) {
+        .infoTablePedi {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+    
+    .bgPedi {
+        background: rgb(255, 110, 127);
+        background: linear-gradient(15deg, rgba(255, 110, 127, 0.3) 0%, rgba(191, 233, 255, 0.4) 100%) !important;
+    }
+    /* End Hx Detail Pedi Styles */
+
     @media print {
         .noPrint{
             display:none;
