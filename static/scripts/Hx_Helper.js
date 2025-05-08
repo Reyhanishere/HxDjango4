@@ -1,3 +1,28 @@
+function TogglePediId() {
+    const checkbox = document.getElementById('id_is_pedi');
+    const divJob = document.getElementById('div_id_job');
+    const divMarriage = document.getElementById('div_id_marriage');
+    const marriageState = document.getElementById('id_marriage')
+    const divAgeM = document.getElementById('div_id_age_m');
+    const age = document.getElementById('id_age')
+    if (checkbox.checked) {
+        AddWZScore();
+        divJob.classList.add('hidden');
+        marriageState.value = 'مجرد'
+        divMarriage.classList.add('hidden');
+        divAgeM.style.display = 'block';
+        if (age.value > 20) {
+            age.value = 10
+        };
+
+    } else {
+        divJob.classList.remove('hidden');
+        divMarriage.classList.remove('hidden');
+        divAgeM.style.display = 'none'
+
+    }
+};
+
 function AddWZScore() {
     const isPediCheckbox = document.getElementById('id_is_pedi');
     const labelForPmh = document.querySelector('label[for="id_pmh"]');
