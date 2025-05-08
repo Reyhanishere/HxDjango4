@@ -1,0 +1,358 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load my_tags %}
+{% block title %} | {{case.title}}{%endblock title%}
+{% block desc %}شرح حالی از {{ case.author.get_name }} {% endblock desc%}
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style_base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style_hx.css' %}">
+
+    <style>
+    </style>
+{% endblock imports %}
+
+{% block content %}
+<div class="pad-15">
+{% if case.verified %}
+    <h2 style="font-weight:600; padding-top:10px" dir="auto">{{ case.title }}</h2>
+    <div dir="ltr" class="txtAlgnL">
+        <a href="{% url 'hx_presentation' case.slug %}" target="_blank" class="btn btn-secondary">Presentation Mode</a>
+        <a href="{% url 'hx_graphs' case.slug %}" target="_blank" class="btn btn-secondary">
+            See Lab Data
+        </a>
+        {%if user.username == case.author.username %}
+            <a href="{% url 'hx_graph_new' case.slug %}" target="_blank" class="btn btn-outline-secondary">
+                + Lab Data
+            </a>
+            <a href="{% url 'hx_add_image' case.slug %}" target="_blank" class="btn btn-outline-secondary">
+                + Images
+            </a>
+        {%endif%}
+        <span style="color:#888" hidden>Share</span><button dir="rtl" onclick="copyToClipboard('{{case.slug}}')" class="copyLink noPrint" id="copy"><img id="share"src="{% static 'images\share-icon.svg' %}" width="20px" alt="Copy case link to clipboard"></button>
+    </div>
+    <p dir="ltr" style='margin:5px;'><span dir="rtl">{{ case.date_created|date:"d M Y" }}</span>  &emsp; توسط <b>{{ case.author.get_name }}</b> | {{ case.author.degree }} </p>
+
+    <p style='margin-right:10px;'>
+        {{ case.pretext|safe }}
+    </p>
+
+    <div class="paper">
+        <h5 class='spanTwo' style="padding:15px 15px 0px 10px"> شرح حال و معاینۀ فیزیکی:</h5>
+        <hr/ class="spanTwo" style="order=0">
+        <div class="infoTablePedi spanTwo">
+            <div class="cell"> جنسیت: <b>{{ case.sex_pedi }}</b> </div> 
+            <div class="cell">منبع شرح حال: <b>{{ case.source }}</b> </div>
+            <div class="cell"> محل مراجعه: <b>{{ case.location }}</b> </div>
+            <div class="cell"><b>{{ case.get_age }}</b></div>
+            <div class="cell"> محل زندگی: <b>{{ case.dwelling }}</b> </div>
+            <div class="cell"> میزان قابل اعتماد بودن: <b>{{ case.reliability }}</b>/5</div>
+        </div>
+        <div class="hx spanTwo bgPedi" id="hxCcPedi"><b>CC: </b>{{ case.cc }}</div>
+        <div class="hx"><b>PI: </b>{{ case.pi|linebreaks }}</div>
+        <div class="hx"><b>PMH: </b>{{ case.pmh|linebreaks }}</div>
+        {% if case.drg %}
+        <div class="hx"><b>Drugs: </b>{{ case.drg|linebreaks }}</div>
+        {% else %}
+        <p style="margin:20px">بیمار دارو یا مادۀ ویژه‌ای مصرف <u>نمی‌کند</u>.</p>
+        {% endif %}
+
+        {% if case.sh %}
+        <div class="hx"><b>SH: </b>{{ case.sh|linebreaks }}</div>
+        {% else %}
+        <p style="margin:20px">بیمار Social Historyای را ذکر <u>نمی‌کند</u>.</p>
+        {% endif %}
+
+        {% if case.alg %}
+        <div class="hx"><b>Allergy: </b>{{ case.alg|linebreaks }}</div>
+        {% else %}
+        <p style="margin:20px">بیمار آلرژی‌ای را ذکر <u>نمی‌کند</u>.</p>
+        {% endif %}
+
+        {% if case.fh %}
+        <div class="hx"><b>FH: </b>{{ case.fh|linebreaks }}</div>
+        {% else %}
+        <p style="margin:20px">بیمار Family Historyای را ذکر <u>نمی‌کند</u>.</p>
+        {% endif %}
+
+        <div class="hx"><b>Other Data: </b><br/>
+            <div style="padding:5px;" dir="auto">
+                {%if user.username == case.author.username %}
+                <a href="graphs/new" style="color:#333;margin:5px; font-size:16px" class='noPrint'>
+                    آزمایش‌های کیس خود را اضافه کنید.
+                </a><br/>
+                <a href="add-image" style="color:#333;margin:5px; font-size:16px" class='noPrint'>
+                    تصاویر کیس خود را اضافه کنید.
+                </a><br/>
+
+                {%endif%}
+                {%for img in case.imagecase_set.all %}
+                {%if img.verified %}
+                <img src="{{img.image.url}}" width="60" alt=""/>
+                {% endif %}
+                {% endfor%}
+            </div>
+            {%if case.labgraphselection_set.all %} <a href="graphs" style="color:#333;margin:5px;" class='noPrint'>نمودار و جدول آزمایش‌های بیمار</a><br/>{% endif %}
+            {%if case.labgraphselection_set.all %} <a href="#labData" style="color:#333;margin:5px;">جدول آزمایش‌های بیمار در زیر برگۀ شرح حال</a><br/>{% endif %}
+            {%if case.imagecase_set.all %} <a href="#images" style="color:#333;margin:5px;">تمام تصاویر در زیر برگۀ شرح حال</a>{% endif %}<hr/>
+            {{ case.dat|linebreaks }}
+            
+        </div>
+
+        <div class="hx"><b>Review of Systems:</b> <br/><div class="twoColumnar">{{ case.ros|emphasize|safe }}</div></div>
+
+        <div class="hx"><b>Physical Examination:</b> <br/><div class="twoColumnar">{{ case.phe|emphasize|safe}}</div></div>
+        <div class="hx" style="background-color:#ffd"><b>Summary: </b>{{ case.summary|linebreaks }}</div>
+        <div class="hx bgPedi">
+            <details>
+                <summary><b>Diffrential Dx:</b></summary>
+            <p dir="auto">{{ case.ddx|linebreaks}}</p>
+            </details>
+        </div>
+        {% if case.pdx %}
+            <div class="hx"><details><summary><b>Primary Dx:</b></summary>
+                <p style="margin:10px" dir="auto">{{ case.pdx }}</p></details>
+            </div>
+        {% endif %}
+        {% if case.act %}
+            <div class="hx"><b>Action:</b> <br/>
+                {{ case.act|linebreaks }}
+            </div>
+        {% endif %}
+
+    </div>
+<br/>
+{% if case.imagecase_set.all|length > 0%}
+<div class="paperLighter">
+    <h4 id="images" >تصاویر</h4>
+    <details >
+        <summary class="pad-15">کلیک کنید</summary>
+        <div class="imageCaseCont">
+        {%for img in case.imagecase_set.all %}
+         {% comment %} {% if verified %} {% endcomment %}
+            <div class="imageCaseCont">
+                <img src="{{img.image.url}}" width="300" class="imageCaseImg" alt="{{case.title}}, {{img.type}}"/>
+                <div>
+                    <p dir="" class="imgType">{{img.type}}:</p>
+                    <p class="imageCaseP">{{img.text|linebreaks}}</p>
+                        {%if case.author.username == user.username%}
+                        <div dir="ltr">
+                            <a href="{% url 'hx_edit_image' case.slug img.id %}" class="editGraph">Edit</a> |
+                            <a href="{% url 'hx_delete_image' case.slug img.id %}" class="editGraph" style="color:#c33">Delete</a>
+                        </div>
+                        {%endif%}
+                </div>
+            </div>
+            <hr/>
+        {% endfor%}
+        </div>
+    </details>
+</div>
+{%else%}
+<p style="color:#888"> <i>برای این کیس هنوز تصویری ثبت و تایید نشده است.</i></p>
+{%endif%}
+
+{% if case.labgraphselection_set.all|length > 0%}
+<div class="paperLighter">
+    <h4 id="labData" >آزمایش‌ها</h4>
+    <details>
+        <summary class="pad-15">کلیک کنید<br/>
+            <a href="graphs" target="_blank" class="btn"><span style="text-decoration: underline">
+                مشاهدۀ تمام آزمایش‌ها به همراه <b>نمودار</b>
+             </span></a>
+        </summary>
+        
+        {%for graph in case.labgraphselection_set.all %}
+        <h5>{{graph.title}}:</h5>
+        <div class="labDataCont">
+            {%if graph.description%}<div class="description">{{graph.description | linebreaks}}</div>
+            {%else%}
+            <div></div>
+            {%endif%}
+            <div dir="ltr" class="table-container">
+                <table id="table-{{ forloop.counter }}" style="margin: 10px 5px">
+                    <tbody>
+                        <!-- Data will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+                {%if graph.author.username == user.username%}
+                <div>
+                    <a href="{% url 'hx_graph_edit' graph.case.slug graph.pk %}" class="editGraph">Edit</a> |
+                    <a href="{% url 'hx_graph_delete' graph.case.slug graph.pk %}" class="editGraph" style="color:#c33">Delete</a>
+                </div>
+                {%endif%}
+            </div>
+        
+            <script>
+                const graphData{{ forloop.counter }} = '{{ graph.data|striptags|linebreaksbr }}'.split('<br>');
+                const datasets{{ forloop.counter }} = [];
+                // Create table
+                const tableBody{{ forloop.counter }} = document.getElementById('table-{{ forloop.counter }}').querySelector('tbody');
+                graphData{{ forloop.counter }}.forEach(line => {
+                    const [label, values] = line.split(': ');
+                    const dataPoints = values.split(', ').map(val => val === '-' ? null : parseFloat(val.trim()));
+                    addToTable(label, dataPoints, tableBody{{ forloop.counter }});
+                });
+
+                function addToTable(label, dataPoints, tableBody) {
+                    const rowCount = tableBody.rows.length;
+
+                    if (rowCount === 0) {
+                        // Create header row
+                        const headerRow = tableBody.insertRow(-1);
+                        const labelHeader = headerRow.insertCell(0);
+                        labelHeader.textContent = 'Day:';
+                        for (let i = 0; i < dataPoints.length; i++) {
+                            const dataHeader = headerRow.insertCell(-1);
+                            dataHeader.textContent = 'D' + (i + 1).toString();
+                        }
+                    }
+
+                    // Insert label and data points
+                    const dataRow = tableBody.insertRow(-1);
+                    const labelCell = dataRow.insertCell(0);
+                    labelCell.textContent = label;
+                    for (let i = 0; i < dataPoints.length; i++) {
+                        const dataCell = dataRow.insertCell(-1);
+                        dataCell.textContent = dataPoints[i];
+                    }
+                }
+            </script>
+        </div>
+            <hr>
+        {% endfor%}
+        
+    </details>
+</div>
+{%else%}
+<p style="color:#888"> <i>برای این کیس هنوز آزمایشی ثبت نشده است.</i></p>
+{%endif%}
+
+<div>
+<p style='margin:20px 10px;'>
+    {{ case.post_text|linebreaks }}
+</p>
+</div>
+<p style="color:#888; text-align:center" class='noPrint'>با کلیک بر روی
+<button dir="rtl" onclick="copyToClipboard('{{case.slug}}')" class="copyLink"><img id="shareDown" src="{% static 'images\share-icon.svg' %}" width="20px" alt="Copy case link to clipboard" /></button>
+لینک مطلب را کپی کنید.
+<span id="copied" hidden>(کپی شد!)</span>
+</p>
+<div class='noPrint'>
+    {% if user.is_authenticated %}
+    <h4>دیدگاهی بیفزایید:</h4>
+    <form method="post">
+        {% csrf_token %}
+        {{ comment_form|crispy }}
+    <button class="btn btn-success ml-2" type="submit">ثبت</button>
+    </form>
+    </div>
+
+{%else%}
+<p style="margin:15px 7px">برای ثبت دیدگاه و پاسخ لازم است <b><a href="{% url "login" %}">وارد</a></b> شوید.</p>
+{% endif %}
+{% if comments.all.count > 0 %}    
+<hr/>
+    <h4 style="margin-bottom:15px">دیدگاه‌ها ({{comments.all | length}}):</h4>
+{%endif%}
+    {% for comment in comments|dictsort:"likes" reversed %}
+    {%if comment.verified %}
+    <div class="comment">
+        <div class="comment-content">
+            <span class="commentDetail">{{ comment.author }} در {{ comment.date_created|date:"d F" }} ساعت {{ comment.date_created|date:"H:i" }}:</span> 
+            <p style="margin:10px">&emsp;{{ comment.comment }}</p>
+        </div>
+         <div class="like-section">
+            <form dir="ltr" class="like-form" method="post" action="{% url 'like_comment' %}">
+                {% csrf_token %}
+                <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                <button type="submit" class="like-btn" style="{%if user in comment.liked_by.all %} color:#0b0 {%endif%}">&#9650;</button><span id="likes_count_{{ comment.id }}">{{ comment.likes }}</span>
+            </form>
+        </div>
+    
+    <div class="reply-box">
+        {% if comment.reply_set.all.count > 0 %}
+        <details class="reply">
+            <summary>پاسخ‌ها ({{comment.reply_set.all | length}})</summary>
+            <br/>
+        {% for reply in comment.reply_set.all %}
+            {% if reply.verified %}
+            <div class="reply-each">
+                <span class="commentDetail">{{ reply.author }} در {{ reply.date_created|date:"d F" }} ساعت {{ reply.date_created|date:"H:i" }}:</span> 
+                <p class="reply-text">{{ reply.content }}</p>
+            </div>
+            {%endif%}
+        {% endfor %}
+        </details>
+        {%else%}
+        <p style="background-color:#fff; padding:5px; border-radius:5px; color:#666" hidden></p>
+    {%endif%}
+    {% if user.is_authenticated %}
+    <form class="reply-form" id="reply_form_{{ comment.id }}" method="post" action="{% url 'add_reply' %}">
+        {% csrf_token %}
+        <input type="hidden" name="comment_id" value="{{ comment.id }}">
+        <textarea name="reply_content" placeholder="پاسخ خود را اینجا بنویسید..." required></textarea>
+        <button type="submit">ثبت</button>
+    </form>
+    
+    {%endif%}
+</div>
+        {%endif%}
+
+
+    </div>
+        <!-- Display replies for the comment if any -->
+        
+    {% endfor %}
+</div>
+{% else %}
+<h2>این مطلب هنوز به تایید ادمین نرسیده است.</h2>
+
+{% endif %}
+</div>
+{% endblock content %}
+
+
+{% block edel %}
+{% if user.username == case.author.username %}
+<a href="{% url 'hx_edit' case.slug %}" class="btn btn-warning" style="width:70px; font-size:16px; padding:4px; align-items:center">
+    <span style="font-size:16px">ویرایش</span></a>
+
+<a href="{% url 'hx_delete' case.slug %}" class="btn btn-danger" style="width:70px; font-size:16px; padding:4px;align-items:center">
+    <span style="font-size:16px">حذف</span></a>
+{% endif %}
+{% endblock edel %}
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const likeForms = document.querySelectorAll('.like-form');
+        likeForms.forEach(form => {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const formData = new FormData(this);
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // If like request is successful, reload the page
+                        window.location.reload();
+                    } else {
+                        console.error('Failed to like comment');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        });
+    });
+
+    
+</script>
