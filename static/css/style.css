@@ -1232,19 +1232,19 @@ text-align: center;
         }
     }
     
-    @media (min-device-width: 600px) and (max-device-width: 750px) {
+    @media (min-device-width: 600px) and (max-device-width: 900px) {
         .twoColumnar {
             column-count: 1;
         }
     }
     
-    @media (min-device-width: 480px) and (max-device-width: 600px) {
+    @media (min-device-width: 500px) and (max-device-width: 600px) {
         .twoColumnar {
             column-count: 2;
         }
     }
     
-    @media screen and (max-height: 480px) {
+    @media screen and (max-device-width: 500px) {
         .twoColumnar {
             column-count: 1;
         }
