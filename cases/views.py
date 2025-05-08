@@ -523,10 +523,55 @@ def pi_que_ai(request):
     if request.user.is_authenticated and request.user.hx_pi_ai_permission and request.user.hx_pi_ai_use_count<use_limit:
         if request.method == 'POST':
             symptom = request.POST.get('cc_term')
+            incomplete_pi = request.POST.get('incomplete_pi')
+            
             if len(symptom)>3:
                 Data = {
                 'message':{
-                    'content': f"{symptom}",
+                    'content': f"CC: {symptom}\n PI till now: {incomplete_pi}",
+                    'type':'USER'
+                    },
+                }
+                message_url = f'{API_URL}/chat/session/{SESSION_CODE}/message'
+                response = requests.post(message_url, headers=Headers, data=json.dumps(Data))
+            else:
+                return JsonResponse({'error': 'Enter Chief Complaint First!'}, status=400)
+
+            if response.status_code == 200:
+                piq_ai_response = response.json().get('content')
+                request.user.hx_pi_ai_use_count+=1
+                request.user.save()
+                new_log = AIReqResLog(
+                    user=request.user,
+                    request_content=Data["message"]['content'],
+                    ai_model="PI",
+                    response_content=piq_ai_response,
+                )
+                new_log.save()
+
+                return JsonResponse({'piq_ai_response': piq_ai_response})
+            else:
+                return JsonResponse({'error': 'API call failed'}, status=500)
+    elif request.user.is_authenticated and request.user.hx_pi_ai_permission and request.user.hx_pi_ai_use_count>use_limit:
+        return JsonResponse({'error': f'You have exceeded use limit.({use_limit})'}, status=400)
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)def pi_que_ai(request):
+    API_URL='https://api.metisai.ir/api/v1'
+    SESSION_CODE='2ac615db-1eb4-43d0-8630-8dc23c3f1f2f'
+    Headers={
+    'Authorization':settings.AI_API_KEY,
+    'content-type':'application/json'
+    }
+    use_limit=100
+    if request.user.is_authenticated and request.user.hx_pi_ai_permission and request.user.hx_pi_ai_use_count<use_limit:
+        if request.method == 'POST':
+            symptom = request.POST.get('cc_term')
+            incomplete_pi = request.POST.get('incomplete_pi')
+            
+            if len(symptom)>3:
+                Data = {
+                'message':{
+                    'content': f"CC: {symptom}\n PI till now: {incomplete_pi}",
                     'type':'USER'
                     },
                 }
