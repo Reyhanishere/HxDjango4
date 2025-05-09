@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     "markdown",
+    "polymorphic",
     # Local
     "accounts.apps.AccountsConfig",
     "pages.apps.PagesConfig",
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     "docs.apps.DocsConfig",
     "cases",
     "calculus",
+    "steps",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
