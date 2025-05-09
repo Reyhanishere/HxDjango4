@@ -1,0 +1,340 @@
+body {
+    margin-top: 0;
+    background-color: transparent;
+    font-size: 20px;
+    font-family: "Baloo Bhaijaan 2", sans-serif;
+}
+
+.block-container {
+    display: none;
+    margin: 10px;
+    background-color: #F9F9F9;
+    border-radius: 10px;
+    padding: 0.5rem;
+    box-shadow: 0px 0px 3px 0px #888;
+}
+
+.block-container.active {
+    display: block;
+}
+
+#continue {
+    margin: 1rem auto;
+    padding: 0.5rem 1rem;
+    font-size: 20;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    width: 14rem;
+    border: 1px solid;
+    font-family: "Baloo Bhaijaan 2", sans-serif;
+}
+
+#continue:hover {
+    background-color: #F9F9F9;
+}
+
+.progressDiv {
+    height: 65px;
+    background-color: aquamarine;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    display: flex;
+    display: none;
+}
+
+.progressBar {
+    height: 20px;
+    width: 80%;
+    margin: auto;
+    background: linear-gradient(225deg, #85FFBD 0%, #FFFB7D 100%);
+    border-radius: 50px;
+    border: 1px solid #888;
+    box-shadow: 0px 0px 2px 0 #999;
+}
+
+.barShine {
+    position: relative;
+    background-color: #ffffff99;
+    width: 80%;
+    height: 5px;
+    right: 18%;
+    top: 5px;
+    border-radius: 3px;
+    box-shadow: 0 0 3px 0px #fff;
+}
+
+#xpBox {
+    display: none;
+    margin: 1rem;
+    padding: 1rem;
+    background: linear-gradient(45deg, #16BFFD, #CB3066);
+    border-radius: 200px;
+    text-align: center;
+    color: white;
+    font-size: 22px;
+    font-weight: 500;
+    box-shadow: 0 0 12px 0px #e9ff21;
+}
+
+
+/* Common */
+
+.explanation {
+    display: none;
+    padding: 1rem;
+    margin: 1rem 0;
+    background-color: #FEFEFE;
+    border: solid 1px #AAA;
+    border-radius: 10px;
+    text-align: justify;
+}
+
+.feedback {
+    border-radius: 10px;
+    padding: 1rem;
+    display: none;
+    margin-top: 1rem;
+}
+
+.fdbkNotAnswered {
+    background-color: #FFFB7D;
+    display: block !important;
+}
+
+.fdbkCorrect {
+    background: linear-gradient(225deg, #85FFBD 0%, #FFFB7D 100%);
+    border: 1px solid #1F4932;
+    color: #1F4932;
+    display: block !important;
+}
+
+.fdbkIncorrect {
+    background-color: rgb(255, 105, 97);
+    color: white;
+    display: block !important;
+}
+
+
+/* End Common */
+
+
+/* Pairing */
+
+.pairing {
+    background-color: #bbb;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.pairing-key,
+.pairing-value {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: #EEE;
+    border: solid 1px rgb(90, 90, 90);
+    box-shadow: 0px 2px 0px 1px #999;
+    transition: 0.3s;
+    max-width: 15rem;
+    user-select: none;
+}
+
+.pairing-key:hover,
+.pairing-value:hover {
+    background-color: #FCFCFC;
+}
+
+.pairing-key.selected,
+.pairing-value.selected {
+    box-shadow: 0px 1px 0px 1px #999;
+    transform: translate(0px, 3px);
+    background-color: #FDFDFD;
+}
+
+.pairing-key.correct,
+.pairing-value.correct {
+    background-color: #57C785;
+    border: solid 1px rgb(45, 103, 69);
+    cursor: not-allowed;
+}
+
+.pairing-key.incorrect,
+.pairing-value.incorrect {
+    background-color: #f99;
+    border: solid 1px #c33;
+    cursor: not-allowed;
+}
+
+.pairing-key.answered,
+.pairing-value.answered {
+    cursor: not-allowed;
+    background-color: #ECE5D8;
+    border: solid 1px #321B15;
+    color: #321B15;
+    box-shadow: 0px 0px 0px 0px #fff;
+}
+
+.pairingDiv {
+    margin-top: 1rem;
+    text-align: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 0.5rem;
+}
+
+.key-container,
+.value-container {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.key-container {
+    grid-column: 1;
+}
+
+.value-container {
+    grid-column: 2;
+}
+
+
+/* End Pairing */
+
+
+/* Key Feature */
+
+.feature {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 5px;
+    background-color: #f1f1f1;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 8px;
+    user-select: none;
+    transition: 0.3s ease;
+    user-select: none;
+}
+
+.feature:hover {
+    background-color: #FCFCFC;
+    border: 1px solid #aaa;
+}
+
+.feature.selected {
+    background-color: #FFCC70;
+}
+
+.feature.correct {
+    background-color: #4caf50;
+    color: white;
+}
+
+.feature.incorrect.selected {
+    background-color: #f44336;
+    color: white;
+}
+
+.feature.incorrect {
+    background-color: rgb(255, 105, 97);
+    color: white;
+}
+
+.feature.missed {
+    background-color: #d2a1f688;
+    color: rgb(62, 42, 77);
+}
+
+.feature.missed.selected {
+    background-color: #d2a1f6;
+    color: rgb(62, 42, 77);
+}
+
+.key-feature-block {
+    border: 2px dashed #aaa;
+    margin: 20px 0;
+    padding: 10px;
+}
+
+.checkButton {
+    background-color: #85FFBD;
+    background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);
+    color: #1F4932;
+    padding: 0.5rem 2rem;
+    margin: 1rem;
+    font-size: 20px;
+    border-radius: 15px;
+    border: solid 1px #1f4932;
+    box-shadow: 0 0 3px 0px #1F4932;
+    cursor: pointer;
+    transition: 0.3s ease;
+    user-select: none;
+}
+
+.checkButton:hover {
+    transform: translate(0px, 2px);
+    box-shadow: 0 0 0px 0px #1F4932;
+}
+
+.resetBtn {
+    background-color: #FFAFBD;
+    background-image: linear-gradient(45deg, #ffc3a0 0%, #FFAFBD 100%) !important;
+}
+
+
+/* End KF */
+
+
+/* MCQ */
+
+.MCQCont {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.optionSpan {
+    display: block;
+    padding: 12px 15px;
+    margin: 8px 0;
+    background-color: #EEE;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s;
+    border: solid 1px rgb(90, 90, 90);
+    box-shadow: 0px 2px 0px 1px #999;
+}
+
+.hidden-radio {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.optionSpan:hover {
+    background-color: #FCFCFC;
+}
+
+.hidden-radio:checked+.optionSpan {
+    box-shadow: 0px 1px 0px 1px #999;
+    transform: translate(0px, 3px);
+    background-color: #FDFDFD;
+}
+
+.checkBtnCont {
+    display: flex;
+    justify-content: center;
+}
+
+form {
+    margin: 0.5rem 1rem;
+}
+
+
+/* End MCQ */
