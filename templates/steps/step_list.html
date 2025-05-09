@@ -1,0 +1,6 @@
+<h1>Steps</h1>
+<ul>
+  {% for step in object_list %}
+    <li><a href="{% url 'step_detail' step.slug %}">{{ step.title }}</a></li>
+  {% endfor %}
+</ul>

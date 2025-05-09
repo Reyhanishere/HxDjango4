@@ -1,0 +1,123 @@
+{% extends 'steps/steps_base.html' %}
+{% load steps_tags %}
+{% load static %}
+
+{% block title %}{{ step.title }}{% endblock title %}
+
+{% block imports %}
+  <style>
+  </style>
+{% endblock imports %}
+
+{% block content %}
+  <div class="progressDiv">
+    <div class="progressBar">
+      <div class="barShine"></div>
+    </div>
+  </div>
+  <h1 style="margin:1rem" dir="ltr">Steps</h1>
+  <h2 style="margin:1rem">{{ step.title }}</h2>
+
+  {% for block in blocks %}
+    <div class="block-container {% if forloop.counter == 1 %}active{% endif %}" id="block-{{ forloop.counter }}" data-model="{{block|wModel}}" data-xp="{{ block.xp }}">
+      {% if block|isModel:"TextBlock" %}
+        <div>{{ block.text }}</div>
+      {% elif block|isModel:"ImageBlock" %}
+      <div style="display: flex; justify-content: center; flex-direction: column; margin: 1rem;">
+        <img src="{{ block.image.url }}" alt="{{ block.caption }}" style="max-width: 80%; margin: 1rem auto; border-radius: 10px;">
+        <div id="explanation{{ forloop.counter }}" class="explanation" style="display:block"> {{ block.caption }} </div>
+      </div>
+      {% elif block|isModel:"MCQBlock" %}
+        <div>{{ block.question }}</div>
+        <form id="mcq{{ forloop.counter }}">
+          {% with choices=block.choices.items|shuffleDict %}
+          <div class="MCQCont">
+            {% for key, value in choices %}
+              <label class="">
+                <input type="radio" name="option" value="{{ key }}" class="hidden-radio">
+                <span class="optionSpan">{{ value }}</span>
+              </label>
+            {% endfor %}
+            </div>
+          {% endwith %}
+          <div class="checkBtnCont">
+          <button type="button" id="checkMCQ{{forloop.counter}}" class="checkButton" data-clicked="0" onclick="checkMCQAnswer('{{ block.correct_choice }}', '{{ forloop.counter }}', '{{ block.xp }}')">Check Answer</button>
+          </div>
+          <div id="feedback{{ forloop.counter }}" class="feedback"></div>
+          <div id="explanation{{ forloop.counter }}" class="explanation" dir=""><details><summary>پاسخ تشریحی</summary>{{block.explanation|sep_paraph}}</details></div>
+
+        </form>
+
+
+      {% elif block|isModel:"KeyFeatureBlock" %}
+      <div>{{ block.question }}</div>
+        <div style="margin: 1rem;">
+      <div class="feature-options" id="feature-options-{{ forloop.counter }}">
+          <div class="features"></div>
+          <div class="checkBtnCont">
+              <button id="cB{{ forloop.counter }}" class="checkButton" data-clicked="0" onclick="checkKFAnswers({{ forloop.counter }}, {{block.xp}})">Check</button>
+              <button id="rB{{ forloop.counter }}" class="checkButton resetBtn" onclick="resetKFSelection({{ forloop.counter }})">Reset Selection</button>
+
+          </div>
+          <div id="feedback{{ forloop.counter }}" class="feedback"></div>
+          <div id="explanation{{ forloop.counter }}" class="explanation"><details><summary>پاسخ تشریحی</summary>{{block.explanation|sep_paraph}}</details></div>
+      </div>
+      </div>
+      <script>
+          document.addEventListener('DOMContentLoaded', function () {
+              initFeatureBlock(
+                  {{ forloop.counter }},
+                  [ {% for feature in block.all_features.values %}"{{ feature }}"{% if not forloop.last %}, {% endif %}{% endfor %} ],
+                  [ {% for feature in block.expected_features.values %}"{{ feature }}"{% if not forloop.last %}, {% endif %}{% endfor %} ],
+                  {{ block.expected_features_count }}
+              );
+          });
+      </script>
+      
+
+      {% elif block|isModel:"PairingBlock" %}
+          <div>{{ block.prompt }}</div>
+          <div class="pairingDiv">
+              <div class="key-container" dir="ltr">
+                  {% for key, value in block.pairs.items %}
+                      <span class="pairing-key" data-pair-id="{{ forloop.counter }}" dir="rtl">{{ key }}</span>
+                  {% endfor %}
+              </div>
+      
+              <div class="value-container">
+                  {% for key, value in block.pairs.items %}
+                      <span class="pairing-value" data-pair-id="{{ forloop.counter }}">{{ value }}</span>
+                  {% endfor %}
+              </div>
+              
+          </div>
+          <div style="margin: 1rem">
+              <div id="feedback{{ forloop.counter }}" class="feedback"></div>
+              <div id="explanation{{ forloop.counter }}" class="explanation"><details><summary>پاسخ تشریحی</summary>{{block.explanation|sep_paraph}}</details></div>
+          </div>
+          
+      {% endif %}
+      
+    </div>
+
+  {% endfor %}
+<div style="display: flex">
+  <button onclick="showNextBlock()" id="continue">بزن بریم</button>
+</div>
+<div id="xpBox"></div>
+
+<script src="{% static 'scripts/Steps/Pairing.js' %}"></script>
+<script src="{% static 'scripts/Steps/KF.js' %}"></script>
+<script src="{% static 'scripts/Steps/MCQ.js' %}"></script>
+
+<script>
+  let totalXP = 0;
+
+document.addEventListener('DOMContentLoaded', function() {
+  handlePairing();
+});
+
+</script>
+
+
+{% endblock content %}
