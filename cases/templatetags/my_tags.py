@@ -40,3 +40,12 @@ def emphasize(value):
             all_lines.append(f"{i}<br/>")
     final = "".join(all_lines)
     return final
+
+@register.filter(name='sep_paraph')
+def sep_paraph(value):
+    if not value:
+        return ''
+    # What I do for Tanaz
+    paras = re.split(r'\n{1,}', str(value))
+    paras = [f'<p dir="auto">{p.strip()}</p>' for p in paras if p.strip()]
+    return mark_safe('\n'.join(paras))
