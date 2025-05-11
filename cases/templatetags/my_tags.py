@@ -48,5 +48,5 @@ def sep_paraph(value):
     if not value:
         return ''
     paras = re.split(r'\n{1,}', str(value))
-    paras = [f'<p dir="auto">{p.strip()}</p>' for p in paras if p.strip()]
+    paras = [f'<p dir="auto" style="margin-bottom: 0.5rem;">{p.strip()}</p>' for p in paras if p.strip()]
     return mark_safe('\n'.join(paras))
