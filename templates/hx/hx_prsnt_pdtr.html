@@ -108,7 +108,7 @@
                         <div class="tabIndic"></div>
                         <b>Past Medical History: </b>
                     </div>
-                    <div class="hx prsntText" dir='auto'>{{ case.pmh|emphasize|safe}}</div>
+                    <div class="hx prsntText" dir='auto'>{{ case.pmh|sep_paraph|safe}}</div>
                 </div>
                 
                 <div id="Drugs" class=" content">
