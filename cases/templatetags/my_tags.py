@@ -1,7 +1,9 @@
 from django import template
 from django.template.defaultfilters import stringfilter
+from django.utils.safestring import mark_safe
 
 import markdown as md
+import re
 
 register = template.Library()
 
