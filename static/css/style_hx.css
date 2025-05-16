@@ -40,3 +40,34 @@
             display:none;
         }
     }
+    /* BackTo Buttons Styles */
+    
+    #backTo a {
+        margin-right: 0.25rem;
+        background-color: #f6f6f6;
+        border-radius: 30px;
+        padding: 2px;
+        padding-right: 12px;
+        border: solid 1px #ccc;
+        color: #999;
+        font-size: 12px;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+    
+    #backTo a:hover {
+        background-color: #e2e2e2;
+        color: #666;
+    }
+    
+    #backTo a:hover span {
+        background-color: #d3d3d3;
+    }
+    
+    #backTo span {
+        border-radius: 30px;
+        padding: 0 8px;
+        background-color: #e7e7e7;
+        transition: 0.3s;
+    }
+    /* End BackTo Buttons Styles */
