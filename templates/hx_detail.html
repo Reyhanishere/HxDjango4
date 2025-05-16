@@ -6,12 +6,57 @@
 
 {% block desc %}شرح حالی از {{ case.author.get_name }}{% endblock desc %}
 
-{% block content %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
-<link rel="stylesheet" href="{% static 'css/style_base.css' %}">
-<link rel="stylesheet" href="{% static 'css/style_hx.css' %}">
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style_base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style_hx.css' %}">
 
+    <style>
+        @media print {
+            .noPrint{
+                display:none;
+            }
+            .btn{
+                display:none;
+            }
+        }
+                
+        #backTo a{
+            margin-right: 0.25rem;
+            background-color: #f6f6f6;
+            border-radius: 30px;
+            padding: 2px;
+            padding-right: 12px;
+            border: solid 1px #ccc;
+            color: #999;
+            font-size: 12px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        #backTo a:hover{
+            background-color: #e2e2e2;
+            color: #666;
+        }
+        
+        #backTo a:hover span{
+            background-color: #d3d3d3;
+        }
+
+        #backTo span{
+            border-radius: 30px;
+            padding: 0 8px;
+            background-color: #e7e7e7;
+            transition: 0.3s;
+        }
+    </style>
+{% endblock imports %}
 <div class="pad-15">
+    <div id="backTo" dir="ltr">
+        <a href="{% url 'cases_main'%}"><span>&#11164;</span> Cases</a>
+        <a href="{% url 'self_user_cases'%}"><span>&#11164;</span> My Cases</a>
+        <a href="{% url 'hx_list'%}"><span>&#11164;</span> Cases List</a>
+    </div>
 {% if case.verified %}
 <h2 style="font-weight:600; padding-top:10px" dir="auto">{{ case.title }}</h2>
 <div dir="ltr" class="txtAlgnL">
