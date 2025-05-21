@@ -297,13 +297,14 @@ body {
 
 .MCQCont {
     display: flex;
-    gap: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0rem;
 }
 
 .optionSpan {
     display: block;
     padding: 12px 15px;
-    margin: 8px 0;
+    margin: 2px 0;
     background-color: #EEE;
     border-radius: 4px;
     cursor: pointer;
