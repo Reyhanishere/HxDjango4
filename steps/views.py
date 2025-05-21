@@ -1,6 +1,7 @@
-from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, DetailView
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
+from django.views.generic import ListView, DetailView
 from django.db.models import Q
 
 from .models import *
