@@ -136,3 +136,30 @@ class UserProgress(models.Model):
 
     def __str__(self):
         return f"{self.user} progress in {self.step}"
+
+class Race(models.Model):
+    name = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+
+
+    def is_open(self):
+        now = timezone.now()
+        return self.start_time <= now <= self.end_time
+    
+    def __str__(self):
+        return self.name
+    
+class Record(models.Model):
+    race = models.ForeignKey(Race, on_delete=models.CASCADE, related_name='records')
+    name = models.CharField(max_length=100)
+    score = models.IntegerField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    ip_address = models.GenericIPAddressField()
+    
+    class Meta:
+        unique_together = ('race', 'name')
+
+    def __str__(self):
+        return f"{self.race}| {self.name}: {self.score}"
