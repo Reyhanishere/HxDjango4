@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ race.name }} – Rankings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% comment %} <meta http-equiv="refresh" content="10"> {% endcomment %}
+    <link rel="stylesheet" href="{% static 'css/style_steps.css'%}">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>🏁 {{ race.name }} Leaderboard 🏁</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Name</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in records %}
+      <tr id="r{{ forloop.counter }}">
+        <td>{{ forloop.counter }}</td>
+        <td>{{ entry.name }}</td>
+        <td>{{ entry.score }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="3" style="color: #333">No submissions yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</body>
+</html>
