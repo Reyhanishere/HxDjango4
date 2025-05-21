@@ -14,12 +14,28 @@ class Field(models.Model):
 
     def __str__(self):
         return self.title
+        
+class Race(models.Model):
+    name = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
 
+
+    def is_open(self):
+        now = timezone.now()
+        return self.start_time <= now <= self.end_time
+    
+    def __str__(self):
+        return self.name
+        
 class Step(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     field=models.ForeignKey(Field, on_delete=models.SET_NULL, null=True)
     slug = models.SlugField(unique=True)
+    race = models.ForeignKey(Race, on_delete=models.SET_NULL, null=True, blank=True)
+
 
     def __str__(self):
         return self.title
@@ -137,19 +153,6 @@ class UserProgress(models.Model):
     def __str__(self):
         return f"{self.user} progress in {self.step}"
 
-class Race(models.Model):
-    name = models.CharField(max_length=100)
-    created_at = models.DateTimeField(auto_now_add=True)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
-
-
-    def is_open(self):
-        now = timezone.now()
-        return self.start_time <= now <= self.end_time
-    
-    def __str__(self):
-        return self.name
     
 class Record(models.Model):
     race = models.ForeignKey(Race, on_delete=models.CASCADE, related_name='records')
