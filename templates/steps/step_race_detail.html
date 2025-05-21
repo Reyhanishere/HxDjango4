@@ -31,7 +31,7 @@
   {% for block in blocks %}
     <div class="block-container {% if forloop.counter == 1 %}active{% endif %}" id="block-{{ forloop.counter }}" data-model="{{ block|wModel }}" data-xp="{{ block.xp }}">
       {% if block|isModel:'TextBlock' %}
-        <div>{{ block.text }}</div>
+        <div>{{ block.text|linebreaks }}</div>
       {% elif block|isModel:'ImageBlock' %}
         <div style="display: flex; justify-content: center; flex-direction: column; margin: 1rem;">
           <img src="{{ block.image.url }}" alt="{{ block.caption }}" style="max-width: 80%; margin: 1rem auto; border-radius: 10px;" />
