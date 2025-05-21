@@ -23,13 +23,13 @@ function showNextBlock() {
 
         if (nextBlock.dataset.model === "textblock") {
             enableContinue();
-            window.scrollBy({
-                top: 500,
-                behavior: 'smooth'
-            });
         } else {
             disableContinue();
         }
+        window.scrollBy({
+            top: 500,
+            behavior: 'smooth'
+        });
     } else {
         disableContinue();
         const xpBox = document.getElementById("xpBox");
@@ -44,10 +44,13 @@ function showNextBlock() {
             scoreInput.value = 0
 
         }
+        window.scrollBy({
+            top: 200,
+            behavior: 'smooth'
+        });
         document.getElementById("submitForm").style.display = "flex"
     }
 }
-
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
