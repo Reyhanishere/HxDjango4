@@ -82,3 +82,18 @@ class BlockAdmin(PolymorphicParentModelAdmin):
         KeyFeatureBlock,
         PairingBlock,
     )
+
+class RecordInline(admin.TabularInline):
+    model=Record
+    extra=0
+
+# @admin.action(description="Clean Race Records")
+# def clean_race_records(Race, request, queryset):
+#     queryset.update(verified=False)
+
+class RaceAdmin(admin.ModelAdmin):
+    inlines = [RecordInline]
+    # actions = [clean_race_records]
+
+admin.site.register(Race, RaceAdmin)
+admin.site.register(Record)
