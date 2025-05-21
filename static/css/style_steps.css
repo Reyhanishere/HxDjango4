@@ -426,6 +426,8 @@ tr:first-child td {
     line-height: 1.5;
     box-shadow: 0 1px 0 1px #aaa;
     background-color: lavenderblush;
+    color: black;
+    border: solid 2px;
 }
 
 #submitRespMessage {
