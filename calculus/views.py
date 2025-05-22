@@ -329,3 +329,75 @@ class CalculateBMIZScoreView(View):
             return JsonResponse({"error": str(e)[:100]}, status=500)
 
     
+class CalculateAllZScoresView(View):
+    def get(self, request):
+        # user = request.user if request.user.is_authenticated else None
+        # api_name = "CalculateAllZScores"
+        # ip_address = request.META.get("REMOTE_ADDR")
+        try:
+            gender = request.GET.get('gender')
+            age_months = float(request.GET.get('age_months'))
+            weight = float(request.GET.get('weight'))
+            height = float(request.GET.get('height'))
+            hc = float(request.GET.get('hc'))
+
+        except Exception as e:
+            # CaLog.objects.create(
+            #     user=user, api_name=api_name, status=500, error_data=str(e), ip_address=ip_address)
+            return JsonResponse({"error": str(e)}, status=500)
+
+        if gender not in ['1', '2']:
+            # CaLog.objects.create(
+            #     user=user, api_name=api_name, input_data=f"G: {gender}", status=400, error_data="Gender is other than M or F.", ip_address=ip_address)
+            return JsonResponse({'error': 'Choose Boy or Girl as a gender.'}, status=400)
+        if height < 30 or height > 250:
+            # CaLog.objects.create(
+            #     user=user, api_name=api_name, input_data=f"Height: {height}", output="", status=400, error_data="Not a valid height.", ip_address=ip_address)
+            return JsonResponse({'error': 'This height is not valid for a kid. Please check if you have entered the height in centimeters (cm).'}, status=400)
+        if weight < 0.5 or weight > 300:
+            # CaLog.objects.create(
+            #     user=user, api_name=api_name, input_data=f"Age: {age_months}", output="", status=400, error_data="Not a valid decimal for month.", ip_address=ip_address)
+            return JsonResponse({'error': 'This weight is not valid for a kid. Please check if you have entered the weight in kilograms (kg).'}, status=400)
+        if age_months%0.5!=0:
+            # CaLog.objects.create(
+            #     user=user, api_name=api_name, input_data=f"Age: {age_months}", output="", status=400, error_data="Not a valid decimal for month.", ip_address=ip_address)
+            return JsonResponse({'error': 'The only acceptable decimal for Months is 5.'}, status=400)
+        if age_months>240.5:
+            # CaLog.objects.create(
+            #     user=user, api_name=api_name, input_data=f"Age: {age_months}", output="", status=400, error_data="Not a valid age.", ip_address=ip_address)
+            return JsonResponse({'error': "This calculator doesn't work for those who are older than 20 years."}, status=400)
+        elif  age_months < 24:
+            # CaLog.objects.create(
+            #     user=user, api_name=api_name, input_data=f"Age: {age_months}", output="", status=400, error_data="Not a valid age.", ip_address=ip_address)
+            return JsonResponse({'error': "This calculator doesn't work for those who are younger than 2 years."}, status=400)
+
+        # bmi=round(((weight)/((height/100)**2)), 2)
+
+        try:
+            result = find_LMS_whole(weight, height, hc, gender, age_months)
+            result_content= json.loads(result.content)
+            # CaLog.objects.create(
+            #     user=user,
+            #     api_name=api_name,
+            #     input_data=f"BMI: {bmi}, G: {gender}, Age: {age_months}",
+            #     output=result_content.get("weight"),
+            #     status=200,
+            #     ip_address=ip_address
+            # )
+            # if not user:
+            #     cache_key = f"api_calls_{api_name}_{ip_address}_{datetime.today().date()}"
+            #     api_calls = cache.get(cache_key, 0)
+            #     if api_calls >= 5:
+            #         # CaLog.objects.create(
+            #         # user=user, api_name=api_name, input_data="", output="", status=429, error_data="Limit exceeded.", ip_address=ip_address
+            #         # )
+            #         return JsonResponse({"error": "Limit exceeded. Please sign up or log in."}, status=429)
+            #     cache.set(cache_key, api_calls + 1, 86400)
+            return result
+        except Exception as e:
+            # CaLog.objects.create(
+            #     user=user, api_name=api_name, input_data="", output="", status=500, error_data=str(e), ip_address=ip_address
+            # )
+            return JsonResponse({"error": str(e)[:100]}, status=500)
+
+    
