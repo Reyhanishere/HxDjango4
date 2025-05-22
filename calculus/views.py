@@ -339,7 +339,7 @@ class CalculateAllZScoresView(View):
             age_months = float(request.GET.get('age_months'))
             weight = float(request.GET.get('weight'))
             height = float(request.GET.get('height'))
-            hc = float(request.GET.get('hc'))
+            # hc = float(request.GET.get('hc'))
 
         except Exception as e:
             # CaLog.objects.create(
@@ -374,7 +374,8 @@ class CalculateAllZScoresView(View):
         # bmi=round(((weight)/((height/100)**2)), 2)
 
         try:
-            result = find_LMS_whole(weight, height, hc, gender, age_months)
+            # result = find_LMS_whole(weight, height, hc, gender, age_months)
+            result = find_LMS_whole(weight, height, gender, age_months)
             result_content= json.loads(result.content)
             # CaLog.objects.create(
             #     user=user,
