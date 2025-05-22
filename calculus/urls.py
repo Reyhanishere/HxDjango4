@@ -12,7 +12,7 @@ urlpatterns = [
     path('calculi/pedi_hc_zscore/', CalculateHCZScoreView.as_view(), name='cal_hczs'),
     path('calculi/pedi_bmi_zscore/', CalculateBMIZScoreView.as_view(), name='cal_bmizs'),
     
-    پpath('calculi/pedi_all_zscores/', CalculateAllZScoresView.as_view(), name='cal_allzs'),
+    path('calculi/pedi_all_zscores/', CalculateAllZScoresView.as_view(), name='cal_allzs'),
 
     path('calculi/<slug:link>_page/', calculi_page_view, name='calculi_page'),
 
