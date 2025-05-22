@@ -51,7 +51,17 @@ def calculate_z_score(X, L, M, S):
         return ((math.log(X / M)) / S)
     else:
         return (((X / M) ** L - 1) / (L * S))
-    
+
+def percentile_calculator(z_score):
+    if z_score < -3.9:
+        percentile = 0
+    elif z_score > 3.9:
+        percentile = 100
+    else:
+        percentile = z_score_table_data[str(round(z_score, 1))]
+        percentile = round(float(percentile) * 100, 1)
+    return percentile
+
 def find_LMS(value, data_set, gender, age_months,):
     age_key = str(age_months)
     if age_key in data_set[gender]:
