@@ -30,6 +30,10 @@
       select{
         padding: 0.5rem 3rem;
         border-radius: 10px;
+        font-family: 'Baloo Bhaijaan 2';
+        font-size: 18px;
+
+
 
       }
       input{
@@ -62,6 +66,23 @@
   {{ form.as_p }}
   <button type="submit">ثبت</button>
 </form>
+<script>
+  const birthDateElement = document.getElementById('id_birth_date');
+
+if (birthDateElement) {
+  // Get the parent element of birth_date
+  const parentElement = birthDateElement.parentNode;
+  
+  // Create a new paragraph element
+  const newParagraph = document.createElement('p');
+  newParagraph.textContent = 'تاریخ تولدی را برگزینید که سن کودک بیشتر از دو سال باشد.';
+  newParagraph.style.color = '#dc0000';
+  newParagraph.style.fontWeight = 'bold'
+  
+  // Insert the new paragraph after the parent element
+  parentElement.parentNode.insertBefore(newParagraph, parentElement.nextSibling);
+}
+</script>
 </body>
 
 </html>
