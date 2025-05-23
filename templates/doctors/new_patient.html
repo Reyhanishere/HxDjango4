@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پایش</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&display=swap" rel="stylesheet">
+    <style>
+      body{
+        display:flex; 
+        flex-direction: column; 
+        font-family: 'Baloo Bhaijaan 2'; 
+        margin:0; 
+        background-color: lightcyan;
+      }
+      form{
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+      }
+      form p {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      label{
+        font-size: 20px;
+        
+      }
+      select{
+        padding: 0.5rem 3rem;
+        border-radius: 10px;
+
+      }
+      input{
+        font-size: 20px;
+        padding: 0.5rem;
+        width: 200px;
+        border-radius: 10px;
+        font-family: 'Baloo Bhaijaan 2'; 
+        text-align: center;
+
+      }
+      button{
+        height: 40px;
+        border-radius: 10px;
+        font-size: 20px;
+        cursor: pointer;
+        font-family: 'Baloo Bhaijaan 2'; 
+
+      }
+    </style>
+
+</head>
+<body style="" dir="rtl">
+<h2 dir="auto" style="text-align: center; margin-top:5rem;">لطفا اطلاعات کودک را وارد کنید.</h2>
+<p dir="auto" style="max-width: 50%; margin: auto; text-align: justify;">به زودی تقویم هجری خورشیدی اضافه خواهد شد.</p>
+<p dir="auto" style="max-width: 50%; margin: auto; text-align: justify;">در نسخۀ آزمایشی کودکان زیر دو سال پشتیبانی نمی‌شوند.</p>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">ثبت</button>
+</form>
+</body>
+
+</html>

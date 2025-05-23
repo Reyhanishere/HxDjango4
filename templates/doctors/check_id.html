@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پایش</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&display=swap" rel="stylesheet">
+    <style>
+      body{
+        display:flex; 
+        flex-direction: column; 
+        font-family: 'Baloo Bhaijaan 2'; 
+        margin:0; 
+        background-color: lightcyan;
+      }
+      form{
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+      }
+      label{
+        display: none
+      }
+      input{
+        font-size: 20px;
+        padding: 0.5rem;
+        width: 200px;
+        border-radius: 10px;
+        font-family: 'Baloo Bhaijaan 2'; 
+        text-align: center;
+
+      }
+      button{
+        height: 40px;
+        border-radius: 10px;
+        font-size: 20px;
+        cursor: pointer;
+        font-family: 'Baloo Bhaijaan 2'; 
+
+      }
+    </style>
+
+</head>
+<body style="">
+<h2 dir="auto" style="text-align: center; margin-top:5rem;">کد ملی / شمارۀ گذرنامۀ کودک را وارد کنید.</h2>
+<p dir="auto" style="max-width: 50%; margin: auto; text-align: justify;">اگر سابقه‌ای از وی وجود داشته باشد، نمایش داده می‌شود. در غیر این صورت، اطلاعات وی را وارد خواهید کرد.</p>
+<form method="post" style="margin: auto;">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">بررسی</button>
+</form>
+</body>
+
+</html>

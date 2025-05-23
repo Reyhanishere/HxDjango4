@@ -1,0 +1,19 @@
+<form method="post">
+  {% csrf_token %}
+  <label>Birth Date: <input type="date" name="birth_date" required></label><br>
+  <label>Gender:
+    <select name="gender">
+      <option value="1">Male</option>
+      <option value="2">Female</option>
+    </select>
+  </label><br>
+  <label>Weight (kg): <input type="number" step="0.01" name="weight" required></label><br>
+  <label>Height (cm): <input type="number" step="0.1" name="height" required></label><br>
+  <label>HC (cm): <input type="number" step="0.1" name="hc" required></label><br>
+  <button type="submit">Calculate</button>
+</form>
+
+{% if result %}
+  <h3>Z-Score Results:</h3>
+  <pre>{{ result|safe }}</pre>
+{% endif %}
