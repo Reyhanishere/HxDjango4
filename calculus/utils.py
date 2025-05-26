@@ -98,23 +98,29 @@ def find_LMS(value, data_set, gender, age_months,):
 def find_LMS_whole(
     weight,
     height,
+    # hc,
     gender,
     age_months,
 ):
     age_key = str(age_months)
     bmi = weight / ((height / 100) ** 2)
+
     if age_key in weight_data[gender]:
         LW, MW, SW = weight_data[gender][age_key]
-        LHe, MHe, SHe = length_data[gender][age_key]
-        LB, MB, SB = bmi_data[gender][age_key]
-
         z_score_w = calculate_z_score(weight, LW, MW, SW)
+        
+    if age_key in length_data[gender]:
+        LHe, MHe, SHe = length_data[gender][age_key]
         z_score_he = calculate_z_score(height, LHe, MHe, SHe)
-        z_score_b = calculate_z_score(bmi, LB, MB, SB)
+
+        if age_months>=24:
+            LB, MB, SB = bmi_data[gender][age_key]
+            z_score_b = calculate_z_score(bmi, LB, MB, SB)
+            average_z_score_b = z_score_b
+
 
         average_z_score_w = z_score_w
         average_z_score_he = z_score_he
-        average_z_score_b = z_score_b
 
         # if int(hc) and age_months<=36:            
         #     LHc, MHc, SHc = head_circumference_data[gender][age_key]
@@ -131,9 +137,9 @@ def find_LMS_whole(
             
             LHe_lower, MHe_lower, SHe_lower = length_data[gender][lower_age]
             LHe_upper, MHe_upper, SHe_upper = length_data[gender][upper_age]
-            
-            LB_lower, MB_lower, SB_lower = bmi_data[gender][lower_age]
-            LB_upper, MB_upper, SB_upper = bmi_data[gender][upper_age]
+            if age_months>=24:
+                LB_lower, MB_lower, SB_lower = bmi_data[gender][lower_age]
+                LB_upper, MB_upper, SB_upper = bmi_data[gender][upper_age]
         
             # if int(hc) and age_months<=36:            
             #     LHc_lower, MHc_lower, SHc_lower = head_circumference_data[gender][lower_age]
@@ -153,10 +159,17 @@ def find_LMS_whole(
         z_score_upper_he = calculate_z_score(height, LHe_upper, MHe_upper, SHe_upper)
         average_z_score_he = round(((z_score_lower_he + z_score_upper_he) / 2), 2)
 
+        if age_months>=24:
+            z_score_lower_b = calculate_z_score(bmi, LB_lower, MB_lower, SB_lower)
+            z_score_upper_b = calculate_z_score(bmi, LB_upper, MB_upper, SB_upper)
+            average_z_score_b = round(((z_score_lower_b + z_score_upper_b) / 2), 2)
+            percentile_b = percentile_calculator(average_z_score_b)
+        else:
+            average_z_score_b = 0
+            percentile_b = '0'
 
-        z_score_lower_b = calculate_z_score(bmi, LB_lower, MB_lower, SB_lower)
-        z_score_upper_b = calculate_z_score(bmi, LB_upper, MB_upper, SB_upper)
-        average_z_score_b = round(((z_score_lower_b + z_score_upper_b) / 2), 2)
+
+
 
         # if int(hc) and age_months<=36:            
         #     z_score_lower_hc = calculate_z_score(hc, LHc_lower, MHc_lower, SHc_lower)
@@ -170,7 +183,6 @@ def find_LMS_whole(
 
     percentile_w = percentile_calculator(average_z_score_w)
     percentile_he = percentile_calculator(average_z_score_he)
-    percentile_b = percentile_calculator(average_z_score_b)
 
     return JsonResponse(
         {"weight": {
@@ -187,6 +199,11 @@ def find_LMS_whole(
             "value": bmi,
             "z_score": round(average_z_score_b, 2),
             "percentile": percentile_b
-            }
+            },
+        # "hc": {
+        #     "value": hc,
+        #     "z_score": average_z_score_hc,
+        #     "percentile": percentile_hc
+        #     }
         }
     )
