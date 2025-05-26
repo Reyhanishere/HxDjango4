@@ -98,7 +98,6 @@ def find_LMS(value, data_set, gender, age_months,):
 def find_LMS_whole(
     weight,
     height,
-    # hc,
     gender,
     age_months,
 ):
@@ -117,15 +116,11 @@ def find_LMS_whole(
             LB, MB, SB = bmi_data[gender][age_key]
             z_score_b = calculate_z_score(bmi, LB, MB, SB)
             average_z_score_b = z_score_b
-
+        else:
+            average_z_score_b = 0
 
         average_z_score_w = z_score_w
         average_z_score_he = z_score_he
-
-        # if int(hc) and age_months<=36:            
-        #     LHc, MHc, SHc = head_circumference_data[gender][age_key]
-        #     z_score_hc = calculate_z_score(hc, LHc, MHc, SHc)
-        #     average_z_score_hc = z_score_hc
 
     else:
         lower_age = str(age_months - 0.5)
@@ -166,20 +161,7 @@ def find_LMS_whole(
             percentile_b = percentile_calculator(average_z_score_b)
         else:
             average_z_score_b = 0
-            percentile_b = '0'
-
-
-
-
-        # if int(hc) and age_months<=36:            
-        #     z_score_lower_hc = calculate_z_score(hc, LHc_lower, MHc_lower, SHc_lower)
-        #     z_score_upper_hc = calculate_z_score(hc, LHc_upper, MHc_upper, SHc_upper)
-        #     average_z_score_hc = round(((z_score_lower_hc + z_score_upper_hc) / 2), 2)
-        #     percentile_hc = percentile_calculator(average_z_score_hc)
-        # else:
-        #     average_z_score_hc = None
-        #     percentile_hc = None
-
+            percentile_b = 0
 
     percentile_w = percentile_calculator(average_z_score_w)
     percentile_he = percentile_calculator(average_z_score_he)
@@ -200,10 +182,5 @@ def find_LMS_whole(
             "z_score": round(average_z_score_b, 2),
             "percentile": percentile_b
             },
-        # "hc": {
-        #     "value": hc,
-        #     "z_score": average_z_score_hc,
-        #     "percentile": percentile_hc
-        #     }
         }
     )
