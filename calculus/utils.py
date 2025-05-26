@@ -118,6 +118,7 @@ def find_LMS_whole(
             average_z_score_b = z_score_b
         else:
             average_z_score_b = 0
+            percentile_b = 0
 
         average_z_score_w = z_score_w
         average_z_score_he = z_score_he
