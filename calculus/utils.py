@@ -103,6 +103,7 @@ def find_LMS_whole(
 ):
     age_key = str(age_months)
     bmi = weight / ((height / 100) ** 2)
+    bmi = round(bmi, 2)
 
     if age_key in weight_data[gender]:
         LW, MW, SW = weight_data[gender][age_key]
