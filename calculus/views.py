@@ -366,15 +366,11 @@ class CalculateAllZScoresView(View):
             # CaLog.objects.create(
             #     user=user, api_name=api_name, input_data=f"Age: {age_months}", output="", status=400, error_data="Not a valid age.", ip_address=ip_address)
             return JsonResponse({'error': "This calculator doesn't work for those who are older than 20 years."}, status=400)
-        elif  age_months < 24:
-            # CaLog.objects.create(
-            #     user=user, api_name=api_name, input_data=f"Age: {age_months}", output="", status=400, error_data="Not a valid age.", ip_address=ip_address)
-            return JsonResponse({'error': "This calculator doesn't work for those who are younger than 2 years."}, status=400)
+
 
         # bmi=round(((weight)/((height/100)**2)), 2)
 
         try:
-            # result = find_LMS_whole(weight, height, hc, gender, age_months)
             result = find_LMS_whole(weight, height, gender, age_months)
             result_content= json.loads(result.content)
             # CaLog.objects.create(
@@ -394,11 +390,9 @@ class CalculateAllZScoresView(View):
             #         # )
             #         return JsonResponse({"error": "Limit exceeded. Please sign up or log in."}, status=429)
             #     cache.set(cache_key, api_calls + 1, 86400)
-            return result
+            return JsonResponse(result_content)
         except Exception as e:
             # CaLog.objects.create(
             #     user=user, api_name=api_name, input_data="", output="", status=500, error_data=str(e), ip_address=ip_address
             # )
             return JsonResponse({"error": str(e)[:100]}, status=500)
-
-    
