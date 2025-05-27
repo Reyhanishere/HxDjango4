@@ -13,7 +13,7 @@
         flex-direction: column; 
         font-family: 'Baloo Bhaijaan 2'; 
         margin:0; 
-        background-color: lightcyan;
+        background: linear-gradient(225deg, #d2ffff, #ffc0cb8c);
       }
       form{
         margin: 2rem auto;
@@ -68,29 +68,160 @@
           background-color: #eee
       }
     </style>
+    <style>
+        .response-box {
+            padding: 15px;
+            margin: 20px;
+            border-radius: 0 10px 10px 0;
+            
+        }
+        .error {
+            background-color: #ffebee;
+            border-left: 5px solid #f44336;
+            color: #d32f2f;
+        }
+        .success {
+            background-color: #e8f5e9;
+            border-right: 5px solid #4caf50;
+            border-radius: 10px 0 0 10px;
 
+            color: #2e7d32;
+            font-size: large;
+        }
+        pre {
+            white-space: pre-wrap;
+        }
+
+        #metrics-table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+        }
+        #metrics-table th, #metrics-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        #metrics-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        #metrics-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .z-score-negative {
+            color: #e53935;  /* Red for negative Z-scores */
+            font-weight: bold;
+        }
+        .z-score-positive {
+            color: #43a047;  /* Green for positive Z-scores */
+            font-weight: bold;
+        }
+        .percentile {
+            font-style: italic;
+        }
+    </style>
 </head>
 <body style="" dir="rtl">
 <h2 dir="auto" style="text-align: center; margin-top:5rem;">محاسبه Z-Score برای {{ patient.name }}</h2>
-<p dir="auto" style="max-width: 50%; margin: auto; text-align: justify;">به زودی تقویم هجری خورشیدی اضافه خواهد شد.</p>
-<p dir="auto" style="max-width: 50%; margin: auto; text-align: justify;">در نسخۀ آزمایشی کودکان زیر دو سال پشتیبانی نمی‌شوند.</p>
+
 <a href="{% url 'corc_patient' %}" id="addNew">برای ثبت بیمار جدید کلیک کنید</a>
 <form method="post">
   {% csrf_token %}
-  <label>تاریخ تولد: <span dir="ltr">{{ patient.birth_date|date:'d M Y' }}</span></label><br>
+  <label>تاریخ تولد: <span dir="rtl">{{ patient.birth_date|j_date:"name, long" }}</span></label><br>
+
   <label>جنسیت: {{ patient.get_gender_display }}</label><br><br>
 
-  <label>وزن (kg): <input type="number" step="0.01" name="weight" max='300' min='0.5' value="{{ previous.weight|default:'' }}" dir="ltr"></label><br>
-  <label>قد (cm): <input type="number" step="0.1" name="height" max='250' min='20' value="{{ previous.height|default:'' }}" dir="ltr"></label><br>
-
+  <label>وزن (kg): <input type="number" step="0.1" name="weight" max='300' min='0.5' value="{{ previous.weight|default:'' }}" dir="ltr"></label><br>
+  <label>قد (cm): <input type="number" step="1" name="height" max='250' min='20' value="{{ previous.height|default:'' }}" dir="ltr"></label><br>
 
   <button type="submit">Calculate</button>
 </form>
-{% if result %}
-  <h3 style="margin:auto">Z-Score Results</h3>
-  <a href="overview/" id="overview">کلیک کنید.</a>
-  {% comment %} <pre>{{ result|safe }}</pre> {% endcomment %}
-{% endif %}
+    <div id="response" class="response-box" dir="auto"></div>
+
+<a href="overview/" id="overview" style="display: none;">نمایش نمودارهای رشد</a>
+
+<div id="chartCont" style="display: none; overflow-x: scroll; padding: 0.5rem;">
+<h2 style="margin-right: 2rem">مقادیر محاسبه شده</h2>
+    <table id="metrics-table">
+        <thead>
+            <tr>
+                <th>Measurement</th>
+                <th>Value</th>
+                <th>Z-Score</th>
+                <th>Percentile</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            <!-- Filled by JavaScript -->
+        </tbody>
+    </table>
+  </div>
+      
+
+    <script>
+        // Get the JSON response passed from Django
+        const result = {{ result|safe }};
+
+        // Display it in the box
+        const responseDiv = document.getElementById('response');
+        const overview = document.getElementById('overview');
+        const chartCont = document.getElementById('chartCont');
+        const tableBody = document.getElementById('table-body');
+
+
+
+        
+        if (result.error) {
+            // Show error in red box
+            responseDiv.className = 'response-box error';
+            responseDiv.innerHTML = `<strong>Error:</strong> <pre>${result.error}</pre>`;
+        } else {
+          
+            // Show success in green box
+            overview.style.display = 'inline-block'
+            chartCont.style.display = 'block'
+
+            responseDiv.className = 'response-box success';
+            responseDiv.innerHTML = `<strong>موفقیت آمیز بود.</strong>`;
+
+            // Loop through each metric (weight, height, BMI)
+            for (const [metric, data] of Object.entries(result)) {
+                const row = document.createElement('tr');
+                
+                // Metric name (capitalized)
+                const metricCell = document.createElement('td');
+                metricCell.textContent = metric.charAt(0).toUpperCase() + metric.slice(1);
+                row.appendChild(metricCell);
+
+                // Value
+                const valueCell = document.createElement('td');
+                valueCell.textContent = data.value.toFixed(metric === 'bmi' ? 2 : 0);
+                row.appendChild(valueCell);
+
+                // Z-Score (color-coded)
+                const zScoreCell = document.createElement('td');
+                zScoreCell.textContent = data.z_score.toFixed(2);
+                zScoreCell.className = data.z_score < -2 ? 'z-score-negative' : 'z-score-positive';
+                row.appendChild(zScoreCell);
+
+                // Percentile
+                const percentileCell = document.createElement('td');
+                percentileCell.textContent = `${data.percentile}%`;
+                percentileCell.className = 'percentile';
+                row.appendChild(percentileCell);
+
+                tableBody.appendChild(row);
+            }
+            window.scrollBy({
+            top: 500,
+            behavior: 'smooth'
+          });
+          }
+
+        
+    </script>
 
 </body>
 
