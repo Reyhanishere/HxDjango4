@@ -100,6 +100,8 @@ def calculate_zscore(request, personal_id):
         today = date.today()
         days = (today - patient.birth_date).days
         age_months = to_five(round((days / 30.4375),1))
+        if age_months > 240:
+            age_months = 240
         
         if patient.gender =='پسر':
             gender = '1'
