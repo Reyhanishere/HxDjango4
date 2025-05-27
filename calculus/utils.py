@@ -117,6 +117,7 @@ def find_LMS_whole(
             LB, MB, SB = bmi_data[gender][age_key]
             z_score_b = calculate_z_score(bmi, LB, MB, SB)
             average_z_score_b = z_score_b
+            percentile_b = percentile_calculator(average_z_score_b)
         else:
             average_z_score_b = 0
             percentile_b = 0
