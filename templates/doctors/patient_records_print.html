@@ -139,7 +139,7 @@
     </style>
 </head>
 
-<body dir="rtl" style="" class="bg-gray-50 text-gray-900 pr-6 pl-6 space-y-6">
+<body dir="rtl" style="" class="text-gray-900 pr-6 pl-6 space-y-6">
 
     <!-- Header -->
     <header class="" style="">
@@ -223,12 +223,16 @@
     </section>
 
     <!-- Recommendation Box -->
-    <section class="mt-6" style="margin:2rem; padding: 1rem; border-radius: 10px; background-color: #f2f2f2;">
-        <h3 class="text-lg font-semibold mb-2">توصیۀ پزشک:</h3>
-        <!-- <textarea class="w-full h-32 p-4 border rounded" placeholder="Type your notes here..."></textarea> -->
-        <div>
-            <p contenteditable="true" class="m-2 p-4"></p>
+    <section dir="ltr" class="mt-6" style="margin:2rem 1.5rem;">
+        <div dir="rtl" style="background-color: #f2f2f2; border-radius: 10px; padding: 1rem; margin-bottom:1rem;">
+            <h3 class="text-lg font-semibold mb-2">توصیۀ پزشک:</h3>
+            <!-- <textarea class="w-full h-32 p-4 border rounded" placeholder="Type your notes here..."></textarea> -->
+            <div>
+                <p contenteditable="true" class="m-2 p-4" style="text-align: justify;"></p>
+            </div>
         </div>
+        <button class="addNew" onclick="window.print();" dir="ltr">Print &#128424;&#65039;</button>
+
     </section>
 
     <!-- Scripts -->
