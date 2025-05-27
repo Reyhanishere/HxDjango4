@@ -11,7 +11,7 @@
         flex-direction: column; 
         font-family: 'Baloo Bhaijaan 2'; 
         margin:0; 
-        background-color: lightcyan;
+        background: linear-gradient(225deg, #d2ffff, #ffc0cb8c);
       }
       form{
         margin: auto;
@@ -57,9 +57,6 @@
 
 </head>
 <body style="" dir="rtl">
-<h2 dir="auto" style="text-align: center; margin-top:5rem;">لطفا اطلاعات کودک را وارد کنید.</h2>
-<p dir="auto" style="max-width: 50%; margin: auto; text-align: justify;">به زودی تقویم هجری خورشیدی اضافه خواهد شد.</p>
-<p dir="auto" style="max-width: 50%; margin: auto; text-align: justify;">در نسخۀ آزمایشی کودکان زیر دو سال پشتیبانی نمی‌شوند.</p>
 
 <form method="post">
   {% csrf_token %}
@@ -67,21 +64,7 @@
   <button type="submit">ثبت</button>
 </form>
 <script>
-  const birthDateElement = document.getElementById('id_birth_date');
 
-if (birthDateElement) {
-  // Get the parent element of birth_date
-  const parentElement = birthDateElement.parentNode;
-  
-  // Create a new paragraph element
-  const newParagraph = document.createElement('p');
-  newParagraph.textContent = 'تاریخ تولدی را برگزینید که سن کودک بیشتر از دو سال باشد.';
-  newParagraph.style.color = '#dc0000';
-  newParagraph.style.fontWeight = 'bold'
-  
-  // Insert the new paragraph after the parent element
-  parentElement.parentNode.insertBefore(newParagraph, parentElement.nextSibling);
-}
 </script>
 </body>
 
