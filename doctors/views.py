@@ -1,5 +1,4 @@
 import requests
-from decimal import Decimal, ROUND_HALF_UP
 from datetime import date, timedelta
 import json
 
@@ -80,7 +79,13 @@ def calculate_age_extended(birth_date):
         day_text='{} روز'.format(days)
     return year_text + month_text + day_text
 
-
+def to_five(value):
+    value *= 10
+    value=round(value)
+    while value % 5 != 0:
+        value += 1
+    return value / 10
+    
 @login_required
 def calculate_zscore(request, personal_id):
     patient = get_object_or_404(Patient, personal_id=personal_id)
@@ -94,7 +99,7 @@ def calculate_zscore(request, personal_id):
         # Calculate age in months with 0.5 precision
         today = date.today()
         days = (today - patient.birth_date).days
-        age_months = Decimal(days / 30.4375).quantize(Decimal('0.5'), rounding=ROUND_HALF_UP)
+        age_months = to_five(round((days / 30.4375),1))
         
         if patient.gender =='پسر':
             gender = '1'
