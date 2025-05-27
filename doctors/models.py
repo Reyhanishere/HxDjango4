@@ -1,5 +1,7 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
+
 
 class Company(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -29,7 +31,9 @@ class Patient(models.Model):
         blank=False,
         default='پسر'
     )
+    # birth_date=models.DateField(editable=True, null=True)
     birth_date=models.DateField(editable=True, null=True)
+
     def __str__(self):
         return self.name
     
@@ -47,14 +51,19 @@ class Record(models.Model):
     bmi_z = models.FloatField(('BMI Z Score'), null=False, blank=False, default=0)
     bmi_p = models.FloatField(('BMI Percentile'), null=False, blank=False, default=0)
     hc = models.FloatField(('Head Circumference Value'), null=True, blank=True, default=0)
-    hc_z = models.FloatField(('Head Circumference Z Score'), null=False, blank=False, default=0)
-    hc_p = models.FloatField(('Head Circumference Percentile'), null=False, blank=False, default=0)
+    hc_z = models.FloatField(('Head Circumference Z Score'), null=True, blank=True, default=0)
+    hc_p = models.FloatField(('Head Circumference Percentile'), null=True, blank=True, default=0)
 
     gender = models.CharField(max_length=5, null=False, blank=True)
     age_months = models.FloatField(('Age in monthes'), null=False, blank=False, default=0)
 
-    record_add_date=models.DateTimeField(auto_now_add=True)
-    record_edir_date=models.DateTimeField(auto_now=True, editable=True, blank=True, null=True)
-    
+    record_add_date=models.DateTimeField(editable=True,)
+    record_edit_date=models.DateTimeField(auto_now=True, editable=True, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+            if not self.id:
+                self.record_add_date = timezone.now()
+            super().save(*args, **kwargs)
+
     def __str__(self):
         return self.patient.name
