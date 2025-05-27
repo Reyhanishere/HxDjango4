@@ -1,5 +1,6 @@
 import jdatetime
 from datetime import date
+from dateutil.relativedelta import relativedelta
 
 from django import forms
 from .models import Patient
@@ -78,9 +79,8 @@ class NewPatientForm(forms.ModelForm):
             # Validation: future date check
             if g_date > date.today():
                 raise forms.ValidationError("تاریخ تولد نمی‌تواند در آینده باشد.")
-            if year < 1381:
-                raise forms.ValidationError("سال وارد شده پشتیبانی نمی‌شود.")
-            return g_date
+            if g_date < date.today() - relativedelta(months=240):
+                raise forms.ValidationError("سن نمی‌تواند بیشتر از ۲۰ سال باشد.")
         
         except ValueError:
             raise forms.ValidationError("تاریخ وارد شده معتبر نیست.")
