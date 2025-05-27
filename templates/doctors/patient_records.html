@@ -170,10 +170,10 @@
 
                     </tr>
                 </thead>
-                <tbody dir="auto">
+                <tbody dir="ltr">
                     {% for r in recent_records %}
                     <tr>
-                        <td class="tg-baqh">{{r.date}}</td>
+                        <td class="tg-baqh" dir="rtl">{{r.date}}</td>
                         <td class="tg-baqh">{{r.weight}}kg</td>
                         <td class="tg-baqh">{{r.weight_z}} ({{r.weight_p}})</td>
                         <td class="tg-baqh">{{r.height}}cm</td>
@@ -182,7 +182,6 @@
                         <td class="tg-baqh">{{r.bmi_z}} ({{r.bmi_p}})</td>
                     </tr>
                     {% endfor %}
-                    
                 </tbody>
             </table>
         </div>
