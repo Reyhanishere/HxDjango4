@@ -1,0 +1,297 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" style="display: flex;">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="title">0670893404 | </title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&display=swap" rel="stylesheet">
+    <style>
+        body{
+            width: 210mm;
+            margin: auto;
+            display:flex; 
+            flex-direction: column; 
+            font-family: 'Baloo Bhaijaan 2';
+        }
+        .tg {
+            border-collapse: collapse;
+            border-spacing: 0;
+            border-radius: 10px;
+        }
+        
+        .tg td {
+            border-color: darkgray;
+            border-style: solid;
+            border-width: 1px;
+            overflow: hidden;
+            padding: 10px 5px;
+            word-break: normal;
+        }
+        
+        .tg th {
+            border-color: darkgray;
+            background-color: #eeeeee;
+            border-style: solid;
+            border-width: 1px;
+            overflow: hidden;
+            padding: 10px 5px;
+            word-break: normal;
+        }
+        
+        .tg .tg-baqh {
+            text-align: center;
+            vertical-align: middle;
+            padding: 1rem;
+        }
+        
+        .tg tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        #miniChartsSection{
+            display: grid; 
+            grid-template-columns: 1fr 1fr;
+            width: 80%; 
+            margin: auto;
+        }
+        #mainChartSection{
+            display:flex; 
+            width: 80%; 
+            margin: 3rem auto;
+                min-height: 40vh;
+
+        }
+        header{
+            display: flex;
+            padding: 1rem;
+            background-color: #D3D3D380;
+            border-radius: 0 0 1rem 1rem;
+            box-shadow: 0px 2px 2px 1px #9999;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: row;
+        }
+        @media (max-width: 1000px) {
+            #mainChartSection{
+                display:flex; 
+                width: 80%; 
+                margin: auto;
+            }
+            #mainChart{
+                max-widtth:80%;
+                
+            }
+            #miniChartsSection{
+                    grid-template-columns: 1fr;
+                    width: 80%; 
+            }
+            .miniCharts{
+                max-widtth:80%;
+            }
+        }
+        @media (max-width: 700px){
+            header{ 
+                flex-direction: column;
+                gap: 0.5rem;
+            align-items: start;}
+        }
+        .addNew{
+            display: inline-block; padding: 0.5rem; color: #666; border: solid 1px #aaa; border-radius: 5px; margin-right: 1rem; transition: 0.3s
+        }
+        .addNew:hover{
+            background-color: #ddd
+        }
+        #tableCont{
+            display: flex;
+            overflow-x: scroll;
+        }
+        @page {
+            size: A4;
+            margin: 1rem
+        }
+        @media print {
+            size: A4;
+            .sheet-outer.A4 {                 
+                width: 210mm 
+            }
+            .addNew{
+                display:none;
+            }
+            #miniChartsSection{
+                    grid-template-columns: 1fr 1fr;
+                    width: 80%;
+                    margin-top: 2rem;
+                    min-height: 40vh;
+            }
+
+            #mainChart{
+                margin: 4rem auto 2rem auto;
+                max-height: 40vh
+                max-width: 90%
+            }
+            miniCharts{
+                width: 40%;
+            }
+        }
+    </style>
+</head>
+
+<body dir="rtl" style="" class="bg-gray-50 text-gray-900 pr-6 pl-6 space-y-6">
+
+    <!-- Header -->
+    <header class="" style="">
+        <div>
+            <h1 class="text-2xl font-bold mb-4">دکتر {{doctor.name}} <span style="font-size:14px"></span></h1>
+            <h3 class="text-l font-bold">{{doctor.title}}</h3>
+
+        </div>
+        <div class="text-gray-600 text-m">
+            <p id="todayDate" style="font-family: system-ui;"></p>
+        </div>
+        <div>
+            <img src="{% static '/images/Logo with Typo Light.svg' %}" alt="Sponsor Logo" class="h-10">
+            <p style="text-align: center;">پشتیبان سلامت شما</p>
+        </div>
+    </header>
+
+    <!-- Patient Info -->
+    <section class="border-b pb-4">
+        <p class="text-lg">بیمار: <span class="font-medium">{{patient.name}}</span>&nbsp;&nbsp;
+            <span style="color: #6e6e6e; font-size: 16px;">{{patient_age}}</span>
+            <a href="{% url 'corc_patient' %}" class="addNew">ثبت بیمار جدید</a>
+            <a href="{% url 'zscore' patient.personal_id %}" class="addNew">ثبت دادۀ جدید برای کودک</a>
+            <button class="addNew" onclick="window.print();" dir="ltr">Print	&#128424;&#65039;</button>
+
+        </p>
+        
+    </section>
+
+    <!-- Main Chart -->
+    <section id="mainChartSection" style="">
+        <canvas id="mainChart" dir="rtl" width=""></canvas>
+    </section>
+
+    <!-- Mini Charts -->
+    <section id="miniChartsSection" style="" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div><canvas class="miniCharts" id="heightChart"></canvas></div>
+        <div><canvas class="miniCharts" id="weightChart"></canvas></div>
+        <div><canvas class="miniCharts" id="bmiChart"></canvas></div>
+        <div><canvas class="miniCharts" id="bmiChart"></canvas></div>
+
+    </section>
+<p id="Alat"></p>
+    <!-- Table Section -->
+    <section>
+        <h2 class="text-xl font-semibold mt-6 mb-2">Z-Scoreها و مقادیر اندازه‌گیری شده در {{recent_records|length}} ویزیت اخیر</h2>
+        <div id="tableCont" style="">
+            <table class="tg" style="margin: 1rem auto">
+                <thead>
+                    <tr>
+                        <th class="tg-baqh" rowspan="2">تاریخ</th>
+                        <th class="tg-baqh" colspan="2">وزن</th>
+                        <th class="tg-baqh" colspan="2">قد</th>
+                        <th class="tg-baqh" colspan="2">BMI</th>
+                    </tr>
+                    <tr dir="auto">
+                        <th class="tg-baqh">Value</th>
+                        <th class="tg-baqh">Z-Score (%)</th>
+                        <th class="tg-baqh">Value</th>
+                        <th class="tg-baqh">Z-Score (%)</th>
+                        <th class="tg-baqh">Value</th>
+                        <th class="tg-baqh">Z-Score (%)</th>
+
+                    </tr>
+                </thead>
+                <tbody dir="auto">
+                    {% for r in recent_records %}
+                    <tr>
+                        <td class="tg-baqh">{{r.date}}</td>
+                        <td class="tg-baqh">{{r.weight}}kg</td>
+                        <td class="tg-baqh">{{r.weight_z}} ({{r.weight_p}})</td>
+                        <td class="tg-baqh">{{r.height}}cm</td>
+                        <td class="tg-baqh">{{r.height_z}} ({{r.height_p}})</td>
+                        <td class="tg-baqh">{{r.bmi}}</td>
+                        <td class="tg-baqh">{{r.bmi_z}} ({{r.bmi_p}})</td>
+                    </tr>
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Recommendation Box -->
+    <section class="mt-6" style="margin:2rem; padding: 1rem; border-radius: 10px; background-color: #f2f2f2;">
+        <h3 class="text-lg font-semibold mb-2">توصیۀ پزشک:</h3>
+        <!-- <textarea class="w-full h-32 p-4 border rounded" placeholder="Type your notes here..."></textarea> -->
+        <div>
+            <p contenteditable="true" class="m-2 p-4"></p>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script id="chart-data" type="application/json">
+        `{{ all_zscores.|safe }}`
+
+    </script>
+    <script>
+        const options = {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        };
+        // Today's date
+        document.getElementById('todayDate').textContent = new Date().toLocaleDateString("fa-EG", options);
+        document.getElementById('title').textContent += new Date().toLocaleDateString("zh-Hans-CN", {year: "numeric",month: "numeric",day: "numeric"},
+        );
+
+        const all_zscores = JSON.parse(`{{ all_zscores|escapejs }}`);
+
+        // Sample Chart.js data for demo
+        const mainChart = new Chart(document.getElementById('mainChart'), {
+            type: 'line',
+            data: {
+                labels: all_zscores.labels,
+                datasets: [{
+                    label: 'Weight Z-Score',
+                    data: all_zscores.weight_z,
+                    fill: false,
+                }, {
+                    label: 'Height Z-Score Summary',
+                    data: all_zscores.height_z,
+                    fill: false,
+                }, {
+                    label: 'BMI Z-Score',
+                    data: all_zscores.bmi_z,
+                    fill: false,
+                }]
+            },
+        });
+
+        const createMiniChart = (ctxId, label, data, color) => {
+            return new Chart(document.getElementById(ctxId), {
+                type: 'line',
+                data: {
+                    labels: lastVisits.labels,
+                    datasets: [{
+                        label,
+                        data,
+                        borderColor: `rgba(${color}, 1)`,
+                        backgroundColor: `rgba(${color}, 0.2)`,
+                        fill: true,
+                    }]
+                }
+            });
+        };
+        const lastVisits = JSON.parse(`{{ last_visits|escapejs }}`);
+
+        createMiniChart('weightChart', 'Weight (kg)', lastVisits.weight, '34, 197, 94');
+        createMiniChart('heightChart', 'Height (cm)', lastVisits.height, '197, 34, 94');
+        createMiniChart('bmiChart', 'BMI', lastVisits.bmi, '34, 94, 197');
+    </script>
+</body>
+
+</html>
