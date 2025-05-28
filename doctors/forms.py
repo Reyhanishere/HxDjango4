@@ -56,7 +56,7 @@ class IDCheckForm(forms.Form):
 class NewPatientForm(forms.ModelForm):
     name = forms.CharField(label="نام و نام خانوادگی",
                                   widget=forms.TextInput(attrs={'dir': 'rtl', 'autocomplete':'off'}))
-    jalali_birth_date = forms.CharField(label="تاریخ تولد", help_text='مثلا 1404/05/04',widget=forms.TextInput(attrs={'dir': 'ltr', 
+    jalali_birth_date = forms.CharField(label="تاریخ تولد", help_text='مثلا 04/05/1404',widget=forms.TextInput(attrs={'dir': 'ltr', 
                                                                 'autocomplete':'off'}),
                                                                 )
     class Meta:
@@ -67,7 +67,7 @@ class NewPatientForm(forms.ModelForm):
         jalali_str = self.cleaned_data['jalali_birth_date']
         try:
             # Split and convert
-            year, month, day = map(int, jalali_str.split('/'))
+            day, month, year = map(int, jalali_str.split('/'))
             if not (1 <= month <= 12):
                 raise forms.ValidationError("ماه وارد شده معتبر نیست.")
             elif not(1 <= day <= 31):
