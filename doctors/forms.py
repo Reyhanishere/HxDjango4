@@ -81,7 +81,8 @@ class NewPatientForm(forms.ModelForm):
                 raise forms.ValidationError("تاریخ تولد نمی‌تواند در آینده باشد.")
             if g_date < date.today() - relativedelta(months=240):
                 raise forms.ValidationError("سن نمی‌تواند بیشتر از ۲۰ سال باشد.")
-        
+            return g_date
+            
         except ValueError:
             raise forms.ValidationError("تاریخ وارد شده معتبر نیست.")
 
