@@ -85,65 +85,85 @@ def to_five(value):
     while value % 5 != 0:
         value += 1
     return value / 10
-    
+
+
 @login_required
 def calculate_zscore(request, personal_id):
     patient = get_object_or_404(Patient, personal_id=personal_id)
-    previous = Record.objects.filter(patient=patient).order_by('-record_add_date').first()
+    previous = Record.objects.filter(patient=patient).order_by('-record_date').first()
     result = None
+    form = ZScoreForm(request.POST or None, birth_date=patient.birth_date)
+    doctor = get_object_or_404(Doctor, user=request.user)
+
     if request.method == 'POST':
-        weight = request.POST.get('weight')
-        height = request.POST.get('height')
-        # hc = request.POST.get('hc')
+        if form.is_valid():
+            weight = form.cleaned_data['weight']
+            height = form.cleaned_data['height']
+            hc = form.cleaned_data.get('hc')
+            record_date = form.cleaned_data['jalali_record_date']
 
-        # Calculate age in months with 0.5 precision
-        today = date.today()
-        days = (today - patient.birth_date).days
-        age_months = to_five(round((days / 30.4375),1))
-        if age_months > 240:
-            age_months = 240
-        
-        if patient.gender =='پسر':
-            gender = '1'
-        else: 
-            gender='2'
-        # Send request to the external API
-        try:
-            response = requests.get(
-                "https://medepartout.ir/calculus/calculi/pedi_all_zscores/",
-                params={
-                    'gender': gender,
-                    'age_months': age_months,
-                    'weight': weight,
-                    'height': height,
-                }
-            )
-            doctor = get_object_or_404(Doctor, user=request.user)
-            response.raise_for_status()
-            result = response.json()
-            Record.objects.create(
-                doctor=doctor,
-                patient=patient,
-                gender=gender,
-                age_months = age_months,
-                weight=weight,
-                height=height,
-                # hc=hc,
-                # Extract values from the response
-                weight_z=result["weight"]["z_score"],
-                weight_p=result["weight"]["percentile"],
-                height_z=result["height"]["z_score"],
-                height_p=result["height"]["percentile"],
-                bmi=result["bmi"]["value"],
-                bmi_z=result["bmi"]["z_score"],
-                bmi_p=result["bmi"]["percentile"]
-            )
-        
-        except requests.RequestException as e:
-            result = {'error': str(e)}
+            weight = request.POST.get('weight')
+            height = request.POST.get('height')
+            # hc = request.POST.get('hc')
 
+            # Calculate age in months with 0.5 precision
+            days = (record_date - patient.birth_date).days
+            age_months = to_five(round((days / 30.4375), 1))
+            if age_months > 240:
+                age_months = 240
+
+            
+            if patient.gender =='پسر':
+                gender = '1'
+            else: 
+                gender='2'
+            # Send request to the external API
+            try:
+                response = requests.get(
+                    "https://medepartout.ir/calculus/calculi/pedi_all_zscores/",
+                    params={
+                        'gender': gender,
+                        'age_months': age_months,
+                        'weight': weight,
+                        'height': height,
+                    }
+                )
+                response.raise_for_status()
+                result = response.json()
+                Record.objects.create(
+                    doctor=doctor,
+                    patient=patient,
+                    gender=gender,
+                    age_months = age_months,
+                    record_date=record_date,
+                    weight=weight,
+                    height=height,
+                    # hc=hc,
+                    # Extract values from the response
+                    weight_z=result["weight"]["z_score"],
+                    weight_p=result["weight"]["percentile"],
+                    height_z=result["height"]["z_score"],
+                    height_p=result["height"]["percentile"],
+                    bmi=result["bmi"]["value"],
+                    bmi_z=result["bmi"]["z_score"],
+                    bmi_p=result["bmi"]["percentile"]
+                )
+            
+            except requests.RequestException as e:
+                result = {'error': str(e)}
+    else:
+        initial_data={}
+        if previous:
+            initial_data = {
+                'weight': previous.weight if previous.weight else None,
+                'height': previous.height if previous.height else None,
+                'hc': previous.hc if previous.hc else None,
+            }
+        form = ZScoreForm(initial=initial_data)
     return render(request, 'doctors/zscore.html', {
         'patient': patient,
+        'doctor':doctor,
+        'form': form,
         'result': result,
         'previous': previous,
     })
@@ -158,8 +178,8 @@ def patient_record_view(request, personal_id):
     patient = get_object_or_404(Patient, personal_id=personal_id)
     patient_age = calculate_age_extended(patient.birth_date)
     # Filter records for this doctor and this patient
-    records = Record.objects.filter(doctor=doctor, patient=patient).order_by('-record_add_date')
-    records_reverse=Record.objects.filter(doctor=doctor, patient=patient).order_by('record_add_date')
+    records = Record.objects.filter(doctor=doctor, patient=patient).order_by('-record_date')
+    records_reverse=Record.objects.filter(doctor=doctor, patient=patient).order_by('record_date')
 
 
     # Get all Z-scores
@@ -167,13 +187,13 @@ def patient_record_view(request, personal_id):
         'weight_z': [record.weight_z for record in records_reverse],
         'height_z': [record.height_z for record in records_reverse],
         'bmi_z': [record.bmi_z for record in records_reverse],
-        'labels': [j_date(record.record_add_date, 'digit, long') for record in records_reverse]
+        'labels': [j_date(record.record_date, 'digit, long') for record in records_reverse]
     }
 
     # Last 3 records (latest to earliest)
     recent_records = records[:5]
     recent_data = [{
-        'date': j_date(r.record_add_date, 'name, long'),
+        'date': j_date(r.record_date, 'name, long'),
         'weight': r.weight,
         'height': r.height,
         'bmi': round(r.bmi,2),
@@ -190,7 +210,7 @@ def patient_record_view(request, personal_id):
         'weight': [record.weight for record in records_reverse[:10]],
         'height': [record.height for record in records_reverse[:10]],
         'bmi': [record.bmi for record in records_reverse[:10]],
-        'labels': [j_date(record.record_add_date, 'digit, long') for record in records_reverse[:10]]
+        'labels': [j_date(record.record_date, 'digit, long') for record in records_reverse[:10]]
     }
     
 
@@ -214,8 +234,8 @@ def patient_record_print_view(request, personal_id):
     patient = get_object_or_404(Patient, personal_id=personal_id)
     patient_age = calculate_age_extended(patient.birth_date)
     # Filter records for this doctor and this patient
-    records = Record.objects.filter(doctor=doctor, patient=patient).order_by('-record_add_date')
-    records_reverse=Record.objects.filter(doctor=doctor, patient=patient).order_by('record_add_date')
+    records = Record.objects.filter(doctor=doctor, patient=patient).order_by('-record_date')
+    records_reverse=Record.objects.filter(doctor=doctor, patient=patient).order_by('record_date')
 
 
     # Get all Z-scores
@@ -223,13 +243,13 @@ def patient_record_print_view(request, personal_id):
         'weight_z': [record.weight_z for record in records_reverse],
         'height_z': [record.height_z for record in records_reverse],
         'bmi_z': [record.bmi_z for record in records_reverse],
-        'labels': [j_date(record.record_add_date, 'digit, long') for record in records_reverse]
+        'labels': [j_date(record.record_date, 'digit, long') for record in records_reverse]
     }
 
     # Last 3 records (latest to earliest)
     recent_records = records[:5]
     recent_data = [{
-        'date': j_date(r.record_add_date, 'name, long'),
+        'date': j_date(r.record_date, 'name, long'),
         'weight': r.weight,
         'height': r.height,
         'bmi': round(r.bmi,2),
@@ -246,7 +266,7 @@ def patient_record_print_view(request, personal_id):
         'weight': [record.weight for record in records_reverse[:10]],
         'height': [record.height for record in records_reverse[:10]],
         'bmi': [record.bmi for record in records_reverse[:10]],
-        'labels': [j_date(record.record_add_date, 'digit, long') for record in records_reverse[:10]]
+        'labels': [j_date(record.record_date, 'digit, long') for record in records_reverse[:10]]
     }
     
 
