@@ -66,8 +66,11 @@ def j_date(value, arg):
     # if type(value) == 'str':
     if year_format != 'long':
         year = year[2:]
+    
+    output = f"{year}/{month}/{day}"
 
     if month_format == 'name':
         month = month_name(int(month))
-        
-    return f"{day} {month} {year}"
+        output = f"{day} {month} {year}"
+
+    return output
