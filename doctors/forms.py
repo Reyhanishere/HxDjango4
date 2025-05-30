@@ -4,8 +4,6 @@ from dateutil.relativedelta import relativedelta
 
 from django import forms
 from .models import Patient
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django import forms
 
 class IDCheckForm(forms.Form):
     autocomplete=True
@@ -56,7 +54,7 @@ class IDCheckForm(forms.Form):
 class NewPatientForm(forms.ModelForm):
     name = forms.CharField(label="نام و نام خانوادگی",
                                   widget=forms.TextInput(attrs={'dir': 'rtl', 'autocomplete':'off'}))
-    jalali_birth_date = forms.CharField(label="تاریخ تولد", help_text='مثلا 04/05/1404',widget=forms.TextInput(attrs={'dir': 'ltr', 
+    jalali_birth_date = forms.CharField(label="تاریخ تولد", help_text='مثلا 4/5/1404',widget=forms.TextInput(attrs={'dir': 'ltr', 
                                                                 'autocomplete':'off'}),
                                                                 )
     class Meta:
@@ -81,8 +79,10 @@ class NewPatientForm(forms.ModelForm):
                 raise forms.ValidationError("تاریخ تولد نمی‌تواند در آینده باشد.")
             if g_date < date.today() - relativedelta(months=240):
                 raise forms.ValidationError("سن نمی‌تواند بیشتر از ۲۰ سال باشد.")
+            # if g_date < date(date.today().year - 20, date.today().month, date.today().day):                
+            #     raise forms.ValidationError("سن نمی‌تواند بیشتر از ۲۰ سال باشد.")
             return g_date
-            
+        
         except ValueError:
             raise forms.ValidationError("تاریخ وارد شده معتبر نیست.")
 
@@ -93,3 +93,34 @@ class NewPatientForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+    
+
+class ZScoreForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        self.birth_date = kwargs.pop('birth_date', None)
+        super().__init__(*args, **kwargs)
+
+    weight = forms.FloatField(label="وزن", 
+                              widget=forms.TextInput(attrs={'dir': 'ltr', 'autocomplete':'off',}))
+    height = forms.FloatField(label="قد", 
+                              widget=forms.TextInput(attrs={'dir': 'ltr', 'autocomplete':'off',}))
+    hc = forms.FloatField(label="دور سر", required=False, 
+                          widget=forms.TextInput(attrs={'dir': 'ltr', 'autocomplete':'off',}))
+    jalali_record_date = forms.CharField(label="تاریخ ویزیت", required=False, help_text="مثلاً 1404/05/04", 
+                                         widget=forms.TextInput(attrs={'dir': 'ltr', 'autocomplete':'off'}))
+    
+    def clean_jalali_record_date(self):
+        data = self.cleaned_data.get('jalali_record_date')
+        if not data:
+            return date.today()
+        try:
+            year, month, day = map(int, data.split('/'))
+            j_date = jdatetime.date(year, month, day)
+            g_date = j_date.togregorian()
+            if g_date > date.today():
+                raise forms.ValidationError("تاریخ نمی‌تواند در آینده باشد.")
+            if self.birth_date and g_date < self.birth_date:
+                raise forms.ValidationError("تاریخ قبل از تولد بیمار است.")
+            return g_date
+        except:
+            raise forms.ValidationError("تاریخ وارد شده معتبر نیست.")
