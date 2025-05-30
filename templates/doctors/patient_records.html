@@ -9,41 +9,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&display=swap" rel="stylesheet">
+    <link href="{% static 'css/doctors.css '%}" rel="stylesheet">
+
     <style>
-        .tg {
-            border-collapse: collapse;
-            border-spacing: 0;
-            border-radius: 10px;
-        }
         
-        .tg td {
-            border-color: darkgray;
-            border-style: solid;
-            border-width: 1px;
-            overflow: hidden;
-            padding: 10px 5px;
-            word-break: normal;
-        }
-        
-        .tg th {
-            border-color: darkgray;
-            background-color: #eeeeee;
-            border-style: solid;
-            border-width: 1px;
-            overflow: hidden;
-            padding: 10px 5px;
-            word-break: normal;
-        }
-        
-        .tg .tg-baqh {
-            text-align: center;
-            vertical-align: middle;
-            padding: 1rem;
-        }
-        
-        .tg tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
         #miniChartsSection{
             display: grid; 
             grid-template-columns: 1fr 1fr;
@@ -55,16 +24,7 @@
             width: 70%; 
             margin: 3rem auto;
         }
-        header{
-            display: flex;
-            padding: 1rem;
-            background-color: #D3D3D380;
-            border-radius: 0 0 1rem 1rem;
-            box-shadow: 0px 2px 2px 1px #9999;
-            align-items: center;
-            justify-content: space-between;
-            flex-direction: row;
-        }
+
         @media (max-width: 1000px) {
             #mainChartSection{
                 display:flex; 
@@ -99,16 +59,36 @@
             display: flex;
             overflow-x: scroll;
         }
+    .icon{
+        width: 20px;
+        display: inline;
+        margin-right:0.5rem;
+        transition: 0.3s;
+        cursor: pointer;
+        opacity: 0.80;
 
+    }
+    .icon:hover{
+        opacity: 1.0;
+    }
     </style>
 </head>
 
 <body dir="rtl" style="display:flex; flex-direction: column; font-family: 'Baloo Bhaijaan 2';" class="bg-gray-50 text-gray-900 pr-6 pl-6 space-y-6">
 
     <!-- Header -->
-    <header class="" style="">
+    <header>
         <div>
-            <h1 class="text-2xl font-bold mb-4">دکتر {{doctor.name}} <span style="font-size:14px"></span></h1>
+            <h1 class="text-2xl font-bold mb-4">
+                دکتر {{doctor.name}} <span style="font-size:14px"></span>
+                <a href="#"><img src="{% static 'images/buttons/user.png' %}" class="icon" alt="user" /></a>
+                <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" style="background-color: transparent">
+                        <img src="{% static 'images/buttons/logout.png' %}" class="icon" alt="logout" />
+                    </button>
+                </form>
+            </h1>
             <h3 class="text-l font-bold">{{doctor.title}}</h3>
 
         </div>
@@ -152,34 +132,34 @@
     <section>
         <h2 class="text-xl font-semibold mt-6 mb-2">Z-Scoreها و مقادیر اندازه‌گیری شده در {{recent_records|length}} ویزیت اخیر</h2>
         <div id="tableCont" style="">
-            <table class="tg" style="margin: 1rem auto">
+            <table class="table" style="margin: 1rem auto">
                 <thead>
                     <tr>
-                        <th class="tg-baqh" rowspan="2">تاریخ</th>
-                        <th class="tg-baqh" colspan="2">وزن</th>
-                        <th class="tg-baqh" colspan="2">قد</th>
-                        <th class="tg-baqh" colspan="2">BMI</th>
+                        <th class="" rowspan="2">تاریخ</th>
+                        <th class="" colspan="2">وزن</th>
+                        <th class="" colspan="2">قد</th>
+                        <th class="" colspan="2">BMI</th>
                     </tr>
                     <tr dir="auto">
-                        <th class="tg-baqh">Value</th>
-                        <th class="tg-baqh">Z-Score (%)</th>
-                        <th class="tg-baqh">Value</th>
-                        <th class="tg-baqh">Z-Score (%)</th>
-                        <th class="tg-baqh">Value</th>
-                        <th class="tg-baqh">Z-Score (%)</th>
+                        <th class="">Value</th>
+                        <th class="">Z-Score (%)</th>
+                        <th class="">Value</th>
+                        <th class="">Z-Score (%)</th>
+                        <th class="">Value</th>
+                        <th class="">Z-Score (%)</th>
 
                     </tr>
                 </thead>
                 <tbody dir="ltr">
                     {% for r in recent_records %}
                     <tr>
-                        <td class="tg-baqh" dir="rtl">{{r.date}}</td>
-                        <td class="tg-baqh">{{r.weight}}kg</td>
-                        <td class="tg-baqh">{{r.weight_z}} ({{r.weight_p}})</td>
-                        <td class="tg-baqh">{{r.height}}cm</td>
-                        <td class="tg-baqh">{{r.height_z}} ({{r.height_p}})</td>
-                        <td class="tg-baqh">{{r.bmi}}</td>
-                        <td class="tg-baqh">{{r.bmi_z}} ({{r.bmi_p}})</td>
+                        <td class="tCell" dir="rtl">{{r.date}}</td>
+                        <td class="tCell">{{r.weight}}kg</td>
+                        <td class="tCell">{{r.weight_z}} ({{r.weight_p}})</td>
+                        <td class="tCell">{{r.height}}cm</td>
+                        <td class="tCell">{{r.height_z}} ({{r.height_p}})</td>
+                        <td class="tCell">{{r.bmi}}</td>
+                        <td class="tCell">{{r.bmi_z}} ({{r.bmi_p}})</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -188,7 +168,7 @@
     </section>
 
     <!-- Recommendation Box -->
-    <section class="mt-6">
+    <section class="mt-6" style="display: none;">
         <h3 class="text-lg font-semibold mb-2">توصیۀ پزشک:</h3>
         <!-- <textarea class="w-full h-32 p-4 border rounded" placeholder="Type your notes here..."></textarea> -->
         <div>
@@ -202,19 +182,44 @@
 
     </script>
     <script>
-        const options = {
+        const dateOptions = {
             year: "numeric",
             month: "long",
             day: "numeric",
         };
         // Today's date
-        document.getElementById('todayDate').textContent = new Date().toLocaleDateString("fa-EG", options);
+        document.getElementById('todayDate').textContent = new Date().toLocaleDateString("fa-EG", dateOptions);
         document.getElementById('title').textContent += new Date().toLocaleDateString("zh-Hans-CN", {year: "numeric",month: "numeric",day: "numeric"},
         );
 
         const all_zscores = JSON.parse(`{{ all_zscores|escapejs }}`);
 
         // Sample Chart.js data for demo
+
+        if (all_zscores.labels.length < 3) { 
+            const mainChart = new Chart(document.getElementById('mainChart'), {
+            type: 'bar',
+            data: {
+                labels: all_zscores.labels,
+                datasets: [{
+                    label: 'Weight Z-Score',
+                    data: all_zscores.weight_z,
+                    backgroundColor: `#441752`,
+                    fill: false,
+                }, {
+                    label: 'Height Z-Score Summary',
+                    data: all_zscores.height_z,
+                    backgroundColor: `#4dc9f6`,
+                    fill: false,
+                }, {
+                    label: 'BMI Z-Score',
+                    data: all_zscores.bmi_z,
+                    backgroundColor: `#f564a9`,
+                    fill: false,
+                }]
+            },
+        });
+        } else {
         const mainChart = new Chart(document.getElementById('mainChart'), {
             type: 'line',
             data: {
@@ -222,35 +227,44 @@
                 datasets: [{
                     label: 'Weight Z-Score',
                     data: all_zscores.weight_z,
+                    //backgroundColor: `rgba(34, 197, 94, 0.8)`,
                     fill: false,
                 }, {
                     label: 'Height Z-Score Summary',
                     data: all_zscores.height_z,
+                    //backgroundColor: `rgba(197, 34, 94, 0.8)`,
                     fill: false,
                 }, {
                     label: 'BMI Z-Score',
                     data: all_zscores.bmi_z,
+                    //backgroundColor: `rgba(34, 94, 197, 0.8)`,
                     fill: false,
                 }]
             },
         });
-
+        }
+        const lastVisits = JSON.parse(`{{ last_visits|escapejs }}`);
+        var miniType = 'line'
+        var miniOpac = 0.2
+        if (lastVisits.labels.length < 2){
+            miniType = 'bar'
+            miniOpac = 0.8
+        }
         const createMiniChart = (ctxId, label, data, color) => {
             return new Chart(document.getElementById(ctxId), {
-                type: 'line',
+                type: miniType,
                 data: {
                     labels: lastVisits.labels,
                     datasets: [{
                         label,
                         data,
                         borderColor: `rgba(${color}, 1)`,
-                        backgroundColor: `rgba(${color}, 0.2)`,
+                        backgroundColor: `rgba(${color}, ${miniOpac})`,
                         fill: true,
                     }]
                 }
             });
         };
-        const lastVisits = JSON.parse(`{{ last_visits|escapejs }}`);
 
         createMiniChart('weightChart', 'Weight (kg)', lastVisits.weight, '34, 197, 94');
         createMiniChart('heightChart', 'Height (cm)', lastVisits.height, '197, 34, 94');
