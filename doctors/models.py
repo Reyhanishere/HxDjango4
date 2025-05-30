@@ -2,9 +2,11 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
-
 class Company(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    name = models.CharField(max_length=200, null=True, blank=True)
+    motto = models.CharField(max_length=200, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     website=models.URLField(null=True, blank=True)
     expiration_date=models.DateField(editable=True, null=True)
     def __str__(self):
@@ -33,6 +35,8 @@ class Patient(models.Model):
     )
     # birth_date=models.DateField(editable=True, null=True)
     birth_date=models.DateField(editable=True, null=True)
+    # created_by=models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True)
+    created_at= models.DateField(auto_now_add=True, blank=True, null=True) # must turn to false
 
     def __str__(self):
         return self.name
@@ -56,14 +60,15 @@ class Record(models.Model):
 
     gender = models.CharField(max_length=5, null=False, blank=True)
     age_months = models.FloatField(('Age in monthes'), null=False, blank=False, default=0)
-
-    record_add_date=models.DateTimeField(editable=True,)
+    
+    record_date=models.DateTimeField(editable=True,) # All to DateField
+    record_add_date=models.DateTimeField(auto_now_add=True, blank=True, null=True) # must turn to false
     record_edit_date=models.DateTimeField(auto_now=True, editable=True, blank=True, null=True)
 
     def save(self, *args, **kwargs):
-            if not self.id:
-                self.record_add_date = timezone.now()
-            super().save(*args, **kwargs)
+        if not self.id:
+            self.record_add_date = timezone.now()
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.patient.name
+        return f"{self.patient.name} {self.record_date.year-2000}/{self.record_date.month}/{self.record_date.day} | {self.doctor.name}"
