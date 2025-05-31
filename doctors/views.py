@@ -283,3 +283,27 @@ def patient_record_print_view(request, personal_id):
     context['last_visits'] = json.dumps(last_visits)
 
     return render(request, 'doctors/patient_records_print.html', context)
+
+@login_required
+def patients_list_view(request):
+    doctor = get_object_or_404(Doctor, user=request.user)
+    records = Record.objects.filter(doctor=doctor).order_by('-record_add_date')
+    patients_list=list()
+    patients_set=set()
+
+    for r in records[:100]:
+        # while len(patients_set) < 10:
+        patients_set.add(r.patient.personal_id)
+    for r in records[:100]:
+        # while len(patients_list) < 10:
+        if r.patient.personal_id in patients_set:
+            patients_list.append(r.patient)
+            patients_set.remove(r.patient.personal_id)
+
+    context = {
+        'doctor': doctor,
+        'patients': patients_list,
+    }
+
+
+    return render(request, 'doctors/patients_list.html', context)
