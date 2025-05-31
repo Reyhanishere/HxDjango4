@@ -1,0 +1,72 @@
+{% extends 'doctors/base.html' %}
+{% load static %}
+
+{% block title %}
+    لیست بیماران دکتر {{doctor.name}}
+{% endblock title %}
+
+{% block imports %}    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+    body {
+        margin: auto;
+        display:flex; 
+        flex-direction: column; 
+        font-family: 'Baloo Bhaijaan 2';
+        }
+    #patientsListCont{
+        background-color: #eee;
+        border-radius: 10px;
+        padding-bottom: 1.5rem;
+        margin: 1rem 2rem;
+        box-shadow: 0px 0px 6px 1px #9999;
+    }
+    .patientsListItems{
+        padding: 0.5rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        align-items: center;
+        cursor: pointer;
+        border-radius: 2px 2px 10px 10px;    
+        text-align: center;
+        transition: 0.3s ease;
+    }
+    .patientsListItems:hover{
+        background-color: #e0e0e0;
+    }
+    .patientsListItems a{
+        text-decoration: none;
+        color: #333;
+        padding: 0.25rem;
+        border-radius: 10px;
+        transition: 0.3s;
+    }
+    .patientsListItems a:hover{
+        background-color: #eee
+    }
+</style>
+{% endblock imports %}    
+
+{% block content %}
+<h2 dir="" style="margin: 2rem 3rem 1rem 0;" class="text-2xl font-bold">لیست بیماران به ترتیب ثبت داده</h2>
+<div id="patientsListCont" dir="rtl">
+    <div class="patientsListItems" style="background-color: #e0e0e0; border-radius: 10px 10px 2px 2px; padding: 1rem 0; font-weight:bold;">
+    <span>نام کودک</span>
+    <span>شماره ملی / کد گذرنامه</span>
+    <span>لینک صفحۀ چاپ</span>
+    <span>افزودن دادۀ جدید</span>
+
+    </div>
+{% for p in patients %}
+<div class="patientsListItems">
+    <a href="{% url 'patient_records' p.personal_id %}">{{ p.name }}</a>
+    <a href="{% url 'patient_records' p.personal_id %}">{{ p.personal_id }}</a>
+    <a href="{% url 'patient_records_print' p.personal_id %}">&#128424;&#65039;</a>
+    <a href="{% url 'zscore' p.personal_id %}" >&#10133;</a>
+    
+    {% comment %} <a href="{% url 'patient_records' p.personal_id %}">Overview</a> {% endcomment %}
+</div>
+{% endfor %}
+</div>
+{% endblock content %}
