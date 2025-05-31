@@ -7,5 +7,6 @@ urlpatterns = [
     path('patient/<slug:personal_id>/', calculate_zscore, name='zscore'),
     path('patient/<slug:personal_id>/overview/', patient_record_view, name='patient_records'),
     path('patient/<slug:personal_id>/overview/print/', patient_record_print_view, name='patient_records_print'),
+    path('patients_list/', patients_list_view, name='patients_list'),
 
 ]
