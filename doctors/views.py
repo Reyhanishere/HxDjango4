@@ -6,7 +6,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.timezone import localtime
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView
+from django.http import JsonResponse
+
+# from django.views.generic import CreateView, UpdateView
 
 from .models import *
 from .forms import *
@@ -91,9 +93,10 @@ def to_five(value):
 def calculate_zscore(request, personal_id):
     patient = get_object_or_404(Patient, personal_id=personal_id)
     previous = Record.objects.filter(patient=patient).order_by('-record_date').first()
-    result = None
-    form = ZScoreForm(request.POST or None, birth_date=patient.birth_date)
     doctor = get_object_or_404(Doctor, user=request.user)
+    result = None
+
+    form = ZScoreForm(request.POST or None, birth_date=patient.birth_date)
 
     if request.method == 'POST':
         if form.is_valid():
@@ -102,22 +105,25 @@ def calculate_zscore(request, personal_id):
             hc = form.cleaned_data.get('hc')
             record_date = form.cleaned_data['jalali_record_date']
 
-            weight = request.POST.get('weight')
-            height = request.POST.get('height')
-            # hc = request.POST.get('hc')
-
-            # Calculate age in months with 0.5 precision
+            # Calculate age in months
             days = (record_date - patient.birth_date).days
             age_months = to_five(round((days / 30.4375), 1))
-            if age_months > 240:
-                age_months = 240
+            age_months = min(age_months, 240)
 
-            
-            if patient.gender =='پسر':
-                gender = '1'
-            else: 
-                gender='2'
-            # Send request to the external API
+            gender = '1' if patient.gender == 'پسر' else '2'
+
+            # Check for existing record
+            existing_qs = Record.objects.filter(
+                doctor=doctor, patient=patient, record_date=record_date
+            )
+
+            # Return a warning if exists and no override/update
+            if existing_qs.exists() and not request.POST.get('force') and not request.POST.get('update'):
+                return JsonResponse({
+                    'status': 'exists',
+                    'message': f"A record already exists for {record_date}.",
+                })
+
             try:
                 response = requests.get(
                     "https://medepartout.ir/calculus/calculi/pedi_all_zscores/",
@@ -130,16 +136,34 @@ def calculate_zscore(request, personal_id):
                 )
                 response.raise_for_status()
                 result = response.json()
+
+                # Update existing record
+                if request.POST.get('update') and existing_qs.exists():
+                    record = existing_qs.first()
+                    record.weight = weight
+                    record.height = height
+                    record.hc = hc
+                    record.age_months = age_months
+                    record.weight_z = result["weight"]["z_score"]
+                    record.weight_p = result["weight"]["percentile"]
+                    record.height_z = result["height"]["z_score"]
+                    record.height_p = result["height"]["percentile"]
+                    record.bmi = result["bmi"]["value"]
+                    record.bmi_z = result["bmi"]["z_score"]
+                    record.bmi_p = result["bmi"]["percentile"]
+                    record.save()
+                    return JsonResponse({'status': 'updated', 'result': result })
+
+                # Otherwise, create a new one
                 Record.objects.create(
                     doctor=doctor,
                     patient=patient,
                     gender=gender,
-                    age_months = age_months,
+                    age_months=age_months,
                     record_date=record_date,
                     weight=weight,
                     height=height,
                     # hc=hc,
-                    # Extract values from the response
                     weight_z=result["weight"]["z_score"],
                     weight_p=result["weight"]["percentile"],
                     height_z=result["height"]["z_score"],
@@ -148,11 +172,13 @@ def calculate_zscore(request, personal_id):
                     bmi_z=result["bmi"]["z_score"],
                     bmi_p=result["bmi"]["percentile"]
                 )
-            
+                return JsonResponse({'status': 'created', 'result': result })
+
             except requests.RequestException as e:
-                result = {'error': str(e)}
+                return JsonResponse({'status': 'error', 'error': str(e)})
+
     else:
-        initial_data={}
+        initial_data = {}
         if previous:
             initial_data = {
                 'weight': previous.weight if previous.weight else None,
@@ -160,14 +186,14 @@ def calculate_zscore(request, personal_id):
                 'hc': previous.hc if previous.hc else None,
             }
         form = ZScoreForm(initial=initial_data)
+
     return render(request, 'doctors/zscore.html', {
         'patient': patient,
-        'doctor':doctor,
+        'doctor': doctor,
         'form': form,
         'result': result,
         'previous': previous,
     })
-
 
 
 from .templatetags.tags import *
@@ -283,6 +309,7 @@ def patient_record_print_view(request, personal_id):
     context['last_visits'] = json.dumps(last_visits)
 
     return render(request, 'doctors/patient_records_print.html', context)
+
 
 @login_required
 def patients_list_view(request):
