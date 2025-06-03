@@ -1,14 +1,9 @@
+{% extends 'doctors/base.html' %}
 {% load tags %}
 {% load static %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
+{% block title %}سامانۀ پایش | {{ patient.name }}{% endblock title %}
+{% block imports %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>پایش</title>
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&display=swap" rel="stylesheet">
-    <link href="{% static 'css/style_doctors.css'%}" rel="stylesheet">
 
     <style>
       body{
@@ -43,6 +38,7 @@
         border-radius: 10px;
         font-family: 'Baloo Bhaijaan 2'; 
         text-align: center;
+        margin: auto;
 
       }
       button{
@@ -53,12 +49,35 @@
         font-family: 'Baloo Bhaijaan 2'; 
 
       }
+#overview{
+    margin: auto;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: linear-gradient(45deg, #FF9800, #FFEB3B);
+    color: #000;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 10px;
+    border: solid 2px #000;
+    text-decoration: none;
+    box-shadow: 0 0 2px 1px #000;
+    opacity: 0.70;
+    transition: 0.3s;
+    text-align: center;
+}
+#overview:hover{
+    opacity: 0.9;
+    box-shadow: 0 0 2px 1px #0008;
 
+
+
+}
     </style>
     <style>
         .response-box {
             padding: 15px;
-            margin: 20px;
+            margin-bottom: 2rem;
+
             border-radius: 0 10px 10px 0;
             
         }
@@ -110,46 +129,108 @@
             display: inline-block;
             text-align: center;
         }
-        
+        #calculateBtn{
+            margin: 1rem auto;
+            background-color: #eee;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: solid 1px #888;
+        }
+        #calculateBtn:hover{
+            margin: 1rem auto;
+            background-color: #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: solid 1px #888;
+        }
         @media (max-width: 550px){
             form{
                 grid-template-columns: 1fr;
             }
             #calculateBtn{
                 grid-column: span 1;
-                margin-top: 1rem;
             }
         }
     </style>
-</head>
-<body style="" dir="rtl">
-    <header style="margin: 0 2rem; padding: 0.5rem 1rem;">
-        <div>
-            <h1 class="" style="margin: 0.5rem;">
-                دکتر {{doctor.name}} <span style="font-size:14px"></span>
-                <a href="#"><img src="{% static 'images/buttons/user.png' %}" class="icon" alt="user" /></a>
-                <form method="post" action="{% url 'logout' %}" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit" style="background-color: transparent; border: none;">
-                        <img src="{% static 'images/buttons/logout.png' %}" class="icon" alt="logout" />
-                    </button>
-                </form>
-            </h1>
-            <h3 class="" style="margin: 0.5rem; margin-right: 1rem;">{{doctor.title}}</h3>
+    
+    <style>
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
-        </div>
-        <div class="text-gray-600 text-m">
-            <p id="todayDate" style="font-family: system-ui;"></p>
-        </div>
-        <div>
-            <img src="{% static '/images/Logo with Typo Light.svg' %}" alt="Sponsor Logo" class="h-10">
-            <p style="text-align: center; margin: 0;">پشتیبان سلامت شما</p>
-        </div>
-    </header>
-<h2 dir="auto" style="text-align: center; margin-top:5rem;">محاسبه Z-Score برای {{ patient.name }}</h2>
+.modal-content {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  text-align: center;
+  max-width: 350px;
+  width: 90%;
+  direction: rtl;
+  box-shadow: 0 0 5px 1px #3338;
+  margin: 1rem;
+}
+
+.modal-buttons button {
+  margin: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  height: auto;
+}
+
+#confirmMessage{
+    margin-bottom: 1rem;
+}
+#confirmAdd { background-color: #28a745; color: white; display: none; transition: 0.3s;}
+#confirmUpdate { background-color: #007bff; color: white; transition: 0.3s; }
+#confirmUpdate:hover { background-color:rgb(0, 107, 222);}
+
+#confirmCancel { background-color:rgb(220, 53, 69); color: white; transition: 0.3s}
+#confirmCancel:hover { background-color:rgb(201, 47, 0);}
+
+
+.loading-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1500;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  direction: rtl;
+}
+
+.loading-spinner {
+    background-color: #f8f9fa;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 5px 1px #3338;
+    margin: 1rem;
+}
+</style>
+{% endblock imports %}
+{% block content %}
+<h2 dir="auto" style="text-align: center; text-align: center; margin: 3rem 1rem 2rem 1rem; font-size: x-large; font-weight: 600;">
+    محاسبه Z-Score برای {{ patient.name }}
+</h2>
 
 <a href="{% url 'corc_patient' %}" id="addNew">برای ثبت بیمار جدید کلیک کنید</a>
-<form method="post" novalidate>
+<form method="post" id="zscore-form" novalidate>
   <label dir="rtl">تاریخ تولد: {{ patient.birth_date|j_date:"name, long" }}</label><br>
   <label>جنسیت: {{ patient.get_gender_display }}</label><br/>
   {% csrf_token %}
@@ -184,108 +265,154 @@
     {{ form.jalali_record_date }}
     {{ form.jalali_record_date.errors }}
     <div class="smallsBox">
-    <small>مثلاً 1404/05/04</small>
-    <small onclick="setToday()" id="todayBtn">امروز</small>
+      <small>مثلاً 1404/05/04</small>
+      <small onclick="setToday()" id="todayBtn">امروز</small>
     </div>
   </div>
-<button type="submit" style="" id="calculateBtn">محاسبه</button>
-</form>
-    <div id="response" class="response-box" dir="auto"></div>
 
-<a href="overview/" id="overview" style="display: none;">نمایش نمودارهای رشد</a>
+  <button type="submit" id="calculateBtn">محاسبه</button>
+</form>
+<div id="confirmModal" style="display: none;" class="modal">
+  <div class="modal-content">
+    <p id="confirmMessage">در این تاریخ، یکبار برای کودک اطلاعات ثبت شده است. آیا مایل به ویرایش آن هستید؟</p>
+    <div class="modal-buttons">
+      <button id="confirmAdd">ثبت جدید</button>
+      <button id="confirmUpdate">ویرایش</button>
+      <button id="confirmCancel">لغو</button>
+    </div>
+  </div>
+</div>
+<div id="loadingBox" class="loading-overlay" style="display: none;">
+  <div class="loading-spinner">در حال پردازش...</div>
+</div>
+
+<a href="overview/" id="overview">نمایش نمودارهای رشد کودک</a>
+<div id="response" class="response-box" dir="auto"></div>
 
 <div id="chartCont" style="display: none; overflow-x: scroll; padding: 0.5rem;">
-<h2 style="margin-right: 2rem">مقادیر محاسبه شده</h2>
-    <table id="metrics-table" dir="ltr">
-        <thead>
-            <tr>
-                <th>Measurement</th>
-                <th>Value</th>
-                <th>Z-Score</th>
-                <th>Percentile</th>
-            </tr>
-        </thead>
-        <tbody id="table-body">
-            <!-- Filled by JavaScript -->
-        </tbody>
-    </table>
-  </div>
-    <script>
-      
-        const dateOptions = {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric",
-        };
-        const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+  <h2 style="margin-right: 2rem; font-size: x-large; font-weight: 600;">مقادیر محاسبه شده</h2>
+  <table id="metrics-table" dir="ltr">
+    <thead>
+      <tr>
+        <th>Measurement</th>
+        <th>Value</th>
+        <th>Z-Score</th>
+        <th>Percentile</th>
+      </tr>
+    </thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</div>
 
-        // Today's date
-        function setToday(){
-            const today = new Date().toLocaleDateString("fa-EG", dateOptions)
-            document.getElementById('id_jalali_record_date').value = today.replace(/[۰-۹]/g, (char) => persianNumbers.indexOf(char));
-        }
-        //document.getElementById('todayDate').textContent = new Date().toLocaleDateString("fa-EG", dateOptions).replace(/[۰-۹]/g, (char) => persianNumbers.indexOf(char));
-        
-    </script>
+<script>
+const dateOptions = { year: "numeric", month: "numeric", day: "numeric" };
+const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
 
-    <script>
-        // Get the JSON response passed from Django
-        const result = {{ result|safe }};
+function setToday() {
+  const today = new Date().toLocaleDateString("fa-EG", dateOptions);
+  document.getElementById('id_jalali_record_date').value =
+    today.replace(/[۰-۹]/g, char => persianNumbers.indexOf(char));
+}
+</script>
 
-        // Display it in the box
-        const responseDiv = document.getElementById('response');
-        const overview = document.getElementById('overview');
-        const chartCont = document.getElementById('chartCont');
-        const tableBody = document.getElementById('table-body');
+<script>
+document.getElementById('zscore-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
 
-        
-        if (result.error) {
-            // Show error in red box
-            responseDiv.className = 'response-box error';
-            responseDiv.innerHTML = `<strong>Error:</strong> <pre>${result.error}</pre>`;
-        } else {
-          
-            // Show success in green box
-            overview.style.display = 'inline-block'
-            chartCont.style.display = 'block'
+  const form = e.target;
+  const formData = new FormData(form);
+  const responseBox = document.getElementById('response');
+  const chartCont = document.getElementById('chartCont');
+  const tableBody = document.getElementById('table-body');
+  //const overview = document.getElementById('overview');
+  const modal = document.getElementById('confirmModal');
 
-            responseDiv.className = 'response-box success';
-            responseDiv.innerHTML = `<strong>موفقیت آمیز بود.</strong>`;
+  // Clear UI
+  responseBox.innerHTML = '';
+  responseBox.className = 'response-box';
+  chartCont.style.display = 'none';
+  //overview.style.display = 'none';
+  tableBody.innerHTML = '';
 
-            // Loop through each metric (weight, height, BMI)
-            for (const [metric, data] of Object.entries(result)) {
-                const row = document.createElement('tr');
-                
-                // Metric name (capitalized)
-                const metricCell = document.createElement('td');
-                metricCell.textContent = metric.charAt(0).toUpperCase() + metric.slice(1);
-                row.appendChild(metricCell);
+  const sendForm = async (extraData = {}) => {
+    loadingBox.style.display = 'flex';  // Show loading
+    for (const key in extraData) {
+      formData.append(key, extraData[key]);
+    }
+    try {
+    const response = await fetch(window.location.href, {
+      method: 'POST',
+      body: formData
+    });
+    return await response.json();
+  } finally {
+    loadingBox.style.display = 'none';  // Always hide after request
+  }
+};
 
-                // Value
-                const valueCell = document.createElement('td');
-                valueCell.textContent = data.value.toFixed(metric === 'bmi' ? 2 : 0);
-                row.appendChild(valueCell);
+  let result = await sendForm();
 
-                // Z-Score (color-coded)
-                const zScoreCell = document.createElement('td');
-                zScoreCell.textContent = data.z_score.toFixed(2);
-                zScoreCell.className = data.z_score < -2 ? 'z-score-negative' : 'z-score-positive';
-                row.appendChild(zScoreCell);
+  const handleFinalResult = (result) => {
+    if (result.status === 'created' || result.status === 'updated') {
+      responseBox.classList.add('success');
+      responseBox.innerHTML = `<strong>موفقیت آمیز بود.</strong>`;
+      //overview.style.display = 'inline-block';
+      chartCont.style.display = 'block';
 
-                // Percentile
-                const percentileCell = document.createElement('td');
-                percentileCell.textContent = `${data.percentile}%`;
-                percentileCell.className = 'percentile';
-                row.appendChild(percentileCell);
+      const finalResult = result.result || result;
+      for (const [metric, data] of Object.entries(finalResult)) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${metric.charAt(0).toUpperCase() + metric.slice(1)}</td>
+          <td>${data.value}</td>
+          <td class="${data.z_score < -2 ? 'z-score-negative' : 'z-score-positive'}">${data.z_score}</td>
+          <td>${data.percentile}%</td>
+        `;
+        tableBody.appendChild(row);
+      }
+      window.scrollBy({ top: 500, behavior: 'smooth' });
+    } else if (result.status === 'error') {
+      responseBox.classList.add('error');
+      responseBox.innerHTML = `<strong>خطا:</strong> <pre>${result.error}</pre>`;
+    }
+  };
 
-                tableBody.appendChild(row);
-            }
-            window.scrollBy({
-            top: 500,
-            behavior: 'smooth'
-          });
-          }
-        
-    </script>
-</body>
-</html>
+  if (result.status === 'exists') {
+    // Show modal
+    modal.style.display = 'flex';
+
+    const confirmAdd = document.getElementById('confirmAdd');
+    const confirmUpdate = document.getElementById('confirmUpdate');
+    const confirmCancel = document.getElementById('confirmCancel');
+
+    const cleanup = () => {
+      modal.style.display = 'none';
+      confirmAdd.onclick = null;
+      confirmUpdate.onclick = null;
+      confirmCancel.onclick = null;
+    };
+
+    confirmAdd.onclick = async () => {
+      cleanup();
+      const forcedResult = await sendForm({ force: '1' });
+      handleFinalResult(forcedResult);
+    };
+
+    confirmUpdate.onclick = async () => {
+      cleanup();
+      const updatedResult = await sendForm({ update: '1' });
+      handleFinalResult(updatedResult);
+    };
+
+    confirmCancel.onclick = () => {
+      cleanup();
+      responseBox.classList.add('error');
+      responseBox.innerHTML = `<strong>لغو شد.</strong>`;
+    };
+  } else {
+    handleFinalResult(result);
+  }
+});
+</script>
+
+{% endblock content %}
