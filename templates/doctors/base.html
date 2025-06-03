@@ -26,15 +26,17 @@
         <div>
             <h1 class="text-2xl font-bold mb-4">
                 دکتر {{doctor.name}} <span style="font-size:14px"></span>
-                <a href="#"><img src="{% static 'images/buttons/user.png' %}" class="icon" alt="user" /></a>
-                <a href="{% url 'patients_list' %}"><img src="{% static 'images/buttons/list.svg' %}" class="icon" alt="list" /></a>
+                <div style="display: inline-block">
+                    <a href="#"><img src="{% static 'images/buttons/user.png' %}" class="icon" alt="user" /></a>
+                    <a href="{% url 'patients_list' %}"><img src="{% static 'images/buttons/list.svg' %}" class="icon" alt="list" /></a>
 
-                <form method="post" action="{% url 'logout' %}" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit" style="background-color: transparent; border: none;">
-                        <img src="{% static 'images/buttons/logout.png' %}" class="icon" alt="logout" />
-                    </button>
-                </form>
+                    <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" style="background-color: transparent; border: none;">
+                            <img src="{% static 'images/buttons/logout.png' %}" class="icon" alt="logout" />
+                        </button>
+                    </form>
+                </div>
             </h1>
             <h3 class="text-l font-bold">{{doctor.title}}</h3>
 
