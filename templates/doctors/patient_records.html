@@ -9,9 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
-
-
+    
     <style>
         
         #miniChartsSection{
@@ -78,10 +76,11 @@
     {% block content %}
     <!-- Patient Info -->
     <section class="border-b pb-4">
-        <p class="text-lg">بیمار: <span class="font-medium">{{patient.name}}</span>&nbsp;&nbsp;
+        <p class="text-lg m-2 mt-4 mb-4">بیمار: <span class="font-medium">{{patient.name}}</span>&nbsp;&nbsp;
             <span style="color: #6e6e6e; font-size: 16px;">{{patient_age}}</span>
         </p>
         <p style="margin-top: 0.5rem">
+            <a href="{% url 'patient_update' patient.personal_id %}" class="addNew">ویرایش مشخصات بیمار</a>
             <a href="{% url 'corc_patient' %}" class="addNew">ثبت بیمار جدید</a>
             <a href="{% url 'zscore' patient.personal_id %}" class="addNew">ثبت دادۀ جدید برای کودک</a>
             <a href="{% url 'patients_list' %}" class="addNew">لیست بیماران</a>
