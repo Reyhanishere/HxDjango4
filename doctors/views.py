@@ -8,13 +8,13 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 
-# from django.views.generic import CreateView, UpdateView
-
 from .models import *
 from .forms import *
 from accounts.models import *
 
 def check_or_create_patient(request):
+    doctor = get_object_or_404(Doctor, user=request.user)
+
     if request.method == 'POST':
         id_form = IDCheckForm(request.POST)
         if id_form.is_valid():
@@ -27,10 +27,11 @@ def check_or_create_patient(request):
                 return redirect('new_patient_info')
     else:
         id_form = IDCheckForm()
-    return render(request, 'doctors/check_id.html', {'form': id_form})
+    return render(request, 'doctors/check_id.html', {'doctor': doctor,'form': id_form})
 
 def create_patient(request):
     personal_id = request.session.get('pending_personal_id')
+    doctor = get_object_or_404(Doctor, user=request.user)
     if not personal_id:
         return redirect('corc_patient')
 
@@ -44,7 +45,7 @@ def create_patient(request):
             return redirect('zscore', personal_id=patient.personal_id)
     else:
         form = NewPatientForm()
-    return render(request, 'doctors/new_patient.html', {'form': form, 'personal_id': personal_id})
+    return render(request, 'doctors/new_patient.html', {'doctor':doctor,'form': form, 'personal_id': personal_id})
 
 
 
@@ -332,5 +333,33 @@ def patients_list_view(request):
         'patients': patients_list,
     }
 
-
     return render(request, 'doctors/patients_list.html', context)
+
+@login_required
+def patient_update_view(request, personal_id):
+    # Get the patient or return 404
+    patient = get_object_or_404(Patient, personal_id=personal_id)
+    
+    # Check if the requesting user is a doctor
+    doctor = Doctor.objects.filter(user=request.user)
+    is_doctor = doctor.exists()
+    doctor = get_object_or_404(Doctor, user=request.user)
+
+    if not is_doctor:
+        # You can return a permission denied response or redirect
+        from django.core.exceptions import PermissionDenied
+        raise PermissionDenied("Only doctors can edit patient information")
+    
+    if request.method == 'POST':
+        form = PatientUpdateForm(request.POST, instance=patient)
+        if form.is_valid():
+            form.save()
+            return redirect('zscore', personal_id=patient.personal_id)  # Redirect to patient detail view
+    else:
+        form = PatientUpdateForm(instance=patient)
+    
+    return render(request, 'doctors/update_patient.html', {
+        'doctor': doctor,
+        'form': form,
+        'patient': patient,
+    })
