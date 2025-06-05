@@ -4,6 +4,8 @@ from dateutil.relativedelta import relativedelta
 
 from django import forms
 from .models import Patient
+from .templatetags.tags import *
+
 
 class IDCheckForm(forms.Form):
     autocomplete=True
@@ -124,3 +126,52 @@ class ZScoreForm(forms.Form):
             return g_date
         except:
             raise forms.ValidationError("تاریخ وارد شده معتبر نیست.")
+        
+class PatientUpdateForm(forms.ModelForm):
+    name = forms.CharField(label="نام و نام خانوادگی",
+                                  widget=forms.TextInput(attrs={'dir': 'rtl', 'autocomplete':'off'}))
+    jalali_birth_date = forms.CharField(label="تاریخ تولد", widget=forms.TextInput(attrs={'dir': 'ltr', 
+                                                                'autocomplete':'off',}),
+                                                                )
+    class Meta:
+        model = Patient
+        fields = ["name", "gender", "jalali_birth_date"]
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Access the model instance's field
+        if self.instance and self.instance.pk:
+            self.fields['jalali_birth_date'].widget.attrs.update({
+                'value': j_date(self.instance.birth_date, "digit, long")
+            })
+
+    def clean_jalali_birth_date(self):
+        jalali_str = self.cleaned_data['jalali_birth_date']
+        try:
+            # Split and convert
+            year, month, day = map(int, jalali_str.split('/'))
+            if not (1 <= month <= 12):
+                raise forms.ValidationError("ماه وارد شده معتبر نیست.")
+            elif not(1 <= day <= 31):
+                raise forms.ValidationError("روز وارد شده معتبر نیست.")
+
+            j_date = jdatetime.date(year, month, day)
+            g_date = j_date.togregorian()
+
+            # Validation: future date check
+            if g_date > date.today():
+                raise forms.ValidationError("تاریخ تولد نمی‌تواند در آینده باشد.")
+            if g_date < date.today() - relativedelta(months=240):
+                raise forms.ValidationError("سن نمی‌تواند بیشتر از ۲۰ سال باشد.")
+            # if g_date < date(date.today().year - 20, date.today().month, date.today().day):                
+            #     raise forms.ValidationError("سن نمی‌تواند بیشتر از ۲۰ سال باشد.")
+            return g_date
+        
+        except ValueError:
+            raise forms.ValidationError("تاریخ وارد شده معتبر نیست.")
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.birth_date = self.cleaned_data['jalali_birth_date']  # already converted to Gregorian
+        if commit:
+            instance.save()
+        return instance
