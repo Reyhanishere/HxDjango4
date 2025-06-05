@@ -1,54 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>پایش</title>
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&display=swap" rel="stylesheet">
-    <style>
-      body{
-        display:flex; 
-        flex-direction: column; 
-        font-family: 'Baloo Bhaijaan 2'; 
-        margin:0;
-        min-height: 100vh;
-        background: linear-gradient(225deg, #d2ffff, #ffc0cb8c);
-      }
-      form{
-        margin: 2rem auto;
-        display: flex;
-        flex-direction: column;
-      }
-      label{
-        display: none
-      }
-      input{
-        font-size: 20px;
-        padding: 0.5rem;
-        width: 200px;
-        border-radius: 10px;
-        font-family: 'Baloo Bhaijaan 2'; 
-        text-align: center;
+{% extends 'doctors/base.html' %}
+{% block title %}پایش | افزودن بیمار{% endblock title %}
+{% block imports %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      background: linear-gradient(225deg, #d2ffff, #ffc0cb8c);
+    }
+    form{
+      margin: 2rem auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    label{
+      display: none
+    }
+    input{
+      font-size: 20px;
+      padding: 0.5rem;
+      width: 200px;
+      border-radius: 10px;
+      font-family: 'Baloo Bhaijaan 2'; 
+      text-align: center;
+      margin: auto;
 
-      }
-      button{
-        height: 40px;
-        border-radius: 10px;
-        font-size: 20px;
-        cursor: pointer;
-        font-family: 'Baloo Bhaijaan 2'; 
-
-      }
-    </style>
-
-</head>
-  <body style="">
-    <h2 dir="auto" style="text-align: center; max-width: 70%; margin: 8rem auto 1rem auto;">کد ملی / شمارۀ گذرنامۀ کودک را وارد کنید.</h2>
-    <p dir="auto" style="max-width: 70%; margin: 1rem auto; text-align: justify;">اگر سابقه‌ای از وی وجود داشته باشد، نمایش داده می‌شود. در غیر این صورت، اطلاعات وی را وارد خواهید کرد.</p>
-    <form method="post" style="margin: 1rem auto;" dir="auto">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">بررسی</button>
-    </form>
-</body>
-</html>
+    }
+    button{
+      height: 40px;
+      border-radius: 10px;
+      font-size: 20px;
+      cursor: pointer;
+      font-family: 'Baloo Bhaijaan 2'; 
+    }
+    .usualBtn{
+      margin: 1rem auto;
+      background-color: #eee;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+      border: solid 1px #888;
+      width: 200px;
+    }
+    .usualBtn:hover{
+      margin: 1rem auto;
+      background-color: #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+      border: solid 1px #888;
+  }
+  </style>
+{% endblock imports %}
+{% block content %}
+  <h2 dir="auto" style="text-align: center; max-width: 70%; margin: 8rem auto 1rem auto; font-size: x-large; font-weight: 700;">کد ملی / شمارۀ گذرنامۀ کودک را وارد کنید.</h2>
+  <p dir="auto" style="max-width: 70%; margin: 1rem auto; text-align: justify;">اگر سابقه‌ای از وی وجود داشته باشد، نمایش داده می‌شود. در غیر این صورت، اطلاعات وی را وارد خواهید کرد.</p>
+  <form method="post" style="margin: 1rem auto;" dir="auto">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="usualBtn">بررسی</button>
+  </form>
+{% endblock content %}
