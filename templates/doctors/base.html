@@ -6,6 +6,7 @@
     <meta charset="UTF-8" />
 
     <title id="title">{% block title %}{% endblock title %}</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&display=swap" rel="stylesheet">
 
@@ -14,7 +15,15 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icon//favicon-16x16.png' %}">
 
     <link href="{% static 'css/style_doctors.css'%}" rel="stylesheet">
-
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            font-family: 'Baloo Bhaijaan 2';
+            margin: 0;
+            min-height: 100vh;
+        }
+    </style>
     {% block imports %}{% endblock imports %}
     
 </head>
