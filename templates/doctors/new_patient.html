@@ -1,43 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>پایش</title>
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&display=swap" rel="stylesheet">
+{% extends 'doctors/base.html' %}
+{% block title %}پایش | افزودن بیمار{% endblock title %}
+    
+{% block imports %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
     <style>
-      body{
-        display:flex; 
-        flex-direction: column; 
-        font-family: 'Baloo Bhaijaan 2'; 
-        margin:0; 
+      body {
         background: linear-gradient(225deg, #d2ffff, #ffc0cb8c);
-        min-height: 100vh;
-
       }
+
       form{
         margin: auto;
         display: flex;
         flex-direction: column;
       }
+
       form p {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin: 0.5rem;
       }
+
       label{
         font-size: 20px;
-        
       }
+
       select{
         padding: 0.5rem 3rem;
         border-radius: 10px;
         font-family: 'Baloo Bhaijaan 2';
         font-size: 18px;
-
-
-
       }
+
       input{
         font-size: 20px;
         padding: 0.5rem;
@@ -45,29 +40,45 @@
         border-radius: 10px;
         font-family: 'Baloo Bhaijaan 2'; 
         text-align: center;
-
       }
+
       button{
         height: 40px;
         border-radius: 10px;
         font-size: 20px;
         cursor: pointer;
         font-family: 'Baloo Bhaijaan 2'; 
-
       }
+
+    .usualBtn{
+      margin: 1rem auto;
+      background-color: #eee;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+      border: solid 1px #888;
+      width: 200px;
+    }
+    .usualBtn:hover{
+      margin: 1rem auto;
+      background-color: #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+      border: solid 1px #888;
+  }
     </style>
 
-</head>
-<body style="" dir="rtl">
+{% endblock imports %}
+
+{% block content %}
 
 <form method="post">
   {% csrf_token %}
   {{ form.as_p }}
-  <button type="submit">ثبت</button>
+  <button type="submit" class="usualBtn">ثبت</button>
 </form>
 <script>
 
 </script>
-</body>
-
-</html>
+{% endblock content %}
