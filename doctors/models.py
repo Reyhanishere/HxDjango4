@@ -72,3 +72,11 @@ class Record(models.Model):
 
     def __str__(self):
         return f"{self.patient.name} {self.record_date.year-2000}/{self.record_date.month}/{self.record_date.day} | {self.doctor.name}"
+
+class Recommendation(models.Model):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
+    add_date=models.DateField(auto_now_add=True, blank=False, null=False)
+    text = models.TextField(null=True, blank=True)
+    def __str__(self):
+        return f"{self.patient.name} {self.add_date.year-2000}/{self.add_date.month}/{self.add_date.day} | {self.doctor.name}"
