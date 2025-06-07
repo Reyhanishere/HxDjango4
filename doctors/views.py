@@ -240,6 +240,7 @@ def patient_record_view(request, personal_id):
         'labels': [j_date(record.record_date, 'digit, long') for record in records_reverse[:10]]
     }
     
+    recoms = Recommendation.objects.filter(add_date = date.today(), doctor=doctor, patient=patient).order_by('-add_date')[:5]
 
     context = {
         'doctor': doctor,
@@ -249,6 +250,7 @@ def patient_record_view(request, personal_id):
         # 'all_dates': all_dates_jalali,
         'recent_records': recent_data,
         # 'last_visits': last_visits,
+        'recoms': recoms,
     }
     context['all_zscores'] = json.dumps(all_zscores)
     context['last_visits'] = json.dumps(last_visits)
@@ -296,7 +298,29 @@ def patient_record_print_view(request, personal_id):
         'labels': [j_date(record.record_date, 'digit, long') for record in records_reverse[:10]]
     }
     
+    recoms = Recommendation.objects.filter(add_date = date.today(), doctor=doctor, patient=patient)
+    last_recom = recoms.first()
+    
+    if request.method == 'POST':
+        # Get the recommendation text from the form
+        recommendation_text = request.POST.get('recommendation_text')
+        if recommendation_text:  # Make sure there's text
 
+            if last_recom.exists():
+                last_recom.text = recommendation_text
+                last_recom.save()
+            else: 
+                Recommendation.objects.create(
+                    doctor=doctor,
+                    patient=patient,
+                    text=recommendation_text,
+                    # Add any other required fields here
+                )
+        else:
+            pass
+        # Redirect to prevent form resubmission on refresh
+        return redirect('patient_records_print', personal_id=personal_id)
+    
     context = {
         'doctor': doctor,
         'patient': patient,
@@ -304,11 +328,12 @@ def patient_record_print_view(request, personal_id):
         # 'all_zscores': all_zscores,
         # 'all_dates': all_dates_jalali,
         'recent_records': recent_data,
+        'last_recom':last_recom.text,
         # 'last_visits': last_visits,
     }
     context['all_zscores'] = json.dumps(all_zscores)
     context['last_visits'] = json.dumps(last_visits)
-
+    
     return render(request, 'doctors/patient_records_print.html', context)
 
 
