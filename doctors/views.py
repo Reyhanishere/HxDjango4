@@ -240,7 +240,7 @@ def patient_record_view(request, personal_id):
         'labels': [j_date(record.record_date, 'digit, long') for record in records_reverse[:10]]
     }
     
-    recoms = Recommendation.objects.filter(add_date = date.today(), doctor=doctor, patient=patient).order_by('-add_date')[:5]
+    recoms = Recommendation.objects.filter(doctor=doctor, patient=patient).order_by('-add_date')[:5]
 
     context = {
         'doctor': doctor,
@@ -298,17 +298,18 @@ def patient_record_print_view(request, personal_id):
         'labels': [j_date(record.record_date, 'digit, long') for record in records_reverse[:10]]
     }
     
-    recoms = Recommendation.objects.filter(add_date = date.today(), doctor=doctor, patient=patient)
-    last_recom = recoms.first()
+    recoms = Recommendation.objects.filter(doctor=doctor, patient=patient)
+    last_recom = recoms.last()
+    today_recom = Recommendation.objects.filter(doctor=doctor, patient=patient, add_date=date.today()).last()
     
     if request.method == 'POST':
         # Get the recommendation text from the form
         recommendation_text = request.POST.get('recommendation_text')
         if recommendation_text:  # Make sure there's text
 
-            if last_recom.exists():
-                last_recom.text = recommendation_text
-                last_recom.save()
+            if today_recom:
+                today_recom.text = recommendation_text
+                today_recom.save()
             else: 
                 Recommendation.objects.create(
                     doctor=doctor,
