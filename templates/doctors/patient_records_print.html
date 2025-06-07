@@ -90,6 +90,15 @@
                 width: 40%;
             }
         }
+        .recomBox{
+            margin-top: 0.5rem;
+            width: 100%;
+            background-color: transparent;
+            text-align: justify;
+            font-size: 16px;
+            min-height: 30mm;
+            font-family: 'Baloo Bhaijaan 2';
+        }
     </style>
     {% endblock imports %} 
 {% block content %}
@@ -166,14 +175,19 @@
 
     <!-- Recommendation Box -->
     <section dir="ltr" class="mt-6" style="margin:2rem 1.5rem;">
-        <div dir="rtl" style="background-color: #f2f2f2; border-radius: 10px; padding: 1rem; margin-bottom:1rem; height: 50mm">
-            <h3 class="text-lg font-semibold mb-2">توصیۀ پزشک:</h3>
+        <div dir="" style="background-color: #f2f2f2; border-radius: 10px; padding: 1rem; margin-bottom:1rem; min-height: 50mm">
+            <h3 class="text-lg font-semibold mb-2" dir="rtl">توصیۀ پزشک:</h3>
             <!-- <textarea class="w-full h-32 p-4 border rounded" placeholder="Type your notes here..."></textarea> -->
             <div>
-                <p contenteditable="true" class="m-2 p-4" style="text-align: justify;"></p>
+                <p contenteditable="true" class="m-2 p-4" style="text-align: justify; display: none;"></p>
+                <form method="post">
+                    {% csrf_token %}
+                    <textarea dir="rtl" name="recommendation_text" class="recomBox" value="" required>{{ last_recom }}</textarea>
+                    <button type="submit" class="addNew" dir="ltr" style="padding-top: 0.35rem; margin: 0;">&#128190; Save Recommendation</button>
+                </form>
             </div>
         </div>
-        <button class="addNew" onclick="window.print();" dir="ltr">Print &#128424;&#65039;</button>
+        <button class="addNew" onclick="window.print();" dir="" style="padding-top: 0.35rem">Print &#128424;&#65039;</button>
 
     </section>
 
