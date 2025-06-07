@@ -1,5 +1,6 @@
 {% extends 'doctors/base.html' %}
 {% load static %}
+{% load tags %}
 
 {% block title %}
     {{ patient.personal_id }} |
@@ -69,6 +70,18 @@
     }
     .icon:hover{
         opacity: 1.0;
+    }
+    .recomsBox{
+        padding: 1rem;
+        background-color: #f2f2f2;
+        border-radius: 10px;
+        margin-bottom: 0.5rem;
+        box-shadow: 0px 1px 2px 0 #999;
+    }
+    .recomsBox span{
+        color: #666;
+        font-size: 14px;
+
     }
     </style>
 {% endblock imports %}
@@ -143,6 +156,14 @@
     </section>
 
     <!-- Recommendation Box -->
+    <section class="mt-6 mb-6" style="">
+    {% for recom in recoms %}
+        <div class="recomsBox">
+            <span>{{ recom.add_date|j_date:"name, long"}}</span>
+            <p>{{ recom.text }}</p>
+        </div>
+    {% endfor %}
+    </section>
     <section class="mt-6" style="display: none;">
         <h3 class="text-lg font-semibold mb-2">توصیۀ پزشک:</h3>
         <!-- <textarea class="w-full h-32 p-4 border rounded" placeholder="Type your notes here..."></textarea> -->
