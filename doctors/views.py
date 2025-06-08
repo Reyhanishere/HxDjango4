@@ -272,8 +272,11 @@ def patient_record_print_view(request, personal_id):
     records_reverse=Record.objects.filter(doctor=doctor, patient=patient).order_by('record_date')
     # growth_recom_data
     last_record = records.first()
-
-    considerations, recommendations = make_recom_and_considers(age_months=age_months, last_record=last_record)
+    if last_record:
+        considerations, recommendations = make_recom_and_considers(age_months=age_months, last_record=last_record)
+    else: 
+        considerations, recommendations = {}, {}
+        
     # Get all Z-scores
     all_zscores = {
         'weight_z': [record.weight_z for record in records_reverse],
