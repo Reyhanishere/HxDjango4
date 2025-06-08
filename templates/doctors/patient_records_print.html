@@ -207,8 +207,8 @@
         <details dir="rtl" class="consRecomBoxes">
             <summary>در نظر داشته باشید:</summary>
             {% for key, value in considerations.items %}
+                <div style="margin-top: 0.75rem;">            
                 <h4>{{ key }}:</h4>
-                <div>
                     {% for v in value %}
                         <span class="consider">{{v}}</span>
                     {% endfor %}
@@ -219,8 +219,8 @@
             <summary>می‌توانید توصیه کنید:</summary>
             <p>با کلیک بر روی هر مورد، آن را به  باکس توصیه‌ها اضافه کنید.</p>
             {% for key, value in recommendations.items %}
+                <div style="margin-top: 0.75rem;">
                 <h4>{{ key }}:</h4>
-                <div>
                     {% for v in value %}
                         <span class="consider recom" onclick="addToTextrea.call(this)">{{v}}</span>
                     {% endfor %}
