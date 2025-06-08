@@ -10,6 +10,7 @@ from django.http import JsonResponse
 
 from .models import *
 from .forms import *
+from .utils import *
 from accounts.models import *
 
 def check_or_create_patient(request):
@@ -262,11 +263,17 @@ def patient_record_print_view(request, personal_id):
     doctor = get_object_or_404(Doctor, user=request.user)
     patient = get_object_or_404(Patient, personal_id=personal_id)
     patient_age = calculate_age_extended(patient.birth_date)
+    
+    days = (date.today() - patient.birth_date).days
+    age_months = to_five(round((days / 30.4375), 1))
+    age_months = min(age_months, 240)
     # Filter records for this doctor and this patient
     records = Record.objects.filter(doctor=doctor, patient=patient).order_by('-record_date')
     records_reverse=Record.objects.filter(doctor=doctor, patient=patient).order_by('record_date')
+    # growth_recom_data
+    last_record = records.first()
 
-
+    considerations, recommendations = make_recom_and_considers(age_months=age_months, last_record=last_record)
     # Get all Z-scores
     all_zscores = {
         'weight_z': [record.weight_z for record in records_reverse],
@@ -330,13 +337,15 @@ def patient_record_print_view(request, personal_id):
         # 'all_dates': all_dates_jalali,
         'recent_records': recent_data,
         'last_recom':last_recom.text if last_recom else '',
+        'considerations' : considerations,
+        'recommendations' : recommendations,
+
         # 'last_visits': last_visits,
     }
     context['all_zscores'] = json.dumps(all_zscores)
     context['last_visits'] = json.dumps(last_visits)
     
     return render(request, 'doctors/patient_records_print.html', context)
-
 
 @login_required
 def patients_list_view(request):
