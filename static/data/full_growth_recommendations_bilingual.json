@@ -1,0 +1,491 @@
+{
+    "0-6_months": {
+        "weight": {
+            "low": {
+                "consider": [{
+                        "en": "Evaluate breastfeeding technique and frequency",
+                        "fa": "بررسی تکنیک و دفعات شیردهی"
+                    },
+                    {
+                        "en": "Check for malabsorption, infections, or metabolic issues",
+                        "fa": "بررسی سوءجذب، عفونت‌ها یا اختلالات متابولیک"
+                    },
+                    {
+                        "en": "Assess for growth faltering",
+                        "fa": "ارزیابی اختلال در رشد"
+                    }
+                ],
+                "tell": [{
+                        "en": "Ensure exclusive breastfeeding 8–12 times/day",
+                        "fa": "تغذیه انحصاری با شیر مادر (۸ تا ۱۲ بار در روز) را انجام دهید."
+                    },
+                    {
+                        "en": "Increase skin-to-skin contact",
+                        "fa": "افزایش تماس پوست با پوست"
+                    },
+                    {
+                        "en": "Provide calm, quiet feeding environment",
+                        "fa": "محیطی آرام و ساکت برای تغذیه فراهم کنید."
+                    }
+                ]
+            },
+            "normal": {
+                "consider": [{
+                    "en": "Regular monitoring of weight and feeding adequacy",
+                    "fa": "پایش منظم وزن و کفایت تغذیه"
+                }],
+                "tell": [{
+                        "en": "Continue current feeding method (breast or formula)",
+                        "fa": "روش تغذیه فعلی (شیر مادر یا شیر خشک) را ادامه دهید."
+                    },
+                    {
+                        "en": "Follow up with weight checks",
+                        "fa": "پیگیری وزن در ویزیت‌های آینده"
+                    }
+                ]
+            },
+            "high": {
+                "consider": [{
+                        "en": "Review for overfeeding, especially formula-fed",
+                        "fa": "بررسی تغذیه بیش از حد، به‌ویژه در شیر خشک"
+                    },
+                    {
+                        "en": "Rule out endocrine disorders if persistent",
+                        "fa": "در صورت تداوم، اختلالات غدد درون‌ریز را رد کنید."
+                    }
+                ],
+                "tell": [{
+                        "en": "Reduce feeding volume if excessive",
+                        "fa": "در صورت زیاد بودن حجم شیردهی، آن را کاهش دهید."
+                    },
+                    {
+                        "en": "Avoid early solid food introduction",
+                        "fa": "از شروع زودهنگام غذای کمکی خودداری کنید."
+                    }
+                ]
+            }
+        },
+        "height": {
+            "low": {
+                "consider": [{
+                        "en": "Screen for intrauterine growth restriction",
+                        "fa": "غربالگری محدودیت رشد داخل رحمی"
+                    },
+                    {
+                        "en": "Evaluate thyroid and skeletal health",
+                        "fa": "ارزیابی سلامت تیروئید و اسکلت"
+                    }
+                ],
+                "tell": [{
+                        "en": "Continue regular check-ups",
+                        "fa": "ویزیت های منظم را ادامه دهید"
+                    },
+                    {
+                        "en": "Encourage tummy time and movement",
+                        "fa": "زمان روی شکم بودن و حرکت را تشویق کنید"
+                    }
+                ]
+            },
+            "normal": {
+                "consider": [{
+                    "en": "Continue routine tracking",
+                    "fa": "پایش معمول رشد را ادامه دهید"
+                }],
+                "tell": [{
+                    "en": "Maintain routine care",
+                    "fa": "مراقبت‌های روتین را حفظ کنید."
+                }]
+            },
+            "high": {
+                "consider": [{
+                        "en": "Consider familial tall stature",
+                        "fa": "قد بلند خانوادگی را مدنظر قرار دهید."
+                    },
+                    {
+                        "en": "Rule out disproportionate growth",
+                        "fa": "رشد نامتناسب را بررسی کنید."
+                    }
+                ],
+                "tell": [{
+                    "en": "Reassure caregiver if otherwise normal",
+                    "fa": "با توجه به طبیعی بودن سایر موارد، مشکلی ندارد. مراقبت‌ها را ادامه دهید."
+                }]
+            }
+        },
+        "bmi": {
+            "low": {
+                "consider": [{
+                        "en": "Assess for inadequate calorie intake",
+                        "fa": "بررسی دریافت ناکافی کالری"
+                    },
+                    {
+                        "en": "Rule out feeding difficulties",
+                        "fa": "مشکلات تغذیه‌ای را بررسی کنید"
+                    }
+                ],
+                "tell": [{
+                        "en": "Breastfeed or offer formula more frequently",
+                        "fa": "دفعات تغذیه با شیر مادر یا شیر خشک را افزایش دهید"
+                    },
+                    {
+                        "en": "Monitor diaper count and satiety cues",
+                        "fa": "تعداد پوشک و علائم سیری را بررسی کنید"
+                    }
+                ]
+            },
+            "normal": {
+                "consider": [{
+                    "en": "Routine monitoring",
+                    "fa": "پایش معمول"
+                }],
+                "tell": [{
+                    "en": "Maintain current feeding habits",
+                    "fa": "عادات تغذیه‌ای فعلی را حفظ کنید"
+                }]
+            },
+            "high": {
+                "consider": [{
+                        "en": "Investigate overfeeding patterns",
+                        "fa": "بررسی الگوهای تغذیه بیش از حد"
+                    },
+                    {
+                        "en": "Screen for early adiposity rebound",
+                        "fa": "پایش شروع زودهنگام تجمع چربی"
+                    }
+                ],
+                "tell": [{
+                        "en": "Avoid force-feeding",
+                        "fa": "از اجبار به غذا خوردن خودداری کنید"
+                    },
+                    {
+                        "en": "Do not use bottles for soothing outside feeding needs",
+                        "fa": "از شیشه برای آرام‌سازی به‌جز زمان تغذیه استفاده نکنید"
+                    }
+                ]
+            }
+        }
+    },
+    "6_months_to_2_years": {
+        "weight": {
+            "low": {
+                "consider": [{
+                        "en": "Assess for inadequate complementary feeding",
+                        "fa": "ارزیابی تغذیه مکمل ناکافی"
+                    },
+                    {
+                        "en": "Check for iron-deficiency anemia or chronic illness",
+                        "fa": "بررسی کم‌خونی فقر آهن یا بیماری مزمن"
+                    },
+                    {
+                        "en": "Review feeding practices and food diversity",
+                        "fa": "بررسی شیوه تغذیه و تنوع غذایی"
+                    }
+                ],
+                "tell": [{
+                        "en": "Introduce high-calorie, nutrient-rich foods",
+                        "fa": "غذاهای پرکالری و مغذی را به کودک بدهید."
+                    },
+                    {
+                        "en": "Add olive oil or butter to the food.",
+                        "fa": "روغن زیتون و کره به غذا اضافه کنید."
+                    },
+                    {
+                        "en": "Add nuts powder to the food.",
+                        "fa": "مغزها را به صورت پودر شده به غذا اضافه کنید."
+                    },
+                    {
+                        "en": "Continue breastfeeding along with complementary foods",
+                        "fa": "شیردهی همراه با غذای کمکی را ادامه دهید."
+                    }
+                ]
+            },
+            "normal": {
+                "consider": [{
+                    "en": "Ensure dietary diversity and adequate intake",
+                    "fa": "اطمینان از تنوع و کفایت غذایی"
+                }],
+                "tell": [{
+                    "en": "Continue balanced meals and active play",
+                    "fa": "وعده‌های متعادل و بازی فعال را ادامه دهد."
+                }]
+            },
+            "high": {
+                "consider": [{
+                        "en": "Evaluate excessive snacking and sugary drinks",
+                        "fa": "ارزیابی مصرف زیاد تنقلات و نوشیدنی‌های شیرین"
+                    },
+                    {
+                        "en": "Consider family eating patterns",
+                        "fa": "الگوهای غذایی خانوادگی را در نظر بگیرید"
+                    }
+                ],
+                "tell": [{
+                        "en": "Limit energy-dense snacks and sugary drinks",
+                        "fa": "تنقلات پرانرژی و نوشیدنی‌های شیرین را محدود کنید."
+                    },
+                    {
+                        "en": "Encourage structured mealtimes",
+                        "fa": "وعده‌های غذایی را منظم مصرف کنید."
+                    }
+                ]
+            }
+        },
+        "height": {
+            "low": {
+                "consider": [{
+                        "en": "Evaluate chronic undernutrition or illness",
+                        "fa": "بررسی سوءتغذیه مزمن یا بیماری"
+                    },
+                    {
+                        "en": "Review growth trend since birth",
+                        "fa": "بررسی روند رشد از تولد"
+                    }
+                ],
+                "tell": [{
+                        "en": "Provide protein-rich foods (meat, eggs, legumes)",
+                        "fa": "غذاهای غنی از پروتئین (گوشت، تخم‌مرغ، حبوبات) به کودک بدهید."
+                    },
+                    {
+                        "en": "Encourage daily sunlight exposure",
+                        "fa": "دریافت روزانۀ نور خورشید با ساخت ویتامین D می‌تواند باعث بهبود وضعیت شود."
+                    }
+                ]
+            },
+            "normal": {
+                "consider": [{
+                    "en": "Continue tracking and appropriate stimulation",
+                    "fa": "پایش مستمر و تحریک مناسب"
+                }],
+                "tell": [{
+                    "en": "Promote movement and active play",
+                    "fa": "تحرک و بازی فعال را تشویق کنید."
+                }]
+            },
+            "high": {
+                "consider": [{
+                        "en": "Consider familial traits",
+                        "fa": "ویژگی‌های خانوادگی را در نظر بگیرید"
+                    },
+                    {
+                        "en": "Assess for disproportionate body ratios",
+                        "fa": "بررسی نسبت‌های بدنی نامتناسب"
+                    }
+                ],
+                "tell": [{
+                    "en": "Support physical activity and healthy routines",
+                    "fa": "فعالیت بدنی و روال روزانۀ سالم را ادامه دهد."
+                }]
+            }
+        },
+        "bmi": {
+            "low": {
+                "consider": [{
+                        "en": "Check for poor feeding or illness",
+                        "fa": "بررسی تغذیه ضعیف یا بیماری"
+                    },
+                    {
+                        "en": "Look for psychosocial stressors",
+                        "fa": "عوامل روانی اجتماعی را بررسی کنید"
+                    }
+                ],
+                "tell": [{
+                        "en": "Offer calorie-dense small meals and snacks",
+                        "fa": "وعده‌های کوچک پرکالری و میان‌وعده‌ها ارائه دهید"
+                    },
+                    {
+                        "en": "Minimize distractions during meals",
+                        "fa": "حذف عوامل مزاحم هنگام غذا خوردن"
+                    }
+                ]
+            },
+            "normal": {
+                "consider": [{
+                    "en": "Continue regular growth monitoring",
+                    "fa": "پایش منظم رشد را ادامه دهید"
+                }],
+                "tell": [{
+                    "en": "Encourage healthy routines and physical activity",
+                    "fa": "تشویق به روال‌های سالم و فعالیت بدنی"
+                }]
+            },
+            "high": {
+                "consider": [{
+                        "en": "Review screen time and physical activity level",
+                        "fa": "بررسی مدت زمان تماشای صفحه و سطح فعالیت بدنی"
+                    },
+                    {
+                        "en": "Identify calorie-dense food habits",
+                        "fa": "عادت‌های غذایی پرکالری را شناسایی کنید"
+                    }
+                ],
+                "tell": [{
+                        "en": "Replace sugary snacks with fruits",
+                        "fa": "میان‌وعده‌های شیرین را با میوه جایگزین کنید"
+                    },
+                    {
+                        "en": "Encourage active play at least 1 hour/day",
+                        "fa": "تشویق به بازی فعال حداقل یک ساعت در روز"
+                    }
+                ]
+            }
+        }
+    },
+    "above_2_years": {
+        "weight": {
+            "low": {
+                "consider": [{
+                        "en": "Investigate chronic illness, malabsorption, or neglect",
+                        "fa": "بررسی بیماری مزمن، سوءجذب یا بی‌توجهی"
+                    },
+                    {
+                        "en": "Check developmental and dietary history",
+                        "fa": "بررسی سابقه تغذیه‌ای و تکاملی"
+                    }
+                ],
+                "tell": [{
+                        "en": "Encourage 3 main meals and 2 nutritious snacks",
+                        "fa": "سه وعده اصلی و دو میان‌وعده مغذی مصرف شود."
+                    },
+                    {
+                        "en": "Include fats and proteins in meals",
+                        "fa": "چربی‌ها و پروتئین‌ها در وعده‌های غذایی گنجانده شوند."
+                    }
+                ]
+            },
+            "normal": {
+                "consider": [{
+                    "en": "Reinforce age-appropriate nutrition and exercise",
+                    "fa": "تأکید بر تغذیه و ورزش متناسب با سن"
+                }],
+                "tell": [{
+                    "en": "Maintain balanced meals and active lifestyle",
+                    "fa": "حفظ وعده‌های غذایی متعادل و سبک زندگی فعال"
+                }]
+            },
+            "high": {
+                "consider": [{
+                        "en": "Review emotional eating or sedentary habits",
+                        "fa": "بررسی پرخوری عصبی یا سبک زندگی کم‌تحرک"
+                    },
+                    {
+                        "en": "Screen for obesity risk factors",
+                        "fa": "غربالگری عوامل خطر چاقی"
+                    }
+                ],
+                "tell": [{
+                        "en": "Encourage water instead of sugary drinks",
+                        "fa": "به‌جای نوشیدنی‌های شیرین، آب بنوشد."
+                    },
+                    {
+                        "en": "Involve family in healthy eating practices",
+                        "fa": "خانواده در عادات غذایی سالم مشارکت داشته باشند."
+                    }
+                ]
+            }
+        },
+        "height": {
+            "low": {
+                "consider": [{
+                        "en": "Refer for endocrine evaluation if severe",
+                        "fa": "در موارد شدید، ارجاع برای ارزیابی غدد درون‌ریز"
+                    },
+                    {
+                        "en": "Assess dietary calcium and vitamin D",
+                        "fa": "ارزیابی کلسیم و ویتامین D غذایی"
+                    }
+                ],
+                "tell": [{
+                        "en": "Promote physical activity and healthy sleep",
+                        "fa": "ترویج فعالیت بدنی و خواب سالم"
+                    },
+                    {
+                        "en": "Ensure adequate intake of growth nutrients",
+                        "fa": "مواد مغذی مرتبط با رشد را دریافت کند."
+                    }
+                ]
+            },
+            "normal": {
+                "consider": [{
+                    "en": "Continue growth chart tracking",
+                    "fa": "ادامه پایش نمودار رشد"
+                }],
+                "tell": [{
+                    "en": "Support healthy routines and school readiness",
+                    "fa": "حمایت از روال‌های سالم و آمادگی مدرسه"
+                }]
+            },
+            "high": {
+                "consider": [{
+                        "en": "Evaluate for growth hormone excess if extreme",
+                        "fa": "در صورت شدید بودن، ارزیابی هورمون رشد"
+                    },
+                    {
+                        "en": "Consider constitutional growth pattern",
+                        "fa": "الگوی رشد سرشتی را در نظر بگیرید"
+                    }
+                ],
+                "tell": [{
+                        "en": "Reassure if proportionate and healthy",
+                        "fa": "در صورت تناسب و سلامت، والدین را مطمئن کنید"
+                    },
+                    {
+                        "en": "Monitor periodically",
+                        "fa": "پایش دوره‌ای"
+                    }
+                ]
+            }
+        },
+        "bmi": {
+            "low": {
+                "consider": [{
+                        "en": "Check for disordered eating or chronic disease",
+                        "fa": "بررسی اختلالات خوردن یا بیماری مزمن"
+                    },
+                    {
+                        "en": "Assess energy intake versus expenditure",
+                        "fa": "بررسی دریافت انرژی نسبت به مصرف"
+                    }
+                ],
+                "tell": [{
+                        "en": "Use food charts to plan calorie-adequate meals",
+                        "fa": "استفاده از جدول غذایی برای برنامه‌ریزی وعده‌های پرکالری"
+                    },
+                    {
+                        "en": "Encourage frequent, small meals",
+                        "fa": "تشویق به وعده‌های کوچک و مکرر"
+                    }
+                ]
+            },
+            "normal": {
+                "consider": [{
+                    "en": "Maintain lifestyle habits",
+                    "fa": "حفظ عادات سبک زندگی"
+                }],
+                "tell": [{
+                    "en": "Continue education on healthy food choices",
+                    "fa": "ادامه آموزش انتخاب غذای سالم"
+                }]
+            },
+            "high": {
+                "consider": [{
+                        "en": "Discuss screen time and family dietary patterns",
+                        "fa": "بحث درباره زمان نمایشگر (Screen Time) و الگوهای غذایی خانواده"
+                    },
+                    {
+                        "en": "Consider early intervention programs",
+                        "fa": "در نظر گرفتن برنامه‌های مداخله زودهنگام"
+                    }
+                ],
+                "tell": [{
+                        "en": "Reduce screen time to <1 hour/day",
+                        "fa": "کاهش زمان تماشای صفحه به کمتر از ۱ ساعت در روز"
+                    },
+                    {
+                        "en": "Create family meal routines without screens",
+                        "fa": "ایجاد وعده‌های خانوادگی بدون نمایشگر"
+                    }
+                ]
+            }
+        }
+    }
+}
