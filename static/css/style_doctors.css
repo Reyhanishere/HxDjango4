@@ -189,6 +189,9 @@ button {
     border: solid 1px #888;
 }
 
+
+/* patient list */
+
 #patientsListCont {
     background-color: #eee;
     border-radius: 10px;
@@ -222,4 +225,46 @@ button {
 
 .patientsListItems a:hover {
     background-color: #eee
+}
+
+
+/* print view recommendation */
+
+.recomBox {
+    margin-top: 0.5rem;
+    width: 100%;
+    background-color: transparent;
+    text-align: justify;
+    font-size: 16px;
+    min-height: 30mm;
+    font-family: 'Baloo Bhaijaan 2';
+}
+
+.consider {
+    display: inline-block;
+    background-color: #f6f6f6;
+    ;
+    padding: 0.25rem 1rem;
+    border: solid 1px #999;
+    border-radius: 50px;
+    margin: 0.5rem 0.1rem;
+}
+
+.recom {
+    cursor: pointer;
+    box-shadow: 0 0 2px 0px #999;
+    transition: 0.3s;
+}
+
+.recom:hover {
+    background-color: #fff;
+    box-shadow: 0 0 0px 0px transparent;
+}
+
+.consRecomBoxes {
+    margin: 1rem 0;
+    background-color: #eee;
+    padding: 1rem;
+    border-radius: 10px;
+    font-family: 'Baloo Bhaijaan 2';
 }
