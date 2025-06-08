@@ -204,6 +204,7 @@
 
     <!-- Recommendation Box -->
     <section dir="ltr" class="mt-6" style="margin:2rem 1.5rem;">
+    {% if considerations %}
         <details dir="rtl" class="consRecomBoxes">
             <summary>در نظر داشته باشید:</summary>
             {% for key, value in considerations.items %}
@@ -217,6 +218,8 @@
                 {% endif %}
             {% endfor %}
         </details>
+    {% endif %}
+    {% if recommendations %}
         <details dir="rtl" class="consRecomBoxes">
             <summary>می‌توانید توصیه کنید:</summary>
             <p>با کلیک بر روی هر مورد، آن را به  باکس توصیه‌ها اضافه کنید.</p>
@@ -231,6 +234,8 @@
                 {% endif %}
             {% endfor %}
         </details>
+    {% endif %}
+
         <div dir="" style="background-color: #f2f2f2; border-radius: 10px; padding: 1rem; margin-bottom:1rem; min-height: 50mm">
             <h3 class="text-lg font-semibold mb-2" dir="rtl">توصیۀ پزشک:</h3>
             <!-- <textarea class="w-full h-32 p-4 border rounded" placeholder="Type your notes here..."></textarea> -->
