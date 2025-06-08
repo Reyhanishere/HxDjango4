@@ -329,7 +329,7 @@ def patient_record_print_view(request, personal_id):
         # 'all_zscores': all_zscores,
         # 'all_dates': all_dates_jalali,
         'recent_records': recent_data,
-        'last_recom':last_recom.text,
+        'last_recom':last_recom.text if last_recom else '',
         # 'last_visits': last_visits,
     }
     context['all_zscores'] = json.dumps(all_zscores)
