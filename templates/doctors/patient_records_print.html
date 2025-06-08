@@ -74,6 +74,10 @@
             .icon{
                 display:none;
             }
+            .consRecomBoxes{
+                display:none;
+            }
+
             #miniChartsSection{
                     grid-template-columns: 1fr 1fr;
                     width: 80%;
@@ -97,6 +101,31 @@
             text-align: justify;
             font-size: 16px;
             min-height: 30mm;
+            font-family: 'Baloo Bhaijaan 2';
+        }
+        .consider {
+            display: inline-block;
+            background-color: #f6f6f6;;
+            padding: 0.25rem 1rem;
+            border: solid 1px #999;
+            border-radius: 50px;
+            margin: 0.5rem 0.1rem;
+        }
+        .recom{
+            cursor: pointer;
+            box-shadow: 0 0 2px 0px #999;
+            transition: 0.3s;
+        }
+        .recom:hover{
+            background-color: #fff;
+            box-shadow: 0 0 0px 0px transparent;
+
+        }
+        .consRecomBoxes{
+            margin: 1rem 0;
+            background-color: #eee;
+            padding: 1rem;
+            border-radius: 10px;
             font-family: 'Baloo Bhaijaan 2';
         }
     </style>
@@ -175,6 +204,29 @@
 
     <!-- Recommendation Box -->
     <section dir="ltr" class="mt-6" style="margin:2rem 1.5rem;">
+        <details dir="rtl" class="consRecomBoxes">
+            <summary>در نظر داشته باشید:</summary>
+            {% for key, value in considerations.items %}
+                <h4>{{ key }}:</h4>
+                <div>
+                    {% for v in value %}
+                        <span class="consider">{{v}}</span>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </details>
+        <details dir="rtl" class="consRecomBoxes">
+            <summary>می‌توانید توصیه کنید:</summary>
+            <p>با کلیک بر روی هر مورد، آن را به  باکس توصیه‌ها اضافه کنید.</p>
+            {% for key, value in recommendations.items %}
+                <h4>{{ key }}:</h4>
+                <div>
+                    {% for v in value %}
+                        <span class="consider recom" onclick="addToTextrea.call(this)">{{v}}</span>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </details>
         <div dir="" style="background-color: #f2f2f2; border-radius: 10px; padding: 1rem; margin-bottom:1rem; min-height: 50mm">
             <h3 class="text-lg font-semibold mb-2" dir="rtl">توصیۀ پزشک:</h3>
             <!-- <textarea class="w-full h-32 p-4 border rounded" placeholder="Type your notes here..."></textarea> -->
@@ -182,11 +234,14 @@
                 <p contenteditable="true" class="m-2 p-4" style="text-align: justify; display: none;"></p>
                 <form method="post">
                     {% csrf_token %}
-                    <textarea dir="rtl" name="recommendation_text" class="recomBox" value="" required>{{ last_recom }}</textarea>
+                    <textarea dir="rtl" name="recommendation_text" id="recomTextarea" class="recomBox" value="" required>{{ last_recom }}</textarea>
                     <button type="submit" class="addNew" dir="ltr" style="padding-top: 0.35rem; margin: 0;">&#128190; Save Recommendation</button>
                 </form>
             </div>
         </div>
+
+        {% comment %} {{ recommendations }} {% endcomment %}
+        {% comment %} {{ considerations }} {% endcomment %}
         <button class="addNew" onclick="window.print();" dir="" style="padding-top: 0.35rem">Print &#128424;&#65039;</button>
 
     </section>
@@ -285,4 +340,12 @@
         createMiniChart('heightChart', 'Height (cm)', lastVisits.height, '197, 34, 94');
         createMiniChart('bmiChart', 'BMI', lastVisits.bmi, '34, 94, 197');
     </script>
+    <script>
+        function addToTextrea(){
+            const textarea = document.getElementById('recomTextarea');
+            textarea.value += (textarea.value ? '\n' : '') + this.innerText;
+            textarea.focus();
+        }
+    </script>
+
 {% endblock content %}
