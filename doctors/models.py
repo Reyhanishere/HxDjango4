@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
@@ -37,7 +39,12 @@ class Patient(models.Model):
     birth_date=models.DateField(editable=True, null=True)
     # created_by=models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True)
     created_at= models.DateField(auto_now_add=True, blank=True, null=True) # must turn to false
-
+    def get_age_months(self):
+        today = date.today()
+        days = (today - self.birth_date).days
+        age_months = round((days / 30.4375), 1)
+        return age_months
+        
     def __str__(self):
         return self.name
     
