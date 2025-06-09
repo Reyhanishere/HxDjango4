@@ -165,6 +165,8 @@ def find_LMS_whole(
             LHc, MHc, SHc = head_circumference_data[gender][age_key]
             z_score_hc = calculate_z_score(hc, LHc, MHc, SHc)
             average_z_score_hc = z_score_hc
+            percentile_hc = percentile_calculator(average_z_score_hc)
+
         else:
             average_z_score_hc = 0
             percentile_hc = 50
@@ -241,7 +243,7 @@ def find_LMS_whole(
             },
         "hc": {
             "value": hc,
-            "z_score": average_z_score_hc,
+            "z_score": round(average_z_score_hc, 2),
             "percentile": percentile_hc
             }
         }
