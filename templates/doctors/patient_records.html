@@ -112,7 +112,10 @@
         <div><canvas class="miniCharts" id="heightChart"></canvas></div>
         <div><canvas class="miniCharts" id="weightChart"></canvas></div>
         <div><canvas class="miniCharts" id="bmiChart"></canvas></div>
-        <div><canvas class="miniCharts" id="bmiChart"></canvas></div>
+        {% if patient.get_age_months <= 36%}
+        <div><canvas class="miniCharts" id="hcChart"></canvas></div>
+        {% endif %}
+
 
     </section>
 <p id="Alat"></p>
@@ -127,6 +130,9 @@
                         <th class="" colspan="2">وزن</th>
                         <th class="" colspan="2">قد</th>
                         <th class="" colspan="2">BMI</th>
+                        {% if patient.get_age_months <= 36%}
+                            <th class="" colspan="2">دور سر</th>
+                        {% endif %}
                     </tr>
                     <tr dir="auto">
                         <th class="">Value</th>
@@ -135,6 +141,10 @@
                         <th class="">Z-Score (%)</th>
                         <th class="">Value</th>
                         <th class="">Z-Score (%)</th>
+                        {% if patient.get_age_months <= 36%}
+                        <th class="">Value</th>
+                        <th class="">Z-Score (%)</th>
+                        {% endif %}
 
                     </tr>
                 </thead>
@@ -148,6 +158,17 @@
                         <td class="tCell">{{r.height_z}} ({{r.height_p}})</td>
                         <td class="tCell">{{r.bmi}}</td>
                         <td class="tCell">{{r.bmi_z}} ({{r.bmi_p}})</td>
+                        {% if patient.get_age_months <= 36%}
+                            {% if r.hc == 0 %}
+                                <td class="tCell">-</td>
+                                <td class="tCell">-</td>
+                            {% else %}
+                                <td class="tCell">{{r.hc}}cm</td>
+                                <td class="tCell">{{r.hc_z}} ({{r.hc_p}})</td>
+                            {% endif %}
+                        {% endif %}
+
+
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -212,6 +233,11 @@
                     data: all_zscores.bmi_z,
                     backgroundColor: `#f564a9`,
                     fill: false,
+                },{
+                    label: 'Head Circumference Z-Score',
+                    data: all_zscores.hc_z,
+                    backgroundColor: `#FCC201`,
+                    fill: false,
                 }]
             },
         });
@@ -233,6 +259,11 @@
                 }, {
                     label: 'BMI Z-Score',
                     data: all_zscores.bmi_z,
+                    //backgroundColor: `rgba(34, 94, 197, 0.8)`,
+                    fill: false,
+                },{
+                    label: 'Head Circumference Z-Score',
+                    data: all_zscores.hc_z,
                     //backgroundColor: `rgba(34, 94, 197, 0.8)`,
                     fill: false,
                 }]
@@ -258,6 +289,13 @@
                         backgroundColor: `rgba(${color}, ${miniOpac})`,
                         fill: true,
                     }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            offset: true
+                        }
+                    }
                 }
             });
         };
@@ -265,5 +303,7 @@
         createMiniChart('weightChart', 'Weight (kg)', lastVisits.weight, '34, 197, 94');
         createMiniChart('heightChart', 'Height (cm)', lastVisits.height, '197, 34, 94');
         createMiniChart('bmiChart', 'BMI', lastVisits.bmi, '34, 94, 197');
+        createMiniChart('hcChart', 'HC', lastVisits.hc, '197, 94, 34');
+
     </script>
 {% endblock content %}
