@@ -127,8 +127,9 @@ button{
         text-align: center;
     }
     .usualBtn{
-        margin: 1rem 2rem;
-        grid-column: span 2;
+      margin: 1rem 2rem;
+            grid-column: span 2;
+
         background-color: #eee;
         border-radius: 5px;
         cursor: pointer;
@@ -315,103 +316,120 @@ button{
   </script>
 
   <script>
-  document.getElementById('zscore-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
+  document.getElementById('zscore-form').addEventListener('submit', async function (e) {
+  e.preventDefault();
 
-    const form = e.target;
-    const formData = new FormData(form);
-    const responseBox = document.getElementById('response');
-    const chartCont = document.getElementById('chartCont');
-    const tableBody = document.getElementById('table-body');
-    //const overview = document.getElementById('overview');
-    const modal = document.getElementById('confirmModal');
+  const form = e.target;
+  const formData = new FormData(form);
+  const responseBox = document.getElementById('response');
+  const chartCont = document.getElementById('chartCont');
+  const tableBody = document.getElementById('table-body');
+  const modal = document.getElementById('confirmModal');
 
-    // Clear UI
-    responseBox.innerHTML = '';
-    responseBox.className = 'response-box';
-    chartCont.style.display = 'none';
-    //overview.style.display = 'none';
-    tableBody.innerHTML = '';
+  // Clear UI
+  responseBox.innerHTML = '';
+  responseBox.className = 'response-box';
+  chartCont.style.display = 'none';
+  tableBody.innerHTML = '';
 
-    const sendForm = async (extraData = {}) => {
-      loadingBox.style.display = 'flex';  // Show loading
-      for (const key in extraData) {
-        formData.append(key, extraData[key]);
-      }
-      try {
+  const sendForm = async (extraData = {}) => {
+    loadingBox.style.display = 'flex'; // Show loading
+    for (const key in extraData) {
+      formData.append(key, extraData[key]);
+    }
+    try {
       const response = await fetch(window.location.href, {
         method: 'POST',
         body: formData
       });
-      return await response.json();
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // In case of 400/500 level errors with a JSON error field
+        throw new Error(data.error || 'خطای ناشناخته‌ای رخ داد.');
+      }
+
+      return data;
+    } catch (err) {
+      return { status: 'error', error: err.message };
     } finally {
-      loadingBox.style.display = 'none';  // Always hide after request
+      loadingBox.style.display = 'none'; // Always hide after request
     }
   };
 
-    let result = await sendForm();
+  let result = await sendForm();
 
-    const handleFinalResult = (result) => {
-      if (result.status === 'created' || result.status === 'updated') {
-        responseBox.classList.add('success');
-        responseBox.innerHTML = `<strong>موفقیت آمیز بود.</strong>`;
-        //overview.style.display = 'inline-block';
-        chartCont.style.display = 'block';
+  const handleFinalResult = (result) => {
+    if (result.status === 'created' || result.status === 'updated') {
+      responseBox.classList.add('success');
+      responseBox.innerHTML = `<strong>موفقیت آمیز بود.</strong>`;
+      chartCont.style.display = 'block';
 
-        const finalResult = result.result || result;
-        for (const [metric, data] of Object.entries(finalResult)) {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${metric.charAt(0).toUpperCase() + metric.slice(1)}</td>
-            <td>${data.value}</td>
-            <td class="${data.z_score < -2 ? 'z-score-negative' : 'z-score-positive'}">${data.z_score}</td>
-            <td>${data.percentile}%</td>
-          `;
-          tableBody.appendChild(row);
-        }
-        window.scrollBy({ top: 500, behavior: 'smooth' });
-      } else if (result.status === 'error') {
+      const finalResult = result.result || result;
+      for (const [metric, data] of Object.entries(finalResult)) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${metric.charAt(0).toUpperCase() + metric.slice(1)}</td>
+          <td>${data.value}</td>
+          <td class="${data.z_score < -2 ? 'z-score-negative' : 'z-score-positive'}">${data.z_score}</td>
+          <td>${data.percentile}%</td>
+        `;
+        tableBody.appendChild(row);
+      }
+      window.scrollBy({ top: 500, behavior: 'smooth' });
+
+      } else if (result.status === 'exists') {
+        responseBox.classList.add('warning');
+        responseBox.innerHTML = `<strong>هشدار:</strong> ${result.message}`;
+      } else if (result.status === 'error' || result.error) {
         responseBox.classList.add('error');
-        responseBox.innerHTML = `<strong>خطا:</strong> <pre>${result.error}</pre>`;
+        responseBox.innerHTML = `<strong>خطا:</strong> <p>${result.error}</p>`;
+      } else {
+        responseBox.classList.add('error');
+        responseBox.innerHTML = `<strong>خطای ناشناخته‌ای رخ داد.</strong>`;
       }
     };
 
-    if (result.status === 'exists') {
-      // Show modal
-      modal.style.display = 'flex';
-
-      const confirmAdd = document.getElementById('confirmAdd');
-      const confirmUpdate = document.getElementById('confirmUpdate');
-      const confirmCancel = document.getElementById('confirmCancel');
-
-      const cleanup = () => {
-        modal.style.display = 'none';
-        confirmAdd.onclick = null;
-        confirmUpdate.onclick = null;
-        confirmCancel.onclick = null;
-      };
-
-      confirmAdd.onclick = async () => {
-        cleanup();
-        const forcedResult = await sendForm({ force: '1' });
-        handleFinalResult(forcedResult);
-      };
-
-      confirmUpdate.onclick = async () => {
-        cleanup();
-        const updatedResult = await sendForm({ update: '1' });
-        handleFinalResult(updatedResult);
-      };
-
-      confirmCancel.onclick = () => {
-        cleanup();
-        responseBox.classList.add('error');
-        responseBox.innerHTML = `<strong>لغو شد.</strong>`;
-      };
-    } else {
       handleFinalResult(result);
-    }
-  });
+
+
+  if (result.status === 'exists') {
+    // Show modal
+    modal.style.display = 'flex';
+
+    const confirmAdd = document.getElementById('confirmAdd');
+    const confirmUpdate = document.getElementById('confirmUpdate');
+    const confirmCancel = document.getElementById('confirmCancel');
+
+    const cleanup = () => {
+      modal.style.display = 'none';
+      confirmAdd.onclick = null;
+      confirmUpdate.onclick = null;
+      confirmCancel.onclick = null;
+    };
+
+    confirmAdd.onclick = async () => {
+      cleanup();
+      const forcedResult = await sendForm({ force: '1' });
+      handleFinalResult(forcedResult);
+    };
+
+    confirmUpdate.onclick = async () => {
+      cleanup();
+      const updatedResult = await sendForm({ update: '1' });
+      handleFinalResult(updatedResult);
+    };
+
+    confirmCancel.onclick = () => {
+      cleanup();
+      responseBox.classList.add('error');
+      responseBox.innerHTML = `<strong>لغو شد.</strong>`;
+    };
+  } else {
+    handleFinalResult(result);
+  }
+});
   </script>
 
 {% endblock content %}
