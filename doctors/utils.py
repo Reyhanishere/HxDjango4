@@ -161,7 +161,7 @@ def find_LMS_whole(
         average_z_score_w = z_score_w
         average_z_score_he = z_score_he
 
-        if int(hc) and hc!=0 and age_months<=36:            
+        if hc and hc!=0 and age_months<=36:            
             LHc, MHc, SHc = head_circumference_data[gender][age_key]
             z_score_hc = calculate_z_score(hc, LHc, MHc, SHc)
             average_z_score_hc = z_score_hc
@@ -185,7 +185,7 @@ def find_LMS_whole(
                 LB_lower, MB_lower, SB_lower = bmi_data[gender][lower_age]
                 LB_upper, MB_upper, SB_upper = bmi_data[gender][upper_age]
         
-            if int(hc) and hc!=0 and age_months<=36:            
+            if hc and hc!=0 and age_months<=36:            
                 LHc_lower, MHc_lower, SHc_lower = head_circumference_data[gender][lower_age]
                 LHc_upper, MHc_upper, SHc_upper = head_circumference_data[gender][upper_age]
             
@@ -212,7 +212,7 @@ def find_LMS_whole(
             average_z_score_b = 0
             percentile_b = 50
 
-        if int(hc) and hc!=0 and age_months<=36:            
+        if hc and hc!=0 and age_months<=36:            
             z_score_lower_hc = calculate_z_score(hc, LHc_lower, MHc_lower, SHc_lower)
             z_score_upper_hc = calculate_z_score(hc, LHc_upper, MHc_upper, SHc_upper)
             average_z_score_hc = round(((z_score_lower_hc + z_score_upper_hc) / 2), 2)
