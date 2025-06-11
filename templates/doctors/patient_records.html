@@ -163,7 +163,7 @@
                                 <td class="tCell">-</td>
                                 <td class="tCell">-</td>
                             {% else %}
-                                <td class="tCell">{{r.hc}}cm</td>
+                                <td class="tCell">{{ r.hc|default_if_none:"- " }}cm</td>
                                 <td class="tCell">{{r.hc_z}} ({{r.hc_p}})</td>
                             {% endif %}
                         {% endif %}
