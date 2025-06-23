@@ -15,14 +15,25 @@ class Company(models.Model):
         return self.user.username
 
 class Doctor(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(
         max_length=100,
     )
     title = models.CharField(max_length=200, null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True)
+    # Settings
+    z_score_count = models.PositiveSmallIntegerField(blank=False, null=False, default=20)
+    mini_charts_data_count = models.PositiveSmallIntegerField(blank=False, null=False, default=10)
+    table_rows_count = models.PositiveSmallIntegerField(blank=False, null=False, default=5)
+    default_recommendation = models.JSONField(blank=True, null=True)
+    is_who = models.BooleanField(blank=False, null=False, default=False)
+    redirect_to_print = models.BooleanField(blank=False, null=False, default=False)
+    is_girl = models.BooleanField(blank=False, null=False, default=False)
+    is_date_reverse = models.BooleanField(blank=False, null=False, default=False)
+
     def __str__(self):
         return f"{self.user.username} | {self.company.user.username}"
+
 
 class Patient(models.Model):
     name = models.CharField(("نام"), max_length=100, null=False, blank=False)
@@ -35,16 +46,15 @@ class Patient(models.Model):
         blank=False,
         default='پسر'
     )
-    # birth_date=models.DateField(editable=True, null=True)
     birth_date=models.DateField(editable=True, null=True)
-    # created_by=models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True)
+    created_by=models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True)
     created_at= models.DateField(auto_now_add=True, blank=True, null=True) # must turn to false
     def get_age_months(self):
         today = date.today()
         days = (today - self.birth_date).days
         age_months = round((days / 30.4375), 1)
         return age_months
-        
+
     def __str__(self):
         return self.name
     
@@ -64,6 +74,9 @@ class Record(models.Model):
     hc = models.FloatField(('Head Circumference Value'), null=True, blank=True, default=0)
     hc_z = models.FloatField(('Head Circumference Z Score'), null=True, blank=True, default=0)
     hc_p = models.FloatField(('Head Circumference Percentile'), null=True, blank=True, default=0)
+    wl_p50 = models.FloatField(('Weight for Length P50 Value'), null=True, blank=True, default=0)
+    wl_z = models.FloatField(('Weight for Length Z Score'), null=True, blank=True, default=0)
+    wl_p = models.FloatField(('Weight for Length Percentile'), null=True, blank=True, default=0)
 
     gender = models.CharField(max_length=5, null=False, blank=True)
     age_months = models.FloatField(('Age in monthes'), null=False, blank=False, default=0)
@@ -79,7 +92,7 @@ class Record(models.Model):
 
     def __str__(self):
         return f"{self.patient.name} {self.record_date.year-2000}/{self.record_date.month}/{self.record_date.day} | {self.doctor.name}"
-
+    
 class Recommendation(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
