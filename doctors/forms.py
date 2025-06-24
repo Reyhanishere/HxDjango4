@@ -54,20 +54,35 @@ class IDCheckForm(forms.Form):
 
 
 class NewPatientForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.is_default_girl = kwargs.pop('is_default_girl', None)
+        self.is_date_reverse = kwargs.pop('is_date_reverse', None)
+        super().__init__(*args, **kwargs)
+        if self.is_default_girl:
+            self.fields['gender'].initial='دختر'
+        if self.is_date_reverse:
+            self.fields['jalali_birth_date'].help_text = 'مثلا 4/5/1404'
+
     name = forms.CharField(label="نام و نام خانوادگی",
                                   widget=forms.TextInput(attrs={'dir': 'rtl', 'autocomplete':'off'}))
-    jalali_birth_date = forms.CharField(label="تاریخ تولد", help_text='مثلا 4/5/1404',widget=forms.TextInput(attrs={'dir': 'ltr', 
+    
+    jalali_birth_date = forms.CharField(label="تاریخ تولد", help_text='مثلا 1404/5/4',widget=forms.TextInput(attrs={'dir': 'ltr', 
                                                                 'autocomplete':'off'}),
                                                                 )
     class Meta:
         model = Patient
         fields = ["name", "gender", "jalali_birth_date"]
 
+
     def clean_jalali_birth_date(self):
         jalali_str = self.cleaned_data['jalali_birth_date']
         try:
             # Split and convert
-            day, month, year = map(int, jalali_str.split('/'))
+            if self.is_date_reverse:
+                day, month, year = map(int, jalali_str.split('/'))
+            else:
+                year, month, day = map(int, jalali_str.split('/'))
+
             if not (1 <= month <= 12):
                 raise forms.ValidationError("ماه وارد شده معتبر نیست.")
             elif not(1 <= day <= 31):
