@@ -1,7 +1,10 @@
+from datetime import date, timedelta
 import json, math
+import os
 
 from django.http import JsonResponse
-import os
+
+from .templatetags.tags import *
 
 def load_pedi_growth_recommendations():
     json_file_path = os.path.join(
@@ -99,6 +102,29 @@ bmi_data = load_pedi_bmi_data()
 
 #### ------------------ ####
 
+def load_wl_data():
+    json_file_path = os.path.join(
+        os.path.dirname(__file__), "../static/data/wfl_LMSP50_45-103.json"
+    )
+    with open(json_file_path, "r") as file:
+        return json.load(file)
+
+
+wl_data = load_wl_data()
+
+#### ------------------ ####
+
+def load_wps_data():
+    json_file_path = os.path.join(
+        os.path.dirname(__file__), "../static/data/weight_Ps_24-240.json"
+    )
+    with open(json_file_path, "r") as file:
+        return json.load(file)
+
+
+wps_data = load_wps_data()
+
+#### ------------------ ####
 
 def load_z_score_table():
     json_file_path = os.path.join(
@@ -130,6 +156,84 @@ def percentile_calculator(z_score):
         percentile = round(float(percentile) * 100, 1)
     return percentile
 
+def to_five(value):
+    value *= 10
+    value=round(value)
+    while value % 5 != 0:
+        value += 1
+    return value / 10
+
+def calculate_age_extended(birth_date):
+    today = date.today()
+    
+    years = today.year - birth_date.year
+    months = today.month - birth_date.month
+    days = today.day - birth_date.day
+    
+    # Adjust for negative months/days
+    if days < 0:
+        months -= 1
+        # Get last day of previous month
+        last_month = today.replace(day=1) - timedelta(days=1)
+        days += last_month.day
+    
+    if months < 0:
+        years -= 1
+        months += 12
+
+    if years==0:
+        year_text=''
+    else:
+        year_text='{} سال و '.format(years)
+
+    if months==0:
+        month_text=''
+    else:
+        month_text='{} ماه و '.format(months)
+    if days==0:
+        day_text=''
+    else:
+        day_text='{} روز'.format(days)
+    return year_text + month_text + day_text
+
+
+def set_is_wl(last_record):
+    is_wl=True
+    last_height = last_record.height
+    if last_height > 103.5 or last_height < 45:
+        is_wl = False
+    return is_wl
+
+def set_recent_data(records, age, is_wl):
+    final_list = []
+    for r in records:
+        data_temp_dict = {}
+        data_temp_dict['date'] = j_date(r.record_date, 'name, long')
+        data_temp_dict['weight'] = r.weight
+        data_temp_dict['weight_z'] = r.weight_z
+        data_temp_dict['weight_p'] = r.weight_p
+
+        data_temp_dict['height'] = r.height
+        data_temp_dict['height_z'] = r.height_z
+        data_temp_dict['height_p'] = r.height_p
+
+        data_temp_dict['hc'] = r.hc
+        data_temp_dict['hc_z'] = r.hc_z
+        data_temp_dict['hc_p'] = r.hc_p
+        
+        if age > 24:
+            data_temp_dict['bmi'] = r.bmi
+            data_temp_dict['bmi_z'] = r.bmi_z
+            data_temp_dict['bmi_p'] = r.bmi_p
+
+        if is_wl:
+            data_temp_dict['wl_p50'] = r.wl_p50
+            data_temp_dict['wl_z'] = r.wl_z
+            data_temp_dict['wl_p'] = r.wl_p
+
+        final_list.append(data_temp_dict)
+    return final_list
+
 def find_LMS_whole(
     weight,
     height,
@@ -140,14 +244,46 @@ def find_LMS_whole(
     age_key = str(age_months)
     bmi = weight / ((height / 100) ** 2)
     bmi = round(bmi, 2)
+    length = to_five(height) #####################
 
+    if length >= 45 and length < 104: ######
+        if str(length) in wl_data[gender]:
+            LWL, MWL, SWL, P50WL = wl_data[gender][str(length)]
+            z_score_wl = calculate_z_score(weight, LWL, MWL, SWL)
+            average_z_score_wl = z_score_wl
+            percentile_wl = percentile_calculator(average_z_score_wl)
+
+        else:
+            lower_length = length - 0.5
+            upper_length = length + 0.5
+            if str(lower_length) in wl_data[gender] and str(upper_length) in wl_data[gender]:
+                LWL_lower, MWL_lower, SWL_lower, P50WL_lower = wl_data[gender][str(lower_length)]
+                LWL_upper, MWL_upper, SWL_upper, P50WL_upper = wl_data[gender][str(upper_length)]
+                z_score_lower_wl = calculate_z_score(weight, LWL_lower, MWL_lower, SWL_lower)
+                z_score_upper_wl = calculate_z_score(weight, LWL_upper, MWL_upper, SWL_upper)
+                P50WL = round(((P50WL_lower + P50WL_upper) / 2), 2)
+                average_z_score_wl = round(((z_score_lower_wl + z_score_upper_wl) / 2), 2)
+                percentile_wl = percentile_calculator(average_z_score_wl)
+            else:
+                P50WL = None
+                average_z_score_wl = None
+                percentile_wl = None
+    else:
+        P50WL = None
+        average_z_score_wl = None
+        percentile_wl = None
+    
     if age_key in weight_data[gender]:
         LW, MW, SW = weight_data[gender][age_key]
         z_score_w = calculate_z_score(weight, LW, MW, SW)
         
-    if age_key in length_data[gender]:
-        LHe, MHe, SHe = length_data[gender][age_key]
-        z_score_he = calculate_z_score(height, LHe, MHe, SHe)
+        
+        if age_key in length_data[gender]:
+            LHe, MHe, SHe = length_data[gender][age_key]
+            z_score_he = calculate_z_score(height, LHe, MHe, SHe)
+
+            average_z_score_w = z_score_w
+            average_z_score_he = z_score_he
 
         if age_months>=24:
             LB, MB, SB = bmi_data[gender][age_key]
@@ -158,9 +294,6 @@ def find_LMS_whole(
             average_z_score_b = 0
             percentile_b = 50
 
-        average_z_score_w = z_score_w
-        average_z_score_he = z_score_he
-
         if hc and hc!=0 and age_months<=36:            
             LHc, MHc, SHc = head_circumference_data[gender][age_key]
             z_score_hc = calculate_z_score(hc, LHc, MHc, SHc)
@@ -168,6 +301,8 @@ def find_LMS_whole(
             percentile_hc = percentile_calculator(average_z_score_hc)
 
         else:
+            if hc==None:
+                hc = 0
             average_z_score_hc = 0
             percentile_hc = 50
 
@@ -181,6 +316,7 @@ def find_LMS_whole(
             
             LHe_lower, MHe_lower, SHe_lower = length_data[gender][lower_age]
             LHe_upper, MHe_upper, SHe_upper = length_data[gender][upper_age]
+            
             if age_months>=24:
                 LB_lower, MB_lower, SB_lower = bmi_data[gender][lower_age]
                 LB_upper, MB_upper, SB_upper = bmi_data[gender][upper_age]
@@ -218,6 +354,8 @@ def find_LMS_whole(
             average_z_score_hc = round(((z_score_lower_hc + z_score_upper_hc) / 2), 2)
             percentile_hc = percentile_calculator(average_z_score_hc)
         else:
+            if hc==None: ################
+                hc = 0
             average_z_score_hc = 0
             percentile_hc = 50
 
@@ -225,26 +363,34 @@ def find_LMS_whole(
     percentile_w = percentile_calculator(average_z_score_w)
     percentile_he = percentile_calculator(average_z_score_he)
 
-    return JsonResponse(
-        {"weight": {
+    response = {
+        "Weight": {
             "value": weight,
             "z_score": round(average_z_score_w, 2),
             "percentile": percentile_w
             },
-        "height": {
+        "Height": {
             "value": height,
             "z_score": round(average_z_score_he, 2),
             "percentile": percentile_he
             },
-        "bmi": {
+        "BMI": {
             "value": bmi,
             "z_score": round(average_z_score_b, 2),
             "percentile": percentile_b
             },
-        "hc": {
+        }
+    if P50WL:
+        response["Weight for Length"] = {
+            "value": round(P50WL,2),
+            "z_score": round(average_z_score_wl, 2)if average_z_score_wl else None,
+            "percentile": percentile_wl
+            }
+    if hc and hc!=0 and age_months<=36:
+        response["Head Circumference"] = {
             "value": hc,
             "z_score": round(average_z_score_hc, 2),
             "percentile": percentile_hc
             }
-        }
-    )
+        
+    return JsonResponse(response)
