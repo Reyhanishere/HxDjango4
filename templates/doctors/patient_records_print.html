@@ -151,9 +151,11 @@
             <a href="{% url 'zscore' patient.personal_id %}" class="addNew">ثبت دادۀ جدید برای کودک</a>
             <a href="{% url 'patients_list' %}" class="addNew">لیست بیماران</a>
             <button class="addNew" onclick="window.print();" dir="ltr">Print	&#128424;&#65039;</button>
+            
+        <p id="ehsan"></p>
 
         </p>
-        
+
     </section>
 
     <!-- Main Chart -->
@@ -165,10 +167,21 @@
     <section id="miniChartsSection" style="" class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div><canvas class="miniCharts" id="heightChart"></canvas></div>
         <div><canvas class="miniCharts" id="weightChart"></canvas></div>
-        <div><canvas class="miniCharts" id="bmiChart"></canvas></div>
-        {% if patient.get_age_months <= 36%}
+        {% if patient.get_age_months <= 36 %}
             <div><canvas class="miniCharts" id="hcChart"></canvas></div>
-        {% endif %}
+            {% if is_wl %}
+                <div><canvas class="miniCharts" id="wflChart"></canvas></div>
+            {% elif patient.get_age_months >= 24 %}
+                <div><canvas class="miniCharts" id="bmiChart"></canvas></div>
+            {% endif %}
+        {% else %}
+            {% if is_wl %}
+                <div><canvas class="miniCharts" id="wflChart"></canvas></div>
+            {% endif %}
+            {% if patient.get_age_months >= 24 %}
+                <div><canvas class="miniCharts" id="bmiChart"></canvas></div>
+            {% endif %}
+        {% endif %}        
 
     </section>
 <p id="Alat"></p>
@@ -301,8 +314,6 @@
 
         const all_zscores = JSON.parse(`{{ all_zscores|escapejs }}`);
 
-        // Sample Chart.js data for demo
-
         if (all_zscores.labels.length < 3) { 
             const mainChart = new Chart(document.getElementById('mainChart'), {
             type: 'bar',
@@ -354,23 +365,33 @@
                 },{
                     label: 'Head Circumference Z-Score',
                     data: all_zscores.hc_z,
+                    //backgroundColor: `rgba(34, 94, 197, 0.8)`,
+                    fill: false,
+                },{
+                    label: 'Weight for Length',
+                    data: all_zscores.wl_z,
+                    //backgroundColor: `rgba(34, 94, 197, 0.8)`,
                     fill: false,
                 }]
             },
         });
         }
         const lastVisits = JSON.parse(`{{ last_visits|escapejs }}`);
+        const isWl = `{{ is_wl|yesno:"true, false" }}`
+
         var miniType = 'line'
         var miniOpac = 0.2
-        if (lastVisits.labels.length < 2){
-            miniType = 'bar'
-            miniOpac = 0.8
-        }
-        const createMiniChart = (ctxId, label, data, color) => {
+
+        const createMiniChart = (ctxId, label, data, labels, color) => {
+            //if (data.filter(item => item !== null).length < 2){
+            if (data.filter(Boolean).length < 2) {
+                miniType = 'bar'
+                miniOpac = 0.8
+            }
             return new Chart(document.getElementById(ctxId), {
                 type: miniType,
                 data: {
-                    labels: lastVisits.labels,
+                    labels: labels,
                     datasets: [{
                         label,
                         data,
@@ -378,14 +399,89 @@
                         backgroundColor: `rgba(${color}, ${miniOpac})`,
                         fill: true,
                     }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            offset: true
+                        },
+                        x: {
+                            offset: true
+                        }
+                    }
                 }
             });
         };
+        const createWfLChart = (ctxId, data_one, data_two, labels) => {
+            return new Chart(document.getElementById(ctxId), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    
+                    datasets: [
+                        {
+                            type: 'bar',
+                            label: 'Kid Weight for Length',
+                            data: data_one,
 
-        createMiniChart('weightChart', 'Weight (kg)', lastVisits.weight, '34, 197, 94');
-        createMiniChart('heightChart', 'Height (cm)', lastVisits.height, '197, 34, 94');
-        createMiniChart('bmiChart', 'BMI', lastVisits.bmi, '34, 94, 197');
-        createMiniChart('hcChart', 'HC', lastVisits.hc, '197, 94, 34');
+                            fill: true,
+                            order: 2
+
+                        },
+                        {
+                            type: 'line',
+                            label: 'Weight P50 for Length',
+                            data: data_two,
+
+                            fill: true,
+                            order: 1,
+                        },
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            offset: true
+                        },
+                        x: {
+                            offset: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                // This more specific font property overrides the global property
+                                font: {
+                                    family: '',
+                                    weight: '600'
+                                }
+                            },
+                            
+                        }
+                    }
+                }
+            });
+        };
+        createMiniChart('weightChart', 'Weight (kg)', lastVisits.weight, lastVisits.labels, '34, 197, 94');
+        createMiniChart('heightChart', 'Height (cm)', lastVisits.height,lastVisits.labels, '197, 34, 94',);
+
+        {% if patient.get_age_months <= 36 %}
+            createMiniChart('hcChart', 'HC', lastVisits.hc,lastVisits.labels, '197, 94, 34');
+            {% if is_wl %}
+                createWfLChart('wflChart', lastVisits.weight, lastVisits.wl_p50, lastVisits.height);
+            {% elif patient.get_age_months >= 24 %}
+                createMiniChart('bmiChart', 'BMI', lastVisits.bmi, lastVisits.labels, '34, 94, 197');
+                
+            {% endif %}
+        {% else %}
+            {% if is_wl %}
+                createWfLChart('wflChart', lastVisits.weight, lastVisits.wl_p50, lastVisits.height);
+            {% endif %}
+            {% if patient.get_age_months >= 24 %}
+                createMiniChart('bmiChart', 'BMI', lastVisits.bmi, lastVisits.labels, '34, 94, 197');
+            {% endif %}
+        {% endif %}
+        
 
     </script>
     <script>
