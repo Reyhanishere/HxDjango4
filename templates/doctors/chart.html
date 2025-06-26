@@ -1,0 +1,126 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    #mainChart{
+        width: 500px;
+    }
+    #hi{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 900px;
+    }
+    
+</style>
+<div id='hii'>
+<canvas id="mainChart" dir="rtl" width=""></canvas>
+<div id="d">{{kid_data}}</div>
+</div>
+<script>
+    // const agemoss = JSON.parse("{{ agemos|escapejs }}")
+    const kidData = JSON.parse(`{{ kid_data|escapejs }}`);
+    const agemos = JSON.parse(`{{ agemos|escapejs }}`);
+    const p3 = JSON.parse("{{ p3|escapejs }}")
+    const p5 = JSON.parse("{{ p5|escapejs }}")
+    const p10 = JSON.parse("{{ p10|escapejs }}")
+    const p25 = JSON.parse("{{ p25|escapejs }}")
+    const p50 = JSON.parse("{{ p50|escapejs }}")
+    const p75 = JSON.parse("{{ p75|escapejs }}")
+    const p90 = JSON.parse("{{ p90|escapejs }}")
+    const p95 = JSON.parse("{{ p95|escapejs }}")
+    const p97 = JSON.parse("{{ p97|escapejs }}")
+
+    //document.getElementById('hi').innerHTML = agemoss
+
+    const mainChart = new Chart(document.getElementById('mainChart'), {
+            type: 'bar',
+            data: {
+                labels: agemos,
+                datasets: [{
+                    type: 'line',
+                    label: 'P3',
+                    data: p3,
+                    //backgroundColor: `rgba(34, 197, 94, 0.8)`,
+                    fill: false,
+                }, {
+                    type: 'line',
+                    label: 'P5',
+                    data: p5,
+                    //backgroundColor: `rgba(197, 34, 94, 0.8)`,
+                    fill: false,
+                }, {
+                    type: 'line',
+                    label: 'P10',
+                    data: p10,
+                    //backgroundColor: `rgba(34, 94, 197, 0.8)`,
+                    fill: false,
+                },{
+                    type: 'line',
+                    label: 'P25',
+                    data: p25,
+                    //backgroundColor: `rgba(34, 94, 197, 0.8)`,
+                    fill: false,
+                },{
+                    type: 'line',
+
+                    label: 'P50',
+                    data: p50,
+                    //backgroundColor: `rgba(34, 94, 197, 0.8)`,
+                    fill: false,
+                },{
+                    type: 'line',
+
+                    label: 'P75',
+                    data: p75,
+                    //backgroundColor: `rgba(34, 94, 197, 0.8)`,
+                    fill: false,
+                },{
+                    type: 'line',
+
+                    label: 'P90',
+                    data: p90,
+                    //backgroundColor: `rgba(34, 94, 197, 0.8)`,
+                    fill: false,
+                },{
+                    type: 'line',
+
+                    label: 'P95',
+                    data: p95,
+                    //backgroundColor: `rgba(34, 94, 197, 0.8)`,
+                    fill: false,
+                },{
+                    type: 'line',
+
+                    label: 'P97',
+                    data: p97,
+                    //backgroundColor: `rgba(34, 94, 197, 0.8)`,
+                    fill: false,
+                },{
+                    type: 'bar',
+                    label: 'L',
+                    data: kidData,
+                    //backgroundColor: `rgba(94, 94, 94, 0.8)`,
+                    fill: false,}
+                    ]
+            },
+            
+            options: {
+                    scales: {
+                        y: {
+                            beginAtZero : false,
+                            offset: false
+                        },
+                        x: {
+                            offset: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'بر اساس صدک‌های رشدی'
+                        }
+                    },
+                }
+        });
+</script>
