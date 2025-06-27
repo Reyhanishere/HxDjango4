@@ -93,7 +93,11 @@ def patient_record_view(request, personal_id):
         last_visits['bmi'] = [record.bmi for record in last_records]
     
     recoms = Recommendation.objects.filter(doctor=doctor, patient=patient).order_by('-add_date')[:5]
-    
+
+    alt_chart_records = Record.objects.filter(patient=patient).order_by('-record_date')[:doctor.z_score_count]
+    gender = '1' if patient.gender == 'پسر' else '2'
+    alternative_chart = create_alt_chart(alt_chart_records, gender, wps_data)
+
     context = {
         'doctor': doctor,
         'patient': patient,
@@ -104,6 +108,7 @@ def patient_record_view(request, personal_id):
     }
     context['all_zscores'] = json.dumps(all_zscores)
     context['last_visits'] = json.dumps(last_visits)
+    context['alt_chart'] = json.dumps(alternative_chart)
 
     return render(request, 'doctors/patient_records.html', context)
 
