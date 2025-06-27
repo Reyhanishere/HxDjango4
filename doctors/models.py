@@ -84,7 +84,10 @@ class Record(models.Model):
     record_date=models.DateTimeField(editable=True,) # All to DateField
     record_add_date=models.DateTimeField(auto_now_add=True, blank=True, null=True) # must turn to false
     record_edit_date=models.DateTimeField(auto_now=True, editable=True, blank=True, null=True)
-
+    
+    class Meta:
+        ordering = ['-record_date']
+    
     def save(self, *args, **kwargs):
         if not self.id:
             self.record_add_date = timezone.now()
