@@ -394,3 +394,75 @@ def find_LMS_whole(
             }
         
     return JsonResponse(response)
+    
+# -------------------- #
+
+def create_alt_chart (records, gender, wps_data,):
+    reversible_records = list(records)
+    reversible_records.reverse()
+    last_rec = reversible_records[-1]
+    first_rec = reversible_records[0]
+
+    agemos = wps_data[gender]['agemos']
+
+    first_age = first_rec.age_months
+    last_age = last_rec.age_months
+    if first_age % 1 != 0.5:
+        first_age -= 0.5
+    if last_age % 1 != 0.5:
+        last_age -= 0.5
+    
+    first_ind = agemos.index(first_age) - 3
+    if first_ind < 0:
+        first_ind = 0
+
+    last_ind = agemos.index(last_age) + 7
+    if last_age > 233.5:
+        last_ind=agemos.index(240)
+
+    
+    agemos = agemos[first_ind:last_ind]
+    p3  = wps_data[gender]['P3'][first_ind:last_ind]
+    p5  = wps_data[gender]['P5'][first_ind:last_ind]
+    p10 = wps_data[gender]['P10'][first_ind:last_ind]
+    p25 = wps_data[gender]['P25'][first_ind:last_ind]
+    p50 = wps_data[gender]['P50'][first_ind:last_ind]
+    p75 = wps_data[gender]['P75'][first_ind:last_ind]
+    p90 = wps_data[gender]['P90'][first_ind:last_ind]
+    p95 = wps_data[gender]['P95'][first_ind:last_ind]
+    p97 = wps_data[gender]['P97'][first_ind:last_ind]
+
+    ages = []
+    for i in reversible_records:
+        if i.age_months in wps_data[gender]['agemos']:
+            ages.append(i.age_months)
+        else:
+            ages.append(i.age_months-.5)
+
+    weights= []
+    co = 0
+    for i in agemos:
+        if i in ages:
+            weights.append(reversible_records[co].weight)
+            co+=1
+        else:
+            weights.append('-')
+
+    # print(agemos)
+    # print(ages)
+    # print(weights)
+
+    result = {
+        'kid_data':json.dumps(weights),
+        'agemos' : agemos,
+        'p3': p3,
+        'p5': p5,
+        'p10': p10,
+        'p25': p25,
+        'p50': p50,
+        'p75': p75,
+        'p90': p90,
+        'p95': p95,
+        'p97': p97,
+    }
+    return result
