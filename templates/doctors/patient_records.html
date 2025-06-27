@@ -8,7 +8,7 @@
 
 {% block imports %}    
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static './scripts/ChartJS.js' %}"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     
     <style>
@@ -83,6 +83,37 @@
         font-size: 14px;
 
     }
+
+    .chart-toggle-btn {
+        background: linear-gradient(135deg, #6e8efb, #a777e3);
+        width: 180px;
+        text-align: center;
+        color: white;
+        border: none;
+        padding: 7px 10px;
+        border-radius: 25px;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        line-height: normal;
+        margin-top: 20px;
+    }
+
+    .chart-toggle-btn:hover {
+        background: linear-gradient(135deg, #5d7de8, #9666d3);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .chart-toggle-btn:active {
+        transform: translateY(0);
+    }
+
+    .toggle-icon {
+        font-size: 18px;
+    }
+
     </style>
 {% endblock imports %}
 
@@ -100,10 +131,14 @@
             <a href="print/" class="addNew">صفحۀ چاپ اطلاعات</a>
         </p>
     </section>
-
+    <span id="chartToggle" class="chart-toggle-btn">
+    ⇄ <span class="toggle-icon">نمایش Z Scoreها</span>
+    </span>
     <!-- Main Chart -->
-    <section id="mainChartSection" style="">
+    <section id="mainChartSection" style="display:grid">
         <canvas id="mainChart" dir="rtl" width=""></canvas>
+        <canvas id="altChart" dir="rtl" width=""></canvas>
+
     </section>
 
     <!-- Mini Charts -->
@@ -123,7 +158,6 @@
 
 
     </section>
-<p id="Alat"></p>
     <!-- Table Section -->
     <section>
         <h2 class="text-xl font-semibold mt-6 mb-2">Z-Scoreها و مقادیر اندازه‌گیری شده در {{recent_records|length}} ویزیت اخیر
@@ -229,6 +263,36 @@
 
     </script>
     <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleButton = document.getElementById('chartToggle');
+        const mainChart = document.getElementById('mainChart');
+        const altChart = document.getElementById('altChart');
+        mainChart.style.display = 'none';
+        altChart.style.display = 'block';
+        // Initialize state - mainChart visible, altChart hidden
+        let isMainChartVisible = false;
+        
+        toggleButton.addEventListener('click', function() {
+            if (isMainChartVisible) {
+            // Switch to altChart
+                mainChart.style.display = 'none';
+                altChart.style.display = 'block';
+
+            } else {
+            // Switch to mainChart
+                mainChart.style.display = 'block';
+                altChart.style.display = 'none';
+            }
+            
+            // Toggle the state
+            isMainChartVisible = !isMainChartVisible;
+            
+            // Optional: Update button text if desired
+            toggleButton.querySelector('.toggle-icon').textContent = isMainChartVisible ? 'نمایش منحنی وزن' : 'نمایش Z Scoreها';
+        });
+        });
+    </script>
+    <script>
         const dateOptions = {
             year: "numeric",
             month: "long",
@@ -240,6 +304,9 @@
         );
 
         const all_zscores = JSON.parse(`{{ all_zscores|escapejs }}`);
+        const alt_chart = JSON.parse(`{{ alt_chart|escapejs }}`);
+        const kidData = JSON.parse(alt_chart.kid_data);
+        const cleanKidData = kidData.map(val => val === "-" ? null : val);
 
         if (all_zscores.labels.length < 3) { 
             const mainChart = new Chart(document.getElementById('mainChart'), {
@@ -303,6 +370,138 @@
             },
         });
         }
+
+        const altChart = new Chart(document.getElementById('altChart'), {
+            type: 'bar',
+            data: {
+                labels: alt_chart.agemos,
+                datasets: [{
+                    type: 'line',
+                    label: 'P3',
+                    data: alt_chart.p3,
+                    borderColor: `rgb(255, 99, 132)`,
+                    backgroundColor: `rgba(255, 99, 132, 0.2)`,
+                    fill: false,
+                    tension: 0.4,
+                    borderWidth: 1.5,
+                    pointStyle: false,
+                }, {
+                    type: 'line',
+                    label: 'P5',
+                    data: alt_chart.p5,
+                    borderColor: 'rgb(255, 159, 64)',
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    fill: false,
+                    tension: 0.4,
+                    borderWidth: 1.5,
+                    pointStyle: false,
+                }, {
+                    type: 'line',
+                    label: 'P10',
+                    data: alt_chart.p10,
+                    borderColor: 'rgb(255, 205, 86)',
+                    backgroundColor: 'rgba(255, 205, 86, 0.2)',
+                    fill: false,
+                    tension: 0.4,
+                    borderWidth: 1.5,
+                    pointStyle: false,
+                },{
+                    type: 'line',
+                    label: 'P25',
+                    data: alt_chart.p25,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: false,
+                    tension: 0.4,
+                    borderWidth: 1.5,
+                    pointStyle: false,
+                },{
+                    type: 'line',
+                    label: 'P50',
+                    data: alt_chart.p50,
+                    borderColor: 'rgb(153, 102, 255)',
+                    backgroundColor: `rgba(153, 102, 255, 0.2)`,
+                    fill: false,
+                    tension: 0.4,
+                    borderWidth: 1.5,
+                    pointStyle: false,
+                },{
+                    type: 'line',
+                    label: 'P75',
+                    data: alt_chart.p75,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: false,
+                    tension: 0.4,
+                    borderWidth: 1.5,
+                    pointStyle: false,
+                },{
+                    type: 'line',
+
+                    label: 'P90',
+                    data: alt_chart.p90,
+                    borderColor: 'rgb(255, 205, 86)',
+                    backgroundColor: 'rgba(255, 205, 86, 0.2)',
+                    fill: false,
+                    tension: 0.4,
+                    borderWidth: 1.5,
+                    pointStyle: false,
+                },{
+                    type: 'line',
+                    label: 'P95',
+                    data: alt_chart.p95,
+                    borderColor: 'rgb(255, 159, 64)',
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    fill: false,
+                    tension: 0.4,
+                    borderWidth: 1.5,
+                    pointStyle: false,
+                },{
+                    type: 'line',
+                    label: 'P97',
+                    data: alt_chart.p97,
+                    borderColor: `rgb(255, 99, 132)`,
+                    backgroundColor: `rgba(255, 99, 132, 0.2)`,
+                    fill: false,
+                    tension: 0.4,
+                    borderWidth: 1.5,
+                    pointStyle: false,
+                },{
+                    type: 'bar',
+                    label: 'Weight',
+                    data: cleanKidData,
+                    borderColor: 'rgb(54, 162, 235)',
+                    borderWidth: 1,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    fill: false,
+                    borderRadius: 10,
+                }
+                    ]
+            },
+            
+            options: {
+                    scales: {
+                        y: {
+                            beginAtZero : false,
+                            offset: false
+                        },
+                        x: {
+                            offset: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'بر اساس صدک‌های رشدی'
+                        }
+                    },
+                }
+        });
+
+
         const lastVisits = JSON.parse(`{{ last_visits|escapejs }}`);
         var miniType = 'line'
         var miniOpac = 0.2
