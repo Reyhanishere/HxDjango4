@@ -133,7 +133,6 @@ def patient_record_print_view(request, personal_id):
     
     # Set is_wl
     is_wl = set_is_wl(records.first())
-    print(is_wl)
 
     # Get all Z-scores
     z_scores_list = list(records[:doctor.z_score_count])
@@ -187,6 +186,10 @@ def patient_record_print_view(request, personal_id):
         # Redirect to prevent form resubmission on refresh
         return redirect('patient_records_print', personal_id=personal_id)
     
+    alt_chart_records = Record.objects.filter(patient=patient).order_by('-record_date')[:doctor.z_score_count]
+    gender = '1' if patient.gender == 'پسر' else '2'
+    alternative_chart = create_alt_chart(alt_chart_records, gender, wps_data)
+    
     context = {
         'doctor': doctor,
         'patient': patient,
@@ -200,9 +203,9 @@ def patient_record_print_view(request, personal_id):
     }
     context['all_zscores'] = json.dumps(all_zscores)
     context['last_visits'] = json.dumps(last_visits)
+    context['alt_chart'] = json.dumps(alternative_chart)
     
     return render(request, 'doctors/patient_records_print.html', context)
-
 
 @login_required
 def patients_list_view(request):
