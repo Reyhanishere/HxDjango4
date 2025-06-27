@@ -97,7 +97,7 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         transition: all 0.3s ease;
         line-height: normal;
-        margin-top: 20px;
+        margin-bottom: 10px;
     }
 
     .chart-toggle-btn:hover {
@@ -131,11 +131,11 @@
             <a href="print/" class="addNew">صفحۀ چاپ اطلاعات</a>
         </p>
     </section>
-    <span id="chartToggle" class="chart-toggle-btn">
-    ⇄ <span class="toggle-icon">نمایش Z Scoreها</span>
-    </span>
     <!-- Main Chart -->
     <section id="mainChartSection" style="display:grid">
+        <span id="chartToggle" class="chart-toggle-btn">
+            ⇄ <span class="toggle-icon">نمایش Z Scoreها</span>
+        </span>
         <canvas id="mainChart" dir="rtl" width=""></canvas>
         <canvas id="altChart" dir="rtl" width=""></canvas>
 
