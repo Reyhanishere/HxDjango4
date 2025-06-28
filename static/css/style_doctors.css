@@ -45,6 +45,8 @@ button {
 
 .icon:hover {
     opacity: 1.0;
+    transform: translateY(-1px);
+
 }
 
 .table {
