@@ -25,12 +25,15 @@
             margin: auto;
         }
         #mainChartSection{
-            display:grid; 
+            display: flex;
+            flex-direction: column; 
+            justify-content: space-evenly;
+            position: relative;
             width: 80%; 
             margin: 3rem auto;
-                min-height: 40vh;
-
+            min-height: 35vh;
         }
+
         .addNew{
             margin-right: 0.25rem;
         }
@@ -60,66 +63,35 @@
             transform: translateY(0);
         }
 
-        @media (max-width: 1000px) {
-            #mainChartSection{
-                width: 80%; 
-                margin: auto;
-            }
-            #mainChart{
-                max-widtth:80%;
-                
-            }
-            #miniChartsSection{
-                    width: 80%; 
-            }
-            .miniCharts{
-                max-widtth:80%;
-            }
-        }
-        @media (max-width: 700px){
-            header{ 
-                flex-direction: column;
-                gap: 0.5rem;
-            align-items: start;}
-        }
-
         @page {
             size: A4;
             margin: 1rem
         }
+
         @media print {
             size: A4;
             .sheet-outer.A4 {                 
                 width: 210mm 
             }
-            .addNew{
+            .noPrint{
                 display:none;
             }
+
             .icon{
                 display:none;
             }
-            .consRecomBoxes{
-                display:none;
-            }
 
+            #mainChartSection{
+                margin: auto;
+            }
+            
             #miniChartsSection{
-                    grid-template-columns: 1fr 1fr;
-                    width: 80%;
-                    margin-top: 2rem;
-                    min-height: 40vh;
+                grid-template-columns: 1fr 1fr;
+                width: 80%;
+                margin-top: 2rem;
+                min-height: 40vh;
             }
 
-            #mainChart{
-                margin: 4rem auto 2rem auto;
-                max-height: 40vh
-                max-width: 90%
-            }
-            miniCharts{
-                width: 40%;
-            }
-            .chartToggleBtn{
-                display:none;
-            }
         }
         .recomBox{
             margin-top: 0.5rem;
@@ -168,16 +140,16 @@
 {% block content %}
     <!-- Patient Info -->
     <section class="border-b pb-4">
-        <p class="text-lg m-2 mt-4">بیمار: <span class="font-medium">{{patient.name}}</span>&nbsp;&nbsp;
+        <p class="text-lg m-2 mt-8">بیمار: <span class="font-medium">{{patient.name}}</span>&nbsp;&nbsp;
             <span style="color: #6e6e6e; font-size: 16px;">{{patient_age}}</span>
         </p>
         <p style="margin-top: 0.5rem;">
-            <a href="{% url 'patient_update' patient.personal_id %}" class="addNew">ویرایش مشخصات بیمار</a>
+            <a href="{% url 'patient_update' patient.personal_id %}" class="addNew noPrint">ویرایش مشخصات بیمار</a>
 
-            <a href="{% url 'corc_patient' %}" class="addNew">ثبت بیمار جدید</a>
-            <a href="{% url 'zscore' patient.personal_id %}" class="addNew">ثبت دادۀ جدید برای کودک</a>
-            <a href="{% url 'patients_list' %}" class="addNew">لیست بیماران</a>
-            <button class="addNew" onclick="window.print();" dir="ltr">Print	&#128424;&#65039;</button>
+            <a href="{% url 'corc_patient' %}" class="addNew noPrint">ثبت بیمار جدید</a>
+            <a href="{% url 'zscore' patient.personal_id %}" class="addNew noPrint">ثبت دادۀ جدید برای کودک</a>
+            <a href="{% url 'patients_list' %}" class="addNew noPrint">لیست بیماران</a>
+            <button class="addNew noPrint" onclick="window.print();" dir="ltr">Print	&#128424;&#65039;</button>
             
         <p id="ehsan"></p>
 
@@ -186,8 +158,8 @@
     </section>
 
     <!-- Main Chart -->
-    <section id="mainChartSection" style="display:grid">
-        <span id="chartToggle" class="chartToggleBtn">
+    <section id="mainChartSection" style="">
+        <span id="chartToggle" class="chartToggleBtn noPrint">
             ⇄ <span class="toggle-icon">نمایش Z Scoreها</span>
         </span>
         <canvas id="mainChart" dir="rtl" width=""></canvas>
@@ -196,27 +168,27 @@
     </section>
 
     <!-- Mini Charts -->
-    <section id="miniChartsSection" style="" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div><canvas class="miniCharts" id="heightChart"></canvas></div>
-        <div><canvas class="miniCharts" id="weightChart"></canvas></div>
+    <section id="miniChartsSection" style="" class="">
+        <div class=""><canvas class="" id="heightChart"></canvas></div>
+        <div class=""><canvas class="" id="weightChart"></canvas></div>
         {% if patient.get_age_months <= 36 %}
-            <div><canvas class="miniCharts" id="hcChart"></canvas></div>
+            <div class=""><canvas class="" id="hcChart"></canvas></div>
             {% if is_wl %}
-                <div><canvas class="miniCharts" id="wflChart"></canvas></div>
+                <div class=""><canvas class="" id="wflChart"></canvas></div>
             {% elif patient.get_age_months >= 24 %}
-                <div><canvas class="miniCharts" id="bmiChart"></canvas></div>
+                <div class=""><canvas class="" id="bmiChart"></canvas></div>
             {% endif %}
         {% else %}
             {% if is_wl %}
-                <div><canvas class="miniCharts" id="wflChart"></canvas></div>
+                <div class=""><canvas class="" id="wflChart"></canvas></div>
             {% endif %}
             {% if patient.get_age_months >= 24 %}
-                <div><canvas class="miniCharts" id="bmiChart"></canvas></div>
+                <div class=""><canvas class="" id="bmiChart"></canvas></div>
             {% endif %}
         {% endif %}        
 
     </section>
-<p id="Alat"></p>
+    <div style="margin: 2rem"></div>
     <!-- Table Section -->
     <section>
         <h2 class="text-xl font-semibold mt-6 mb-2">Z-Scoreها و مقادیر اندازه‌گیری شده در {{recent_records|length}} ویزیت اخیر</h2>
@@ -295,7 +267,7 @@
     <!-- Recommendation Box -->
     <section dir="ltr" class="mt-6" style="margin:2rem 1.5rem;">
     {% if considerations %}
-        <details dir="rtl" class="consRecomBoxes">
+        <details dir="rtl" class="consRecomBoxes noPrint">
             <summary>در نظر داشته باشید:</summary>
             {% for key, value in considerations.items %}
                 {% if value %}
@@ -455,7 +427,11 @@
                     data: all_zscores.wl_z,
                     //backgroundColor: `rgba(34, 94, 197, 0.8)`,
                     fill: false,
+                    
                 }]
+            },
+            options: {
+                tension: 0.2,
             },
         });
         }
@@ -563,6 +539,7 @@
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     fill: false,
                     borderRadius: 50,
+                    
                 }
                     ]
             },
@@ -587,6 +564,10 @@
                         }
                     },
                 }
+        });
+        window.addEventListener('beforeprint', () => {
+            mainChart.resize();
+            altChart.resize();
         });
         const lastVisits = JSON.parse(`{{ last_visits|escapejs }}`);
         const isWl = `{{ is_wl|yesno:"true, false" }}`
@@ -613,6 +594,9 @@
                     }]
                 },
                 options: {
+                    
+                    tension: 0.4,
+
                     scales: {
                         y: {
                             offset: true
@@ -651,6 +635,7 @@
                     ]
                 },
                 options: {
+                    tension: 0.4,
                     scales: {
                         y: {
                             offset: true
