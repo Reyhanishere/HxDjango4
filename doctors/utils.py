@@ -116,7 +116,7 @@ wl_data = load_wl_data()
 
 def load_wps_data():
     json_file_path = os.path.join(
-        os.path.dirname(__file__), "../static/data/weight_Ps_24-240.json"
+        os.path.dirname(__file__), "../static/data/weight_Ps_0-240.json"
     )
     with open(json_file_path, "r") as file:
         return json.load(file)
