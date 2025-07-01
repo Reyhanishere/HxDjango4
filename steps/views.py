@@ -40,6 +40,9 @@ class StepRaceDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         step = self.object
+        if not step.race:
+            from django.http import Http404
+            raise Http404
         
         # Get all specific block types you have
         visible_blocks = step.blocks.instance_of(
