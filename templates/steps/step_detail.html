@@ -28,7 +28,7 @@
         <div id="explanation{{ forloop.counter }}" class="explanation" style="display:block"> {{ block.caption }} </div>
       </div>
       {% elif block|isModel:"MCQBlock" %}
-        <div>{{ block.question }}</div>
+        <div>{{ block.question|linebreaks }}</div>
         <form id="mcq{{ forloop.counter }}">
           {% with choices=block.choices.items|shuffleDict %}
           <div class="MCQCont">
