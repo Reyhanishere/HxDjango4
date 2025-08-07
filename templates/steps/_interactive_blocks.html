@@ -5,7 +5,7 @@
   {% if block|classname:"InteractiveTextBlock" %}
     <div class="text-block">{{ block.content|linebreaksbr }}</div>
     <div style="display: flex">
-      <button class="next-button" data-current="{{ block.number }}" data-next="{{ block.next_block_number }}" style="">Continue</button>
+      <button class="next-button" data-current="{{ block.number }}" data-next="{{ block.next_block_number|default:"0" }}" style="">Continue</button>
     </div>
 
   {% elif block|classname:"InteractiveImageBlock" %}
@@ -13,7 +13,7 @@
       <img src="{{ block.image.url }}" alt="{{ block.alt_text }}" style="max-width: 90%; margin: auto;" />
     </div>
     <div style="display: flex">
-      <button class="next-button" data-current="{{ block.number }}" data-next="{{ block.next_block_number }}" style="">Continue</button>
+      <button class="next-button" data-current="{{ block.number }}" data-next="{{ block.next_block_number|default:"0" }}" style="">Continue</button>
     </div>
 
 
@@ -33,4 +33,5 @@
     </div>
   {% endif %}
 </div>
+
 
