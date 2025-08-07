@@ -30,4 +30,9 @@ def sep_paraph(value):
     
     paras = re.split(r'\n{1,}', str(value))
     paras = [f'<p dir="auto">{p.strip()}</p>' for p in paras if p.strip()]
+
     return mark_safe('\n'.join(paras))
+
+@register.filter
+def classname(obj, class_name):
+    return obj.__class__.__name__== class_name
