@@ -57,7 +57,46 @@ class StepRaceDetailView(DetailView):
         
         context['blocks'] = visible_blocks
         return context
+        
+class InteractiveStepDetailView(DetailView):
+    model = InteractiveStep
+    template_name = 'steps/interactive_step_detail.html'
+    context_object_name = 'step'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        step = self.object
+
+        blocks = step.interactive_blocks.instance_of(
+            InteractiveImageBlock,
+            InteractiveTextBlock,
+            InteractiveQuestionBlock
+        )
+
+        # Handle dynamic block loading based on URL query param
+        block_number = self.request.GET.get('block')
+        if block_number:
+            current_block = blocks.filter(number=block_number).first()
+        else:
+            current_block = blocks.first()
+
+        # context['blocks'] = blocks  # still available if needed
+        context['current_block'] = current_block
+        return context
+    
+def load_interactive_block(request, step_id, block_number):
+    step = get_object_or_404(InteractiveStep, id=step_id)
+    blocks = step.interactive_blocks.instance_of(
+        InteractiveImageBlock,
+        InteractiveTextBlock,
+        InteractiveQuestionBlock
+    )
+    block = blocks.filter(number=block_number).first()
+    if not block:
+        return render(request, 'steps/_end_of_step.html')
+
+    return render(request, 'steps/_interactive_blocks.html', {'block': block})
+    
 def submit_answer(request, block_id):
     if request.method == 'POST':
         block = get_object_or_404(Block, pk=block_id)
@@ -123,3 +162,4 @@ def submit_race_score(request, race_id):
             "status": 400,
             "redirect_url": "❌ Invalid request."
         })
+
