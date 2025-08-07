@@ -5,7 +5,6 @@ from django.utils import timezone
 from polymorphic.models import PolymorphicModel
 
 
-
 # === STEP & BLOCK SYSTEM ===
 class Field(models.Model):
     title = models.CharField(max_length=200)
@@ -14,45 +13,45 @@ class Field(models.Model):
 
     def __str__(self):
         return self.title
-        
+
+
 class Race(models.Model):
     name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
 
-
     def is_open(self):
         now = timezone.now()
         return self.start_time <= now <= self.end_time
-    
+
     def __str__(self):
         return self.name
-        
+
+
 class Step(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    field=models.ForeignKey(Field, on_delete=models.SET_NULL, null=True)
+    field = models.ForeignKey(Field, on_delete=models.SET_NULL, null=True)
     slug = models.SlugField(unique=True)
     race = models.ForeignKey(Race, on_delete=models.SET_NULL, null=True, blank=True)
-
 
     def __str__(self):
         return self.title
 
-
 class Block(PolymorphicModel):
-    step = models.ForeignKey('Step', related_name='blocks', on_delete=models.CASCADE)
+    step = models.ForeignKey("Step", related_name="blocks", on_delete=models.CASCADE)
     order = models.PositiveIntegerField()
 
     class Meta:
-        ordering = ['order']
-        unique_together = ('step', 'order')
+        ordering = ["order"]
+        unique_together = ("step", "order")
 
     def __str__(self):
         return f"{self.step.title} - Block {self.order}"
 
 # === BLOCK TYPES ===
+
 
 class TextBlock(Block):
     visible = models.BooleanField(default=True)
@@ -61,11 +60,14 @@ class TextBlock(Block):
     def __str__(self):
         return f"{self.text[:50]}"
 
+def step_image_upload_path(instance, filename):
+    step_slug = instance.step.slug
+    return f'steps/{step_slug}/images/{filename}'
 
 class ImageBlock(Block):
     visible = models.BooleanField(default=True)
-    image = models.ImageField(upload_to='steps/images/')
-    caption =  models.TextField(blank=True)
+    image = models.ImageField(upload_to=step_image_upload_path)
+    caption = models.TextField(blank=True)
 
     def __str__(self):
         return f"{self.caption[:50]}"
@@ -113,28 +115,18 @@ class PairingBlock(Block):
     def __str__(self):
         return f"{self.prompt[:50]}"
 
-# class SortingBlock(Block):
-#     prompt = models.TextField(blank=True, null=True)
-#     options = models.JSONField()
-#     explanation = models.TextField(blank=True)
-#     xp = models.IntegerField(default=10)
-#     def __str__(self):
-#         return f"{self.prompt[:50]}"
-
-# class TextCheckBlock(Block):
-#     prompt = models.TextField(blank=True, null=True)
-#     answer_list = models.TextField()
-#     explanation = models.TextField(blank=True)
-#     xp = models.IntegerField(default=10)
-#     def __str__(self):
-#         return f"{self.prompt[:50]}"
 
 # === USER ANSWERS & PROGRESS ===
 
+
 class UserAnswer(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
+    )
     block = models.ForeignKey(Block, on_delete=models.SET_NULL, null=True)
-    submitted_data = models.JSONField()  # Can store selected option, typed keywords, pairs, etc.
+    submitted_data = (
+        models.JSONField()
+    )  # Can store selected option, typed keywords, pairs, etc.
     is_correct = models.BooleanField()
     answered_at = models.DateTimeField(auto_now_add=True)
 
@@ -143,7 +135,9 @@ class UserAnswer(models.Model):
 
 
 class UserProgress(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
+    )
     step = models.ForeignKey(Step, on_delete=models.SET_NULL, null=True)
     completed_blocks = models.ManyToManyField(Block, blank=True)
     xp = models.IntegerField(default=10)
@@ -153,25 +147,23 @@ class UserProgress(models.Model):
     def __str__(self):
         return f"{self.user} progress in {self.step}"
 
-    
+
 class Record(models.Model):
-    race = models.ForeignKey(Race, on_delete=models.CASCADE, related_name='records')
+    race = models.ForeignKey(Race, on_delete=models.CASCADE, related_name="records")
     name = models.CharField(max_length=100)
     score = models.IntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)
     ip_address = models.GenericIPAddressField()
-    
+
     class Meta:
-        unique_together = ('race', 'name')
+        unique_together = ("race", "name")
 
     def __str__(self):
         return f"{self.race}| {self.name}: {self.score}"
 
-
 # --------------------------- #
 # ---- Interactive Steps ---- #
 # --------------------------- #
-
 from django.core.exceptions import ValidationError
 
 class InteractiveStep(Step):
