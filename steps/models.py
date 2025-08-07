@@ -166,3 +166,66 @@ class Record(models.Model):
 
     def __str__(self):
         return f"{self.race}| {self.name}: {self.score}"
+
+
+# --------------------------- #
+# ---- Interactive Steps ---- #
+# --------------------------- #
+
+from django.core.exceptions import ValidationError
+
+class InteractiveStep(Step):
+    class Meta:
+        verbose_name = "Interactive Step"
+
+class InteractiveBlock(PolymorphicModel):
+    step = models.ForeignKey(InteractiveStep, related_name="interactive_blocks", on_delete=models.CASCADE)
+    number = models.PositiveIntegerField()
+
+    class Meta:
+        unique_together = ('step', 'number')
+
+class InteractiveQuestionBlock(InteractiveBlock):
+    question_text = models.TextField()
+    image = models.ImageField(upload_to=step_image_upload_path, blank=True, null= True)
+    def __str__(self):
+        return f"{self.step}: {self.question_text[:20]}"
+    
+
+class InteractiveTextBlock(InteractiveBlock):
+    content = models.TextField()
+    # next_block = models.ForeignKey(InteractiveBlock, on_delete=models.SET_NULL, null=True, blank=True, related_name='previous_textblocks')
+    next_block_number = models.PositiveIntegerField(null=True, blank=True)
+    def __str__(self):
+        return f"{self.step}: {self.content[:20]}"
+
+class InteractiveImageBlock(InteractiveBlock):
+    image = models.ImageField(upload_to=step_image_upload_path)
+    caption = models.TextField(blank=True)
+    # next_block = models.ForeignKey(InteractiveBlock, on_delete=models.SET_NULL, null=True, blank=True, related_name='previous_imageblocks')
+    next_block_number = models.PositiveIntegerField(null=True, blank=True)
+    def __str__(self):
+        return f"{self.step}: {self.caption[:20]}"
+
+# Options:
+COLORS=[('yellow', 'Yellow'),('red', 'Red'),('green', 'Green'),('blue', 'Blue'),('none', 'None')]
+class InteractiveOption(PolymorphicModel):
+    question = models.ForeignKey(InteractiveQuestionBlock, related_name='options', on_delete=models.CASCADE)
+    # next_block = models.ForeignKey(InteractiveBlock, related_name='incoming_options', on_delete=models.SET_NULL, null=True, blank=True)
+    # color_code = models.CharField(max_length=7, blank=True, help_text="Hex code or choose from CSS colors")
+    color = models.CharField(max_length=16, blank=True, choices=COLORS)
+    next_block_number = models.PositiveIntegerField(null=True, blank=True)
+
+    
+class InteractiveTextOption(InteractiveOption):
+    text = models.CharField(max_length=255)
+    response= models.TextField(blank=True)
+    def __str__(self):
+        return f"{self.question}: {self.text}"
+    
+class InteractiveImageOption(InteractiveOption):
+    image = models.ImageField(upload_to=step_image_upload_path)
+    alt_text = models.CharField(max_length=255, blank=True)
+    response= models.TextField(blank=True)
+    def __str__(self):
+        return f"{self.question}: {self.alt_text}"
