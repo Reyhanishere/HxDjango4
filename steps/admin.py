@@ -97,3 +97,62 @@ class RaceAdmin(admin.ModelAdmin):
 
 admin.site.register(Race, RaceAdmin)
 admin.site.register(Record)
+
+# --------------------------- #
+# ---- Interactive Steps ---- #
+# --------------------------- #
+
+class InteractiveTextOptionInline(StackedPolymorphicInline.Child):
+    model = InteractiveTextOption
+
+class InteractiveImageOptionInline(StackedPolymorphicInline.Child):
+    model = InteractiveImageOption
+
+class InteractiveOptionInline(StackedPolymorphicInline):
+    model = InteractiveOption
+    child_inlines = [InteractiveTextOptionInline, InteractiveImageOptionInline]
+    fk_name = 'question'  # Important: set correct FK name
+
+class InteractiveQuestionBlockAdmin(PolymorphicInlineSupportMixin, admin.ModelAdmin):
+    inlines = [InteractiveOptionInline]
+
+# Optional: Register other block types
+@admin.register(InteractiveImageBlock)
+class InteractiveImageBlockAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(InteractiveTextBlock)
+class InteractiveTextBlockAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(InteractiveQuestionBlock)
+class InteractiveQuestionBlockAdmin(PolymorphicInlineSupportMixin, admin.ModelAdmin):
+    inlines = [InteractiveOptionInline]
+    fk_name = "question block"
+
+class InteractiveTextBlockInline(StackedPolymorphicInline.Child):
+    model = InteractiveTextBlock
+
+class InteractiveImageBlockInline(StackedPolymorphicInline.Child):
+    model = InteractiveImageBlock
+
+class InteractiveQuestionBlockInline(StackedPolymorphicInline.Child):
+    model = InteractiveQuestionBlock
+    inlines = [InteractiveOptionInline]
+
+class InteractiveBlockInline(StackedPolymorphicInline):
+    model = InteractiveBlock
+    child_inlines = [InteractiveTextBlockInline, InteractiveImageBlockInline, InteractiveQuestionBlockInline]
+    fk_name = 'step'
+
+@admin.register(InteractiveStep)
+class InteractiveStepAdmin(PolymorphicInlineSupportMixin, admin.ModelAdmin):
+    inlines = [InteractiveBlockInline]
+
+@admin.register(InteractiveBlock)
+class InteractiveBlockAdmin(PolymorphicParentModelAdmin):
+    base_model = InteractiveBlock
+    child_models = (InteractiveQuestionBlock, InteractiveImageBlock, InteractiveTextBlock)
+    fk_name = "block"
+
+
