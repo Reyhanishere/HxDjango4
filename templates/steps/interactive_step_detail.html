@@ -85,7 +85,7 @@ document.addEventListener('click', async function(e) {
   if (e.target.matches('.next-button')) {
     const current = parseInt(e.target.dataset.current);
     const stepId = {{ step.id }};  // from context
-    const next = current + 1;
+    const next = parseInt(e.target.dataset.next)
     
     const response = await fetch(`/steps/interactive_step/${stepId}/blocks/${next}/`);
     const html = await response.text();
@@ -117,5 +117,6 @@ document.addEventListener('click', async function(e) {
   }
 });
 </script>
+
 
 {% endblock content %}
