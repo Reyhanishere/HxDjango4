@@ -1,0 +1,35 @@
+{% load steps_tags %}
+
+
+<div class="block_div" id="block-{{ block.number }}">
+  {% if block|classname:"InteractiveTextBlock" %}
+    <div class="text-block">{{ block.content|linebreaksbr }}</div>
+    <div style="display: flex">
+      <button class="next-button" data-current="{{ block.number }}" style="">Continue</button>
+    </div>
+
+  {% elif block|classname:"InteractiveImageBlock" %}
+    <div class="image-block" style="display: flex">
+      <img src="{{ block.image.url }}" alt="{{ block.alt_text }}" style="max-width: 90%; margin: auto;" />
+    </div>
+    <div style="display: flex">
+      <button class="next-button" data-current="{{ block.number }}" style="">Continue</button>
+    </div>
+
+
+  {% elif block|classname:"InteractiveQuestionBlock" %}
+    <div class="question-block">
+      <p>{{ block.question_text }}</p>
+        {% for option in block.options.all %}
+            <button class="option-btn"
+                    data-response="{{ option.response }}"
+                    data-next="{{ option.next_block_number }}"
+                    data-current="{{ block.number }}"
+                    data-color="{{ option.color }}">
+
+              {{ option.text }}
+            </button>
+        {% endfor %}
+    </div>
+  {% endif %}
+</div>

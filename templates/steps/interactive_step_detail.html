@@ -1,0 +1,121 @@
+{% extends 'steps/steps_base.html' %}
+{% load steps_tags %}
+{% load static %}
+
+{% block title %}{{ step.title }}{% endblock title %}
+
+{% block imports %}
+  <style>
+    .block_div {
+        margin: 10px;
+        background-color: #F9F9F9;
+        border-radius: 10px;
+        padding: 1rem;
+        box-shadow: 0px 0px 3px 0px #888;
+    }
+    .next-button{
+        background-color: #e3e3e3;
+        border-radius:50px;
+        margin: auto;
+        padding: 0.25rem 1rem;
+        border: none;
+        line-height: normal;
+        transition: 0.3s;
+    }
+    .next-button:hover{
+        box-shadow: 0 0 1px 1px #8888;
+        color: #444
+    }
+
+    .option-btn{
+        display: block;
+        background-color: #eaeaea;
+        border-radius: 50px;
+        margin: 0.25rem;
+        padding: 0rem 1rem;
+        border: none;
+        transition: 0.3s;
+    }
+    .option-btn:hover{
+        background-color: #e3e3e3;
+    }
+    .option-response{
+        padding: 1rem;
+        margin-top: 1rem;
+        border-radius: 25px;
+    }
+    .option-response-red{
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+    }
+    .option-response-yellow{
+        color: #856404;
+        background-color: #fff3cd;
+        border-color: #ffeeba;
+    }
+    .option-response-green{
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+    }
+    .option-response-blue{
+        color: #004085;
+        background-color: #cce5ff;
+        border-color: #b8daff;
+    }
+    
+  </style>
+{% endblock imports %}
+
+{% block content %}
+
+    <h2 style="margin:1rem" dir="auto">{{ step.title }}</h2>
+    <div dir="auto" style="font-size:12px; color:#666; margin:0 1.5rem">{{ step.description|linebreaksbr }}</div>
+
+
+<div id="block-container">
+  {% include 'steps/_interactive_blocks.html' with block=current_block %}
+</div>
+
+
+<script>
+document.addEventListener('click', async function(e) {
+  // Continue button for Text/Image block
+  if (e.target.matches('.next-button')) {
+    const current = parseInt(e.target.dataset.current);
+    const stepId = {{ step.id }};  // from context
+    const next = current + 1;
+    
+    const response = await fetch(`/steps/interactive_step/${stepId}/blocks/${next}/`);
+    const html = await response.text();
+    document.getElementById('block-container').insertAdjacentHTML('beforeend', html);
+    e.target.style.display = 'none';
+  }
+
+  // Option button for QuestionBlock
+  if (e.target.matches('.option-btn')) {
+    const btn = e.target;
+    const responseText = btn.dataset.response;
+    const next = btn.dataset.next;
+    const current = btn.dataset.current;
+    const stepId = {{ step.id }};
+
+    // Show response text
+    const responseElem = document.createElement('div');
+    responseElem.className = `option-response option-response-${btn.dataset.color}`;
+    responseElem.innerText = responseText;
+    btn.parentElement.appendChild(responseElem);
+
+    // Disable all options in current block
+    btn.closest('.question-block').querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+
+    // Fetch and render next block
+    const res = await fetch(`/steps/interactive_step/${stepId}/blocks/${next}/`);
+    const html = await res.text();
+    document.getElementById('block-container').insertAdjacentHTML('beforeend', html);
+  }
+});
+</script>
+
+{% endblock content %}
