@@ -125,7 +125,7 @@ class InteractiveStepGraphVizz(DetailView):
                 final_text+=a
                 for o in options:
                     if o.__class__.__name__=='InteractiveTextOption':
-                        a=f"dot.node('O{o_n}', color='{COLORS[o.color]} label='{o.text.replace(b_n, space)}')<br/>"
+                        a=f"dot.node('O{o_n}', color='{COLORS[o.color]}', label='{o.text.replace(b_n, space)}')<br/>"
                         a+=f"dot.edge('B{b.number}', 'O{o_n}')<br/>"
                         if o.next_block_number:
                             a+=f"dot.edge('O{o_n}', 'B{o.next_block_number}')<br/>"
@@ -211,6 +211,7 @@ def submit_race_score(request, race_id):
             "status": 400,
             "redirect_url": "❌ Invalid request."
         })
+
 
 
 
