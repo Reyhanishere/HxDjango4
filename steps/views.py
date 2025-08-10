@@ -96,7 +96,60 @@ def load_interactive_block(request, step_id, block_number):
         return render(request, 'steps/_end_of_step.html')
 
     return render(request, 'steps/_interactive_blocks.html', {'block': block})
-    
+
+class InteractiveStepGraphVizz(DetailView):
+    model = InteractiveStep
+    template_name = 'steps/interactive_step_graph.html'
+    context_object_name = 'step'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        step = self.object
+
+        blocks = step.interactive_blocks.instance_of(
+            InteractiveImageBlock,
+            InteractiveTextBlock,
+            InteractiveQuestionBlock
+        )
+        # Alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+        COLORS={'red':'#f8d7da', 'yellow':'#fff3cd', 'blue':'#cce5ff', 'green':'#d4edda'}
+        # n = 0
+        o_n = 0
+        final_text = ""
+        b_n='\n'
+        space = ' '
+        for b in blocks:
+            if b.__class__.__name__=='InteractiveQuestionBlock':
+                a = "dot.attr('node', shape='box', style='solid')\n"
+                a += f"dot.node('B{b.number}', label='{b.question_text.replace(b_n, space)}')\n"
+                final_text+=a
+                options = b.options.all()
+                a="dot.attr('node', shape='ellipse', style='filled')\n"
+                final_text+=a
+                for o in options:
+                    if o.__class__.__name__=='InteractiveTextOption':
+                        a=f"dot.attr('node', color='{COLORS[o.color]}')\n"
+                        a+=f"dot.node('O{o_n}', label='{o.text.replace(b_n, space)}')\n"
+                        a+=f"dot.edge('B{b.number}', 'O{o_n}')\n"
+                        if o.next_block_number:
+                            a+=f"dot.edge('O{o_n}', 'B{o.next_block_number}')\n"
+                        final_text+=a
+                    o_n+=1
+            elif b.__class__.__name__=='InteractiveImageBlock':
+                a = "dot.attr('node', shape='box', style='solid')\n"
+                a += f"dot.node('B{b.number}', label='{b.caption.replace(b_n, space)}')\n"
+                if b.next_block_number:
+                    a+=f"dot.edge('B{b.number}', 'B{b.next_block_number}')\n"
+                final_text+=a
+            else:
+                a = "dot.attr('node', shape='box', style='solid', color='black')\n"
+                txt_content = " ".join(b.content.split())
+                a += f"dot.node('B{b.number}', label='{txt_content}')\n"
+                if b.next_block_number:
+                    a+=f"dot.edge('B{b.number}', 'B{b.next_block_number}')\n"
+                final_text+=a
+        context['ehsan'] = final_text
+        return context
+        
 def submit_answer(request, block_id):
     if request.method == 'POST':
         block = get_object_or_404(Block, pk=block_id)
@@ -162,4 +215,5 @@ def submit_race_score(request, race_id):
             "status": 400,
             "redirect_url": "❌ Invalid request."
         })
+
 
