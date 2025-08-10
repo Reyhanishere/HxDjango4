@@ -119,33 +119,33 @@ class InteractiveStepGraphVizz(DetailView):
         space = ' '
         for b in blocks:
             if b.__class__.__name__=='InteractiveQuestionBlock':
-                a = "dot.attr('node', shape='box', style='solid')\n"
-                a += f"dot.node('B{b.number}', label='{b.question_text.replace(b_n, space)}')\n"
+                a = "dot.attr('node', shape='box', style='solid')<br/>"
+                a += f"dot.node('B{b.number}', label='{b.question_text.replace(b_n, space)}')<br/>"
                 final_text+=a
                 options = b.options.all()
-                a="dot.attr('node', shape='ellipse', style='filled')\n"
+                a="dot.attr('node', shape='ellipse', style='filled')<br/>"
                 final_text+=a
                 for o in options:
                     if o.__class__.__name__=='InteractiveTextOption':
-                        a=f"dot.attr('node', color='{COLORS[o.color]}')\n"
-                        a+=f"dot.node('O{o_n}', label='{o.text.replace(b_n, space)}')\n"
-                        a+=f"dot.edge('B{b.number}', 'O{o_n}')\n"
+                        a=f"dot.attr('node', color='{COLORS[o.color]}')<br/>"
+                        a+=f"dot.node('O{o_n}', label='{o.text.replace(b_n, space)}')<br/>"
+                        a+=f"dot.edge('B{b.number}', 'O{o_n}')<br/>"
                         if o.next_block_number:
-                            a+=f"dot.edge('O{o_n}', 'B{o.next_block_number}')\n"
+                            a+=f"dot.edge('O{o_n}', 'B{o.next_block_number}')<br/>"
                         final_text+=a
                     o_n+=1
             elif b.__class__.__name__=='InteractiveImageBlock':
-                a = "dot.attr('node', shape='box', style='solid')\n"
-                a += f"dot.node('B{b.number}', label='{b.caption.replace(b_n, space)}')\n"
+                a = "dot.attr('node', shape='box', style='solid')<br/>"
+                a += f"dot.node('B{b.number}', label='{b.caption.replace(b_n, space)}')<br/>"
                 if b.next_block_number:
-                    a+=f"dot.edge('B{b.number}', 'B{b.next_block_number}')\n"
+                    a+=f"dot.edge('B{b.number}', 'B{b.next_block_number}')<br/>"
                 final_text+=a
             else:
-                a = "dot.attr('node', shape='box', style='solid', color='black')\n"
+                a = "dot.attr('node', shape='box', style='solid', color='black')<br/>"
                 txt_content = " ".join(b.content.split())
-                a += f"dot.node('B{b.number}', label='{txt_content}')\n"
+                a += f"dot.node('B{b.number}', label='{txt_content}')<br/>"
                 if b.next_block_number:
-                    a+=f"dot.edge('B{b.number}', 'B{b.next_block_number}')\n"
+                    a+=f"dot.edge('B{b.number}', 'B{b.next_block_number}')<br/>"
                 final_text+=a
         context['ehsan'] = final_text
         return context
@@ -215,5 +215,6 @@ def submit_race_score(request, race_id):
             "status": 400,
             "redirect_url": "❌ Invalid request."
         })
+
 
 
