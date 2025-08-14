@@ -1,6 +1,5 @@
 {% load steps_tags %}
 
-
 <div class="block_div" id="block-{{ block.number }}">
   {% if block|classname:"InteractiveTextBlock" %}
     <div class="text-block">{{ block.content|linebreaksbr }}</div>
@@ -16,22 +15,31 @@
       <button class="next-button" data-current="{{ block.number }}" data-next="{{ block.next_block_number|default:"0" }}" style="">Continue</button>
     </div>
 
-
   {% elif block|classname:"InteractiveQuestionBlock" %}
-    <div class="question-block">
+    <div class="question-block" dir="auto">
+      <div class="questionTxtImg" dir="auto">
       <p>{{ block.question_text }}</p>
+      {% if block.image %}
+        <img src="{{ block.image.url }}" alt="" class="questionImg" />
+      {% endif %}
+      </div>
+      <div class="optionsDiv" dir="rtl">
         {% for option in block.options.all %}
-            <button class="option-btn"
+            <button  dir="auto"
                     data-response="{{ option.response }}"
                     data-next="{{ option.next_block_number }}"
                     data-current="{{ block.number }}"
-                    data-color="{{ option.color }}">
-
-              {{ option.text }}
+                    data-color="{{ option.color }}" 
+                    {% if option|classname:"InteractiveTextOption" %}
+                    class="option-btn">
+                {{ option.text }}
+              {% else %}
+                class="option-btn optionImage">
+                <img src="{{ option.image.url }}" alt="{{ option.alt_text }}" class=""/>
+              {% endif %}
             </button>
         {% endfor %}
+      </div>
     </div>
   {% endif %}
 </div>
-
-
