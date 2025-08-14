@@ -4,7 +4,6 @@ from django.utils import timezone
 
 from polymorphic.models import PolymorphicModel
 
-
 # === STEP & BLOCK SYSTEM ===
 class Field(models.Model):
     title = models.CharField(max_length=200)
@@ -13,7 +12,6 @@ class Field(models.Model):
 
     def __str__(self):
         return self.title
-
 
 class Race(models.Model):
     name = models.CharField(max_length=100)
@@ -27,7 +25,6 @@ class Race(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class Step(models.Model):
     title = models.CharField(max_length=200)
@@ -52,7 +49,6 @@ class Block(PolymorphicModel):
 
 # === BLOCK TYPES ===
 
-
 class TextBlock(Block):
     visible = models.BooleanField(default=True)
     text = models.TextField()
@@ -72,7 +68,6 @@ class ImageBlock(Block):
     def __str__(self):
         return f"{self.caption[:50]}"
 
-
 class MCQBlock(Block):
     visible = models.BooleanField(default=True)
     question = models.TextField()
@@ -83,7 +78,6 @@ class MCQBlock(Block):
 
     def __str__(self):
         return f"{self.question[:50]}"
-
 
 class KeyFeatureBlock(Block):
     visible = models.BooleanField(default=True)
@@ -104,7 +98,6 @@ class KeyFeatureBlock(Block):
     def __str__(self):
         return f"{self.question[:50]}"
 
-
 class PairingBlock(Block):
     visible = models.BooleanField(default=True)
     prompt = models.TextField(blank=True, null=True)
@@ -115,9 +108,23 @@ class PairingBlock(Block):
     def __str__(self):
         return f"{self.prompt[:50]}"
 
+# class SortingBlock(Block):
+#     prompt = models.TextField(blank=True, null=True)
+#     options = models.JSONField()
+#     explanation = models.TextField(blank=True)
+#     xp = models.IntegerField(default=10)
+#     def __str__(self):
+#         return f"{self.prompt[:50]}"
+
+# class TextCheckBlock(Block):
+#     prompt = models.TextField(blank=True, null=True)
+#     answer_list = models.TextField()
+#     explanation = models.TextField(blank=True)
+#     xp = models.IntegerField(default=10)
+#     def __str__(self):
+#         return f"{self.prompt[:50]}"
 
 # === USER ANSWERS & PROGRESS ===
-
 
 class UserAnswer(models.Model):
     user = models.ForeignKey(
@@ -133,7 +140,6 @@ class UserAnswer(models.Model):
     def __str__(self):
         return f"Answer by {self.user} to Block {self.block.id if self.block else 'Deleted Block'}"
 
-
 class UserProgress(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
@@ -146,7 +152,6 @@ class UserProgress(models.Model):
 
     def __str__(self):
         return f"{self.user} progress in {self.step}"
-
 
 class Record(models.Model):
     race = models.ForeignKey(Race, on_delete=models.CASCADE, related_name="records")
@@ -164,7 +169,6 @@ class Record(models.Model):
 # --------------------------- #
 # ---- Interactive Steps ---- #
 # --------------------------- #
-from django.core.exceptions import ValidationError
 
 class InteractiveStep(Step):
     class Meta:
@@ -176,25 +180,28 @@ class InteractiveBlock(PolymorphicModel):
 
     class Meta:
         unique_together = ('step', 'number')
+        ordering = ['number']
 
 class InteractiveQuestionBlock(InteractiveBlock):
     question_text = models.TextField()
+    parse_md=models.BooleanField(default=False)
     image = models.ImageField(upload_to=step_image_upload_path, blank=True, null= True)
+    image_alt_text = models.CharField(max_length=255, blank=True, null=True)
     def __str__(self):
         return f"{self.step}: {self.question_text[:20]}"
-    
 
 class InteractiveTextBlock(InteractiveBlock):
     content = models.TextField()
-    # next_block = models.ForeignKey(InteractiveBlock, on_delete=models.SET_NULL, null=True, blank=True, related_name='previous_textblocks')
+    parse_md=models.BooleanField(default=False)
     next_block_number = models.PositiveIntegerField(null=True, blank=True)
     def __str__(self):
         return f"{self.step}: {self.content[:20]}"
 
 class InteractiveImageBlock(InteractiveBlock):
     image = models.ImageField(upload_to=step_image_upload_path)
+    alt_text = models.CharField(max_length=255, blank=True, null=True)
     caption = models.TextField(blank=True)
-    # next_block = models.ForeignKey(InteractiveBlock, on_delete=models.SET_NULL, null=True, blank=True, related_name='previous_imageblocks')
+    parse_md = models.BooleanField(default=False)
     next_block_number = models.PositiveIntegerField(null=True, blank=True)
     def __str__(self):
         return f"{self.step}: {self.caption[:20]}"
@@ -203,21 +210,25 @@ class InteractiveImageBlock(InteractiveBlock):
 COLORS=[('yellow', 'Yellow'),('red', 'Red'),('green', 'Green'),('blue', 'Blue'),('none', 'None')]
 class InteractiveOption(PolymorphicModel):
     question = models.ForeignKey(InteractiveQuestionBlock, related_name='options', on_delete=models.CASCADE)
-    # next_block = models.ForeignKey(InteractiveBlock, related_name='incoming_options', on_delete=models.SET_NULL, null=True, blank=True)
-    # color_code = models.CharField(max_length=7, blank=True, help_text="Hex code or choose from CSS colors")
     color = models.CharField(max_length=16, blank=True, choices=COLORS)
     next_block_number = models.PositiveIntegerField(null=True, blank=True)
 
-    
 class InteractiveTextOption(InteractiveOption):
     text = models.CharField(max_length=255)
     response= models.TextField(blank=True)
+    parse_md_response=models.BooleanField(default=False)
     def __str__(self):
         return f"{self.question}: {self.text}"
     
+def step_option_image_upload_path(instance, filename):
+    step_slug = instance.question.step.slug
+    return f'steps/{step_slug}/images/{filename}'
+
 class InteractiveImageOption(InteractiveOption):
-    image = models.ImageField(upload_to=step_image_upload_path)
+    image = models.ImageField(upload_to=step_option_image_upload_path)
     alt_text = models.CharField(max_length=255, blank=True)
+    caption = models.CharField(max_length=255, blank=True, null=True)
     response= models.TextField(blank=True)
+    parse_md_response=models.BooleanField(default=False)
     def __str__(self):
         return f"{self.question}: {self.alt_text}"
