@@ -78,7 +78,7 @@ class InteractiveStepDetailView(DetailView):
         if block_number:
             current_block = blocks.filter(number=block_number).first()
         else:
-            current_block = blocks.first()
+            current_block = blocks.filter(number=1).first()
 
         # context['blocks'] = blocks  # still available if needed
         context['current_block'] = current_block
@@ -211,6 +211,7 @@ def submit_race_score(request, race_id):
             "status": 400,
             "redirect_url": "❌ Invalid request."
         })
+
 
 
 
