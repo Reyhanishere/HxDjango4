@@ -12,6 +12,7 @@ urlpatterns = [
     path("calculus/", include("calculus.urls")),
     path("steps/", include("steps.urls")),
     path("doctors/", include("doctors.urls")),
+    path("text-check/",include("phrases.urls")),
 
     path("blog/",include("blogs.urls")),
     path("docs/",include("docs.urls")),
