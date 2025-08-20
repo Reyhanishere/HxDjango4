@@ -23,6 +23,9 @@ class KeyFeatureBlockInline(StackedPolymorphicInline.Child):
 class PairingBlockInline(StackedPolymorphicInline.Child):
     model = PairingBlock
 
+class MonoTextCheckBlockInline(StackedPolymorphicInline.Child):
+    model = MonoTextCheckBlock
+
 class BlockInline(StackedPolymorphicInline):
     model = Block
     child_inlines = (
@@ -31,6 +34,7 @@ class BlockInline(StackedPolymorphicInline):
         MCQBlockInline,
         KeyFeatureBlockInline,
         PairingBlockInline,
+        MonoTextCheckBlockInline,
     )
     extra = 1  # Number of empty forms shown by default
     sortable_field_name = "order"  # So you can reorder them easily if you have this field
@@ -71,7 +75,12 @@ class KeyFeatureBlockAdmin(BlockChildAdmin):
 class PairingBlockAdmin(BlockChildAdmin):
     base_model = PairingBlock
 
+@admin.register(MonoTextCheckBlock)
+class MonoTextCheckBlockAdmin(BlockChildAdmin):
+    base_model = MonoTextCheckBlock
+
 # === Parent Block Admin ===
+
 @admin.register(Block)
 class BlockAdmin(PolymorphicParentModelAdmin):
     base_model = Block
@@ -81,8 +90,9 @@ class BlockAdmin(PolymorphicParentModelAdmin):
         MCQBlock,
         KeyFeatureBlock,
         PairingBlock,
+        MonoTextCheckBlock,
     )
-
+    # readonly_fields = ('order',)
 class RecordInline(admin.TabularInline):
     model=Record
     extra=0
@@ -154,5 +164,5 @@ class InteractiveBlockAdmin(PolymorphicParentModelAdmin):
     base_model = InteractiveBlock
     child_models = (InteractiveQuestionBlock, InteractiveImageBlock, InteractiveTextBlock)
     fk_name = "block"
-
+    
 
