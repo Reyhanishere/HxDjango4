@@ -1,9 +1,14 @@
 asgiref==3.8.1
 charset-normalizer==3.4.0
 crispy-bootstrap5==0.6
-Django==4.0.10
+Django==5.2.5
+django-cors-headers==4.7.0
 django-crispy-forms==1.13.0
 django-polymorphic==3.1.0
+django-js-asset==2.2.0
+django-polymorphic==3.1.0
+django-rest-polymorphic==0.1.10
+djangorestframework==3.16.1
 idna==3.10
 isodate==0.7.2
 jalali_core==1.0.0
@@ -11,7 +16,10 @@ jdatetime==5.2.0
 Markdown==3.6
 pillow==10.2.0
 python-dateutil==2.9.0.post0
+qrcode==8.2
+RapidFuzz==3.13.0
 requests==2.32.3
 sqlparse==0.4.4
 tzdata==2024.1
 urllib3==2.2.3
+
