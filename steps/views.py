@@ -21,18 +21,19 @@ class StepDetailView(DetailView):
         
         # Get all specific block types you have
         visible_blocks = step.blocks.instance_of(
-            TextBlock, ImageBlock, MCQBlock, KeyFeatureBlock, PairingBlock
+            TextBlock, ImageBlock, MCQBlock, KeyFeatureBlock, PairingBlock, MonoTextCheckBlock,
         ).filter(
             Q(textblock__visible=True) |
             Q(imageblock__visible=True) |
             Q(mcqblock__visible=True) |
             Q(keyfeatureblock__visible=True) |
-            Q(pairingblock__visible=True)
+            Q(pairingblock__visible=True) |
+            Q(monotextcheckblock__visible=True)
         )
-        
+    
         context['blocks'] = visible_blocks
         return context
-        
+
 class StepRaceDetailView(DetailView):
     model = Step
     template_name = 'steps/step_race_detail.html'
@@ -46,13 +47,14 @@ class StepRaceDetailView(DetailView):
         
         # Get all specific block types you have
         visible_blocks = step.blocks.instance_of(
-            TextBlock, ImageBlock, MCQBlock, KeyFeatureBlock, PairingBlock
+            TextBlock, ImageBlock, MCQBlock, KeyFeatureBlock, PairingBlock, MonoTextCheckBlock
         ).filter(
             Q(textblock__visible=True) |
             Q(imageblock__visible=True) |
             Q(mcqblock__visible=True) |
             Q(keyfeatureblock__visible=True) |
-            Q(pairingblock__visible=True)
+            Q(pairingblock__visible=True) |
+            Q(monotextcheckblock__visible=True)
         )
         
         context['blocks'] = visible_blocks
@@ -211,6 +213,7 @@ def submit_race_score(request, race_id):
             "status": 400,
             "redirect_url": "❌ Invalid request."
         })
+
 
 
 
