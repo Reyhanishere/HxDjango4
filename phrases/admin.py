@@ -1,6 +1,10 @@
 from django.contrib import admin
+from django.conf import settings
 
 from .models import MedicalConcept, TermVariant, UnmappedTerm, MedicalSubject
+
+import requests
+import json
 
 class MedicalConceptInline(admin.TabularInline):
     model= MedicalConcept.subject.through
@@ -32,20 +36,71 @@ class TermVariantInline(admin.TabularInline):   # or admin.StackedInline
     fields = ["text"]
     show_change_link = True
 
+
 @admin.register(MedicalConcept)
 class MedicalConceptAdmin(admin.ModelAdmin):
     list_display = ["name", "get_subject", "code"]
-    
     search_fields = ["name", "get_subject", "code"]
-
+    actions = ["generate_variants_action"]
+    inlines = [TermVariantInline]
+    
     def get_subject(self, obj):
         return ", ".join(c.name for c in obj.subject.all())
-    
+        
+    def generate_variants_action(self, request, queryset):
+        API_URL='https://api.metisai.ir/api/v1'
+        for concept in queryset:
+            try:
+                bot_id = '4e8a5b03-1ad7-4db4-a5e1-5c2ba38fdc16'
+                bot_data={
+                    'botId': bot_id,
+                    'user':None,
+                    'initialMessages': None,
+                }
+                Headers={
+                'Authorization':settings.AI_API_KEY,
+                'content-type':'application/json'
+                }
+                response=requests.post(API_URL+"/chat/session", headers=Headers, data=json.dumps(bot_data))
+                session_JSON = response.json()
+                session_ID=session_JSON.get('id')
+                print(session_ID)
+                # SESSION_CODE='47f9a62c-932a-4ec7-a60d-126485bb8220'
+                Headers={
+                'Authorization':settings.AI_API_KEY,
+                'content-type':'application/json'
+                }
+                Data = {
+                    'message':{
+                        'content': f"Medical Concept: {concept.name}",
+                        'type':'USER'
+                    },
+                    }
+                message_url = f'{API_URL}/chat/session/{session_ID}/message'
+                response = requests.post(message_url, headers=Headers, data=json.dumps(Data))
+                response.raise_for_status()
+                # print('response', response)
+                response_data = response.json()
+                # print('data', response_data)
+                content_str = response_data["content"]
+                # Now variants is a real Python list
+                variants = content_str[15:-3].split('", "')
+                # print('list', variants)
+                for text in variants:
+                # for text in response['variants']:
+                    TermVariant.objects.get_or_create(
+                        text=text.lower().strip(),
+                        defaults={
+                            'concept':concept,
+                        }
+                    )
+                self.message_user(request, f"Variants Added for {concept.name} Successfully.")
+            except Exception as e:
+                self.message_user(request, f"Error calling AI API: {e}")
+                
     get_subject.short_description = "Subjects"
-
-    inlines = [TermVariantInline]
-
-
+    generate_variants_action.short_description = "Generate Variants with AI!"
+    
 
 @admin.register(UnmappedTerm)
 class UnmappedTermAdmin(admin.ModelAdmin):
@@ -61,4 +116,5 @@ class UnmappedTermAdmin(admin.ModelAdmin):
                 term.delete()
 
         self.message_user(request, "Selected terms assigned to their concepts.")
+
     assign_to_concept.short_description = "Assign to its concept"
