@@ -19,7 +19,16 @@
   <h2 style="margin:1rem">{{ step.title }}</h2>
 
   {% for block in blocks %}
-    <div class="block-container {% if forloop.counter == 1 %}active{% endif %}" id="block-{{ forloop.counter }}" data-model="{{block|wModel}}" data-xp="{{ block.xp }}">
+    <div 
+    class="block-container {% if forloop.counter == 1 %}active{% endif %}" 
+    id="block-{{ forloop.counter }}" 
+    data-model="{{block|wModel}}" 
+    data-xp="{{ block.xp }}"
+    {% if block|isModel:"MonoTextCheckBlock" %}
+      data-concept = "{{ block.concept.id }}"
+      data-check-url="{% url 'mono_text_check' %}"
+    {% endif %}
+    >
       {% if block|isModel:"TextBlock" %}
         <div>{{ block.text }}</div>
       {% elif block|isModel:"ImageBlock" %}
@@ -28,7 +37,7 @@
         <div id="explanation{{ forloop.counter }}" class="explanation" style="display:block"> {{ block.caption }} </div>
       </div>
       {% elif block|isModel:"MCQBlock" %}
-        <div>{{ block.question|linebreaks }}</div>
+        <div>{{ block.question }}</div>
         <form id="mcq{{ forloop.counter }}">
           {% with choices=block.choices.items|shuffleDict %}
           <div class="MCQCont">
@@ -95,7 +104,72 @@
               <div id="feedback{{ forloop.counter }}" class="feedback"></div>
               <div id="explanation{{ forloop.counter }}" class="explanation"><details><summary>پاسخ تشریحی</summary>{{block.explanation|sep_paraph}}</details></div>
           </div>
-          
+      {% elif block|isModel:"MonoTextCheckBlock" %}
+      <style>
+        .monoTextInput{
+          padding: 5px 10px;
+          border-radius: 10px;
+          border: none;
+          background-color: #eee;
+          min-width: 100px;
+
+        }
+        .monoTextCheckBtn{
+          border-radius: 10px;
+          border: 1px solid #999;
+          color: #333
+        }
+        .monoTextCheckBtn:disabled{
+          opacity: 0.5
+        }
+        .monoTextResponse{
+          background-color: #eee;
+          border-radius: 10px;
+          margin: 0.5rem 0;
+          padding: 0.5rem;
+          opacity:0; 
+          transition:opacity .5s;
+          display: none;
+        }
+        .monoTextStatusLight{
+          width:12px;
+          height: 12px;
+          border-radius: 10px;
+          background-color: #999;
+          margin: auto;
+          border: 1px solid #999;
+        }
+        .monoTextInputBtnCont{
+          display: grid;
+          grid-template-columns: 0.25fr 3fr 1fr;
+          gap: 5px;
+          margin: 1rem 0;
+        }
+        .monoTextExplanation{
+          background-color: #eee;
+          border-radius: 10px;
+          padding: 0.5rem;
+          display: none;
+        }
+      </style>
+          <div dir="auto">{{ block.question }}</div>
+          <!-- 2) Input -->
+          <div class="monoTextInputBtnCont">
+            <div class="monoTextStatusLight"></div>
+
+            <input dir="auto" type="text" class="monoTextInput" placeholder="Type your answer…" autocomplete="off" />
+
+            <!-- 3) Check button -->
+            <button type="button" class="monoTextCheckBtn" data-concept="{{ block.answer_concept.id }}">Check</button>
+          </div>
+
+          <!-- 4) Response box (hidden by opacity) -->
+          <div class="monoTextResponse" style="" aria-live="polite"></div>
+
+          <!-- 5) Explanation box (hidden by opacity) -->
+          <div dir="auto" class="monoTextExplanation" style="opacity:0; transition:opacity .5s;">
+            {{ block.explanation }}
+          </div>
       {% endif %}
       
     </div>
@@ -109,6 +183,110 @@
 <script src="{% static 'scripts/Steps/Pairing.js' %}"></script>
 <script src="{% static 'scripts/Steps/KF.js' %}"></script>
 <script src="{% static 'scripts/Steps/MCQ.js' %}"></script>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all check buttons
+            const checkButtons = document.querySelectorAll('.monoTextCheckBtn');
+            
+            // Add click event listener to each button
+            checkButtons.forEach(button => {
+                button.addEventListener('click', handleCheckClick);
+            });
+            
+            // Also allow Enter key to trigger the check
+            const inputFields = document.querySelectorAll('.monoTextInput');
+            inputFields.forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        const button = this.nextElementSibling;
+                        if (button && button.classList.contains('monoTextCheckBtn')) {
+                            handleCheckClick.call(button);
+                        }
+                    }
+                });
+            });
+            
+            // Handle the button click
+            function handleCheckClick() {
+                const button = this;
+                const concept = button.getAttribute('data-concept');
+                const inputField = button.previousElementSibling;
+                const statusLight = inputField.previousElementSibling;
+                const responseElement = button.parentElement.nextElementSibling;
+                const explanationElement = responseElement.nextElementSibling;
+                
+                // Get input value and trim whitespace
+                const inputText = inputField.value.trim();
+                
+                // Validate input
+                if (!inputText) {
+                    responseElement.textContent = 'Please enter some text before checking.';
+                    responseElement.style.display = 'block';
+                    explanationElement.style.display = 'block';
+
+                    responseElement.style.opacity = 1;
+                    return;
+                }
+                
+                // Disable button
+                button.disabled = true;
+                button.textContent = 'Checking...';
+                const data = {
+                  concept_id: concept,
+                  input_text: inputText
+                };
+                // In a real implementation, this would be a fetch call to your Django backend
+                    fetch("{% url 'mono_text_check' %}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken') // CSRF token for Django
+                        },
+                        body: JSON.stringify(data)
+                      })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update response element
+                        responseElement.innerHTML = data.message;
+                        responseElement.style.opacity = 1;
+                        responseElement.style.color = data.color;
+                        responseElement.style.backgroundColor = data.backColor;
+                        statusLight.style.backgroundColor = data.backColor;
+                        statusLight.style.borderColor = data.color;
+                        responseElement.style.display = 'block';
+                        
+                        
+                        // Show explanation
+                        explanationElement.style.display = 'block';
+                        explanationElement.style.opacity = '1';
+                    })
+                    .catch(error => {
+                        responseElement.textContent = 'Error: ' + error;
+                        responseElement.style.opacity = 1;
+                    })
+                    .finally(() => {
+                        // Keep the button disabled permanently after response
+                        button.textContent = 'Submitted';
+                    });
+                  }
+            
+            function getCookie(name) {
+              let cookieValue = null;
+              if (document.cookie && document.cookie !== '') {
+                  const cookies = document.cookie.split(';');
+                  for (let i = 0; i < cookies.length; i++) {
+                      const cookie = cookies[i].trim();
+                      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                          break;
+                      }
+                  }
+              }
+              return cookieValue;
+          }
+            
+        });
+    </script>
 
 <script>
   let totalXP = 0;
