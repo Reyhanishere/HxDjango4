@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.conf import settings
 
 from .models import MedicalConcept, TermVariant, UnmappedTerm, MedicalSubject
@@ -100,6 +100,8 @@ class MedicalConceptAdmin(admin.ModelAdmin):
                 except Exception as e:
                     self.message_user(request, f"Error calling AI API: {e}")
                 queryset.update(ai_used=True)
+            else:
+                messages.error(request, f'Error: AI Variant Generator has already been used for {concept.name}.')
                 
     get_subject.short_description = "Subjects"
     generate_variants_action.short_description = "Generate Variants with AI!"
@@ -121,6 +123,7 @@ class UnmappedTermAdmin(admin.ModelAdmin):
         self.message_user(request, "Selected terms assigned to their concepts.")
 
     assign_to_concept.short_description = "Assign to its concept"
+
 
 
 
