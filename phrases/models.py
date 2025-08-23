@@ -13,6 +13,7 @@ class MedicalConcept(models.Model):
     description = models.TextField(blank=True)
     code = models.CharField(max_length=50, blank=True)
     subject = models.ManyToManyField(MedicalSubject)
+    ai_used = models.BooleanField(default= False)
 
     def __str__(self):
         return self.name
@@ -58,3 +59,4 @@ class UnmappedTerm(models.Model):
         if self.matched_term:
             matched_term = self.matched_term.text
         return f"{self.text} ({self.score}%) - {matched_term} | {self.concept}"
+
