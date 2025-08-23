@@ -29,7 +29,7 @@ def match_concept(user_input, correct_concept_pk, cutoff_score=85):
     all_variant_texts = TermVariant.objects.values_list("text", flat=True)
     if normalized in all_variant_texts:
         wrong_variant = TermVariant.objects.get(text=normalized)
-        return {"message": "incorrect", "matched_variant": wrong_variant.concept.name}
+        return {"message": "wrong_concept", "matched_variant": wrong_variant.concept.name}
 
     # 3. Fuzzy match within correct variants
     if correct_variant_texts:
@@ -129,12 +129,13 @@ def mono_text_check(request):
     elif result["message"] == "unknown":
         return JsonResponse(
             {
-                "message": "سیستم ما این عبارت رو نمی‌شناسه.\nاگر فکر می‌کنی پاسخت درسته، ما اون رو بررسی می‌کنیم و امتیازش رو بهت می‌دیم.",
-                "backColor": "#fff3cd",
-                "color": "#856404",
+                "message": "سیستم ما این عبارت رو نمی‌شناسه و به نظرمون، اشتباهه.\nاگر فکر می‌کنی پاسخت درسته، ما اون رو بررسی می‌کنیم و امتیازش رو بهت می‌دیم.",
+                "backColor": "#f8d7da",
+                "color": "#721c24",
             }
         )
     else:
         return JsonResponse(
             {"message": "خطای ناشناخته", "backColor": "#fff3cd", "color": "#856404"}
         )
+
