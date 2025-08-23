@@ -50,53 +50,56 @@ class MedicalConceptAdmin(admin.ModelAdmin):
     def generate_variants_action(self, request, queryset):
         API_URL='https://api.metisai.ir/api/v1'
         for concept in queryset:
-            try:
-                bot_id = '4e8a5b03-1ad7-4db4-a5e1-5c2ba38fdc16'
-                bot_data={
-                    'botId': bot_id,
-                    'user':None,
-                    'initialMessages': None,
-                }
-                Headers={
-                'Authorization':settings.AI_API_KEY,
-                'content-type':'application/json'
-                }
-                response=requests.post(API_URL+"/chat/session", headers=Headers, data=json.dumps(bot_data))
-                session_JSON = response.json()
-                session_ID=session_JSON.get('id')
-                print(session_ID)
-                # SESSION_CODE='47f9a62c-932a-4ec7-a60d-126485bb8220'
-                Headers={
-                'Authorization':settings.AI_API_KEY,
-                'content-type':'application/json'
-                }
-                Data = {
-                    'message':{
-                        'content': f"Medical Concept: {concept.name}",
-                        'type':'USER'
-                    },
+            if concept.ai_used == False:
+                try:
+                    bot_id = '4e8a5b03-1ad7-4db4-a5e1-5c2ba38fdc16'
+                    bot_data={
+                        'botId': bot_id,
+                        'user':None,
+                        'initialMessages': None,
                     }
-                message_url = f'{API_URL}/chat/session/{session_ID}/message'
-                response = requests.post(message_url, headers=Headers, data=json.dumps(Data))
-                response.raise_for_status()
-                print('Response:', response)
-                response_data = response.json()
-                print('Data:', response_data)
-                content_str = response_data["content"]
-                # Now variants is a real Python list
-                variants = content_str[15:-3].split('", "')
-                print('List:', variants)
-                for text in variants:
-                # for text in response['variants']:
-                    TermVariant.objects.get_or_create(
-                        text=text.lower().strip(),
-                        defaults={
-                            'concept':concept,
+                    Headers={
+                    'Authorization':settings.AI_API_KEY,
+                    'content-type':'application/json'
+                    }
+                    response=requests.post(API_URL+"/chat/session", headers=Headers, data=json.dumps(bot_data))
+                    session_JSON = response.json()
+                    session_ID=session_JSON.get('id')
+                    print(session_ID)
+                    # SESSION_CODE='47f9a62c-932a-4ec7-a60d-126485bb8220'
+                    Headers={
+                    'Authorization':settings.AI_API_KEY,
+                    'content-type':'application/json'
+                    }
+                    Data = {
+                        'message':{
+                            'content': f"Medical Concept: {concept.name}",
+                            'type':'USER'
+                        },
                         }
-                    )
-                self.message_user(request, f"Variants Added for {concept.name} Successfully.")
-            except Exception as e:
-                self.message_user(request, f"Error calling AI API: {e}")
+                    message_url = f'{API_URL}/chat/session/{session_ID}/message'
+                    response = requests.post(message_url, headers=Headers, data=json.dumps(Data))
+                    response.raise_for_status()
+                    print('Response:', response)
+                    response_data = response.json()
+                    print('Data:', response_data)
+                    content_str = response_data["content"]
+                    # Now variants is a real Python list
+                    variants = content_str[15:-3].split('", "')
+                    print('List: ', variants)
+                    for text in variants:
+                    # for text in response['variants']:
+                        TermVariant.objects.get_or_create(
+                            text=text.lower().strip(),
+                            defaults={
+                                'concept':concept,
+                            }
+                        )
+                    self.message_user(request, f"Variants Added for {concept.name} Successfully.")
+                    
+                except Exception as e:
+                    self.message_user(request, f"Error calling AI API: {e}")
+                queryset.update(ai_used=True)
                 
     get_subject.short_description = "Subjects"
     generate_variants_action.short_description = "Generate Variants with AI!"
@@ -118,4 +121,5 @@ class UnmappedTermAdmin(admin.ModelAdmin):
         self.message_user(request, "Selected terms assigned to their concepts.")
 
     assign_to_concept.short_description = "Assign to its concept"
+
 
