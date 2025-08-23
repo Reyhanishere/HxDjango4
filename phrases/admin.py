@@ -85,7 +85,7 @@ class MedicalConceptAdmin(admin.ModelAdmin):
                     print('Data:', response_data)
                     content_str = response_data["content"]
                     # Now variants is a real Python list
-                    variants = content_str[15:-3].split('", "')
+                    variants = content_str[15:-3].split('","')
                     print('List: ', variants)
                     for text in variants:
                     # for text in response['variants']:
@@ -121,5 +121,6 @@ class UnmappedTermAdmin(admin.ModelAdmin):
         self.message_user(request, "Selected terms assigned to their concepts.")
 
     assign_to_concept.short_description = "Assign to its concept"
+
 
 
