@@ -8,7 +8,6 @@ from .utils import normalize_text
 import json
 from rapidfuzz import process, fuzz
 
-
 def match_concept(user_input, correct_concept_pk, cutoff_score=85):
     normalized = normalize_text(user_input)
     rapidfuzz_function = fuzz.WRatio
@@ -19,15 +18,19 @@ def match_concept(user_input, correct_concept_pk, cutoff_score=85):
 
     # Get only variants related to the expected concept
     correct_variants_qs = correct_concept.variants.all()
-    correct_variant_texts = [v.text for v in correct_variants_qs]
+    correct_variant_texts = [v.text.lower() for v in correct_variants_qs]
 
     # 1. Exact match to correct variants
     if normalized in correct_variant_texts:
         return {"message": "correct", "matched_variant": normalized}
 
     # 2. Check if it matches another known concept
-    all_variant_texts = TermVariant.objects.values_list("text", flat=True)
-    if normalized in all_variant_texts:
+    variant_texts_qs = TermVariant.objects.values_list("text", flat=True)
+
+    all_variants_lowered = [
+        item for text in variant_texts_qs for item in (text, text.lower())
+    ]
+    if normalized in all_variants_lowered:
         wrong_variant = TermVariant.objects.get(text=normalized)
         return {"message": "wrong_concept", "matched_variant": wrong_variant.concept.name}
 
@@ -52,7 +55,7 @@ def match_concept(user_input, correct_concept_pk, cutoff_score=85):
 
     # 4. Fuzzy match within all variants
     other_match, other_score, _ = process.extractOne(
-        normalized, all_variant_texts, scorer=rapidfuzz_function
+        normalized, all_variants_lowered, scorer=rapidfuzz_function
     )
 
     if other_score > cutoff_score:
@@ -138,4 +141,5 @@ def mono_text_check(request):
         return JsonResponse(
             {"message": "خطای ناشناخته", "backColor": "#fff3cd", "color": "#856404"}
         )
+
 
