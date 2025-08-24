@@ -41,7 +41,7 @@ class TermVariant(models.Model):
         return f"{self.text} | {self.concept.name}"
     
     def save(self, *args, **kwargs):
-        self.text = self.text.strip().lower()
+        self.text = self.text.strip()
         super().save(*args, **kwargs)
 
 class UnmappedTerm(models.Model):
@@ -59,4 +59,5 @@ class UnmappedTerm(models.Model):
         if self.matched_term:
             matched_term = self.matched_term.text
         return f"{self.text} ({self.score}%) - {matched_term} | {self.concept}"
+
 
