@@ -80,12 +80,7 @@ class MedicalConceptAdmin(admin.ModelAdmin):
                     message_url = f'{API_URL}/chat/session/{session_ID}/message'
                     response = requests.post(message_url, headers=Headers, data=json.dumps(Data))
                     response.raise_for_status()
-                    print('Response:', response)
-                    response_data = response.json()
-                    print('Data:', response_data)
-                    content_str = response_data["content"]
-                    # Now variants is a real Python list
-                    variants = content_str[15:-3].split('","')
+                    variants = json.loads(response['content'])['variants']
                     print('List: ', variants)
                     for text in variants:
                     # for text in response['variants']:
@@ -123,6 +118,7 @@ class UnmappedTermAdmin(admin.ModelAdmin):
         self.message_user(request, "Selected terms assigned to their concepts.")
 
     assign_to_concept.short_description = "Assign to its concept"
+
 
 
 
