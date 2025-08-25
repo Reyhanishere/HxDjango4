@@ -31,7 +31,7 @@ def match_concept(user_input, correct_concept_pk, cutoff_score=85):
         item for text in variant_texts_qs for item in (text, text.lower())
     ]
     if normalized in all_variants_lowered:
-        wrong_variant = TermVariant.objects.get(text=normalized)
+        wrong_variant = TermVariant.objects.get(text__iexact=normalized)
         return {"message": "wrong_concept", "matched_variant": wrong_variant.concept.name}
 
     # 3. Fuzzy match within correct variants
@@ -45,7 +45,7 @@ def match_concept(user_input, correct_concept_pk, cutoff_score=85):
                     defaults={
                         "score": int(score),
                         "concept": correct_concept,
-                        "matched_term": TermVariant.objects.get(text=text_var),
+                        "matched_term": TermVariant.objects.get(text__iexact=text_var),
                     },
                 )
                 if not created:
@@ -59,7 +59,7 @@ def match_concept(user_input, correct_concept_pk, cutoff_score=85):
     )
 
     if other_score > cutoff_score:
-        wrong_variant = TermVariant.objects.get(text=other_match)
+        wrong_variant = TermVariant.objects.get(text__iexact=other_match)
         unmapped, created = UnmappedTerm.objects.get_or_create(
             text=normalized,  # <-- only search by this
             defaults={
@@ -141,5 +141,6 @@ def mono_text_check(request):
         return JsonResponse(
             {"message": "خطای ناشناخته", "backColor": "#fff3cd", "color": "#856404"}
         )
+
 
 
