@@ -17,7 +17,8 @@
     }
 
   </style>
-{% endblock %}
+  <script src="{% static 'scripts/Steps/Race.js' %}"></script>
+{% endblock imports %}
 
 {% block content %}
   <div class="progressDiv">
@@ -110,8 +111,6 @@
   </form>
     <div id="submitRespMessage" style="" dir="auto"></div>
 
-    <script src="{% static 'scripts/Steps/Race.js' %}"></script>
-
     <script>
         document.getElementById('submitForm').addEventListener('submit', sendForm);
     </script>
@@ -124,3 +123,4 @@
         });
     </script>
 {% endblock %}
+
