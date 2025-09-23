@@ -25,7 +25,7 @@
       <div class="barShine"></div>
     </div>
   </div>
-  <h1 style="margin:1rem" dir="ltr">Steps</h1>
+  <h1 style="margin:1rem" dir="ltr">Steps Race</h1>
   <h2 style="margin:1rem">{{ step.title }}</h2>
 
   {% for block in blocks %}
@@ -170,7 +170,7 @@
             <input dir="auto" type="text" class="monoTextInput" placeholder="Type your answer…" autocomplete="off" />
 
             <!-- 3) Check button -->
-            <button type="button" class="monoTextCheckBtn" data-concept="{{ block.answer_concept.id }}">Check</button>
+            <button type="button" class="monoTextCheckBtn" data-concept="{{ block.answer_concept.id }}" data-xp="{{block.xp}}">Check</button>
           </div>
 
           <!-- 4) Response box (hidden by opacity) -->
@@ -198,9 +198,7 @@
   </form>
     <div id="submitRespMessage" style="" dir="auto"></div>
     
-    <script>
-        document.getElementById('submitForm').addEventListener('submit', sendForm);
-    </script>
+    
 <script src="{% static 'scripts/Steps/Pairing.js' %}"></script>
 <script src="{% static 'scripts/Steps/KF.js' %}"></script>
 <script src="{% static 'scripts/Steps/MCQ.js' %}"></script>
@@ -231,6 +229,7 @@
             function handleCheckClick() {
                 const button = this;
                 const concept = button.getAttribute('data-concept');
+                const xp = button.getAttribute('data-xp');
                 const inputField = button.previousElementSibling;
                 const statusLight = inputField.previousElementSibling;
                 const responseElement = button.parentElement.nextElementSibling;
@@ -276,10 +275,12 @@
                         statusLight.style.borderColor = data.color;
                         responseElement.style.display = 'block';
                         
-                        
                         // Show explanation
                         explanationElement.style.display = 'block';
                         explanationElement.style.opacity = '1';
+                        if (data.correct == 'true') {
+                          totalXP += parseInt(xp)
+                        };
                     })
                     .catch(error => {
                         responseElement.textContent = 'Error: ' + error;
@@ -288,6 +289,7 @@
                     .finally(() => {
                         // Keep the button disabled permanently after response
                         button.textContent = 'Submitted';
+                        enableContinue();
                     });
                   }
             
@@ -357,5 +359,39 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 }
 </script>
+<script>
+function sendForm(event, title) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    const submitRespMessage = document.getElementById('submitRespMessage');
 
+    fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "ok") {
+                window.location.href = data.redirect_url;
+            } else {
+                submitRespMessage.style.display = "block"
+                submitRespMessage.innerHTML = data.message;
+            }
+        })
+        .catch(data => {
+            submitRespMessage.style.display = "block"
+            submitRespMessage.innerHTML = "❌ Submission failed.";
+        });
+}
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("submitForm")
+            .addEventListener("submit", e => sendForm(e, "Race Form"));
+});
+</script>
 {% endblock content %}
