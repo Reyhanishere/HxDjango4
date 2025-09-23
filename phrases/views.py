@@ -114,12 +114,13 @@ def mono_text_check(request):
 
     if result["message"] == "correct":
         return JsonResponse(
-            {"message": "درسته!", "backColor": "#d4edda", "color": "#155724"}
+            {"correct": "true", "message": "درسته!", "backColor": "#d4edda", "color": "#155724"}
         )
     elif result["message"] == "partially_correct":
         matched_variant = result["matched_variant"]
         return JsonResponse(
             {
+                "correct": "true", 
                 "message": f"درسته.\nالبته احتمالا منظورت <b>{matched_variant}</b> بوده!",
                 "backColor": "#d4edda",
                 "color": "#155724",
@@ -127,20 +128,22 @@ def mono_text_check(request):
         )
     elif result["message"] == "wrong_concept":
         return JsonResponse(
-            {"message": "اشتباهه!", "backColor": "#f8d7da", "color": "#721c24"}
+            {"correct": "false", "message": "اشتباهه!", "backColor": "#f8d7da", "color": "#721c24"}
         )
     elif result["message"] == "unknown":
         return JsonResponse(
             {
-                "message": "سیستم ما این عبارت رو نمی‌شناسه و به نظرمون، اشتباهه.\nاگر فکر می‌کنی پاسخت درسته، ما اون رو بررسی می‌کنیم و امتیازش رو بهت می‌دیم.",
-                "backColor": "#f8d7da",
-                "color": "#721c24",
+                "correct": "false", 
+                "message": "سیستم ما این عبارت رو نمی‌شناسه.\nاگر فکر می‌کنی پاسخت درسته، ما اون رو بررسی می‌کنیم و امتیازش رو بهت می‌دیم.",
+                "backColor": "#fff3cd",
+                "color": "#856404",
             }
         )
     else:
         return JsonResponse(
-            {"message": "خطای ناشناخته", "backColor": "#fff3cd", "color": "#856404"}
+            {"correct": "false", "message": "خطای ناشناخته", "backColor": "#fff3cd", "color": "#856404"}
         )
+
 
 
 
