@@ -6,6 +6,10 @@
 
 {% block imports %}
   <style>
+    summary{
+      margin-bottom: 1rem;
+      color: #888;
+    }
   </style>
 {% endblock imports %}
 
@@ -53,8 +57,9 @@
           <button type="button" id="checkMCQ{{forloop.counter}}" class="checkButton" data-clicked="0" onclick="checkMCQAnswer('{{ block.correct_choice }}', '{{ forloop.counter }}', '{{ block.xp }}')">Check Answer</button>
           </div>
           <div id="feedback{{ forloop.counter }}" class="feedback"></div>
-          <div id="explanation{{ forloop.counter }}" class="explanation" dir=""><details><summary>پاسخ تشریحی</summary>{{block.explanation|sep_paraph}}</details></div>
-
+          {% if block.explanation %}
+            <div id="explanation{{ forloop.counter }}" class="explanation" dir=""><details><summary>پاسخ تشریحی</summary>{{block.explanation|sep_paraph}}</details></div>
+          {% endif %}
         </form>
 
 
@@ -69,8 +74,9 @@
 
           </div>
           <div id="feedback{{ forloop.counter }}" class="feedback"></div>
-          <div id="explanation{{ forloop.counter }}" class="explanation"><details><summary>پاسخ تشریحی</summary>{{block.explanation|sep_paraph}}</details></div>
-      </div>
+          {% if block.explanation %}
+            <div id="explanation{{ forloop.counter }}" class="explanation" dir=""><details><summary>پاسخ تشریحی</summary>{{block.explanation|sep_paraph}}</details></div>
+          {% endif %}      </div>
       </div>
       <script>
           document.addEventListener('DOMContentLoaded', function () {
@@ -102,8 +108,9 @@
           </div>
           <div style="margin: 1rem">
               <div id="feedback{{ forloop.counter }}" class="feedback"></div>
-              <div id="explanation{{ forloop.counter }}" class="explanation"><details><summary>پاسخ تشریحی</summary>{{block.explanation|sep_paraph}}</details></div>
-          </div>
+          {% if block.explanation %}
+            <div id="explanation{{ forloop.counter }}" class="explanation" dir=""><details><summary>پاسخ تشریحی</summary>{{block.explanation|sep_paraph}}</details></div>
+          {% endif %}          </div>
       {% elif block|isModel:"MonoTextCheckBlock" %}
       <style>
         .monoTextInput{
@@ -167,9 +174,11 @@
           <div class="monoTextResponse" style="" aria-live="polite"></div>
 
           <!-- 5) Explanation box (hidden by opacity) -->
+          {% if block.explanation %}
           <div dir="auto" class="monoTextExplanation" style="opacity:0; transition:opacity .5s;">
-            {{ block.explanation }}
+            {{ block.explanation|linebreaksbr }}
           </div>
+          {% endif %}
       {% endif %}
       
     </div>
