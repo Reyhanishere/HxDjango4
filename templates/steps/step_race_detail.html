@@ -69,9 +69,7 @@
           <button type="button" id="checkMCQ{{forloop.counter}}" class="checkButton" data-clicked="0" onclick="checkMCQAnswer('{{ block.correct_choice }}', '{{ forloop.counter }}', '{{ block.xp }}')">Check Answer</button>
           </div>
           <div id="feedback{{ forloop.counter }}" class="feedback"></div>
-          {% if block.explanation %}
             <div id="explanation{{ forloop.counter }}" class="explanation" dir=""><details><summary>پاسخ تشریحی</summary>{{block.explanation|sep_paraph}}</details></div>
-          {% endif %}
         </form>
 
 
@@ -406,4 +404,5 @@ function sendForm(event, title) {
 });
 </script>
 {% endblock content %}
+
 
