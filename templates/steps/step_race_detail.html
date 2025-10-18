@@ -42,7 +42,7 @@
     {% endif %}
     >
       {% if block|isModel:"TextBlock" %}
-        <div dir="auto" block.text|linebreaksbr }}</div>
+        <div dir="auto">{{ block.text|linebreaksbr }}</div>
       {% elif block|isModel:"ImageBlock" %}
       <div style="display: flex; justify-content: center; flex-direction: column; margin: 1rem;">
         <img src="{{ block.image.url }}" alt="{{ block.caption }}" style="max-width: 80%; margin: 1rem auto; border-radius: 10px;">
@@ -397,3 +397,4 @@ function sendForm(event, title) {
 });
 </script>
 {% endblock content %}
+
