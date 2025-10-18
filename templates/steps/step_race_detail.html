@@ -332,6 +332,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (nextBlock.dataset.model === "textblock") {
             enableContinue();
+        } else if (nextBlock.dataset.model === "imageblock") {
+            enableContinue();
         } else {
             disableContinue();
         }
@@ -397,4 +399,5 @@ function sendForm(event, title) {
 });
 </script>
 {% endblock content %}
+
 
