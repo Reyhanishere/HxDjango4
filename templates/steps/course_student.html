@@ -1,0 +1,94 @@
+<style>
+.course-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  background: #f9fafb;
+  border-radius: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
+  font-family: sans-serif;
+}
+
+.course-header {
+  background: #2563eb;
+  color: white;
+  padding: 1rem 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.grid-header, .grid-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  padding: 0.75rem 1rem;
+  align-items: center;
+}
+
+.grid-header {
+  background: #e5e7eb;
+  font-weight: bold;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.grid-row:nth-child(even) {
+  background: #f3f4f6;
+}
+
+.grid-row span {
+  padding: 0.5rem 0;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-start {
+  background: #10b981;
+  color: white;
+}
+
+.btn-start:hover {
+  background: #059669;
+}
+
+.btn-done {
+  background: #9ca3af;
+  color: white;
+  cursor: default;
+}
+</style>
+
+<div class="course-container">
+  <div class="course-header">
+    {{ course.title }} <small style="font-weight: 400;">(Student View)</small>
+  </div>
+
+  {% if races_data %}
+  <div class="grid-header">
+    <span>عنوان</span>
+    <span>نمره</span>
+    <span>اقدام</span>
+  </div>
+
+  {% for r in races_data %}
+  <div class="grid-row">
+    <span>{{ r.name }}</span>
+    <span>{{ r.score|default_if_none:"-" }}</span>
+    {% if r.score %}
+      <span><span class="btn btn-done">Done</span></span>
+    {% else %}
+      <span><a href="{% url 'course_race_view' course.id r.id %}" class="btn btn-start">Start</a></span>
+    {% endif %}
+  </div>
+  {% endfor %}
+  {% else %}
+  <div style="padding: 1rem; text-align: center; color: #6b7280;">
+    هیچ مسابقه‌ای برای این دوره ثبت نشده است.
+  </div>
+  {% endif %}
+</div>

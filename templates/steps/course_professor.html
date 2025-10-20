@@ -1,0 +1,17 @@
+<h2>{{ course.title }} (Professor View)</h2>
+
+<h3>1. Total Scores</h3>
+<table>
+<tr><th>Student</th><th>Total Score</th></tr>
+{% for s in total_scores %}
+<tr><td>{{ s.user__username }}</td><td>{{ s.total_score }}</td></tr>
+{% endfor %}
+</table>
+
+<h3>2. Per-Race Scores</h3>
+<table>
+<tr><th>Race</th><th>Student</th><th>Score</th></tr>
+{% for r in race_scores %}
+<tr><td>{{ r.race__title }}</td><td>{{ r.user__username }}</td><td>{{ r.score }}</td></tr>
+{% endfor %}
+</table>

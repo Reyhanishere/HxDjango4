@@ -1,0 +1,6 @@
+<h2>{{ course.title }}</h2>
+<p>You are not registered for this course.</p>
+<form action="{% url 'register_course' course.id %}" method="post">
+  {% csrf_token %}
+  <button type="submit">Register</button>
+</form>
