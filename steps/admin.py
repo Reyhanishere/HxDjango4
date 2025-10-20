@@ -105,6 +105,8 @@ class RaceAdmin(admin.ModelAdmin):
     inlines = [RecordInline]
     # actions = [clean_race_records]
 
+admin.site.register(Course)
+admin.site.register(CourseRegistration)
 admin.site.register(Race, RaceAdmin)
 admin.site.register(Record)
 
@@ -165,4 +167,5 @@ class InteractiveBlockAdmin(PolymorphicParentModelAdmin):
     child_models = (InteractiveQuestionBlock, InteractiveImageBlock, InteractiveTextBlock)
     fk_name = "block"
     
+
 
