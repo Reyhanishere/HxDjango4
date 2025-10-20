@@ -1,10 +1,11 @@
+import uuid
+
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from phrases import models as phrases
-
 from polymorphic.models import PolymorphicModel
 
 
@@ -17,8 +18,29 @@ class Field(models.Model):
     def __str__(self):
         return self.title
 
+class Course(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    professor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='courses_led', null=True, blank=True)
+    students = models.ManyToManyField(settings.AUTH_USER_MODEL, through='CourseRegistration', related_name='courses_joined')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
+class CourseRegistration(models.Model):
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
+    joined_at = models.DateTimeField(auto_now_add=True)
 
 class Race(models.Model):
+    course = models.ManyToManyField(
+        Course,
+        related_name='races',
+        blank=True
+    )
     name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     start_time = models.DateTimeField()
@@ -183,13 +205,21 @@ class UserProgress(models.Model):
 
 class Record(models.Model):
     race = models.ForeignKey(Race, on_delete=models.CASCADE, related_name="records")
-    name = models.CharField(max_length=100)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)  # optional user
+    name = models.CharField(max_length=255, blank=True)
     score = models.IntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    ip_address = models.GenericIPAddressField()
+    ip_address = models.GenericIPAddressField(null=True)
 
     class Meta:
         unique_together = ("race", "name")
+
+    def save(self, *args, **kwargs):
+        if self.user:
+            full_name = f"{self.user.first_name} {self.user.last_name}".strip()
+            self.name = full_name
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.race}| {self.name}: {self.score}"
