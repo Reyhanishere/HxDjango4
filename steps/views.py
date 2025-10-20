@@ -1,7 +1,10 @@
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.http import JsonResponse, Http404
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 
 from .models import *
@@ -59,7 +62,7 @@ class StepRaceDetailView(DetailView):
         
         context['blocks'] = visible_blocks
         return context
-        
+
 class InteractiveStepDetailView(DetailView):
     model = InteractiveStep
     template_name = 'steps/interactive_step_detail.html'
@@ -86,19 +89,6 @@ class InteractiveStepDetailView(DetailView):
         context['current_block'] = current_block
         return context
     
-def load_interactive_block(request, step_id, block_number):
-    step = get_object_or_404(InteractiveStep, id=step_id)
-    blocks = step.interactive_blocks.instance_of(
-        InteractiveImageBlock,
-        InteractiveTextBlock,
-        InteractiveQuestionBlock
-    )
-    block = blocks.filter(number=block_number).first()
-    if not block:
-        return render(request, 'steps/_end_of_step.html')
-
-    return render(request, 'steps/_interactive_blocks.html', {'block': block})
-
 class InteractiveStepGraphVizz(DetailView):
     model = InteractiveStep
     template_name = 'steps/interactive_step_graph.html'
@@ -120,7 +110,7 @@ class InteractiveStepGraphVizz(DetailView):
         space = ' '
         for b in blocks:
             if b.__class__.__name__=='InteractiveQuestionBlock':
-                a = f"dot.node('B{b.number}', shape='box', style='solid', label='{b.question_text.replace(b_n, space)[:50]}')<br/>"
+                a = f"dot.node('B{b.number}', shape='box', style='rounded', label='{b.question_text.replace(b_n, space)[:50]}')<br/>"
                 final_text+=a
                 options = b.options.all()
                 a="dot.attr('node', shape='ellipse', style='filled')<br/>"
@@ -147,7 +137,20 @@ class InteractiveStepGraphVizz(DetailView):
         context['ehsan'] = final_text
         return context
 
-        
+def load_interactive_block(request, step_id, block_number):
+    step = get_object_or_404(InteractiveStep, id=step_id)
+    blocks = step.interactive_blocks.instance_of(
+        InteractiveImageBlock,
+        InteractiveTextBlock,
+        InteractiveQuestionBlock
+    )
+    block = blocks.filter(number=block_number).first()
+    if not block:
+        return render(request, 'steps/_end_of_step.html')
+
+    return render(request, 'steps/_interactive_blocks.html', {'block': block})
+
+
 def submit_answer(request, block_id):
     if request.method == 'POST':
         block = get_object_or_404(Block, pk=block_id)
@@ -214,9 +217,177 @@ def submit_race_score(request, race_id):
             "redirect_url": "❌ Invalid request."
         })
 
+def submit_course_race_score(request, uuid, race_id):
+    race = get_object_or_404(Race, id=race_id)
+
+    # if the race is linked to any course → require login
+    # if race.course.exists() and not request.user.is_authenticated:
+    #     messages.error(request, "You must log in to participate in course races.")
+    #     return redirect('login')
+
+    # if request.user.is_authenticated and Record.objects.filter(race=race, user=request.user).exists():
+    #     messages.error(request, "You have already submitted this race.")
+    #     return redirect('race_detail', race_id=race.id)
+    course = Course.objects.get(id=uuid)
+    
+    if request.method == 'POST':
+        score = request.POST.get('score')
+        
+
+        try:
+            score = int(score)
+        except (TypeError, ValueError):
+            score = 0
+
+        record, created = Record.objects.get_or_create(user=request.user, course=course, race=race, defaults={
+            'score': score,
+        })
+
+        if created:
+            record.save()
+
+            messages.success(request, f"Your score: {score}")
+            return redirect('course_detail', uuid=uuid)
+        else: 
+            messages.error(request, f"You have already done the test.")
+            return redirect('course_detail', uuid=uuid)
 
 
+from django.db.models import Sum
 
+@login_required
+def course_detail(request, uuid):
+    course = get_object_or_404(Course, id=uuid)
 
+    # professor view
+    if request.user == course.professor:
+        students = course.students.all()
 
+        # total score per student
+        total_scores = (
+            Record.objects.filter(course=course)
+            .values('user__id', 'user__username')
+            .annotate(total_score=Sum('score'))
+        )
+
+        # per-race scores
+        race_scores = (
+            Record.objects.filter(course=course)
+            .values('race__name', 'user__username', 'score')
+            .order_by('race__name')
+        )
+
+        return render(request, 'steps/course_professor.html', {
+            'course': course,
+            'students': students,
+            'total_scores': total_scores,
+            'race_scores': race_scores,
+        })
+
+    # student view
+    elif request.user in course.students.all():
+        races = course.races.all()
+        records = Record.objects.filter(course=course, user=request.user)
+        record_dict = {r.race_id: r.score for r in records}
+        races_data=[]
+        for race in races:
+            try:
+                Step.objects.get(race=race)
+                record=Record.objects.filter(course=course, user=request.user, race=race).last()
+                if record:
+                    races_data.append({'name': race.name, 'score': record.score,})
+                else:
+                    races_data.append({'name': race.name, 'score': None, 'id':race.id})
+            except:
+                pass
+        print(races_data)
+
+        return render(request, 'steps/course_student.html', {
+            'course': course,
+            'races': races,
+            'races_data': races_data,
+        })
+
+    # outsider view
+    else:
+        return render(request, 'steps/course_register.html', {'course': course})
+
+@login_required
+def register_course(request, uuid):
+    course = get_object_or_404(Course, id=uuid)
+    course.students.add(request.user)
+    messages.success(request, "You have successfully registered in this course.")
+    return redirect('course_detail', uuid=course.id)
+
+@login_required
+def course_race_view(request, uuid, race_id):
+    course = get_object_or_404(Course, id=uuid)
+    race = get_object_or_404(Race, id=race_id, course=course)
+
+    # Prevent duplicate submission
+    if Record.objects.filter(course=course, race=race, user=request.user).exists():
+        messages.error(request, "You have already submitted this race.")
+        return redirect('course_detail', uuid=course.id)
+
+    if request.method == 'POST':
+        score = request.POST.get('score')
+        Record.objects.create(
+            race=race,
+            course=course,
+            user=request.user,
+            score=score
+        )
+        messages.success(request, f"Your score: {score}")
+        return redirect('course_detail', uuid=course.id)
+
+    return render(request, 'steps/ranking.html', {'race': race, 'course': course})
+
+class StepCourseRaceDetailView(LoginRequiredMixin, DetailView):
+    model = Step
+    template_name = 'steps/step_course_race_detail.html'
+    context_object_name = 'step'
+
+    def get_object(self):
+        # get race by id from URL
+        race_id = self.kwargs.get('race_id')
+        race = Race.objects.get(id=race_id)
+
+        try:
+            return Step.objects.get(race=race)
+        except Step.DoesNotExist:
+            raise Http404("Race not found")
+
+    def dispatch(self, request, *args, **kwargs):
+        course_uuid = kwargs.get('uuid')
+        course = get_object_or_404(Course, id=course_uuid)
+
+        # only allow students or professor to access
+        user = request.user
+        if not (course.students.filter(id=user.id).exists() or user == course.professor):
+            return redirect('course_register', uuid=course.uuid)
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        step = self.object
+        
+        if not step.race:
+            raise Http404("This step is not a race")
+
+        visible_blocks = step.blocks.instance_of(
+            TextBlock, ImageBlock, MCQBlock, KeyFeatureBlock, PairingBlock, MonoTextCheckBlock
+        ).filter(
+            Q(textblock__visible=True) |
+            Q(imageblock__visible=True) |
+            Q(mcqblock__visible=True) |
+            Q(keyfeatureblock__visible=True) |
+            Q(pairingblock__visible=True) |
+            Q(monotextcheckblock__visible=True)
+        )
+
+        context['blocks'] = visible_blocks
+        context['course'] = get_object_or_404(Course, id=self.kwargs.get('uuid'))
+
+        return context
 
