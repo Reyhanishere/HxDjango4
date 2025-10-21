@@ -1,90 +1,94 @@
-
 {% extends 'base.html' %}
-{% block title %} | {{ course.title }}{% endblock title%}
 {% block content %}
 <style>
     body{
         background-color:white;
         font-family: system-ui;
     }
-    .course-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    background: #f9fafb;
-    border-radius: 1rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    overflow: hidden;
-    }
+.course-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  background: #f9fafb;
+  border-radius: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
 
-    .course-header {
-    background: maroon;
-    color: white;
-    padding: 1rem 1.5rem;
-    font-size: 1.4rem;
-    font-weight: 600;
-    }
+.course-header {
+  background: maroon;
+  color: white;
+  padding: 1rem 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
 
-    .grid-header, .grid-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0.75rem 1rem;
-    align-items: center;
-    }
+.grid-header, .grid-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  padding: 0.75rem 1rem;
+  align-items: center;
+}
 
-    .grid-header {
-    background: #e5e7eb;
-    font-weight: bold;
-    border-bottom: 1px solid #d1d5db;
-    }
+.grid-header {
+  background: #e5e7eb;
+  font-weight: bold;
+  border-bottom: 1px solid #d1d5db;
+}
 
-    .grid-row:nth-child(even) {
-    background: #f3f4f6;
-    }
+.grid-row:nth-child(even) {
+  background: #f3f4f6;
+}
 
-    .grid-row span {
-    padding: 0.5rem 0;
-    }
+.grid-row span {
+  padding: 0.5rem 0;
+}
 
-    .btn {
-    display: inline-block;
-    padding: 0.4rem 0.8rem;
-    border-radius: 0.5rem;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    }
+.btn {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
 
-    .btn-start {
-    background: #10b981;
-    color: white;
-    }
+.btn-start {
+  background: #10b981;
+  color: white;
+}
 
-    .btn-start:hover {
-    background: #059669;
-    }
+.btn-start:hover {
+  background: #059669;
+}
 
-    .btn-done {
-    background: #9ca3af;
-    color: white;
-    cursor: default;
-    }
+.btn-done {
+  background: #9ca3af;
+  color: white;
+  cursor: default;
+}
 </style>
 
 <div class="course-container">
   <div class="course-header" dir="auto">
-    {{ course.title }} <small style="font-weight: 400;">(Professor View)</small>
+    {{ course.title }} <small style="font-weight: 400;">(Student View)</small>
   </div>
 
-  {% if total_scores %}
+  {% if races_data %}
   <div class="grid-header">
-    <span>نام کاربر</span>
-    <span>امتیاز</span>
+    <span>عنوان</span>
+    <span>نمره</span>
+    <span>اقدام</span>
   </div>
 
-  {% for s in total_scores %}
+  {% for r in races_data %}
   <div class="grid-row">
-    <span>{{ s.user__username }}</span>
-    <span>{{ s.total_score }}</span>
+    <span>{{ r.name }}</span>
+    <span>{{ r.score|default_if_none:"-" }}</span>
+    {% if r.score %}
+      <span><span class="btn btn-done" style="padding: 5px 10px;">Done</span></span>
+    {% else %}
+      <span><a href="{% url 'course_race_view' course.id r.id %}" class="btn btn-start" style="padding: 5px 10px;">Start</a></span>
+    {% endif %}
   </div>
   {% endfor %}
   {% else %}
@@ -92,25 +96,5 @@
     هیچ مسابقه‌ای برای این دوره ثبت نشده است.
   </div>
   {% endif %}
-</div>
-<div class="course-container" display="grid-template-columns: 1fr 1fr 1fr;">
-    <div class="course-header" style="grid-template-columns: 1fr 1fr 1fr;" dir="auto">
-        Per Case
-    </div>
-    <div class="grid-header" style="grid-template-columns: 1fr 1fr 1fr;">
-        <span>عنوان</span>
-        <span>کاربر</span>
-        <span>امتیاز</span>
-    </div>
-    <div class="grid-row" style="grid-template-columns: 1fr 1fr 1fr;">
-        {% for race in races_scores %}
-            {% for rec in race.data %}
-                <span>{{ race.race_name }}</span>
-                <span>{{ rec.name }}</span>
-                <span>{{ rec.score }}</span>
-            {% endfor %}
-        {% endfor %}
-    </div>
-
 </div>
 {% endblock content %}
