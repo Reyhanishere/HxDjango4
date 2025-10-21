@@ -16,6 +16,9 @@
       text-align: center;
       box-shadow: 0 0 5px 2px #9932cc55;
   }
+  #submitForm{
+    display:none;
+  }
   </style>
 {% endblock imports %}
 
@@ -45,7 +48,7 @@ SSSSSSSSSSSSSSSSSSSSSSss
     {% endif %}
     >
       {% if block|isModel:"TextBlock" %}
-        <div>{{ block.text|linebreaksbr }}</div>
+        <div dir="auto">{{ block.text|linebreaksbr }}</div>
       {% elif block|isModel:"ImageBlock" %}
       <div style="display: flex; justify-content: center; flex-direction: column; margin: 1rem;">
         <img src="{{ block.image.url }}" alt="{{ block.caption }}" style="max-width: 80%; margin: 1rem auto; border-radius: 10px;">
@@ -59,7 +62,7 @@ SSSSSSSSSSSSSSSSSSSSSSss
             {% for key, value in choices %}
               <label class="">
                 <input type="radio" name="option" value="{{ key }}" class="hidden-radio">
-                <span class="optionSpan">{{ value }}</span>
+                <span class="optionSpan" dir="auto">{{ value }}</span>
               </label>
             {% endfor %}
             </div>
@@ -210,7 +213,7 @@ SSSSSSSSSSSSSSSSSSSSSSss
         <input type="text" name="name" placeholder="Enter your name" id="enterName" required autocomplete="off" dir="auto" />
         <input type="hidden" name="score" id="scoreInput" value="" />
         <!-- show questions/inputs here -->
-        <button type="submit" id="nameSubmit">Submit</button>
+        <button type="submit" id="nameSubmit" style="margin:auto">Submit</button>
     </form>
 {% endif %}
 
@@ -363,11 +366,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const scoreInput = document.getElementById("scoreInput")
         xpBox.style.display = 'block';
         if (totalXP > 0) {
-            xpBox.textContent = `عالی بود. ${totalXP} امتیاز گرفتی! این پایین اسمت رو بنویس.`
+            xpBox.textContent = `عالی بود. ${totalXP} امتیاز گرفتی! دکمۀ Submit رو بزن.`
             scoreInput.value = totalXP
 
         } else {
-            xpBox.textContent = 'خوب بود. کلی چیز یاد گرفتی.'
+            xpBox.textContent = 'خوب بود. کلی چیز یاد گرفتی. دکمۀ Submit رو بزن.'
             scoreInput.value = 0
 
         }
