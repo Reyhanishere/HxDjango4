@@ -271,17 +271,23 @@ def course_detail(request, uuid):
         )
 
         # per-race scores
-        race_scores = (
-            Record.objects.filter(course=course)
-            .values('race__name', 'user__username', 'score')
-            .order_by('race__name')
-        )
-
+        # race_scores = (
+        #     Record.objects.filter(course=course)
+        #     .values('race__name', 'user__username', 'score')
+        #     .order_by('race__name')
+        # )
+        races_scores = []
+        for race in course.races.all():
+            temp = []
+            recs = Record.objects.filter(course=course, race=race).order_by('-score')
+            for r in recs:
+                temp.append({'name': r.user.get_name(), 'score': r.score,})
+            races_scores.append({'race_name': race.name, 'data':temp})
         return render(request, 'steps/course_professor.html', {
             'course': course,
             'students': students,
             'total_scores': total_scores,
-            'race_scores': race_scores,
+            'races_scores': races_scores,
         })
 
     # student view
@@ -390,4 +396,5 @@ class StepCourseRaceDetailView(LoginRequiredMixin, DetailView):
         context['course'] = get_object_or_404(Course, id=self.kwargs.get('uuid'))
 
         return context
+
 
