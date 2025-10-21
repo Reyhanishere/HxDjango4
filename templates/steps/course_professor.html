@@ -102,7 +102,6 @@
         <span>کاربر</span>
         <span>امتیاز</span>
     </div>
-    <div class="grid-row" style="grid-template-columns: 1fr 1fr 1fr;">
     {% for race in races_scores %}
       <div class="grid-row" style="grid-template-columns: 1fr 1fr 1fr;">
         {% for rec in race.data %}
@@ -112,8 +111,23 @@
         {% endfor %}
       </div>
     {% endfor %}
-    </div>
+</div>
 
+<div class="course-container" display="grid-template-columns: 1fr 1fr 1fr 1fr 1fr;">
+    <div class="course-header" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr;" dir="auto">
+        Registered Students
+    </div>
+    <div class="grid-header" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr;">
+        <span>نام</span>
+        <span>نام</span>
+        <span>نام</span>
+        <span>نام</span>
+        <span>نام</span>
+    </div>
+    <div class="grid-row" style="grid-template-columns: 1fr 1fr 1fr;">
+    {% for student in students_list %}
+      <span>{{student}}</span>
+    {% endfor %}
+  </div>
 </div>
 {% endblock content %}
-
