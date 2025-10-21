@@ -283,6 +283,17 @@ def course_detail(request, uuid):
             for r in recs:
                 temp.append({'name': r.user.get_name(), 'score': r.score,})
             races_scores.append({'race_name': race.name, 'data':temp})
+        regs = CourseRegistration.objects.filter(course=course)
+        students_list = []
+        for r in regs:
+            students_list.append(r.student.get_name())
+        return render(request, 'steps/course_professor.html', {
+            'course': course,
+            'students': students,
+            'total_scores': total_scores,
+            'races_scores': races_scores,
+            'students_list':students_list,
+        })
         return render(request, 'steps/course_professor.html', {
             'course': course,
             'students': students,
@@ -396,5 +407,6 @@ class StepCourseRaceDetailView(LoginRequiredMixin, DetailView):
         context['course'] = get_object_or_404(Course, id=self.kwargs.get('uuid'))
 
         return context
+
 
 
