@@ -1,6 +1,44 @@
-<h2>{{ course.title }}</h2>
-<p>You are not registered for this course.</p>
-<form action="{% url 'register_course' course.id %}" method="post">
-  {% csrf_token %}
-  <button type="submit">Register</button>
+{% extends 'base.html' %}
+{% block title %} | {{ course.title }}{% endblock title %}
+{% block imports %}
+<style>
+    body{
+        background: white;
+    }
+    #register{
+        margin: 2rem;
+        padding: 3rem;
+        background: linear-gradient(45deg, antiquewhite, bisque);
+        border-radius: 20px;
+        box-shadow: 1px 1px 7px 2px #9999;
+}
+#registerBtn{
+    margin: auto;
+    border-radius: 10px;
+    border: none;
+    padding: 0.5rem 2rem;
+    background-color: rebeccapurple;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 0 5px 3px #9999;
+    transition: 0.3s;
+}
+#registerBtn:hover{
+    box-shadow: 0 0 5px 3px #eee;
+
+}
+
+</style>
+    {%endblock imports%}
+{% block content %}
+<div id="register">
+<div style="display:flex">
+<h2 style="margin: 2rem auto;">{{ course.title }}</h2>
+</div>
+<p style="text-align: center">شما در این کورس ثبت نام نکرده‌اید.</p>
+<form action="{% url 'register_course' course.id %}" method="post" style="display: flex;">
+    {% csrf_token %}
+    <button type="submit" style="margin: auto" id="registerBtn">ثبت نام</button>
 </form>
+</div>
+{% endblock content %}
