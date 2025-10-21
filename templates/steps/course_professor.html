@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 {% block title %} | {{ course.title }}{% endblock title%}
 {% block content %}
@@ -9,7 +8,7 @@
     }
     .course-container {
     max-width: 800px;
-    margin: 2rem auto;
+    margin: 2rem 1rem;
     background: #f9fafb;
     border-radius: 1rem;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -113,13 +112,11 @@
     {% endfor %}
 </div>
 
-<div class="course-container" display="grid-template-columns: 1fr 1fr 1fr 1fr 1fr;">
-    <div class="course-header" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr;" dir="auto">
+<div class="course-container" display="grid-template-columns: 1fr 1fr 1fr;">
+    <div class="course-header" style="grid-template-columns: 1fr 1fr 1fr;" dir="auto">
         Registered Students
     </div>
-    <div class="grid-header" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr;">
-        <span>نام</span>
-        <span>نام</span>
+    <div class="grid-header" style="grid-template-columns: 1fr 1fr 1fr;">
         <span>نام</span>
         <span>نام</span>
         <span>نام</span>
