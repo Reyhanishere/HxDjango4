@@ -282,7 +282,7 @@ def course_detail(request, uuid):
             recs = Record.objects.filter(course=course, race=race).order_by('-score')
             for r in recs:
                 temp.append({'name': r.user.get_name(), 'score': r.score,})
-            races_scores.append({'race_name': race.name, 'data':temp})
+            races_scores.append({'race_name': race.name, 'data':temp, 'id':race.id})
         regs = CourseRegistration.objects.filter(course=course)
         students_list = []
         for r in regs:
@@ -407,6 +407,7 @@ class StepCourseRaceDetailView(LoginRequiredMixin, DetailView):
         context['course'] = get_object_or_404(Course, id=self.kwargs.get('uuid'))
 
         return context
+
 
 
 
