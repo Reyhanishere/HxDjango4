@@ -103,14 +103,17 @@
         <span>امتیاز</span>
     </div>
     <div class="grid-row" style="grid-template-columns: 1fr 1fr 1fr;">
-        {% for race in races_scores %}
-            {% for rec in race.data %}
-                <span>{{ race.race_name }}</span>
-                <span>{{ rec.name }}</span>
-                <span>{{ rec.score }}</span>
-            {% endfor %}
+    {% for race in races_scores %}
+      <div class="grid-row" style="grid-template-columns: 1fr 1fr 1fr;">
+        {% for rec in race.data %}
+          <span>{{ race.race_name }}</span>
+          <span>{{ rec.name }}</span>
+          <span>{{ rec.score }}</span>
         {% endfor %}
+      </div>
+    {% endfor %}
     </div>
 
 </div>
 {% endblock content %}
+
