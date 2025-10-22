@@ -201,7 +201,7 @@ SSSSSSSSSSSSSSSSSSSSSSss
 
 
 {% if user.is_authenticated %}
-    <form method="post" action="{% url 'submit_course_race_score' course.id step.race.id %}">
+    <form method="post" action="{% url 'submit_course_race_score' course.id step.race.id %}" id="submitForm">
         {% csrf_token %}
         <!-- show questions/inputs here -->
         <input type="hidden" name="score" id="scoreInput" value="" />
@@ -418,3 +418,4 @@ function sendForm(event, title) {
 });
 </script>
 {% endblock content %}
+
