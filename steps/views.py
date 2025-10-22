@@ -267,15 +267,9 @@ def course_detail(request, uuid):
         total_scores = (
             Record.objects.filter(course=course)
             .values('user__id', 'user__username')
-            .annotate(total_score=Sum('score'))
+            .annotate(total_score=Sum('score')).order_by('-score')
         )
 
-        # per-race scores
-        # race_scores = (
-        #     Record.objects.filter(course=course)
-        #     .values('race__name', 'user__username', 'score')
-        #     .order_by('race__name')
-        # )
         races_scores = []
         for race in course.races.all():
             temp = []
@@ -294,22 +288,13 @@ def course_detail(request, uuid):
             'races_scores': races_scores,
             'students_list':students_list,
         })
-        return render(request, 'steps/course_professor.html', {
-            'course': course,
-            'students': students,
-            'total_scores': total_scores,
-            'races_scores': races_scores,
-        })
 
     # student view
     elif request.user in course.students.all():
         races = course.races.all()
-        records = Record.objects.filter(course=course, user=request.user)
-        record_dict = {r.race_id: r.score for r in records}
         races_data=[]
         for race in races:
             try:
-                Step.objects.get(race=race)
                 record=Record.objects.filter(course=course, user=request.user, race=race).last()
                 if record:
                     races_data.append({'name': race.name, 'score': record.score,})
@@ -317,11 +302,9 @@ def course_detail(request, uuid):
                     races_data.append({'name': race.name, 'score': None, 'id':race.id})
             except:
                 pass
-        print(races_data)
 
         return render(request, 'steps/course_student.html', {
             'course': course,
-            'races': races,
             'races_data': races_data,
         })
 

@@ -106,12 +106,16 @@
         <span>کاربر</span>
         <span>امتیاز</span>
     </div>
-    {% for race in races_scores %}
+{% for race in races_scores %}
       <div class="grid-row" style="grid-template-columns: 1fr 1fr 1fr;">
         {% for rec in race.data %}
+          {% if forloop.first or forloop.last %}
           <a href="{% url 'course_race_view' course.id race.id %}" class="btn btn-start" style="padding: 5px 10px; width: max-content">
             <span>{{ race.race_name }}</span>
           </a>
+          {% else %}
+          <br/>
+          {% endif %}
           <span>{{ rec.name }}</span>
           <span>{{ rec.score }}</span>
         {% endfor %}
