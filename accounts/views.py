@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from .forms import *
 import cases.models as Cases
+import steps.models as Steps
 from .models import CustomUser
 
 
@@ -20,6 +21,14 @@ def self_user_cases(request):
     user = request.user
     hxs = Cases.Case.objects.filter(author=user).order_by("-date_created")
     return render(request, 'user/self_user_cases.html', {'hxs': hxs,})
+
+@login_required
+def self_user_courses(request):
+    user = request.user
+    courses = Steps.CourseRegistration.objects.filter(student=user).order_by("-joined_at")
+    for course in courses:
+        print(course.course.title)
+    return render(request, 'user/self_user_courses.html', {'courses': courses,})
 
 class UserChangeInfoView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model= CustomUser
