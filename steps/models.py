@@ -25,6 +25,10 @@ class Course(models.Model):
     professor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='courses_led', null=True, blank=True)
     students = models.ManyToManyField(settings.AUTH_USER_MODEL, through='CourseRegistration', related_name='courses_joined')
     created_at = models.DateTimeField(auto_now_add=True)
+    open_for_registration = models.BooleanField(default=True)
+    visible_when_closed = models.BooleanField(default=True)
+    open_for_answering = models.BooleanField(default=True)
+    score_correction = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -34,6 +38,9 @@ class CourseRegistration(models.Model):
     student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
     joined_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.student} at {self.course}"
 
 class Race(models.Model):
     course = models.ManyToManyField(
@@ -206,19 +213,52 @@ class UserProgress(models.Model):
 class Record(models.Model):
     race = models.ForeignKey(Race, on_delete=models.CASCADE, related_name="records")
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)  # optional user
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=255, blank=True)
     score = models.IntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    ip_address = models.GenericIPAddressField(null=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
 
     class Meta:
         unique_together = ("race", "name")
 
     def save(self, *args, **kwargs):
+        # Build base name from user
         if self.user:
-            full_name = f"{self.user.first_name} {self.user.last_name}".strip()
-            self.name = full_name
+            base_name = f"{self.user.first_name} {self.user.last_name}".strip()
+            if not base_name:
+                base_name = self.user.username or "user"
+
+            # ensure max length safety
+            max_len = self._meta.get_field('name').max_length
+            base_name = base_name[:max_len]
+
+            # try to create a unique name for the same race
+            candidate = base_name
+            suffix = 1
+
+            # exclude this instance if it already exists (update case)
+            qs = Record.objects.filter(race=self.race, name=candidate)
+            if self.pk:
+                qs = qs.exclude(pk=self.pk)
+
+            while qs.exists():
+                suffix += 1
+                # create candidate with suffix like "John Doe (2)"
+                candidate = f"{base_name} ({suffix})"
+                # ensure length doesn't exceed max_len
+                if len(candidate) > max_len:
+                    # truncate base_name to fit "(N)" suffix
+                    trim_len = max_len - len(f" ({suffix})")
+                    base_name_tr = base_name[:trim_len]
+                    candidate = f"{base_name_tr} ({suffix})"
+
+                qs = Record.objects.filter(race=self.race, name=candidate)
+                if self.pk:
+                    qs = qs.exclude(pk=self.pk)
+
+            self.name = candidate
+
         super().save(*args, **kwargs)
 
     def __str__(self):

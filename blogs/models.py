@@ -19,7 +19,7 @@ class Post(models.Model):
     description = models.CharField(max_length=200, null=True, blank=True)
     text = models.TextField(null=False, blank=False)
     date = models.DateField(auto_now_add=True)
-    tags = models.ManyToManyField(Tag, null=False, blank=False)
+    tags = models.ManyToManyField(Tag)
     is_md = models.BooleanField(("MarkDown Active"),default=True ,null=False, blank=False)
     visible = models.BooleanField("Visibility",default=True ,null=False, blank=False)
 

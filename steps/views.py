@@ -194,6 +194,12 @@ def submit_race_score(request, race_id):
         except (TypeError, ValueError):
             score = 0
 
+        if not race.is_open:
+            return JsonResponse({
+                "status": 400,
+                "message": f"⚠️ Time to participate at this race has ended."
+             })
+
         if Record.objects.filter(race=race, ip_address=ip).exists():
             return JsonResponse({
                 "status": 400,
@@ -221,19 +227,32 @@ def submit_course_race_score(request, uuid, race_id):
     race = get_object_or_404(Race, id=race_id)
 
     # if the race is linked to any course → require login
-    # if race.course.exists() and not request.user.is_authenticated:
-    #     messages.error(request, "You must log in to participate in course races.")
-    #     return redirect('login')
+    if race.course.exists() and not request.user.is_authenticated:
+        messages.error(request, "You must log in to participate in course races.")
+        return JsonResponse({
+                "status": 400,
+                "message": f"⚠️ You must log in to participate in course races. It's almost imposible that someone sees this message."
+             })
 
-    # if request.user.is_authenticated and Record.objects.filter(race=race, user=request.user).exists():
-    #     messages.error(request, "You have already submitted this race.")
-    #     return redirect('race_detail', race_id=race.id)
     course = Course.objects.get(id=uuid)
     
     if request.method == 'POST':
         score = request.POST.get('score')
         
-
+        if not course in race.course.all():
+            messages.error(request, f"This race is not in the course! Bad link.")
+            return JsonResponse({
+                "status": 400,
+                "message": f"⚠️ This race is not in the course! Where did you get the link from?"
+             })
+        
+        if not course.open_for_answering:
+            messages.error(request, f"Course races are not open for score submition.")
+            return JsonResponse({
+                "status": 400,
+                "message": f"⚠️ فرصت ثبت امتیازها در این دوره تمام شده‌است."
+             })
+        
         try:
             score = int(score)
         except (TypeError, ValueError):
@@ -247,10 +266,32 @@ def submit_course_race_score(request, uuid, race_id):
             record.save()
 
             messages.success(request, f"Your score: {score}")
-            return redirect('course_detail', uuid=uuid)
-        else: 
-            messages.error(request, f"You have already done the test.")
-            return redirect('course_detail', uuid=uuid)
+            
+            return JsonResponse({
+                "status": "ok",
+                "redirect_url": reverse('course_detail', args=[uuid]),
+             })
+            
+        else:
+            if course.score_correction:
+                if score > record.score:
+                    record.score = score
+                    record.save()
+                    return JsonResponse({
+                        "status": "ok",
+                        "redirect_url": reverse('course_detail', args=[uuid]),
+                    })
+                else:
+                    return JsonResponse({
+                        "status": 400,
+                        "message": f"⚠️ امتیاز پیشین شما،کمتر نبوده است."
+                    })
+            else:
+                messages.error(request, f"You have already done the test.")
+                return JsonResponse({
+                    "status": 400,
+                    "message": f"⚠️ شما پیش‌تر به این پرسش‌ها پاسخ داده‌اید. امکان اصلاح نمره وجود ندارد."
+                })
 
 
 from django.db.models import Sum
@@ -312,7 +353,7 @@ def course_detail(request, uuid):
         
         ## Two Things to do:
         ### 1. Show user's ranking among friends (two aboves and two belows)
-        ### 2. If course is closed (need to be added in models) (reg_closed, visible, answer_closed), show their lesson (step) link.
+        ### 2. If course is closed (need to be added in models) (reg_closed, visible, answer_closed), show their lesson (step) link. Done
 
         return render(request, 'steps/course_student.html', {
             'course': course,
@@ -322,10 +363,16 @@ def course_detail(request, uuid):
 
     # outsider view
     else:
-        return render(request, 'steps/course_register.html', {'course': course})
+        lessons = []
+        for race in course.races.all():
+            lessons.append({'lesson_title':race.step_set.first().title, 
+                            'race_name':race.name,
+                            'slug':race.step_set.first().slug,
+                            'field':race.step_set.first().field})
+        return render(request, 'steps/course_register.html', {'course': course, 'lessons':lessons})
 
 @login_required
-def register_course(request, uuid):
+def course_register(request, uuid):
     course = get_object_or_404(Course, id=uuid)
     course.students.add(request.user)
     messages.success(request, "You have successfully registered in this course.")
@@ -376,7 +423,7 @@ class StepCourseRaceDetailView(LoginRequiredMixin, DetailView):
         # only allow students or professor to access
         user = request.user
         if not (course.students.filter(id=user.id).exists() or user == course.professor):
-            return redirect('course_register', uuid=course.uuid)
+            return redirect('course_register', uuid=course.id)
 
         return super().dispatch(request, *args, **kwargs)
 

@@ -50,7 +50,7 @@ class Review(models.Model):
         return f"{self.author}: {self.content_object.title}"
     
 class Case(models.Model):
-    choice = models.ManyToManyField(Choice, "Choice",null=True, blank=True)
+    choice = models.ManyToManyField(Choice)
     premium = models.BooleanField(default=False)
     verified = models.BooleanField(
         default=True,
@@ -251,8 +251,8 @@ class Case(models.Model):
         ),
     )
 
-    tags = models.ManyToManyField(Tag, null=True, blank=True,help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
-    suggests=models.ManyToManyField(Suggest, null=True, blank=True,help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
+    tags = models.ManyToManyField(Tag, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
+    suggests=models.ManyToManyField(Suggest, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
     slug = models.SlugField(
         ("لینک"),
         unique=True,
@@ -396,7 +396,7 @@ def user_directory_path(instance, filename):
 
 
 class Picasso(models.Model):
-    choice = models.ManyToManyField(Choice, null=True, blank=True)
+    choice = models.ManyToManyField(Choice)
     premium = models.BooleanField(default=False)
     verified = models.BooleanField(default=True)
     visible = models.BooleanField(
@@ -446,7 +446,7 @@ class Picasso(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    tags=models.ManyToManyField(Tag, null=True, blank=True)
+    tags=models.ManyToManyField(Tag)
     inappropriate=models.BooleanField(("آزاردهنده"),default=False,help_text="اگر این تصویر می‌تواند برای بخشی از جامعۀ هدف آزاردهنده باشد، این تیک را بزنید تا به طور واضح در صفحۀ نخست سایت به نمایش در نیاید.")
     case = models.URLField(
         "لینک کیس مرتبط",
@@ -455,7 +455,7 @@ class Picasso(models.Model):
         blank=True,
     )
     editors_review=models.TextField(blank=True,null=True)
-    suggests=models.ManyToManyField(Suggest, null=True, blank=True)
+    suggests=models.ManyToManyField(Suggest)
     def __str__(self):
         return self.title
 
@@ -478,7 +478,7 @@ class Picasso(models.Model):
     #     super(Picasso, self).save(*args, **kwargs)
 
 class Note(models.Model):
-    choice = models.ManyToManyField(Choice, null=True, blank=True)
+    choice = models.ManyToManyField(Choice)
     premium = models.BooleanField(default=False)
     verified = models.BooleanField(default=True)
     visible = models.BooleanField(
@@ -517,7 +517,7 @@ class Note(models.Model):
         null=False,
     )
     
-    tags=models.ManyToManyField(Tag, null=True, blank=True)
+    tags=models.ManyToManyField(Tag)
     slug = models.SlugField(
         ("لینک"),
         unique=True,

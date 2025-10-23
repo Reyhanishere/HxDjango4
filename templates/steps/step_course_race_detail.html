@@ -198,27 +198,15 @@ SSSSSSSSSSSSSSSSSSSSSSss
 </div>
 <div id="xpBoxRace"></div>
 
+{% comment %} USER IS ALWAYS AUTHENTICATED BECAUSE OF A MIXIN {% endcomment %}
+<form method="post" action="{% url 'submit_course_race_score' course.id step.race.id %}" id="submitForm">
+    {% csrf_token %}
+    <!-- show questions/inputs here -->
+    <input type="hidden" name="score" id="scoreInput" value="" />
+    <button type="submit" id="nameSubmit">Submit</button>
+</form>
 
-
-{% if user.is_authenticated %}
-    <form method="post" action="{% url 'submit_course_race_score' course.id step.race.id %}" id="submitForm">
-        {% csrf_token %}
-        <!-- show questions/inputs here -->
-        <input type="hidden" name="score" id="scoreInput" value="" />
-        <button type="submit" id="nameSubmit">Submit</button>
-    </form>
-{% else %}
-    <form method="post" action="{% url 'submit_course_race_score' course.id step.race.id %}" id="submitForm">
-        {% csrf_token %}
-        <input type="text" name="name" placeholder="Enter your name" id="enterName" required autocomplete="off" dir="auto" />
-        <input type="hidden" name="score" id="scoreInput" value="" />
-        <!-- show questions/inputs here -->
-        <button type="submit" id="nameSubmit" style="margin:auto">Submit</button>
-    </form>
-{% endif %}
-
-    <div id="submitRespMessage" style="" dir="auto"></div>
-    
+<div id="submitRespMessage" style="" dir="auto"></div>
     
 <script src="{% static 'scripts/Steps/Pairing.js' %}"></script>
 <script src="{% static 'scripts/Steps/KF.js' %}"></script>

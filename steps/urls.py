@@ -18,7 +18,7 @@ urlpatterns = [
     path('blocks/<int:block_id>/submit/', submit_answer, name='submit_answer'),
 
     path('course/<uuid:uuid>/', course_detail, name='course_detail'),
-    path('course/<uuid:uuid>/register/', register_course, name='register_course'),
+    path('course/<uuid:uuid>/register/', course_register, name='course_register'),
     path('course/<uuid:uuid>/race/<int:race_id>/', StepCourseRaceDetailView.as_view(), name='course_race_view'),
     path('course/<uuid:uuid>/race/<int:race_id>/submit_race_score/', submit_course_race_score, name='submit_course_race_score'),
 ]

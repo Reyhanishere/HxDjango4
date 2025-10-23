@@ -5,40 +5,106 @@
     body{
         background: white;
     }
-    #register{
+    .register{
         margin: 2rem;
         padding: 3rem;
         background: linear-gradient(45deg, antiquewhite, bisque);
         border-radius: 20px;
         box-shadow: 1px 1px 7px 2px #9999;
-}
-#registerBtn{
-    margin: auto;
-    border-radius: 10px;
-    border: none;
-    padding: 0.5rem 2rem;
-    background-color: rebeccapurple;
-    color: white;
-    font-weight: 600;
-    box-shadow: 0 0 5px 3px #9999;
-    transition: 0.3s;
-}
-#registerBtn:hover{
-    box-shadow: 0 0 5px 3px #eee;
-
-}
-
+    }
+    #registerBtn{
+        margin: auto;
+        border-radius: 10px;
+        border: none;
+        padding: 0.5rem 2rem;
+        background-color: rebeccapurple;
+        color: white;
+        font-weight: 600;
+        box-shadow: 0 0 5px 3px #9999;
+        transition: 0.3s;
+    }
+    #registerBtn:hover{
+        box-shadow: 0 0 5px 3px #eee;
+    }
+    .lessonsCont{
+        padding: 1rem;
+        display: grid;
+        gap: 10px;
+    }
+    .lessonsRows{
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 10px;
+    }
+    .lessonsRows b, .lessonsRows a, .lessonsRows div{
+        text-align: center
+    }
+    .lessonBtn{
+        cursor: pointer;
+        padding: 0.25rem 1rem;
+        border-radius: 10px;
+        background-color: lightpink;
+        color: deeppink;
+        font-weight: 600;
+        text-decoration: none;
+        width: fit-content;
+        justify-self: center;
+        height: fit-content;
+        align-self: center;
+        transition: 0.3s;
+    }
+    .lessonBtn:hover{
+        color: #ca0c73;
+        transform: translate(0, -2px)
+    }
+    @media (max-width:750px){
+        .lessonsRows{
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 10px;
+        }
+        .hideAt750{
+            display: none;
+        }
+    }
 </style>
-    {%endblock imports%}
+{%endblock imports%}
 {% block content %}
-<div id="register">
-<div style="display:flex">
-<h2 style="margin: 2rem auto;">{{ course.title }}</h2>
+<div class="register">
+    <div style="display:flex">
+        <h2 style="margin: 2rem auto;">{{ course.title }}</h2>
+    </div>
+    {% if course.open_for_registration %}
+        <p style="text-align: center">شما در این کورس ثبت نام نکرده‌اید.</p>
+        <form action="{% url 'course_register' course.id %}" method="post" style="display: flex;">
+            {% csrf_token %}
+            <button type="submit" style="margin: auto" id="registerBtn">ثبت نام</button>
+        </form>
+    {% else %}
+        <p style="text-align: center; margin: 0">در حال حاضر اجازۀ ثبت نام در این دوره را ندارید.</p>
+    {% endif %}
 </div>
-<p style="text-align: center">شما در این کورس ثبت نام نکرده‌اید.</p>
-<form action="{% url 'register_course' course.id %}" method="post" style="display: flex;">
-    {% csrf_token %}
-    <button type="submit" style="margin: auto" id="registerBtn">ثبت نام</button>
-</form>
-</div>
+    
+{% if not course.open_for_registration and course.visible_when_closed %}
+    <p style="text-align: center; margin: 1rem">می‌توانید عنوان درس‌های دوره را اینجا ببینید و به صورت تمرینی به آنها پاسخ بدهید.</p>
+    <div class="register lessonsCont" style="">
+        <div class="lessonsRows">
+            <b>عنوان درس</b>
+            <b class="hideAt750">عنوان در مسابقه</b>
+            <b>ورود به درس</b>
+            <b class="hideAt750">حیطه</b>
+
+        </div>
+        
+        {% for lesson in lessons %}
+        <div class="lessonsRows">
+            <div>{{lesson.lesson_title}}</div>
+            <div class="hideAt750">{{lesson.race_name}}</div>
+            <a href="{% url 'step_detail' lesson.slug %}" class="lessonBtn">Lesson</a>
+            <div class="hideAt750">{{lesson.field}}</div>
+        </div>
+        {% endfor %}
+    </div>
+{% endif %}
+    
 {% endblock content %}
