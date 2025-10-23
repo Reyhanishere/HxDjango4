@@ -30,7 +30,7 @@
 
     .grid-header, .grid-row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 0.2fr 1.5fr 1fr;
     padding: 0.75rem 1rem;
     align-items: center;
     gap: 0.25rem;
@@ -73,21 +73,34 @@
     color: white;
     cursor: default;
     }
+    .studentsList{
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    @media (max-width: 700px){
+      .studentsList{
+        grid-template-columns: 1fr 1fr;
+      }
+      .hideAt700{
+        display: none;
+      }
+    }
 </style>
 <div class="course-container">
   <div class="course-header" dir="auto">
-    {{ course.title }} <small style="font-weight: 400;">(Professor View)</small>
+    {{ course.title }} <small style="font-weight: 400;"></small>
   </div>
 
   {% if total_scores %}
   <div class="grid-header">
+    <span>رتبه</span>
     <span>نام کاربر</span>
     <span>امتیاز</span>
   </div>
 
   {% for s in total_scores %}
   <div class="grid-row">
-    <span>{{ s.user__username }}</span>
+    <span>{{ forloop.counter }}</span>
+    <span>{{ s.name }}</span>
     <span>{{ s.total_score }}</span>
   </div>
   {% endfor %}
@@ -97,17 +110,17 @@
   </div>
   {% endif %}
 </div>
-<div class="course-container" display="grid-template-columns: 1fr 1fr 1fr;">
-    <div class="course-header" style="grid-template-columns: 1fr 1fr 1fr;" dir="auto">
+<div class="course-container" display="grid-template-columns: 1fr 1.5fr 1fr;">
+    <div class="course-header" style="grid-template-columns: 1fr 1.5fr 1fr;" dir="auto">
         Per Case
     </div>
-    <div class="grid-header" style="grid-template-columns: 1fr 1fr 1fr;">
+    <div class="grid-header" style="grid-template-columns: 1fr 1.5fr 1fr;">
         <span>عنوان</span>
         <span>کاربر</span>
         <span>امتیاز</span>
     </div>
 {% for race in races_scores %}
-      <div class="grid-row" style="grid-template-columns: 1fr 1fr 1fr;">
+      <div class="grid-row" style="grid-template-columns: 1fr 1.5fr 1fr;">
         {% for rec in race.data %}
           {% if forloop.first or forloop.last %}
           <a href="{% url 'course_race_view' course.id race.id %}" class="btn btn-start" style="padding: 5px 10px; width: max-content">
@@ -123,16 +136,16 @@
     {% endfor %}
 </div>
 
-<div class="course-container" display="grid-template-columns: 1fr 1fr 1fr;">
-    <div class="course-header" style="grid-template-columns: 1fr 1fr 1fr;" dir="auto">
+<div class="course-container">
+    <div class="course-header studentsList" dir="auto">
         Registered Students
     </div>
-    <div class="grid-header" style="grid-template-columns: 1fr 1fr 1fr;">
+    <div class="grid-header studentsList">
         <span>نام</span>
         <span>نام</span>
-        <span>نام</span>
+        <span class="hideAt700">نام</span>
     </div>
-    <div class="grid-row" style="grid-template-columns: 1fr 1fr 1fr;">
+    <div class="grid-row studentsList">
       {% for student in students_list %}
         <span>{{student}}</span>
       {% endfor %}

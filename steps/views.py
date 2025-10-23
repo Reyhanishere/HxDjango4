@@ -266,9 +266,10 @@ def course_detail(request, uuid):
         # total score per student
         total_scores = (
             Record.objects.filter(course=course)
-            .values('user__id', 'user__username')
-            .annotate(total_score=Sum('score')).order_by('-score')
+            .values('user__id', 'name')
+            .annotate(total_score=Sum('score'))
         )
+        total_scores_ordered = sorted(total_scores, key=lambda x: x['total_score'], reverse=True)
 
         races_scores = []
         for race in course.races.all():
@@ -277,20 +278,26 @@ def course_detail(request, uuid):
             for r in recs:
                 temp.append({'name': r.user.get_name(), 'score': r.score,})
             races_scores.append({'race_name': race.name, 'data':temp, 'id':race.id})
-        regs = CourseRegistration.objects.filter(course=course)
+        regs = CourseRegistration.objects.filter(course=course).order_by('joined_at')
         students_list = []
         for r in regs:
             students_list.append(r.student.get_name())
         return render(request, 'steps/course_professor.html', {
             'course': course,
             'students': students,
-            'total_scores': total_scores,
+            'total_scores': total_scores_ordered,
             'races_scores': races_scores,
             'students_list':students_list,
         })
 
     # student view
     elif request.user in course.students.all():
+        total_score = (
+            Record.objects.filter(course=course, user=request.user)
+            .values('name')
+            .annotate(total_score=Sum('score'))
+        )
+        total_score = total_score[0]['total_score']
         races = course.races.all()
         races_data=[]
         for race in races:
@@ -302,9 +309,14 @@ def course_detail(request, uuid):
                     races_data.append({'name': race.name, 'score': None, 'id':race.id})
             except:
                 pass
+        
+        ## Two Things to do:
+        ### 1. Show user's ranking among friends (two aboves and two belows)
+        ### 2. If course is closed (need to be added in models) (reg_closed, visible, answer_closed), show their lesson (step) link.
 
         return render(request, 'steps/course_student.html', {
             'course': course,
+            'total_score': total_score,
             'races_data': races_data,
         })
 

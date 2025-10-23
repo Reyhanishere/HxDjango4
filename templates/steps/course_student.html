@@ -80,7 +80,7 @@
   {% if races_data %}
   <div class="grid-header">
     <span>عنوان</span>
-    <span>نمره</span>
+    <span>امتیاز</span>
     <span>اقدام</span>
   </div>
 
@@ -95,6 +95,11 @@
     {% endif %}
   </div>
   {% endfor %}
+  <div class="grid-row" style="border-top: 2px solid darkgray;">
+    <span>مجموع امتیازها</span>
+    <span>{{ total_score|default_if_none:"-" }}</span>
+    <br/>
+  </div>
   {% else %}
   <div style="padding: 1rem; text-align: center; color: #6b7280;">
     هیچ مسابقه‌ای برای این دوره ثبت نشده است.
