@@ -21,6 +21,8 @@ urlpatterns = [
     path('course/<uuid:uuid>/register/', course_register, name='course_register'),
     path('course/<uuid:uuid>/race/<int:race_id>/', StepCourseRaceDetailView.as_view(), name='course_race_view'),
     path('course/<uuid:uuid>/race/<int:race_id>/submit_race_score/', submit_course_race_score, name='submit_course_race_score'),
+
+    path('course/<uuid:course_uuid>/toggle/<str:field_name>/', toggle_course_field, name='toggle_field'),
 ]
 
 

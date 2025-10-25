@@ -2,89 +2,124 @@
 {% block title %} | {{ course.title }}{% endblock title%}
 {% block content %}
 <style>
-    body{
-        background-color:white;
-        font-family: system-ui;
-    }
-    .course-container {
+  body{
+      background-color:white;
+      font-family: system-ui;
+  }
+  .course-container {
     max-width: 800px;
     margin: 2rem auto;
     background: #f9fafb;
     border-radius: 1rem;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     overflow: hidden;
+  }
+  .profBtnsPanel{
+    max-width: 800px;
+    margin: 2rem auto;
+  }
+  @media (max-width: 820px){
+    .course-container, .profBtnsPanel{
+      margin: 2rem 1rem;
     }
-    @media (max-width: 820px){
-      .course-container{
-        margin: 2rem 1rem;
-      }
-    }
-    .course-header {
+  }
+  .course-header {
     background: maroon;
     color: white;
     padding: 1rem 1.5rem;
     font-size: 1.4rem;
     font-weight: 600;
-    
-    }
+  
+  }
 
-    .grid-header, .grid-row {
+  .grid-header, .grid-row {
     display: grid;
     grid-template-columns: 0.2fr 1.5fr 1fr;
     padding: 0.75rem 1rem;
     align-items: center;
     gap: 0.25rem;
-    }
+  }
 
-    .grid-header {
+  .grid-header {
     background: #e5e7eb;
     font-weight: bold;
     border-bottom: 1px solid #d1d5db;
-    }
+  }
 
-    .grid-row:nth-child(even) {
+  .grid-row:nth-child(even) {
     background: #f3f4f6;
-    }
+  }
 
-    .grid-row span {
+  .grid-row span {
     padding: 0.5rem 0;
-    }
+  }
 
-    .btn {
+  .btn {
     display: inline-block;
     padding: 0.4rem 0.8rem;
     border-radius: 0.5rem;
     text-decoration: none;
     font-weight: 500;
     transition: all 0.2s ease;
-    }
+  }
 
-    .btn-start {
+  .btn-start {
     background: #10b981;
     color: white;
-    }
+  }
 
-    .btn-start:hover {
+  .btn-start:hover {
     background: #059669;
-    }
+  }
 
-    .btn-done {
+  .btn-done {
     background: #9ca3af;
     color: white;
     cursor: default;
-    }
+  }
+  .studentsList{
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  @media (max-width: 700px){
     .studentsList{
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
     }
-    @media (max-width: 700px){
-      .studentsList{
-        grid-template-columns: 1fr 1fr;
-      }
-      .hideAt700{
-        display: none;
-      }
+    .hideAt700{
+      display: none;
     }
+  }
+
 </style>
+<div dir="auto" class="profBtnsPanel">
+  <form method="post" action="{% url 'toggle_field' course.id 'open_for_answering' %}" class="d-inline">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-sm {% if course.open_for_answering %}btn-success{% else %}btn-outline-success{% endif %}">
+          Open for Answering: {{ course.open_for_answering|yesno:"On,Off" }}
+      </button>
+  </form>
+
+  <form method="post" action="{% url 'toggle_field' course.id 'open_for_registration' %}" class="d-inline">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-sm {% if course.open_for_registration %}btn-success{% else %}btn-outline-success{% endif %}">
+          Open for Registration: {{ course.open_for_registration|yesno:"On,Off" }}
+      </button>
+  </form>
+
+  <form method="post" action="{% url 'toggle_field' course.id 'visible_when_closed' %}" class="d-inline">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-sm {% if course.visible_when_closed %}btn-success{% else %}btn-outline-success{% endif %}">
+          Visible: {{ course.visible_when_closed|yesno:"On,Off" }}
+      </button>
+  </form>
+
+  <form method="post" action="{% url 'toggle_field' course.id 'score_correction' %}" class="d-inline">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-sm {% if course.score_correction %}btn-success{% else %}btn-outline-success{% endif %}">
+          Score Correction: {{ course.score_correction|yesno:"On,Off" }}
+      </button>
+  </form>
+</div>
+
 <div class="course-container">
   <div class="course-header" dir="auto">
     {{ course.title }} <small style="font-weight: 400;"></small>

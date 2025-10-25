@@ -105,14 +105,19 @@ class RaceAdmin(admin.ModelAdmin):
     inlines = [RecordInline]
     # actions = [clean_race_records]
 
+class CourseRegInline(admin.TabularInline):
+    model = CourseRegistration
+    extra = 0
+
 class CourseAdmin(admin.ModelAdmin):
     list_display=['title', 'professor',]
+    inlines=[CourseRegInline]
 
 class CourseRegAdmin(admin.ModelAdmin):
     list_display=['course', 'student', 'joined_at']
 
 class RecordAdmin(admin.ModelAdmin):
-    list_display=['race', 'course', 'user', 'name', 'score']
+    list_display=['race', 'course', 'user', 'name', 'score', 'get_time', 'get_date']
 
 admin.site.register(Course, CourseAdmin)
 admin.site.register(CourseRegistration, CourseRegAdmin)

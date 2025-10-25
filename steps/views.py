@@ -1,14 +1,14 @@
-from django.http import JsonResponse, Http404
-from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
+from django.http import JsonResponse, Http404
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 
 from .models import *
-
 
 class StepListView(ListView):
     model = Step
@@ -450,6 +450,67 @@ class StepCourseRaceDetailView(LoginRequiredMixin, DetailView):
 
         return context
 
+def is_course_professor(user, course):
+    return user == course.professor
 
+@login_required
+@require_POST
+def toggle_course_field(request, course_uuid, field_name):
+    course = get_object_or_404(Course, id=course_uuid)
+    
+    # Check if user is the course professor
+    if not is_course_professor(request.user, course):
+        messages.error(request, "You don't have permission to modify this course.")
+        return redirect(reverse('course_detail', args=[course_uuid]))
 
+    
+    valid_fields = ['open_for_registration', 'visible_when_closed', 'open_for_answering', 'score_correction']
+    if field_name not in valid_fields:
+        messages.error(request, "Invalid field")
+        return redirect(reverse('course_detail', args=[course_uuid]))
+    
+    current_value = getattr(course, field_name)
+    setattr(course, field_name, not current_value)
+    course.save()
+    
+    field_display_names = {
+        'open_for_registration':'Open for new students registration',
+        'visible_when_closed': 'Visible lessons when registration closed',
+        'open_for_answering': 'Open for answering', 
+        'score_correction': 'Score correction'
+    }
+    
+    messages.success(request, 
+        f"{field_display_names[field_name]} {'enabled' if not current_value else 'disabled'}")
+    
+    return redirect(reverse('course_detail', args=[course_uuid]))
 
+@login_required
+@require_POST
+def toggle_course_field_post(request, course_uuid, field_name):
+    course = get_object_or_404(Course, id=course_uuid)
+    
+    # Check if user is the course professor
+    if not is_course_professor(request.user, course):
+        messages.error(request, "You don't have permission to modify this course.")
+        return redirect(reverse('course_list'))
+    
+    valid_fields = ['visible_when_closed', 'open_for_answering', 'score_correction']
+    if field_name not in valid_fields:
+        messages.error(request, "Invalid field")
+        return redirect(reverse('course_list'))
+    
+    current_value = getattr(course, field_name)
+    setattr(course, field_name, not current_value)
+    course.save()
+    
+    field_display_names = {
+        'visible_when_closed': 'Visible when closed',
+        'open_for_answering': 'Open for answering', 
+        'score_correction': 'Score correction'
+    }
+    
+    messages.success(request, 
+        f"{field_display_names[field_name]} {'enabled' if not current_value else 'disabled'}")
+    
+    return redirect(reverse('course_list'))

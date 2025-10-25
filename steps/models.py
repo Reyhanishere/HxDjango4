@@ -222,6 +222,12 @@ class Record(models.Model):
     class Meta:
         unique_together = ("race", "name")
 
+    def get_time(self):
+        return f"{self.timestamp.hour}:{self.timestamp.minute}"
+    
+    def get_date(self):
+        return self.timestamp.date()
+
     def save(self, *args, **kwargs):
         # Build base name from user
         if self.user:
