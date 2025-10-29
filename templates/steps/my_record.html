@@ -23,14 +23,14 @@
         font-size: 1.5em;
       }
       .textBox{
-            padding: 0.5rem 1rem;
-            background-color: #d8d8d8;
-            border-radius: 10px;
-            max-width: 400px;
-            text-align: center;
-            margin: 1rem auto;
+        padding: 0.5rem 1rem;
+        background-color: #d8d8d8;
+        border-radius: 10px;
+        max-width: 400px;
+        text-align: center;
+        margin: 1rem auto;
       }
-      #payesh{
+      .btn{
         padding: 0.5rem 1rem;
         background-color: #d8d8d8;
         border-radius: 10px;
@@ -39,19 +39,26 @@
         text-decoration: none;
         transition: 0.3s;
         display: inline-block;
+        cursor: pointer;
       }
         
-      #payesh:hover{
+      .btn:hover{
         box-shadow: 0 0px #666;
     }
     </style>
   </head>
-  <body>
-
+  <body dir="rtl">
     <h1>🏁 {{ race.name }} 🏁</h1>
     {% if score_matches %}
     <h2>Your Score: <span style="font-size:xxx-large">{{ record.score }}</span></h2>
-        <p class="textBox">رتبۀ شما از میان {{ total_records }} نفر: <b style="font-size:xx-large">{{ ranking }}</b> (تا به این لحظه)</p>
+        <p class=""></p>
+    
+        <div>
+            <p class="textBox" style="display: inline-block; margin:0.5rem">
+                رتبۀ شما از میان {{ total_records }} نفر: <b style="font-size:xx-large">{{ ranking }}  </b><span style="font-size:small">(تا به این لحظه)</span>
+            </p>
+            <span onclick="location.reload()" class="btn">⟳</span>
+        </div>
         <p class="textBox">بالاترین نمره: <b style="font-size:xx-large">{{ highest_score }}</b></p>
         {% if same_score_records > 1 %}
             <p class="textBox">تعداد افراد با امتیاز مشابه شما: <b style="font-size:x-large">{{ same_score_records }}</b></p>
@@ -59,6 +66,11 @@
     {% else %}
         <p class="textBox">We think that you manipulated the URL!</p>
     {% endif %}
-<a href="{% url 'step_race_detail' race.step_set.first.id %}" id="payesh">مرور دوبارۀ پرسش‌ها</a>
+    <a href="{% url 'step_race_detail' race.step_set.first.id %}" class="btn">مرور دوبارۀ پرسش‌ها</a>
+    <script type="text/javascript">
+        setTimeout(function () { 
+        location.reload();
+        }, 10 * 1000);
+    </script>
 </body>
 </html>
