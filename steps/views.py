@@ -232,31 +232,31 @@ def submit_race_score(request, race_id):
         except (TypeError, ValueError):
             score = 0
 
-        if not race.is_open:
+        if not race.is_open():
             return JsonResponse({
                 "status": 400,
                 "message": f"⚠️ Time to participate at this race has ended."
              })
 
-        elif Record.objects.filter(race=race, ip_address=ip).exists():
-            return JsonResponse({
-                "status": 400,
-                "message": f"⚠️ You have already submitted. <span style='font-size: 12px'>Duplicate IP</span>"
-             })
-        elif Record.objects.filter(race=race, name=name).exists():   
-            return JsonResponse({
-                "status": 400,
-                "message": f"⚠️ Choose another nickname. <b>{name}</b> is already taken."
-             })
-
         else:
-            record = Record(race=race, name=name, score=score, ip_address=ip)
-            record.save()
-            # Record.objects.create(race=race, name=name, score=score, ip_address=ip)
-            return JsonResponse({
-                "status": "ok",
-                "redirect_url": reverse('my_rank', args=[race_id ,f"{record.id}_{score}"])
-            })
+            if Record.objects.filter(race=race, ip_address=ip).exists():
+                return JsonResponse({
+                    "status": 400,
+                    "message": f"⚠️ You have already submitted. <span style='font-size: 12px'>Duplicate IP</span>"
+                })
+            elif Record.objects.filter(race=race, name=name).exists():   
+                return JsonResponse({
+                    "status": 400,
+                    "message": f"⚠️ Choose another nickname. <b>{name}</b> is already taken."
+                })
+            else:
+                record = Record(race=race, name=name, score=score, ip_address=ip)
+                record.save()
+                # Record.objects.create(race=race, name=name, score=score, ip_address=ip)
+                return JsonResponse({
+                    "status": "ok",
+                    "redirect_url": reverse('my_rank', args=[race_id ,f"{record.id}_{score}"])
+                })
 
     return JsonResponse({
             "status": 400,
