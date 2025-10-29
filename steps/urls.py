@@ -14,6 +14,7 @@ urlpatterns = [
     path('submit_race_score/<int:race_id>/', submit_race_score, name='submit_race_score'),
 
     path('race/<int:race_id>/ranking/', ranking_page, name='ranking_page'),
+    path('race/<int:race_id>/my_rank/<str:id_score>/', my_rank, name='my_rank'),
 
     path('blocks/<int:block_id>/submit/', submit_answer, name='submit_answer'),
 

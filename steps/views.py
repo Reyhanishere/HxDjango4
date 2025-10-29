@@ -170,6 +170,44 @@ def ranking_page(request, race_id):
     records = race.records.order_by('-score', 'timestamp')[:100]
     return render(request, 'steps/ranking.html', {'records': records, 'race': race})
 
+def my_rank(request, race_id, id_score):
+    record_id, score = str(id_score).split("_")
+    record_id, score = int(record_id), int(score)
+    race = get_object_or_404(Race, id=race_id)
+    record = get_object_or_404(Record, id=record_id, race=race)
+    try:
+        highest_score_object = Record.objects.filter(race=race).order_by('score').last()
+        highest_score= highest_score_object.score
+    except:
+        highest_score = None
+
+    score_matches = record.score == score
+    
+    if score_matches:
+        ranking = record.get_ranking()
+        total_records = Record.objects.filter(race=race).count()
+        same_score_records = Record.objects.filter(race=race, score=score).count()
+
+        context = {
+            'race': race,
+            'record': record,
+            'score_matches': True,
+            'ranking': ranking,
+            'total_records': total_records,
+            'same_score_records': same_score_records,
+            'highest_score': highest_score,
+        }
+
+    else:
+        context = {
+            'race': race,
+            'record': record,
+            'score_matches': False,
+            'highest_score': highest_score,
+        }
+
+    return render(request, 'steps/my_record.html', context)
+
 def get_client_ip(request):
     """Handles IP even behind proxy/load balancer"""
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -200,23 +238,25 @@ def submit_race_score(request, race_id):
                 "message": f"⚠️ Time to participate at this race has ended."
              })
 
-        if Record.objects.filter(race=race, ip_address=ip).exists():
+        elif Record.objects.filter(race=race, ip_address=ip).exists():
             return JsonResponse({
                 "status": 400,
                 "message": f"⚠️ You have already submitted. <span style='font-size: 12px'>Duplicate IP</span>"
              })
-        if Record.objects.filter(race=race, name=name).exists():   
+        elif Record.objects.filter(race=race, name=name).exists():   
             return JsonResponse({
                 "status": 400,
                 "message": f"⚠️ Choose another nickname. <b>{name}</b> is already taken."
              })
 
-
-        Record.objects.create(race=race, name=name, score=score, ip_address=ip)
-        return JsonResponse({
-            "status": "ok",
-            "redirect_url": reverse('ranking_page', args=[race.id])
-        })
+        else:
+            record = Record(race=race, name=name, score=score, ip_address=ip)
+            record.save()
+            # Record.objects.create(race=race, name=name, score=score, ip_address=ip)
+            return JsonResponse({
+                "status": "ok",
+                "redirect_url": reverse('my_rank', args=[race_id ,f"{record.id}_{score}"])
+            })
 
     return JsonResponse({
             "status": 400,

@@ -224,9 +224,18 @@ class Record(models.Model):
 
     def get_time(self):
         return f"{self.timestamp.hour}:{self.timestamp.minute}"
+    get_time.short_description = 'Time'
     
     def get_date(self):
         return self.timestamp.date()
+    get_date.short_description = 'Date'
+    
+    def get_ranking(self):
+        records_list = list(Record.objects.filter(race=self.race).order_by('-score'))
+        for idx, record in enumerate(records_list, start=1):
+            if record.id == self.id:
+                return idx
+        return None
 
     def save(self, *args, **kwargs):
         # Build base name from user

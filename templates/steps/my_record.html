@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ race.name }} – Rankings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% comment %} <meta http-equiv="refresh" content="10"> {% endcomment %}
+    <link rel="stylesheet" href="{% static 'css/style_steps.css'%}">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Baloo Bhaijaan 2'; 
+      background: #f4f4f4;
+      margin: 0;
+      padding: 2rem;
+      text-align: center;
+    }
+
+      h1 {
+        color: #333;
+        font-size: 1.5em;
+      }
+      .textBox{
+            padding: 0.5rem 1rem;
+            background-color: #d8d8d8;
+            border-radius: 10px;
+            max-width: 400px;
+            text-align: center;
+            margin: 1rem auto;
+      }
+      #payesh{
+        padding: 0.5rem 1rem;
+        background-color: #d8d8d8;
+        border-radius: 10px;
+        box-shadow: 0 3px #666;
+        color: #333;
+        text-decoration: none;
+        transition: 0.3s;
+        display: inline-block;
+      }
+        
+      #payesh:hover{
+        box-shadow: 0 0px #666;
+    }
+    </style>
+  </head>
+  <body>
+
+    <h1>🏁 {{ race.name }} 🏁</h1>
+    {% if score_matches %}
+    <h2>Your Score: <span style="font-size:xxx-large">{{ record.score }}</span></h2>
+        <p class="textBox">رتبۀ شما از میان {{ total_records }} نفر: <b style="font-size:xx-large">{{ ranking }}</b> (تا به این لحظه)</p>
+        <p class="textBox">بالاترین نمره: <b style="font-size:xx-large">{{ highest_score }}</b></p>
+        {% if same_score_records > 1 %}
+            <p class="textBox">تعداد افراد با امتیاز مشابه شما: <b style="font-size:x-large">{{ same_score_records }}</b></p>
+        {% endif %}
+    {% else %}
+        <p class="textBox">We think that you manipulated the URL!</p>
+    {% endif %}
+<a href="{% url 'step_race_detail' race.step_set.first.id %}" id="payesh">مرور دوبارۀ پرسش‌ها</a>
+</body>
+</html>
