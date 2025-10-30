@@ -1,5 +1,40 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
+
 from django.db import models
+
+class University(models.Model):
+    name = models.CharField(max_length=100, blank=False, null=False)
+    abr = models.CharField(max_length=8, blank=False, null=False)
+    date_added = models.DateField(auto_now_add=True)
+    def __str__(self):
+        return self.abr + " | " + self.name
+
+class Section(models.Model):
+    name = models.CharField(max_length=100, blank=False, null=False)
+    slug = models.SlugField(unique=True, blank=False, null=False)
+    def __str__(self):
+        return self.name
+    
+class Location(models.Model):
+    name = models.CharField(max_length=100, blank=False, null=False)
+    slug = models.SlugField(unique=True, blank=False, null=False)
+    university = models.ForeignKey(University, verbose_name=("دانشگاه"), on_delete=models.CASCADE)
+    def __str__(self):
+        return self.name
+
+class Education(models.Model):
+    name = models.CharField(max_length=100, blank=False, null=False)
+    slug = models.SlugField(unique=True, blank=False, null=False)
+    def __str__(self):
+        return self.name + " | " + self.slug
+
+class ScientificGrade(models.Model):
+    name = models.CharField(max_length=100, blank=False, null=False)
+    slug = models.SlugField(unique=True, blank=False, null=False)
+    level = models.CharField(blank=False, null=False, choices=[("1", "1"), ("2","2"), ("3","3")])
+    def __str__(self):
+        return self.name
 
 
 class CustomUser(AbstractUser):
@@ -129,3 +164,46 @@ class CustomUser(AbstractUser):
 
     def join_date_day(self):
         return self.date_joined.date()
+
+class StudentProfile(models.Model):
+    user = models.OneToOneField('CustomUser', on_delete=models.CASCADE, related_name='student_profile')
+    verified = models.BooleanField(default=False)
+    completed = models.BooleanField(default=False)
+    working_university = models.ForeignKey(University, null=True, on_delete=models.SET_NULL)
+    contact_info = models.CharField(max_length=100, blank=True, null=True)
+    semester_of_entrance = models.PositiveSmallIntegerField(blank=True, null=True)
+    student_id = models.CharField(max_length=12, blank=True, null=True, unique=True)
+    date_added = models.DateField(auto_now_add=True)
+    verified_date = models.DateTimeField(null=True, blank=True)
+    
+    def __str__(self):
+        return f"{self.user.get_name()} (دانشجو)"
+    
+    class Meta:
+        verbose_name = "پروفایل دانشجو"
+        verbose_name_plural = "پروفایل دانشجویان"
+
+class ProfessorProfile(models.Model):
+    user = models.OneToOneField('CustomUser', on_delete=models.CASCADE, related_name='professor_profile')
+    working_university = models.ForeignKey(University, null=True, on_delete=models.PROTECT)
+    year_of_recruitment = models.PositiveSmallIntegerField(blank=True, null=True)
+    section = models.ForeignKey(Section, null=True, blank=True, on_delete=models.PROTECT)
+    location = models.ManyToManyField(Location)
+    education = models.ForeignKey(Education, null=True, blank=True, on_delete=models.PROTECT)
+    grade = models.ForeignKey(ScientificGrade, null=True, blank=True, on_delete=models.PROTECT)
+    phone_number = models.CharField(max_length=20, blank=True, null=True, unique=True)
+    academic_email = models.EmailField(blank=True, null=True, unique=True)
+    date_added = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.get_name()} | (استاد)"
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        if self.instance.verified:
+            raise ValidationError("You cannot edit your profile after verification.")
+        return cleaned_data
+    
+    class Meta:
+        verbose_name = "پروفایل استاد"
+        verbose_name_plural = "پروفایل استادان"
