@@ -72,11 +72,17 @@ class Step(models.Model):
     def __str__(self):
         return self.title
 
+def step_image_upload_path(instance, filename):
+    step_slug = instance.step.slug
+    return f"steps/{step_slug}/images/{filename}"
 
 class Block(PolymorphicModel):
     step = models.ForeignKey("Step", related_name="blocks", on_delete=models.CASCADE)
     order = models.PositiveIntegerField()
+    img = models.ImageField(_("Image"), upload_to=step_image_upload_path, blank=True, null=True)
+    img_alt_txt = models.CharField("Image Alt Text",max_length=255, blank=True, null=True)
     is_md = models.BooleanField(_("Parse as MD"), default=False, help_text="Parse block text as a markdown text.")
+    date_added = models.DateTimeField(_("Date added"), auto_now_add=True, blank=True)
 
     class Meta:
         ordering = ["order"]
@@ -95,11 +101,6 @@ class TextBlock(Block):
 
     def __str__(self):
         return f"{self.text[:50]}"
-
-
-def step_image_upload_path(instance, filename):
-    step_slug = instance.step.slug
-    return f"steps/{step_slug}/images/{filename}"
 
 
 class ImageBlock(Block):

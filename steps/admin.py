@@ -86,7 +86,7 @@ class BlockAdmin(PolymorphicParentModelAdmin):
     base_model = Block
     child_models = (
         TextBlock,
-        ImageBlock,
+        # ImageBlock,
         MCQBlock,
         KeyFeatureBlock,
         PairingBlock,
