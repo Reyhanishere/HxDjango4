@@ -27,6 +27,20 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+class CCCategory(models.Model):
+    name = models.CharField(max_length=25)
+    slug = models.SlugField(unique=True)
+
+    def __str__(self):
+        return self.name
+
+class DxCategory(models.Model):
+    name = models.CharField(max_length=25)
+    slug = models.SlugField(unique=True)
+
+    def __str__(self):
+        return self.name
+    
 class Rotation(models.Model):
     name=models.CharField(max_length=25)
     slug = models.SlugField(unique=True)
@@ -54,6 +68,9 @@ class Case(models.Model):
     premium = models.BooleanField(default=False)
     verified = models.BooleanField(
         default=True,
+    )
+    professor_verified = models.BooleanField(
+        default=False,
     )
     visible = models.BooleanField(
         default=True,
@@ -128,8 +145,9 @@ class Case(models.Model):
         blank=False,
         default="بخش",
     )
-    job = models.CharField(("پیشه (شغل)"), max_length=20, null=True, blank=True, default="",)
-    dwelling = models.CharField(("محل زندگی"), max_length=20, null=True, blank=True, default="")
+    job = models.CharField(("پیشه (شغل)"), max_length=20, null=True, blank=True)
+    born_city = models.CharField(("محل تولد"), max_length=20, null=True, blank=True)
+    dwelling = models.CharField(("محل زندگی"), max_length=20, null=True, blank=True,)
     age = models.PositiveSmallIntegerField(("سن به سال"), null=False, blank=False, default=40)
     age_m= models.PositiveSmallIntegerField(("باقی سن به ماه"), null=False, blank=False, default=0)
     marriage = models.CharField(
@@ -171,13 +189,21 @@ class Case(models.Model):
         blank=True,
         help_text="Past Medical History"
     )
+    previous_data = models.TextField(
+        ("داده‌های پیش از مراجعۀ بیمار"),
+        null=True,
+        blank=True,
+        help_text=(
+            "داده‌های آزمایشگاهی و گزارش‌های تصویربرداری، اکوگرافی، نوار قلب و ... که پیش از مراجعه به دست آمده‌اند."
+        ),
+    )
     drg = models.TextField(
-        ("داروها"),
+        ("داروها و حساسیت‌ها"),
         null=True,
         blank=True,
     )
     sh = models.TextField(
-        ("شرح حال اجتماعی"),
+        ("شرح حال اجتماعی و عادات"),
         null=True,
         blank=True,
         help_text="مصرف مواد مخدر، الکل، وضعیت نظام وظیفه، شغل، روابط اجتماعی و جنسی و ...",
@@ -241,9 +267,14 @@ class Case(models.Model):
         null=True,
         blank=True,
     )
-
+    fdx = models.CharField(
+        ("تشخیص پایانی"),
+        max_length=100,
+        null=True,
+        blank=True,
+    )
     post_text = models.TextField(
-        ("توضیح پایانی"),
+        ("توضیح پایانی و بحث"),
         null=True,
         blank=True,
         help_text=(
@@ -252,6 +283,8 @@ class Case(models.Model):
     )
 
     tags = models.ManyToManyField(Tag, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
+    cc_tags = models.ManyToManyField(CCCategory, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
+    dx_tags = models.ManyToManyField(DxCategory, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
     suggests=models.ManyToManyField(Suggest, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
     slug = models.SlugField(
         ("لینک"),
@@ -367,6 +400,7 @@ class ImageCase(models.Model):
     verified=models.BooleanField(default=True)
     visible=models.BooleanField(default=True)
     case = models.ForeignKey(Case, on_delete=models.CASCADE)
+    is_old = models.BooleanField(("آیا داده مربوط به مراجعات پیشین است؟"), default=False)
     related_name = "imagecase"
     image = models.ImageField(
         "آپلود تصویر", upload_to=user_directory_path_hx, null=False, blank=False
