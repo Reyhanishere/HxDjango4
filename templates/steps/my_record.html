@@ -66,12 +66,12 @@
         text-align: right;
       }
       select{
-        width: 50px;
+        width: 60px;
         text-align: center;
         font-size: 16px;
         padding: 0.5rem;
         border-radius: 10px;
-        margin-right: 1rem;
+        margin-right: 0.25rem;
       }
       .realBtn{
         font-size: 18px;
@@ -109,8 +109,8 @@
           <div>
             <label for="survey_score" style="align-self: flex-start;">از ۱ تا ۱۰ چند امتیاز می‌دهید؟</label>
             <select name="survey_score" id="survey_score" required>
-                {% for n in "1234567890"|make_list %}
-                <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                {% for n in num_list %}
+                <option value="{{ n }}">{{ n }}</option>
                 {% endfor %}
             </select>
           </div>

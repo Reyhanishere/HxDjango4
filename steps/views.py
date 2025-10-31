@@ -194,6 +194,7 @@ def my_rank(request, race_id, id_score):
         'record': record,
         'score_matches': score_matches,
         'highest_score': highest_score,
+        'num_list': [10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
     }
 
     if score_matches:
