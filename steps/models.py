@@ -373,3 +373,14 @@ class InteractiveImageOption(InteractiveOption):
 
     def __str__(self):
         return f"{self.question}: {self.alt_text}"
+
+class SurveyRecord(models.Model):
+    date_writen = models.DateTimeField(auto_now_add=True)
+    author = models.CharField(max_length=100, null=True)
+    race_score = models.PositiveSmallIntegerField(null=True)
+    survey_score = models.PositiveSmallIntegerField(null=True)
+    race = models.ForeignKey(Race, null=False, on_delete=models.PROTECT)
+    text_box = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.race.name}: {self.survey_score}"
