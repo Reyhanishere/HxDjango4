@@ -175,36 +175,56 @@ def my_rank(request, race_id, id_score):
     record_id, score = int(record_id), int(score)
     race = get_object_or_404(Race, id=race_id)
     record = get_object_or_404(Record, id=record_id, race=race)
+
+    # Check if the user has already submitted a survey for this race
+    existing_survey = SurveyRecord.objects.filter(
+        race=race, author=record.name
+    ).first()
+
     try:
         highest_score_object = Record.objects.filter(race=race).order_by('score').last()
-        highest_score= highest_score_object.score
+        highest_score = highest_score_object.score
     except:
         highest_score = None
 
     score_matches = record.score == score
-    
+
+    context = {
+        'race': race,
+        'record': record,
+        'score_matches': score_matches,
+        'highest_score': highest_score,
+    }
+
     if score_matches:
         ranking = record.get_ranking()
         total_records = Record.objects.filter(race=race).count()
         same_score_records = Record.objects.filter(race=race, score=score).count()
 
-        context = {
-            'race': race,
-            'record': record,
-            'score_matches': True,
+        context.update({
             'ranking': ranking,
             'total_records': total_records,
             'same_score_records': same_score_records,
-            'highest_score': highest_score,
-        }
+        })
 
-    else:
-        context = {
-            'race': race,
-            'record': record,
-            'score_matches': False,
-            'highest_score': highest_score,
-        }
+    # If survey already exists → show thank you / summary instead of form
+    if existing_survey:
+        context['existing_survey'] = existing_survey
+        return render(request, 'steps/my_record.html', context)
+
+    # Otherwise → handle new survey submission
+    if request.method == 'POST':
+        survey_score = int(request.POST.get('survey_score'))
+        text_box = request.POST.get('text_box')
+
+        SurveyRecord.objects.create(
+            author=record.name,
+            race_score=record.score,
+            survey_score=survey_score,
+            race=race,
+            text_box=text_box,
+        )
+        return redirect('my_rank', race_id=race.id, id_score=id_score)
 
     return render(request, 'steps/my_record.html', context)
 

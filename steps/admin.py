@@ -119,10 +119,15 @@ class CourseRegAdmin(admin.ModelAdmin):
 class RecordAdmin(admin.ModelAdmin):
     list_display=['race', 'course', 'user', 'name', 'score', 'get_time', 'get_date']
 
+class SurveyAdmin(admin.ModelAdmin):
+    list_display= ["author", "race", "survey_score", "race_score", "date_writen",]
+
 admin.site.register(Course, CourseAdmin)
 admin.site.register(CourseRegistration, CourseRegAdmin)
 admin.site.register(Race, RaceAdmin)
 admin.site.register(Record, RecordAdmin)
+admin.site.register(SurveyRecord, SurveyAdmin)
+
 
 # --------------------------- #
 # ---- Interactive Steps ---- #

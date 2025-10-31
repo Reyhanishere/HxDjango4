@@ -44,7 +44,42 @@
         
       .btn:hover{
         box-shadow: 0 0px #666;
-    }
+      }
+      #surveyTextArea{
+        width: 90%;
+        max-width: 400px;
+        padding: 1rem;
+        border-radius: 10px;
+        font-size: 16px;
+        margin-bottom: 1rem;
+        margin-top: 0.5rem;
+      }
+      .form{
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        max-width: 400px;
+        margin: 2rem auto;
+        align-items: center;
+        background-color: #f0f0f0;
+        border-radius: 10px;
+        text-align: right;
+      }
+      select{
+        width: 50px;
+        text-align: center;
+        font-size: 16px;
+        padding: 0.5rem;
+        border-radius: 10px;
+        margin-right: 1rem;
+      }
+      .realBtn{
+        font-size: 18px;
+        font-family: 'Baloo Bhaijaan 2';
+        border: 1px solid #888;
+        padding: 0.5rem 3rem;
+        font-weight: 600;
+      }
     </style>
   </head>
   <body dir="rtl">
@@ -66,11 +101,64 @@
     {% else %}
         <p class="textBox">We think that you manipulated the URL!</p>
     {% endif %}
+
+    {% if not existing_survey %}
+      <form method="post" class="form">
+          {% csrf_token %}
+          <p>لطفا در نظرسنجی زیر شرکت کنید. ثبت امتیاز هم کافی‌ست.<br/> به نظر شما این Survey در خصوص <b>{{race.name}}</b> چه میزان مفید بود؟</p>
+          <div>
+            <label for="survey_score" style="align-self: flex-start;">از ۱ تا ۱۰ چند امتیاز می‌دهید؟</label>
+            <select name="survey_score" id="survey_score" required>
+                {% for n in "1234567890"|make_list %}
+                <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                {% endfor %}
+            </select>
+          </div>
+          <label for="text_box" style="align-self: flex-start; margin-top: 1rem">دیدگاه‌ها و پیشنهادهای خود را می‌توانید در باکس زیر بنویسید.</label>
+          <textarea name="text_box" rows="4" cols="" id="surveyTextArea"></textarea>
+          <button type="submit" class="btn realBtn">ثبت</button>
+      </form>
+    {% else %}
+      <div class="form">
+        <p class="textBox">شما قبلاً نظرسنجی این مسابقه را تکمیل کرده‌اید.</p>
+        <p>امتیازی که به ما دادید: <b>{{ existing_survey.survey_score }}</b></p>
+      {% if existing_survey.text_box %}
+        <p style="align-self: flex-start;">متن شما:<br/> {{ existing_survey.text_box }}</p>
+      {% endif %}
+      </div>
+    {% endif %}
+
     <a href="{% url 'step_race_detail' race.step_set.first.id %}" class="btn">مرور دوبارۀ پرسش‌ها</a>
+
     <script type="text/javascript">
-        setTimeout(function () { 
-        location.reload();
-        }, 10 * 1000);
-    </script>
+      let textBox = document.querySelector('textarea[name="text_box"]');
+      let selectBox = document.querySelector('select[name="survey_score"]');
+      let hasStartedInteracting = false;
+
+      // Detect tapping / clicking / changing the select element
+      if (textBox) {
+          ['focus', 'click', 'change', 'input'].forEach(eventType => {
+              textBox.addEventListener(eventType, () => {
+                  hasStartedInteracting = true;
+              });
+          });
+      }
+
+      if (selectBox) {
+          ['focus', 'click', 'change', 'input'].forEach(eventType => {
+              selectBox.addEventListener(eventType, () => {
+                  hasStartedInteracting = true;
+              });
+          });
+      }
+
+      // Reload only if the user hasn't interacted
+      setTimeout(() => {
+          if (!hasStartedInteracting) {
+              location.reload();
+          }
+      }, 10000);  // 10 seconds
+  </script>
+
 </body>
 </html>
