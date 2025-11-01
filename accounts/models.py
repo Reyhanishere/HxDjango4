@@ -164,6 +164,22 @@ class CustomUser(AbstractUser):
 
     def join_date_day(self):
         return self.date_joined.date()
+    
+    def has_fa_name(self):
+        if self.fn_fa and self.ln_fa:
+            print(self.fn_fa+self.ln_fa)
+            if len(self.fn_fa+self.ln_fa) > 5:
+                return True
+            else: return False
+        else: return False
+    
+    def has_profile(self):
+        try:
+            profile = self.student_profile
+            if profile:
+                return True
+        except:
+            return False
 
 class StudentProfile(models.Model):
     user = models.OneToOneField('CustomUser', on_delete=models.CASCADE, related_name='student_profile')

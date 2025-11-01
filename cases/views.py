@@ -18,7 +18,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
 from .utils import *
-
+from .decorators import *
 
 class CasesListView(ListView):
     model = Case
@@ -160,12 +160,12 @@ class CaseDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     template_name = "hx_delete.html"
     success_url = "/cases/hx"
 
-    def test_func(self):  # new
+    def test_func(self):
         obj = self.get_object()
         return obj.author == self.request.user
 
 
-class CaseCreateView(LoginRequiredMixin, CreateView):  # new
+class CaseCreateView(LoginRequiredMixin, CreateView):
     model = Case
     template_name = "hx_new.html"
     form_class = CaseCreateForm
@@ -710,3 +710,12 @@ def phe_ai(request):
         return JsonResponse({'error': f'You have exceeded use limit.({use_limit})'}, status=400)
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+# University Cases
+
+class HxNewChooseView(TemplateView):
+    template_name = "hx/hx_new_choose.html"
+
+@student_profile_state
+def hx_new_choose_view(request):
+    return render(request, 'hx/hx_new_choose.html', None)

@@ -1,0 +1,12 @@
+{% if user.has_fa_name %}
+    <form action="" method="post">{% csrf_token %}
+        <div class="createForm" autocomplete="off">
+            {{ form }}
+            <button dir="ltr" class="btn btn-success" type="submit" id="save" style="height: 50px; margin-top: 2rem;" >ثبت</button>
+        </div>
+    </form>
+{% else %}
+    <h3>
+        ابتدا در  صفحۀ <a href="{% url 'change_user_info' %}">«ویرایش اطلاعات من»</a> نام فارسی خود را ثبت کنید.
+    </h3>
+{% endif %}

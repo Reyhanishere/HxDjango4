@@ -42,5 +42,7 @@ urlpatterns = [
     path("ex/<slug:slug>/delete", ExDeleteView.as_view(), name="ex_delete"),
     path('like/', like_comment, name='like_comment'),
     path('add_reply/', add_reply, name='add_reply'),
-    ]
+
+    path('uni_hx/new/choose/', hx_new_choose_view, name='hx_new_choose'),
+]
 

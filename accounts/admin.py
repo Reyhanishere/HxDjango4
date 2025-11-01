@@ -94,3 +94,10 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.register(CustomUser, CustomUserAdmin)
 
+admin.site.register(University)
+admin.site.register(Location)
+admin.site.register(Section)
+admin.site.register(Education)
+admin.site.register(ScientificGrade)
+admin.site.register(ProfessorProfile)
+admin.site.register(StudentProfile)
