@@ -88,3 +88,28 @@ local_settings.py
 
 .env
 db.sqlite3
+
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.log
+*.sqlite3
+db.sqlite3
+
+# Django static files
+staticfiles/
+static/css/output.css
+
+# Tailwind / Node
+node_modules/
+npm-debug.log*
+package-lock.json
+.env
+
+# OS files
+.DS_Store
+
+vemv/

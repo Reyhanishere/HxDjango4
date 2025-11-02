@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morning Presentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+
+        body {
+            font-family: 'Noto Sans Arabic', 'Noto Sans', sans-serif;
+        }
+        .cases-table th {
+            background-color: #1E0342;
+            color: white;
+            font-weight: bold;
+            border-bottom-width: 1px;
+        } 
+
+        .cases-table th, .cases-table td {
+            padding: 12px 8px;
+            height: 60px; 
+            border-bottom: 1px solid #e5e7eb;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: rap;
+        }
+
+        .cases-table tr:hover {
+            background-color: white; 
+        } 
+
+       
+        .dropdown-menu {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* max-height: 150px; */
+            overflow-y: auto;
+            padding: 8px;
+            width: 100%; 
+        }
+
+        .dropdown-menu.hidden {
+            display: none;
+        }
+
+        .numbered-list {
+            direction: rtl;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .numbered-list li {
+            cursor: pointer;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            text-align: right;
+        }
+
+
+        @layer utilities {
+            :root {
+                --mscolorbackground: #F2F9FF;
+                /* --mscolorbackground2: #F2F9FF; */
+                --msitem1: #E1F7F5;
+                --msitem2: #1E0342;
+                --msitem3: #0E46A3; 
+                --msitem4: #9AC8CD; 
+            }
+        }
+        .bg-mscolorbackground { background-color: var(--mscolorbackground); }
+        /* .bg-mscolorbackground2 { background-color: var(--mscolorbackground2); } */
+        .bg-msitem1 { background-color: var(--msitem1); }
+        .bg-msitem2 { background-color: var(--msitem2); }
+        .bg-msitem3 { background-color: var(--msitem3); }
+        .bg-msitem4 { background-color: var(--msitem4); }
+        .text-msitem1 { color: var(--msitem1); }
+        .text-msitem2 { color: var(--msitem2); }
+
+        .bg-gradient-msitem {
+        background-image: linear-gradient(45deg, var(--msitem4), var(--msitem3));
+    }
+    </style>
+</head>
+<body dir="auto" class="bg-mscolorbackground md:bg-mscolorbackground p-6">
+    <header>
+        <div class="text-center text-2xl font-bold bg-msitem2 text-white p-4 rounded-lg"> 
+            Morning Presentation - Medical Cases 
+        </div>
+
+        <div id="toggleHeader" class="text-white bg-gradient-msitem  text-center py-2 text-lg font-semibold cursor-pointer mt-2 rounded-lg transition-all duration-300 hover:from-gray-300 hover:to-msitem3">
+            بیماران بیمارستان قائم، بخش داخلی، دوم بهمن 1403
+        </div>
+    </header>
+
+    <!-- the explanation field -->
+    <aside class="w-full bg-gradient-msitem p-4 rounded-lg shadow-md flex flex-col lg:flex-row-reverse lg:gap-5 mt-1 ">
+        
+        <h2 class="text-lg font-semibold border-b pb-2 mb-2 text-center text-white">توضیحات کشیک</h2> <!-- 1 -->
+
+        <div class="dropdown-trigger cursor-pointer text-center mt-2 lg:pt-2 " onclick="toggleDropdown()"> <!-- 2 -->
+            <i class="fa-solid fa-chevron-down m-auto lg:hidden fa-lg"></i> 
+            <i class="fa-solid fa-chevron-left m-auto hidden lg:block fa-sm"></i> 
+        </div>
+ 
+        <!-- 3  - menu-->
+        <!-- <div id="dropdownMenu" class="dropdown-menu bg-msitem4 hidden mt-2 "> 
+            <ul id="residentsList" class="numbered-list space-y-4 lg:space-y-0 lg:space-x-4 text-right"></ul>
+        </div> -->
+
+        <!-- 3  - text-->
+        <div id="dropdownMenu" class="dropdown-menu bg-msitem4 hidden mt-2 "> <!-- 3 -->
+            <p id="simpleTextDiv" class="text-right"></p>
+        </div>
+
+
+    </aside>
+    
+    <!-- Cases Table -->
+    <div class="w-full mt-6 ">
+        <table class=" table-auto w-full text-center cases-table border-collapse text-sm rounded-lg">
+            <thead>
+                <tr >
+                    <th class="text-center align-middle p-2 ">&#x1F4CB;</th>
+                    <th class="text-center align-middle p-2 ">توضیحات</th>
+                    <th class="text-center align-middle p-2">شکایت اصلی</th>
+                    <th class="text-center align-middle p-2">سن</th>
+                    <th class="text-center align-middle p-2">نام بیمار</th>
+                    <th class="text-center align-middle p-2">#</th> 
+                </tr>
+            </thead>
+            <tbody  id="casesContainer">
+            </tbody>
+        </table>
+    </div>
+
+
+    <script>
+        const residents = [
+            "دکتر محمد حسینی",
+            "دکتر فاطمه رضایی",
+            "دکتر علی کریمی",
+            "دکتر زهرا محمودی",
+        ];
+
+        // Case data
+        // const cases = [
+        //     { name: "زهرا محمدی", age: "1", complaint: "فشار خون", description: "Inpatient", link: "#"},
+        //     { name: "فاطمه احمدی", complaint: "درد شکم و عدم تحمل po", description: "Outpatient", link: "#" ,age: "2"},
+        //     { name: " آتریسا عادلی", complaint: "تب و استفراغ", description: "Inpatient", link: "#", age: "1" }
+        // ];
+        
+        function toFarsiNumber(number) {
+            const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+            return number.toString().replace(/\d/g, (digit) => farsiDigits[digit]);
+        }
+
+        
+
+    cases.forEach((c, index) => {
+    const row = document.createElement("tr");
+    row.className = "case-row cursor-pointer";
+
+    const complaintText = c.complaint.length > 30 ? c.complaint.substring(0, 30) + "..." : c.complaint;
+    const descriptionText = c.description.length > 30 ? c.description.substring(0, 30) + "..." : c.description;
+
+    row.innerHTML = `
+        <td>
+            <a href="${c.link}" class="more-info bg-msitem4 px-4 my-4 rounded-lg text-sm ">ارائه</a>
+        </td>
+        <td title="${c.description}">${descriptionText}</td>
+        <td title="${c.complaint}">${complaintText}</td>
+        <td>${toFarsiNumber(c.age)}</td>
+        <td class="font-bold">${c.name}</td>
+        <td>${toFarsiNumber(index + 1)}</td>
+    `;
+    casesContainer.appendChild(row);
+});
+
+
+        function toggleDropdown() {
+            const dropdownMenu = document.getElementById("dropdownMenu");
+            dropdownMenu.classList.toggle("hidden");
+        }
+
+        document.addEventListener("click", (event) => {
+            const dropdownMenu = document.getElementById("dropdownMenu");
+            const dropdownTrigger = document.querySelector(".dropdown-trigger");
+            
+            if (!dropdownMenu.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                dropdownMenu.classList.add("hidden");
+            }
+        });
+
+
+        function toggleDropdown() {
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        dropdownMenu.classList.toggle("hidden");
+}
+
+    const simpleTextDiv = document.getElementById('simpleTextDiv');
+    simpleTextDiv.textContent = "متن شما";
+    
+async function loadCases() {
+  try {
+    const response = await fetch("https://medepartout.ir/cases/morning_report/");
+    const data = await response.json();
+    const casesContainer = document.getElementById("casesContainer");
+    casesContainer.innerHTML = "";
+
+    data.cases.forEach((c, index) => {
+      const row = document.createElement("tr");
+      row.className = "case-row cursor-pointer";
+      const complaintText = c.complaint.length > 30 ? c.complaint.substring(0, 30) + "..." : c.complaint;
+      const descriptionText = c.description.length > 30 ? c.description.substring(0, 30) + "..." : c.description;
+
+      row.innerHTML = `
+        <td>
+          <a href="${c.link}" class="more-info bg-msitem4 px-4 my-4 rounded-lg text-sm">ارائه</a>
+        </td>
+        <td title="${c.description}">${descriptionText}</td>
+        <td title="${c.complaint}">${complaintText}</td>
+        <td>${toFarsiNumber(c.age || "")}</td>
+        <td class="font-bold">${c.name}</td>
+        <td>${toFarsiNumber(index + 1)}</td>
+      `;
+      casesContainer.appendChild(row);
+    });
+  } catch (error) {
+    console.error("Error fetching cases:", error);
+  }
+}
+
+loadCases();
+</script>
+
+</body>
+</html>

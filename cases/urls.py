@@ -43,6 +43,7 @@ urlpatterns = [
     path('like/', like_comment, name='like_comment'),
     path('add_reply/', add_reply, name='add_reply'),
 
-    path('uni_hx/new/choose/', hx_new_choose_view, name='hx_new_choose'),
-]
+    path("api/cases/", cases_json, name="cases_json"),
+    path("morning_report/", morning_report, name="morning_report"),
+    ]
 

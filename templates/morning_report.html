@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Morning Presentation</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      font-family: 'Noto Sans Arabic', 'Noto Sans', sans-serif;
+      background-color: #F2F9FF;
+    }
+
+    .cases-table th {
+      background-color: #1E0342;
+      color: white;
+      font-weight: bold;
+    }
+
+    .cases-table th, .cases-table td {
+      padding: 12px 8px;
+      border-bottom: 1px solid #e5e7eb;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .cases-table tr:hover {
+      background-color: #f9fafb;
+    }
+
+    .bg-gradient-msitem {
+      background-image: linear-gradient(45deg, #9AC8CD, #0E46A3);
+    }
+  </style>
+</head>
+
+<body class="p-6">
+  <header>
+    <div class="text-center text-2xl font-bold bg-[#1E0342] text-white p-4 rounded-lg">
+      Morning Presentation - Medical Cases
+    </div>
+
+    <div id="toggleHeader"
+         class="text-white bg-gradient-msitem text-center py-2 text-lg font-semibold cursor-pointer mt-2 rounded-lg transition-all duration-300 hover:opacity-90">
+      بیماران بیمارستان قائم، بخش داخلی، دوم بهمن ۱۴۰۳
+    </div>
+  </header>
+
+  <aside class="w-full bg-gradient-msitem p-4 rounded-lg shadow-md flex flex-col lg:flex-row-reverse lg:gap-5 mt-4">
+    <h2 class="text-lg font-semibold border-b pb-2 mb-2 text-center text-white">توضیحات کشیک</h2>
+    <div class="dropdown-trigger cursor-pointer text-center mt-2 lg:pt-2" onclick="toggleDropdown()">
+      <i class="fa-solid fa-chevron-down m-auto lg:hidden fa-lg"></i>
+      <i class="fa-solid fa-chevron-left m-auto hidden lg:block fa-sm"></i>
+    </div>
+
+    <div id="dropdownMenu" class="dropdown-menu bg-[#9AC8CD] hidden mt-2 p-3 rounded-lg">
+      <p id="simpleTextDiv" class="text-right text-white">متن شما</p>
+    </div>
+  </aside>
+
+  <!-- Cases Table -->
+  <section class="w-full mt-6">
+    <table class="table-auto w-full text-center cases-table border-collapse text-sm rounded-lg">
+      <thead>
+        <tr>
+          <th>ارائه</th>
+          <th>توضیحات</th>
+          <th>شکایت اصلی</th>
+          <th>سن</th>
+          <th>عنوان کیس</th>
+          <th>#</th>
+        </tr>
+      </thead>
+      <tbody id="casesContainer"></tbody>
+    </table>
+  </section>
+
+  <script>
+    // Convert digits to Farsi
+    function toFarsiNumber(number) {
+      if (!number) return "";
+      const farsiDigits = ["۰","۱","۲","۳","۴","۵","۶","۷","۸","۹"];
+      return number.toString().replace(/\d/g, d => farsiDigits[d]);
+    }
+
+    // Toggle dropdown visibility
+    function toggleDropdown() {
+      document.getElementById("dropdownMenu").classList.toggle("hidden");
+    }
+
+    // Fetch and render cases
+    async function loadCases() {
+      const apiUrl = "http://127.0.0.1:8000/cases/api/cases/";  // Use your Django JSON endpoint
+      const container = document.getElementById("casesContainer");
+      container.innerHTML = `<tr><td colspan="6" class="p-4 text-gray-500">در حال بارگذاری...</td></tr>`;
+
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+        container.innerHTML = "";
+
+        data.cases.forEach((c, index) => {
+          const row = document.createElement("tr");
+          row.className = "hover:bg-gray-100 transition";
+          row.innerHTML = `
+            <td>
+              <a href="${c.link}" target="_blank"
+                 class="bg-[#9AC8CD] text-white px-3 py-1 rounded-lg text-sm hover:opacity-90 transition">
+                 ارائه
+              </a>
+            </td>
+            <td title="${c.description || ""}">${c.description?.substring(0, 40) || "—"}</td>
+            <td title="${c.complaint || ""}">${c.complaint?.substring(0, 30) || "—"}</td>
+            <td>${toFarsiNumber(c.age)}</td>
+            <td class="font-bold">${c.title}</td>
+            <td>${toFarsiNumber(index + 1)}</td>
+          `;
+          container.appendChild(row);
+        });
+
+        if (data.cases.length === 0) {
+          container.innerHTML = `<tr><td colspan="6" class="p-4 text-gray-500">موردی یافت نشد</td></tr>`;
+        }
+      } catch (error) {
+        console.error("Error fetching cases:", error);
+        container.innerHTML = `<tr><td colspan="6" class="p-4 text-red-500">خطا در بارگذاری اطلاعات</td></tr>`;
+      }
+    }
+
+    // Initialize
+    loadCases();
+  </script>
+</body>
+</html>
