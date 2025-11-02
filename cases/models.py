@@ -100,6 +100,7 @@ class Case(models.Model):
         null=False,
         blank=False,
     )
+
     rts = models.ForeignKey(Rotation, on_delete=models.CASCADE, null=True, blank=True,)
 
     description = models.CharField(
@@ -109,11 +110,23 @@ class Case(models.Model):
         blank=True,
         help_text="خلاصه‌ای برای نشان دادن در صفحۀ اصلی که می‌تواند از عنوان طولانی‌تر باشد (تا دویست حرف).",
     )
+
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
+    
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
+        related_name='author',
         on_delete=models.CASCADE,
+    )
+    
+    professor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='related_professor',
+        on_delete=models.CASCADE,
+        limit_choices_to={'professor_profile': True},
+        null= True,
+        blank= True,
     )
 
     pretext = models.TextField(
@@ -164,7 +177,7 @@ class Case(models.Model):
         default="متاهل"
     )
 
-    source = models.CharField(("منبع شرح حال"), max_length=20, null=True, blank=True, default="")
+    source = models.CharField(("منبع شرح حال"), max_length=50, null=True, blank=True, default="")
     reliability = models.CharField(
         ("میزان قابل اعتماد بودن بیمار از 5"),
         max_length=1,
@@ -281,6 +294,14 @@ class Case(models.Model):
             "می‌توانید توضیحات بیشتر که در شرح‌حال قرار نمی‌گیرند و همچنین اطلاعات بیشتر دربارۀ بیماری را در اینجا ذکر کنید."
         ),
     )
+    professor_post_text = models.TextField(
+        ("توضیح پایانی و بحث"),
+        null=True,
+        blank=True,
+        help_text=(
+            "می‌توانید توضیحات بیشتر که در شرح‌حال قرار نمی‌گیرند و همچنین اطلاعات بیشتر دربارۀ بیماری را در اینجا ذکر کنید."
+        ),
+    )
 
     tags = models.ManyToManyField(Tag, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
     cc_tags = models.ManyToManyField(CCCategory, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
@@ -303,7 +324,10 @@ class Case(models.Model):
             else:
                 return self.gender
         else:
-            return self.gender
+            if self.gender=='آقا':
+                return "آقای"
+            else:
+                return self.gender
     
     def get_age(self):
         if self.age > 5:
@@ -314,6 +338,13 @@ class Case(models.Model):
             return f"{self.age} ساله"
         else:
             return f"{self.age} سال و {self.age_m} ماهه"
+    
+    def generate_title(self):
+        title = f"{self.sex_pedi()} {self.get_age()} با {self.cc}"
+        if len(title) <= 100:
+            return title
+        else:
+            return title[:100]
         
     def save(self, *args, **kwargs):
         if not self.pk:
@@ -371,7 +402,6 @@ class Comment(models.Model):
     def __str__(self):
         return self.comment[:32]
 
-    
 
 class Reply(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
@@ -617,3 +647,9 @@ class AIReqResLog(models.Model):
     
     def __str__(self):
         return f"{self.ai_model}: {self.request_content[:20]} | {self.response_content[:20]} by {self.user.username}"
+
+class CaseMessage(models.Model):
+    case = models.ForeignKey(Case, on_delete=models.PROTECT)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    text = models.TextField(blank=True, null=True)
+    time_written = models.DateTimeField(auto_now_add=True)

@@ -180,6 +180,14 @@ class CustomUser(AbstractUser):
                 return True
         except:
             return False
+    
+    def is_professor(self):
+        try:
+            profile = self.professor_profile
+            if profile:
+                return True
+        except:
+            return False
 
 class StudentProfile(models.Model):
     user = models.OneToOneField('CustomUser', on_delete=models.CASCADE, related_name='student_profile')
@@ -213,12 +221,6 @@ class ProfessorProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.get_name()} | (استاد)"
-    
-    def clean(self):
-        cleaned_data = super().clean()
-        if self.instance.verified:
-            raise ValidationError("You cannot edit your profile after verification.")
-        return cleaned_data
     
     class Meta:
         verbose_name = "پروفایل استاد"

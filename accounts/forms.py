@@ -12,6 +12,9 @@ class CustomUserCreationForm(UserCreationForm):
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
+        # if user.student_profile.verified:
+        #     pass
+        # else:
         fields=['first_name', 'last_name', 'degree', 'university','fn_fa','ln_fa','en_name']
         
     first_name=forms.CharField(label='نام به انگلیسی')
@@ -29,7 +32,31 @@ class CustomUserChangeForm(UserChangeForm):
         label='نام خانوادگی به فارسی',
         required=False
     )
+    university = forms.ChoiceField(
+        choices=CustomUser.UNIS,
+        label='دانشگاه',
+        required=False
+    )
+    degree = forms.ChoiceField(
+        choices=CustomUser.DEGREES,
+        label='مقطع',
+        required=False,
+        help_text="مقطع فعلی شما (اگر دانشجوی پزشکی نیستید، خالی بگذارید)"
+    )
     password=forms.HiddenInput()
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        hidden_fields=['fn_fa','ln_fa']
+
+        # Check if the user has a student profile, doesn't let the user to change their Persian name.
+        try: 
+            if self.user.student_profile.verified == True:
+                for f in hidden_fields:
+                    self.fields[f].widget = forms.HiddenInput()
+        except:
+            pass
 
     def clean(self):
         cleaned_data = super().clean()

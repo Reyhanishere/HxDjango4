@@ -36,8 +36,14 @@ class UserChangeInfoView(LoginRequiredMixin, UpdateView):
     template_name='registration/change_info.html'
     form_class=CustomUserChangeForm
     success_url=reverse_lazy('self_user_cases')
+
     def get_object(self, queryset=None):
         return self.request.user
+    
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
 
 def dashboard(request):

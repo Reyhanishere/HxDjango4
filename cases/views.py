@@ -18,6 +18,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
 from .utils import *
+from .decorators import *
 
 
 
@@ -80,7 +81,7 @@ class CaseDetailView(View):
         if case.is_pedi:
             tmplt_name = "hx/hx_detail_pedi.html"
         else:
-            tmplt_name = "hx_detail.html"
+            tmplt_name = "hx/hx_detail.html"
         return render(request, tmplt_name, context)
         
     def post(self, request, *args, **kwargs):
@@ -713,3 +714,122 @@ def phe_ai(request):
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
+class HxNewChooseView(TemplateView):
+    template_name = "hx/hx_new_choose.html"
+
+@student_profile_state
+def hx_new_choose_view(request):
+    return render(request, 'hx/hx_new_choose.html', None)
+
+
+PAGES_FLOW = ['cc_id', 'pi', 'pmh', 'dsf', 'ros_phe', 'last_fields']
+
+class CaseStepView(View):
+    model = Case
+
+    def get_object(self):
+        """Return the case object if pk exists, otherwise None."""
+        slug = self.kwargs.get('slug')
+        if slug:
+            return get_object_or_404(Case, slug=slug, author=self.request.user)
+        return None
+
+    def get_form_class(self, page):
+        if page == 'cc_id':
+            return CaseCCAndIDForm
+        elif page == 'pi':
+            return CasePIForm
+        elif page == 'pmh':
+            return CasePMHForm
+        elif page == 'dsf':
+            return CaseDSFForm
+        elif page == 'ros_phe':
+            return CaseROSPhEForm
+        elif page == 'last_fields':
+            return CaseLastFieldsForm
+        raise Http404("Invalid page")
+
+    def get(self, request, page, slug=None):
+        obj = self.get_object()
+        form_class = self.get_form_class(page)
+        form = form_class(instance=obj) if form_class else None
+        print(f"{obj.date_modified.hour}:{obj.date_modified.minute}")
+        index = PAGES_FLOW.index(page)
+        context = {
+            'object': obj,
+            'saved_time': f"{obj.date_modified.hour}:{obj.date_modified.minute}",
+            'form': form,
+            'page_name': page,
+            'has_prev': index > 0,
+            'has_next': index < len(PAGES_FLOW) - 1,
+        }
+
+        return render(request, f'hx/case_page_{page}.html', context)
+    
+    def post(self, request, page, slug=None):
+        obj = self.get_object()
+        form_class = self.get_form_class(page)
+        form = form_class(request.POST, instance=obj) if form_class else None
+
+        if form and form.is_valid():
+            case = form.save(commit=False)
+            case.author = request.user
+            case.title = case.generate_title()
+            case.save()
+
+            # if this was the first creation, return the new pk to frontend
+            if not obj and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'status': 'created', 'slug': case.slug})
+
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'status': 'saved'})
+
+            # return redirect('case_step', slug=case.slug, page=self.get_next_step(page))
+
+        elif request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'status': 'error', 'errors': form.errors}, status=400)
+
+        # return render(request, f'cases/step_{page}.html', {'form': form, 'object': obj})
+
+    # def post(self, request, page, slug=None):
+    #     obj = self.get_object()
+    #     form_class = self.get_form_class(page)
+    #     form = form_class(request.POST, instance=obj) if form_class else None
+
+    #     if form:
+    #         if form.is_valid():
+    #             case = form.save(commit=False)
+    #             case.author = request.user
+    #             case.title = case.generate_title()
+    #             case.save()
+    #         else:
+    #             # Return errors for AJAX auto-save
+    #             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+    #                 return JsonResponse({'status': 'error', 'errors': form.errors}, status=400)
+    #             return render(request, f'hx/case_page_{page}.html', {'form': form, 'object': obj})
+
+    #     # For AJAX autosave
+    #     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+    #         return JsonResponse({'status': 'saved'})
+
+        # Determine next page
+        current_page = page
+        page_index = PAGES_FLOW.index(current_page)
+        next_page = request.POST.get('next')
+        prev_page = request.POST.get('prev')
+        submit_page = request.POST.get('submit_final')
+
+        # Case creation special handling
+        if not obj and form and form.instance.slug:
+            obj = form.instance
+
+        if next_page and page_index + 1 < len(PAGES_FLOW):
+            return redirect('unicase_page', slug=obj.slug, page=PAGES_FLOW[page_index + 1])
+
+        if prev_page and page_index > 0:
+            return redirect('unicase_page', slug=obj.slug, page=PAGES_FLOW[page_index - 1])
+        
+        if submit_page:
+            return redirect('hx_detail', slug=obj.slug)
+
+        return redirect('unicase_page', slug=obj.slug, page=current_page)

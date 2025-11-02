@@ -43,6 +43,9 @@ urlpatterns = [
     path('like/', like_comment, name='like_comment'),
     path('add_reply/', add_reply, name='add_reply'),
 
+    path('uni_hx/new/choose/', hx_new_choose_view, name='hx_new_choose'),
 
-    ]
+    path('uni_hx/new/<str:page>/', CaseStepView.as_view(), name='unicase_new'), # Create mode (first page)
+    path('uni_hx/<slug:slug>/edit/<str:page>/', CaseStepView.as_view(), name='unicase_page'), # Update mode
+]
 
