@@ -753,11 +753,9 @@ class CaseStepView(View):
         obj = self.get_object()
         form_class = self.get_form_class(page)
         form = form_class(instance=obj) if form_class else None
-        print(f"{obj.date_modified.hour}:{obj.date_modified.minute}")
         index = PAGES_FLOW.index(page)
         context = {
             'object': obj,
-            'saved_time': f"{obj.date_modified.hour}:{obj.date_modified.minute}",
             'form': form,
             'page_name': page,
             'has_prev': index > 0,
