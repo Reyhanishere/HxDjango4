@@ -1,36 +1,37 @@
 {% extends "base.html" %}
 {% block imports %}
 <style>
-  body{
-    background: transparent
-  }
-  #case-form{
-      margin: 2rem
-  }
-  .helptext{
-    font-size: small;
-    color:#555;
-    margin: 0.25rem !important;
-  }
-  #case-form > div{
-    background: #eee;
-    margin: 1rem;
-    border-radius: 20px;
-    padding: 10px;
-  }
-  input{
-    width: 300px;
-    height: 40px;
-  }
-  #case-form label{
-    display: block;
-  }
-  #case-form textarea{
-    margin-top: 0.5rem;
-  }
+    body{
+        background: transparent
+    }
+    #case-form{
+        margin: 2rem
+    }
+    .helptext{
+        font-size: small;
+        color:#555;
+        margin: 0.25rem !important;
+    }
+    #case-form > div{
+        background: #eee;
+        margin: 1rem;
+        border-radius: 20px;
+        padding: 10px;
+    }
+    input{
+        width: 300px;
+        height: 40px;
+    }
+    #case-form label{
+        display: block;
+    }
+    #case-form textarea{
+        margin-top: 0.5rem;
+    }
 
 </style>
 {% endblock imports %}
+
 {% block content %}
 <form id="case-form" method="post" action="">
     {% csrf_token %}
@@ -40,50 +41,57 @@
 
     <div class="navigation">
       
-      {% if has_next %}
-          <button name="next" value="1">→ادامه</button>
-      {% else %}
-          <button type="submit" name="submit_final" value="1">ثبت</button>
-      {% endif %}
-      {% if has_prev %}
-      <button name="prev" value="1">بازگشت ←</button>
-      {% endif %}
+        {% if has_next %}
+            <button name="next" value="1">→ادامه</button>
+        {% else %}
+            <button type="submit" name="submit_final" value="1">ثبت</button>
+        {% endif %}
+        {% if has_prev %}
+            <button name="prev" value="1">بازگشت ←</button>
+        {% endif %}
     </div>
 </form>
 
 <p id="autosave-status" style="font-style:italic; color:gray;"></p>
 
 <script>
-  let timeout;
-  document.querySelectorAll('#case-form input, #case-form textarea, #case-form select')
-    .forEach(el => el.addEventListener('input', () => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => autoSave(), 1 * 1000);
-    }));
-  var saved_time = "{{ object.date_modified|time:'H:i' }}";
-  const currentPage = "{{ page_name }}";
-  let caseSlug = "{{ object.slug|default:'' }}";
-  function autoSave() {
-    const form = document.getElementById('case-form');
-    const url = caseSlug
-        ? `/cases/uni_hx/${caseSlug}/edit/${currentPage}/` // update
-        : `/cases/uni_hx/new/${currentPage}/`; // create first time
+    let timeout;
+    document.querySelectorAll('#case-form input, #case-form textarea, #case-form select')
+            .forEach(el => el.addEventListener('input', () => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => autoSave(), 1 * 1000);
+            }));
+    var saved_time = "{{ object.date_modified|time:'H:i' }}";
+    const currentPage = "{{ page_name }}";
+    let caseSlug = "{{ object.slug|default:'' }}";
 
-    fetch(url, {
-      method: 'POST',
-      headers: {'X-Requested-With': 'XMLHttpRequest'},
-      body: new FormData(form)
-    })
-    .then(r => r.json())
-    .then(data => {
-      if (data.status === 'created') {
-        caseSlug = data.slug; // now future saves go to update URL
-      }
-      if (data.status === 'saved' || data.status === 'created') {
-        setTimeout(() => document.getElementById('autosave-status').innerText = `واپسین ذخیره در ${saved_time}!`, 2000);
-      }
-    });
-  }
+    function autoSave() {
+        const form = document.getElementById('case-form');
+        const url = caseSlug
+            ? `/cases/uni_hx/${caseSlug}/edit/${currentPage}/`   // update
+            : `/cases/uni_hx/new/${currentPage}/`;               // create first time
+
+        fetch(url, {
+        method: 'POST',
+        headers: {'X-Requested-With': 'XMLHttpRequest'},
+        body: new FormData(form)
+        })
+        .then(r => r.json())
+        .then(data => {
+        if (data.status === 'created' && data.slug) {
+            caseSlug = data.slug;
+            // also update browser URL without reloading
+            const newUrl = `/cases/uni_hx/${caseSlug}/edit/${currentPage}/`;
+            window.history.replaceState({}, '', newUrl);
+        }
+
+        if (data.status === 'saved' || data.status === 'created') {
+            document.getElementById('autosave-status').innerText = `آخرین پشتیبان‌گیری در ${saved_time}`;
+            setTimeout(() => document.getElementById('autosave-status').innerText = '', 2000);
+        }
+        });
+    }
+
 </script>
 
 {% endblock content %}

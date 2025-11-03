@@ -775,7 +775,7 @@ class CaseStepView(View):
             case.title = case.generate_title()
             case.save()
 
-            # if this was the first creation, return the new pk to frontend
+            # if this was the first creation, return the new slug to frontend
             if not obj and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 return JsonResponse({'status': 'created', 'slug': case.slug})
 
@@ -786,29 +786,6 @@ class CaseStepView(View):
 
         elif request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({'status': 'error', 'errors': form.errors}, status=400)
-
-        # return render(request, f'cases/step_{page}.html', {'form': form, 'object': obj})
-
-    # def post(self, request, page, slug=None):
-    #     obj = self.get_object()
-    #     form_class = self.get_form_class(page)
-    #     form = form_class(request.POST, instance=obj) if form_class else None
-
-    #     if form:
-    #         if form.is_valid():
-    #             case = form.save(commit=False)
-    #             case.author = request.user
-    #             case.title = case.generate_title()
-    #             case.save()
-    #         else:
-    #             # Return errors for AJAX auto-save
-    #             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-    #                 return JsonResponse({'status': 'error', 'errors': form.errors}, status=400)
-    #             return render(request, f'hx/case_page_{page}.html', {'form': form, 'object': obj})
-
-    #     # For AJAX autosave
-    #     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-    #         return JsonResponse({'status': 'saved'})
 
         # Determine next page
         current_page = page
