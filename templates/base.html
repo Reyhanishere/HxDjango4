@@ -93,9 +93,9 @@
                         </svg>
                     </div>
                     <div class="dropdown-content" id="userDiv" dir="rtl">
-                        {% if user.university == 'MUMS' %}
+                        {% if user.university == 'MUMS' or user.university == 'NKUMS' %}
                         <a class="dropdown-item" href="{% url 'hx_new_choose'%}">
-                            ثبت کیس دانشگاه
+                            ثبت کیس دانشگاهی
                         </a>    
                         {% endif %}
                         <a class="dropdown-item" href="{% url 'self_user_cases'%}">

@@ -1,7 +1,72 @@
 {% extends "base.html" %}
+
+{% block imports %}
+<style>
+    body{
+        background: transparent;
+    }
+    #btnsBox1{
+        margin: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #btnsBox2{
+        margin: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    @media (max-width: 700px){
+        #btnsBox2{
+            grid-template-columns: 1fr;
+        }
+    }
+    .chooseTypeBtn1{
+        display: block;
+        width:200px;
+        margin: 1rem;
+        padding: 0.5rem 0.5rem;
+        text-align: center;
+        background: linear-gradient(45deg, aquamarine, turquoise);
+        border-radius: 25px;
+    }
+    .chooseTypeBtn2{
+        background: linear-gradient(to right, #412a4c99, #11114499) padding-box, linear-gradient(to right, darkblue, darkorchid) border-box;
+        border: 3px solid transparent;
+        font-weight: 600;
+        color: #fff;
+        border-radius: 20px;
+        padding: 1rem;
+        text-align: center;
+        transition: 0.3s;
+        text-decoration: none;
+        font-size: xx-large;
+        height: 10rem;
+        line-height: 3.75;
+    }
+    .chooseTypeBtn2:hover{
+        color: gold;
+        border: 3px solid transparent;
+        box-shadow: 0 0 5px 2px #999d;
+        transform: translate(0, -3px)
+    }
+    a[disabled]{
+        background: #ccc
+    }
+    a[disabled]:hover{
+        color: #333;
+        transform: translate(0, 0);
+        box-shadow: 0 0 0 0 #999d;
+    }
+</style>
+{% endblock imports %}
+
 {% block content %}
-    <a href="{% url 'unicase_new' page='cc_id' %}">Routine</a>
-    <a href="">Pediatrics</a>
-    <a href="">Gynecology</a>
-    <a href="">Psychology</a>
+    <div id="btnsBox2">
+        <a href="{% url 'unicase_new' page='cc_id' %}" class="chooseTypeBtn2">شرح حال روتین</a>
+        <a href="" class="chooseTypeBtn2" disabled>شرح حال کودکان</a>
+        <a href="" class="chooseTypeBtn2" disabled>شرح حال زنان و مامایی</a>
+        <a href="" class="chooseTypeBtn2" disabled>شرح حال روان پزشکی</a>
+    </div>
 {% endblock content %}
