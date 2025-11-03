@@ -4,13 +4,17 @@
     <style>
         #caseForm > div {
             flex-direction: column;
-            align-items: flex-start;
-            justify-content: flex-start;
             grid-column: span 2;
+        }
+        #caseForm label {
+            display: none;
+        }
+        select{
+            min-width: 300px;
         }
     </style>
 {% endblock imports %}
 {% block content %}
-<h2>شرح بیماری فعلی</h2>
+<h2>استاد مربوطه را برگزینید</h2>
 {{ block.super }}
 {% endblock %}

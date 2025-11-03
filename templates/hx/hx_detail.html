@@ -20,7 +20,10 @@
                 display:none;
             }
         }
-                
+        body{
+            white-space: normal;
+            word-break: break-all;
+        }
         #backTo a{
             margin-right: 0.25rem;
             background-color: #f6f6f6;
@@ -48,6 +51,21 @@
             padding: 0 8px;
             background-color: #e7e7e7;
             transition: 0.3s;
+        }
+        .imageCaseContHx{
+            background: #f0f8ff;
+            padding: 0.5rem;
+            border-radius: 10px;
+            box-shadow: 0 0 3px 1px #acb6c0;
+        }
+        .imageCaseContHx a{
+            display: block;
+            color:#333;
+            margin:5px;
+            font-size:16px
+        }
+        .infoTable{
+            word-break: auto-phrase;
         }
     </style>
 {% endblock imports %}
@@ -104,16 +122,24 @@
         <div class="cell"><b>{{ case.age }}</b> ساله </div>
         <div class="cell">منبع شرح حال: <b>{{ case.source|default_if_none:"-" }}</b> </div>
         <div class="cell"> محل زندگی: <b>{{ case.dwelling|default_if_none:"-" }}</b> </div>
-        <div class="cell"> میزان قابل اعتماد بودن: <b>{{ case.reliability }}</b>/5</div>
+        <div class="cell"> میزان قابل اعتماد بودن: <b>{{ case.reliability|default_if_none:"-" }}</b>/5</div>
     </div>
     <div class="hx spanTwo"><b>CC: </b>{{ case.cc }}</div>
     <div class="hx"><b>PI: </b>{{ case.pi|linebreaks }}</div>
     <div class="hx"><b>PMH: </b>{{ case.pmh|default_if_none:""|linebreaks }}
-        {%for img in case.imagecase_set.all %}
-            {%if img.verified and img.is_old %}
-                <img src="{{img.image.url}}" width="60" alt=""/>
-            {% endif %}
-        {% endfor%}
+        <div class="imageCaseContHx">
+            {%for img in case.imagecase_set.all %}
+                {%if img.verified and img.is_old %}
+                    <a href="{{ img.image.url }}" target="_blank"><img src="{{ img.image.url }}" width="60" alt=""/></a>
+                {% endif %}
+            {% endfor%}
+            {%if user.username == case.author.username %}
+                <a href="{% url 'hx_add_image_when' case.slug 'old' %}" class='noPrint'>
+                    تصاویر مراجعات پیشین کیس خود را اضافه کنید.
+                </a>
+            {%endif%}
+        </div>
+
     </div>
     {% if case.drg %}
     <div class="hx"><b>Drugs and Allergies: </b>{{ case.drg|linebreaks }}</div>
@@ -135,25 +161,28 @@
 
     <div class="hx"><b>Other Data: </b><br/>
         <div style="padding:5px;" dir="auto">
-            {%if user.username == case.author.username %}
-            <a href="graphs/new" style="color:#333;margin:5px; font-size:16px" class='noPrint'>
-                آزمایش‌های کیس خود را اضافه کنید.
-            </a><br/>
-            <a href="add-image" style="color:#333;margin:5px; font-size:16px" class='noPrint'>
-                تصاویر کیس خود را اضافه کنید.
-            </a><br/>
+            {{ case.dat|default_if_none:""|linebreaks }}
 
-            {%endif%}
-            {%for img in case.imagecase_set.all %}
-                {%if img.verified and not img.is_old %}
-                    <img src="{{img.image.url}}" width="60" alt=""/>
-                {% endif %}
-            {% endfor%}
+            <div class="imageCaseContHx">
+                {%for img in case.imagecase_set.all %}
+                    {%if img.verified and not img.is_old %}
+                        <img src="{{img.image.url}}" width="60" alt=""/>
+                    {% endif %}
+                {% endfor%}
+
+                {%if user.username == case.author.username %}
+                    <a href="graphs/new" style="" class='noPrint'>
+                        آزمایش‌های کیس خود را اضافه کنید.
+                    </a>
+                    <a href="{% url 'hx_add_image_when' case.slug 'new' %}" class='noPrint'>
+                        تصاویر کیس خود را اضافه کنید.
+                    </a>
+                {%endif%}
+            </div>
         </div>
         {% if case.labgraphselection_set.all %} <a href="graphs" style="color:#333;margin:5px;" class='noPrint'>نمودار و جدول آزمایش‌های بیمار</a><br/>{% endif %}
         {% if case.labgraphselection_set.all %} <a href="#labData" style="color:#333;margin:5px;">جدول آزمایش‌های بیمار در زیر برگۀ شرح حال</a><br/>{% endif %}
-        {% if case.imagecase_set.all %} <a href="#images" style="color:#333;margin:5px;">تمام تصاویر در زیر برگۀ شرح حال</a>{% endif %}<hr/>
-        {{ case.dat|default_if_none:""|linebreaks }}
+        {% if case.imagecase_set.all %} <a href="#images" style="color:#333;margin:5px;">تمام تصاویر در زیر برگۀ شرح حال</a>{% endif %}
         
     </div>
 
@@ -287,7 +316,7 @@
 
 <div>
 <p style='margin:20px 10px;'>
-    {{ case.post_text|linebreaks }}
+    {{ case.post_text|default_if_none:""|linebreaks }}
 </p>
 </div>
 <p style="color:#888; text-align:center" class='noPrint'>با کلیک بر روی

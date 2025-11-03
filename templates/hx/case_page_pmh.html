@@ -1,5 +1,19 @@
 {% extends "hx/_sep_page_base.html" %}
+{% block imports %}
+    {{ block.super }}
+    <style>
+        #caseForm > div {
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+        .helptext{
+            margin: 0.25rem;
+        }
+    </style>
+{% endblock imports %}
 {% block content %}
-<h2>Step 3: Medical History</h2>
+<h2>شرح حال گذشتۀ بیمار</h2>
 {{ block.super }}
+<a href="{% url 'hx_add_image_when' object.slug 'old' %}" id="addImage" class="navigationBtn" target="_blank">افزودن تصاویر گذشتۀ بیمار</a>
 {% endblock %}

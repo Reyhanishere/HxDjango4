@@ -3,7 +3,13 @@
 {% block content %}
 
 <div class="pad-15">
-    <h2>افزودن تصویر به شرح حال</h2>
+    {% if is_old_record %}
+        <h2>افزودن تصویر <u>مراجعات پیشین</u> به شرح حال</h2>
+    {% elif is_old_record == false %}
+        <h2>افزودن تصاویر <u>پس از مراجعه</u> به شرح حال</h2>
+    {% else %}
+        <h2>افزودن تصویر به شرح حال</h2>
+    {% endif %}
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form|crispy }}

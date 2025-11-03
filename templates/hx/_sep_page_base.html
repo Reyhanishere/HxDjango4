@@ -4,69 +4,219 @@
     body{
         background: transparent
     }
+    h2{
+        margin: 2rem 1rem;
+        text-align: center;
+    }
     #case-form{
         margin: 2rem
     }
     .helptext{
         font-size: small;
         color:#555;
-        margin: 0.25rem !important;
+        margin: 0.25rem;
     }
-    #case-form > div{
+    #caseForm > div{
         background: #eee;
-        margin: 1rem;
         border-radius: 20px;
+        margin: 1rem;
         padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: unset;
+    }
+    @media (min-width: 575px){
+        #caseForm > div{
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            
+        }
+        input, select{
+            margin-right: 0.5rem;
+        }
+        .helptext{
+            margin-right: 0.75rem;
+        }
+    }
+    @media (min-width: 850px){
+        #caseForm{
+            display: grid;
+            grid-template-columns: 1fr 1fr;   
+        }
     }
     input{
-        width: 300px;
+        width: 220px;
         height: 40px;
+        border-radius: 10px;
+        border: 1px solid#777;
+        padding: 0 0.5rem;
+        align-self: center;
     }
-    #case-form label{
+    input[type=number]{
+        width: 100px;
+        text-align: center;
+    }
+    select{
+        border-radius: 10px;
+        border: 1px solid #777;
+        align-self: center;
+        min-width: 120px;
+
+    }
+    option{
+        padding: 0 0.5rem;
+        text-align: center;
+    }
+    textarea{
+        width: -webkit-fill-available;
+        height: 50vh;
+    }
+    #caseForm label{
         display: block;
     }
-    #case-form textarea{
+    #caseForm textarea{
         margin-top: 0.5rem;
     }
+    #id_cc{
+        width: -webkit-fill-available;
+        max-width:700px
+    }
+    div:has(input#id_cc){
+        grid-column: span 2;
+    }
+    .navigation{
+        grid-column: span 2;
+        background: transparent !important;
+    }
+    @media (max-width: 480px){
+        .navigation div{
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.25rem;
+        }
+    }
+    .navigationBtn{
+        font-weight: 600;
+        border-radius: 10px;
+        border: none;
+        padding: 0.5rem 2rem;
+        margin: 0 0.5rem;
+        color: white;
+        transition: 0.3s;
+    }
+    .navigationBtn:hover{
+        box-shadow: 0 0 4px 2px #fed1c7;
+        transform: translate(0, -2px);
+    }
 
+    #next{
+        background: linear-gradient(45deg, #7f00ff, #e100ff);
+    }
+    #prev{
+        background: linear-gradient(45deg, #ef4136, #fbb040);
+    }
+    #submit{
+        background: linear-gradient(45deg, #ff7db8, #ee2a7b);
+    }
+    #addImage{
+        background: linear-gradient(45deg, #00a1ffdd, #00ff8fdd);
+        text-decoration: none;
+        display: block;
+        margin: 1rem;
+        text-align: center;
+        color: white;
+    }
+    #autosave-status{
+        font-style:italic;
+        color:gray;
+        margin: 1rem;
+    }
+    .pagesBtn{
+        display: inline-block;
+        background: linear-gradient(45deg, #fe8dc6, #fed1c7);
+        box-shadow: 0 0 2px 1px #fed1c7ee;
+        color: rgba(103, 10, 49, 1);
+        font-weight: 400;
+        border-radius: 20px;
+        border: none;
+        padding: 0.1rem 0.75rem;
+        margin:0.25rem;
+        transition: 0.3s;
+        text-decoration: none;
+        font-size: 14px
+    }
+    .pagesBtn:hover{
+        box-shadow: 0 0 4px 2px #fed1c7;
+        transform: translate(0, -1px);
+        color:rgba(164, 19, 80, 1);
+    }
+    #pagesBtnsCont{
+        display: flex;
+        flex-direction: row-reverse;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+    }
+    #00a1ffdd
+    #00ff8fdd
+    
+    #7f00ff
+    #e100ff
+
+    #ee2a7b
+    #ff7db8
+
+    #fe8dc6
+    #fed1c7
+    
 </style>
 {% endblock imports %}
 
 {% block content %}
-<form id="case-form" method="post" action="">
+{% if exists %}
+    <div id="pagesBtnsCont">
+        <span dir="auto">Other Pages:</span>
+        {% for adrs, name in pages.items %}
+            <a href="{% url 'unicase_page' object.slug adrs %}" class="pagesBtn">{{name}}</a>
+        {% endfor %}
+    </div>
+{% endif %}
+<form id="caseForm" method="post" action="">
     {% csrf_token %}
     {% if form %}
-        {{ form }}
+        {{ form.as_div }}
     {% endif %}
 
     <div class="navigation">
-      
-        {% if has_next %}
-            <button name="next" value="1">→ادامه</button>
-        {% else %}
-            <button type="submit" name="submit_final" value="1">ثبت</button>
-        {% endif %}
-        {% if has_prev %}
-            <button name="prev" value="1">بازگشت ←</button>
-        {% endif %}
+        <div style="margin: auto">
+            {% if has_next %}
+                <button name="next" value="1" id="next" class="navigationBtn">→ادامه</button>
+            {% endif %}
+            {% if has_prev %}
+                <button type="submit" name="submit_final" value="1" id="submit" class="navigationBtn">ثبت</button>
+                <button name="prev" value="1" id="prev" class="navigationBtn">بازگشت ←</button>
+            {% endif %}
+        </div>
     </div>
 </form>
 
-<p id="autosave-status" style="font-style:italic; color:gray;"></p>
+<p id="autosave-status"></p>
 
 <script>
     let timeout;
-    document.querySelectorAll('#case-form input, #case-form textarea, #case-form select')
+    document.querySelectorAll('#caseForm input, #caseForm textarea, #caseForm select')
             .forEach(el => el.addEventListener('input', () => {
                 clearTimeout(timeout);
-                timeout = setTimeout(() => autoSave(), 1 * 1000);
+                timeout = setTimeout(() => autoSave(), 5 * 1000);
             }));
     var saved_time = "{{ object.date_modified|time:'H:i' }}";
     const currentPage = "{{ page_name }}";
     let caseSlug = "{{ object.slug|default:'' }}";
 
     function autoSave() {
-        const form = document.getElementById('case-form');
+        const form = document.getElementById('caseForm');
         const url = caseSlug
             ? `/cases/uni_hx/${caseSlug}/edit/${currentPage}/`   // update
             : `/cases/uni_hx/new/${currentPage}/`;               // create first time
@@ -86,8 +236,12 @@
         }
 
         if (data.status === 'saved' || data.status === 'created') {
-            document.getElementById('autosave-status').innerText = `آخرین پشتیبان‌گیری در ${saved_time}`;
-            setTimeout(() => document.getElementById('autosave-status').innerText = '', 2000);
+            if (saved_time){
+            document.getElementById('autosave-status').innerText = `آخرین پشتیبان‌گیری در ${saved_time}`
+        }else{
+            document.getElementById('autosave-status').innerText = `پشتیبان‌گیری انجام شد ${saved_time}`
+        };
+            //setTimeout(() => document.getElementById('autosave-status').innerText = '', 2000);
         }
         });
     }
