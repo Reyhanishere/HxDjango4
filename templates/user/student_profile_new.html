@@ -1,12 +1,275 @@
-{% if user.has_fa_name %}
-    <form action="" method="post">{% csrf_token %}
-        <div class="createForm" autocomplete="off">
-            {{ form }}
-            <button dir="ltr" class="btn btn-success" type="submit" id="save" style="height: 50px; margin-top: 2rem;" >ثبت</button>
+{% extends "base.html" %}
+{% block title %}ثبت اطلاعات{% endblock title %}
+{% block imports %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .myMain {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 3rem 0.75rem;
+        }
+        
+        .card {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        
+        .card-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .card-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+        
+        .card-body {
+            padding: 30px;
+        }
+        
+        .createForm {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5ee;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: #f8f9fa;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #6a11cb;
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.2);
+            background-color: white;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(106, 17, 203, 0.5);
+        }
+        
+        .btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .message-box {
+            background-color: #fff9e6;
+            border: 1px solid #ffd166;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .message-box h3 {
+            color: #e67700;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .message-box a {
+            color: #6a11cb;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .message-box a:hover {
+            color: #2575fc;
+            text-decoration: underline;
+        }
+        
+        .form-icon {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .card-body {
+                padding: 20px;
+            }
+            
+            .card-header {
+                padding: 20px;
+            }
+            
+            .card-header h1 {
+                font-size: 1.5rem;
+            }
+        }
+        .errorlist {
+            color: #b71c1c;
+            background-color: #ffcdd2;
+            padding: 12px 16px 12px 45px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 14px;
+            position: relative;
+            border: 1px solid #ef9a9a;
+        }
+
+        .errorlist li::marker {
+            content: "";
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+        }
+        .errorlist li::before{
+            content: "⚠";
+            
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+{% endblock imports %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h1>ثبت اطلاعات دانشجویی</h1>
+            <p>برای نوشتن کیس دانشگاهی، باید اطلاعات شما به تایید برسد.</p>
         </div>
-    </form>
-{% else %}
-    <h3>
-        ابتدا در  صفحۀ <a href="{% url 'change_user_info' %}">«ویرایش اطلاعات من»</a> نام فارسی خود را ثبت کنید.
-    </h3>
-{% endif %}
+        
+        <div class="card-body">
+                {% if user.has_fa_name %}
+                <!-- User has a Persian name - show form -->
+                <div class="user-has-name">
+                    <div class="form-icon">
+                        <div class="icon-circle">
+                            <i class="fas fa-user-edit"></i>
+                        </div>
+                    </div>
+                    
+                    <form action="" method="post" novalidate>
+                        {% csrf_token %}
+                        <div class="createForm" autocomplete="off">
+                            <!-- Simulated form fields -->
+                            <div class="form-group">
+                                <label for="id_working_university">دانشگاه</label>
+                                      {{ form.working_university }}
+                            </div>
+                            <div class="form-group">
+                                <label for="semester_of_entrance">ورودی</label>
+                                {{ form.semester_of_entrance }}
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="id_student_id">شماره دانشجویی:</label>
+                                {{ form.student_id }}
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="id_contact_info">شماره تماس</label>
+                                {{ form.contact_info }}
+                            </div>
+                                {{ form.working_university.errors }}
+                                {{ form.semester_of_entrance.errors }}
+                                {{ form.student_id.errors }}
+                                {{ form.contact_info.errors }}
+                            <button class="btn" type="submit" id="save">
+                                ثبت اطلاعات
+                                <i class="fas fa-save"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                {% else %}
+                <div class="user-no-name">
+                    <div class="message-box">
+                        <h3>ابتدا نام فارسی خود را ثبت کنید</h3>
+                        <p>برای استفاده از این بخش، لطفا ابتدا در صفحۀ <a href="{% url 'change_user_info' %}">«ویرایش اطلاعات من»</a> نام فارسی خود را ثبت کنید.</p>
+                    </div>
+                    
+                    <div class="form-icon">
+                        <div class="icon-circle">
+                            <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        </div>
+    </div>
+
+
+{% endblock content %}
