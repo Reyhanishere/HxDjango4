@@ -171,26 +171,53 @@ class CaseCreateView(LoginRequiredMixin, CreateView):  # new
     model = Case
     template_name = "hx_new.html"
     form_class = CaseCreateForm
-    success_url = "/accounts/dashboard/"
+    success_url = reverse_lazy("self_user_cases")
+
     
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
 
+def get_when(when):
+    if when == 'old': return True
+    elif when == 'new': return False
+    elif when == None: return None
+    else: raise Http404()
+    
 class CaseImageCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = ImageCase
     form_class = CaseImageForm
     template_name = "hx_add_img.html"
+            
+    def get_initial(self):
+        initial = super().get_initial()
+        when = self.kwargs.get('when')
+        initial['is_old'] = get_when(when)
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        when = self.kwargs.get('when')
+        kwargs['is_old'] = get_when(when)
+        return kwargs
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        when = self.kwargs.get('when')
+        context['is_old'] = get_when(when)
+        return context
+    
     def get_success_url(self):
         case_slug = self.kwargs["case_slug"]
         case = get_object_or_404(Case, slug=case_slug)
         return f"/cases/hx/{case.slug}/"
+    
     def form_valid(self, form):
         case_slug = self.kwargs["case_slug"]
         case = get_object_or_404(Case, slug=case_slug, author=self.request.user)
         form.instance.case = case
+        when = self.kwargs.get('when')
+        form.instance.is_old = get_when(when)
         return super().form_valid(form)
     def test_func(self):  # new
         case_slug = self.kwargs["case_slug"]
@@ -469,7 +496,7 @@ class CasePublication(UpdateView, LoginRequiredMixin, UserPassesTestMixin):
     model= Case
     template_name='hx_edit.html'
     form_class=CasePubForm
-    success_url = "/accounts/dashboard/"
+    success_url = reverse_lazy("self_user_cases")
     def test_func(self):
         obj = self.get_object()
         return obj.author == self.request.user
@@ -722,9 +749,11 @@ def hx_new_choose_view(request):
     return render(request, 'hx/hx_new_choose.html', None)
 
 
-PAGES_FLOW = ['cc_id', 'pi', 'pmh', 'dsf', 'ros_phe', 'last_fields']
+PAGES_FLOW = ['cc_id', 'pi', 'pmh', 'dsf', 'ros_phe', 'last_fields', 'select_prof']
+PAGES = {'cc_id':'CC & ID', 'pi':'Present Illness', 'pmh':'Past Medical', 'dsf':'Drugs Social Family', 'ros_phe':'ROS & PhE', 'last_fields':'Actions & Dx', 'select_prof':'Professor'}
 
-class CaseStepView(View):
+
+class CaseNewPageView(View):
     model = Case
 
     def get_object(self):
@@ -747,6 +776,8 @@ class CaseStepView(View):
             return CaseROSPhEForm
         elif page == 'last_fields':
             return CaseLastFieldsForm
+        elif page == 'select_prof':
+            return CaseSelectProfForm
         raise Http404("Invalid page")
 
     def get(self, request, page, slug=None):
@@ -754,12 +785,20 @@ class CaseStepView(View):
         form_class = self.get_form_class(page)
         form = form_class(instance=obj) if form_class else None
         index = PAGES_FLOW.index(page)
+        try:
+            if obj.slug:
+                exists=True
+        except:
+            exists=False
+            
         context = {
             'object': obj,
             'form': form,
             'page_name': page,
             'has_prev': index > 0,
             'has_next': index < len(PAGES_FLOW) - 1,
+            'pages': PAGES,
+            'exists': exists,
         }
 
         return render(request, f'hx/case_page_{page}.html', context)
@@ -773,6 +812,8 @@ class CaseStepView(View):
             case = form.save(commit=False)
             case.author = request.user
             case.title = case.generate_title()
+            case.visible = False
+            case.is_university_case = True
             case.save()
 
             # if this was the first creation, return the new slug to frontend
@@ -805,6 +846,8 @@ class CaseStepView(View):
             return redirect('unicase_page', slug=obj.slug, page=PAGES_FLOW[page_index - 1])
         
         if submit_page:
+            case.done = True
+            case.save()
             return redirect('hx_detail', slug=obj.slug)
 
         return redirect('unicase_page', slug=obj.slug, page=current_page)

@@ -64,7 +64,7 @@ class Review(models.Model):
         return f"{self.author}: {self.content_object.title}"
     
 class Case(models.Model):
-    choice = models.ManyToManyField(Choice)
+    choice = models.ManyToManyField(Choice, blank=True)
     premium = models.BooleanField(default=False)
     verified = models.BooleanField(
         default=True,
@@ -75,8 +75,11 @@ class Case(models.Model):
     visible = models.BooleanField(
         default=True,
     )
+    is_university_case = models.BooleanField(
+        default=False,
+    )
     done = models.BooleanField(
-        default=True,
+        default=False,
     )
     
     rating = models.SmallIntegerField(
@@ -256,6 +259,7 @@ class Case(models.Model):
     )
     summary = models.TextField(
         ("خلاصۀ شرح حال و معاینه"),
+        help_text="می‌توانید Problem List بیمار را اینجا بنویسید.",
         null=True,
         blank=True,
     )
@@ -270,6 +274,7 @@ class Case(models.Model):
 
     act = models.TextField(
         ("اقدامات"),
+        help_text="می‌توانید اقدامات انجام شده برای بیمار را اینجا لیست کنید. شامل آزمایش‌ها، عکس‌برداری‌ها و سایر اقدامات",
         null=True,
         blank=True,
     )
@@ -303,10 +308,10 @@ class Case(models.Model):
         ),
     )
 
-    tags = models.ManyToManyField(Tag, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
-    cc_tags = models.ManyToManyField(CCCategory, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
-    dx_tags = models.ManyToManyField(DxCategory, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
-    suggests=models.ManyToManyField(Suggest, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
+    tags = models.ManyToManyField(Tag, blank=True, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
+    cc_tags = models.ManyToManyField(CCCategory, blank=True, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
+    dx_tags = models.ManyToManyField(DxCategory, blank=True, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
+    suggests=models.ManyToManyField(Suggest, blank=True, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
     slug = models.SlugField(
         ("لینک"),
         unique=True,
@@ -341,10 +346,10 @@ class Case(models.Model):
     
     def generate_title(self):
         title = f"{self.sex_pedi()} {self.get_age()} با {self.cc}"
-        if len(title) <= 100:
+        if len(title) <= 50:
             return title
         else:
-            return title[:100]
+            return title[:50]
         
     def save(self, *args, **kwargs):
         if not self.pk:

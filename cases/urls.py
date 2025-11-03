@@ -33,6 +33,7 @@ urlpatterns = [
     path("search/", SearchResultsListView.as_view(), name="search_results"),
     path("success/", SuccessPageView.as_view(), name="success"),
     path('hx/<slug:case_slug>/add-image', CaseImageCreateView.as_view(), name='hx_add_image'),
+    path('hx/<slug:case_slug>/add-image/<str:when>', CaseImageCreateView.as_view(), name='hx_add_image_when'),
     path('hx/<slug:case_slug>/image-<int:pk>/edit', ImageCaseEditView.as_view(), name='hx_edit_image'),
     path('hx/<slug:case_slug>/image-<int:pk>/delete', ImageCaseDeleteView.as_view(), name='hx_delete_image'),
     path("ex/", ExListView.as_view(), name="ex_list"),
@@ -45,7 +46,7 @@ urlpatterns = [
 
     path('uni_hx/new/choose/', hx_new_choose_view, name='hx_new_choose'),
 
-    path('uni_hx/new/<str:page>/', CaseStepView.as_view(), name='unicase_new'), # Create mode (first page)
-    path('uni_hx/<slug:slug>/edit/<str:page>/', CaseStepView.as_view(), name='unicase_page'), # Update mode
+    path('uni_hx/new/<str:page>/', CaseNewPageView.as_view(), name='unicase_new'), # Create mode (first page)
+    path('uni_hx/<slug:slug>/edit/<str:page>/', CaseNewPageView.as_view(), name='unicase_page'), # Update mode
 ]
 

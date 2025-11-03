@@ -167,7 +167,6 @@ class CustomUser(AbstractUser):
     
     def has_fa_name(self):
         if self.fn_fa and self.ln_fa:
-            print(self.fn_fa+self.ln_fa)
             if len(self.fn_fa+self.ln_fa) > 5:
                 return True
             else: return False
@@ -188,7 +187,15 @@ class CustomUser(AbstractUser):
                 return True
         except:
             return False
-
+        
+    def __str__(self):
+        try:
+            profile = self.professor_profile
+            if profile:
+                return f"دکتر {self.fn_fa} {self.ln_fa} | {profile.section}"
+        except:
+            return self.username
+        
 class StudentProfile(models.Model):
     user = models.OneToOneField('CustomUser', on_delete=models.CASCADE, related_name='student_profile')
     verified = models.BooleanField(default=False)

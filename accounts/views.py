@@ -53,7 +53,7 @@ def verification_pending(request):
     try:
         request.user.student_profile
         if request.user.student_profile.verified:
-            return redirect("dashboard")
+            return redirect("self_user_cases")
         elif not request.user.student_profile.completed:
             return redirect("fill_user_profile")
         else:

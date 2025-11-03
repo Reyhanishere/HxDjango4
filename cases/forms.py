@@ -86,10 +86,17 @@ class CaseImageForm(ModelForm):
                     f"حجم تصویری که بارگذاری می‌کنید نباید بیشتر از {max_size_kb} کیلوبایت باشد. حجم فایل شما، {round(image.size/1024, 1)} کیلوبایت است."
                 )
         return image
+    
+    def __init__(self, *args, **kwargs):
+        self.is_old = kwargs.pop('is_old', None)
+        super().__init__(*args, **kwargs)
+        if self.is_old != None:
+            self.fields['is_old'].widget = forms.HiddenInput()
+        
 
     class Meta:
         model = ImageCase
-        exclude = ("case", "verified", "visible")
+        exclude = ("case", "verified", "visible",)
 
 
 class ImageCaseEditForm(ModelForm):
@@ -197,6 +204,22 @@ class ReplyForm(forms.ModelForm):
 
 
 class CaseCCAndIDForm(forms.ModelForm):
+    cc = forms.CharField(required=True,
+                        label="شکایت اصلی",
+                        help_text="Chief Complaint",
+                        widget=forms.TextInput(
+                        attrs={
+                            'dir': 'auto'
+                        }
+                    ))
+    
+    age = forms.IntegerField(required=True,
+                             widget=forms.NumberInput(
+                                attrs={
+                                    "value": "40",
+                                }
+                            ))
+    
     class Meta:
         model = Case
         fields = [
@@ -235,8 +258,12 @@ class CaseROSPhEForm(forms.ModelForm):
 class CaseLastFieldsForm(forms.ModelForm):
     class Meta:
         model = Case
-        fields = ["summary", "ddx", "pdx", "act", "dat", "fdx"]
-        
+        fields = ["summary", "ddx", "act", "dat", "pdx", "fdx"]
+
+class CaseSelectProfForm(forms.ModelForm):
+    class Meta:
+        model = Case
+        fields = ["professor"]
 ### End of Uni Cases Forms
 
 
