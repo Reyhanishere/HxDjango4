@@ -264,6 +264,34 @@ class CaseSelectProfForm(forms.ModelForm):
     class Meta:
         model = Case
         fields = ["professor"]
+
+class CaseFinalsForm(forms.ModelForm):
+    class Meta:
+        model = Case
+        fields = ["professor_post_text", "rts", "tags", "cc_tags", "dx_tags", "suggests", 'professor_verified']
+        labels = {
+            "rts": ("روتیشن / بخش"),
+            "cc_tags": ("تگ‌های شکایت اصلی"),
+            "dx_tags": ("تگ‌های تشخیص"),
+            "tags": ("سایر تگ‌های کیس"),
+            "suggests": ("مناسب برایِ"),
+            "professor_verified": ("آیا تایید نهایی می‌کنید؟"),
+    
+        }
+        help_texts = {
+            "tags": (
+                "تمام تگ‌هایی که به نظرتان برای دسته‌بندی کیس مناسب است و در تگ‌های شکایت و تشخیص انتخاب نکردید."
+            ),
+            "cc_tags": (
+                "می‌توانید مواردی که در لیست نیستند را اضافه کنید."
+            ),
+            "dx_tags": (
+                "می‌توانید مواردی که در لیست نیستند را اضافه کنید."
+            ),
+            "professor_verified": (
+                "با تایید نهایی، دانشجو دیگر توان ویرایش این کیس را نخواهد داشت و با تیک تایید شده و به نام شما، در سایت ثبت می‌شود."
+            ),
+        }
 ### End of Uni Cases Forms
 
 

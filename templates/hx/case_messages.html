@@ -32,27 +32,35 @@
         margin: 1rem;
         background: aliceblue;
     }
-    .myFeedback{
+    .authorFeedback{
         border-color: wheat;
         background: floralwhite;
+    }
+    .feedbackTime{
+        font-size: 14px;
+        color: #999;
+        font-weight: 400;
     }
 </style>
 
 {% endblock imports %}
 
 {% block content %}
-<h2 style="margin: 3rem 1rem;">پیام‌های کیس شما ({{ case.title }})</h2>
+<h2 style="margin: 3rem 1rem;">پیام‌های 
+    {% if request.user == case.author %} کیس شما {% else %} این کیس{%endif%}
+    ({{ case.title }})</h2>
 {% if feedbacks %}
     {% for feedback in feedbacks %}
-        <div class="feedbacksBox{% if feedback.author == case.author %} myFeedback{% endif %}">
+        <div class="feedbacksBox{% if feedback.author == case.author %} authorFeedback{% endif %}">
             <h5>
                 <b>
-                    {% if feedback.author == case.author %}
+                    {% if feedback.author == request.user %}
                         شما
                     {% else %}
-                    دکتر {{ feedback.author.get_name }}
+                    {% if feedback.author.professor_profile %}دکتر {% endif %}{{ feedback.author.student_profile.get_fa_name }}
                     {% endif %}
-                </b>:
+                </b>: 
+                <span class="feedbackTime">(در {{feedback.time_written|date:'d F'}}، ساعت {{feedback.time_written|date:'H:i'}})</span>
                 {% if forloop.counter == 1 %}
                     <span style="font-size: 14px; color: #999">(آخرین پیام)</span>
                 {% endif %}

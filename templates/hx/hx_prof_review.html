@@ -1,0 +1,88 @@
+{% extends "hx/hx_detail.html" %}
+{% block imports%}
+<style>
+    body{
+        background: transparent;
+    }
+    #shareP{
+        display: none;
+    }
+    #commentsCont{
+        display: none;
+    }
+    .feedbacksBox{
+        border: 1px solid cornflowerblue;
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 1rem;
+        background: aliceblue;
+    }
+    .authorFeedback{
+        border-color: wheat;
+        background: floralwhite;
+    }
+    .feedbackTime{
+        font-size: 14px;
+        color: #999;
+        font-weight: 400;
+    }
+    li::marker{
+        content:"";
+    }
+    #msgTextarea{
+        border-radius: 10px;
+        border: 1px solid grey;
+        padding: 1rem;
+        width: auto;
+        height: 35vh;
+    }
+    .showAllMsgs{
+        border-radius: 20px;
+        padding: .15rem 1rem;
+    }
+    
+</style>
+{% endblock imports%}
+
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+    <div class="m-2 alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %}">{{ message|capfirst }}</div>
+{% endfor %}
+{% endif %}
+{{ block.super }}
+<div class="feedbacksBox">
+    <h5 style="font-weight: 600;">
+        آخرین پیام شما:
+        <span class="feedbackTime">(در {{prof_last_message.time_written|date:'d F'}}، ساعت {{prof_last_message.time_written|date:'H:i'}})</span>
+    </h5>
+    {{prof_last_message.text|linebreaks}}
+    {% if student_last_message%}
+        <div class="feedbacksBox authorFeedback">
+            <h5 style="font-weight: 600;">پاسخ
+                <span class="feedbackTime">(در {{student_last_message.time_written|date:'d F'}}، ساعت {{student_last_message.time_written|date:'H:i'}})</span>
+            </h5>
+            {{student_last_message.text|linebreaks}}
+        </div>
+    {% endif %}
+</div>
+{% if messages %}
+{% for message in messages %}
+    <div class="m-2 alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %}">{{ message|capfirst }}</div>
+{% endfor %}
+{% endif %}
+<form method="post" style="display: grid; margin: 1rem;">
+    <h5 style="font-weight: 600;">
+        نوشتن پیام جدید: 
+        <a href="{% url 'case_messages' case.slug %}" class="btn btn-outline-warning showAllMsgs" target="_blank">نمایش تمام پیام‌ها</a>
+    </h5>
+    
+
+    {% csrf_token %}
+    <textarea dir="rtl" name="message_text" id="msgTextarea" class="" value=""></textarea>
+    <div style="margin: auto;">
+        <button type="submit" name="submit" value="submit" class="btn btn-success" dir="ltr" style="width: 200px; margin:auto;">&#128190; ثبت</button>
+        <button name="go_next_step" value="go_next_step" class="btn btn-outline-secondary" dir="ltr" style="width: 200px; margin:auto;">بریم مرحلۀ بعدی</button>
+    </div>
+</form>
+{% endblock content %}

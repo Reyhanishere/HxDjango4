@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% load static %}
+{% block imports %}
+<link rel="stylesheet" href="{% static 'css/style_panel.css' %}">
+<link rel="stylesheet" href="{% static 'css/style_calculi.css' %}">
+
+<style>
+    .eachItemUni{
+        
+    }
+    @media(max-width:900px){
+
+    }
+    .panelMainContainer{
+        margin: 20px;
+        background-color: #FDFCF8;
+        border-radius: 10px;
+        border: 1px solid #000;
+    }
+    .seeAll{
+        padding: 0.25rem 1rem;
+        border-radius: 25px;
+        display: inline-block;
+        font-size: 16px;
+        background: lightseagreen;
+        border: 1px solid darkslategray;
+        box-shadow: 0px 0px 0px 0.5px #eee9;
+        color: white;
+        margin-right: 0.5rem;
+        width: auto;
+    }
+    .seeAll:hover{
+        color: darkslategray;
+        box-shadow: 0px 0px 1px 1px #eee9;
+    }
+    #quickBtnsBox{
+        margin: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .otherPagesBtn{
+        display: inline-block;
+        background: linear-gradient(45deg, #fe8dc6, #fed1c7);
+        box-shadow: 0 0 2px 1px #fed1c7ee;
+        color: rgba(103, 10, 49, 1);
+        font-weight: 400;
+        border-radius: 20px;
+        border: none;
+        padding: 0.1rem 0.75rem;
+        margin:0.25rem;
+        transition: 0.3s;
+        text-decoration: none;
+        font-size: 14px
+    }
+    .otherPagesBtn:hover{
+        box-shadow: 0 0 4px 2px #fed1c7;
+        transform: translate(0, -1px);
+        color:rgba(164, 19, 80, 1);
+    }
+    .moveBtn{
+        position: relative;
+        left: 2px;
+        bottom: 2px;
+    }
+    .eachItem{
+        grid-template-rows: 1fr;
+        padding: 0 0 1rem 0;
+    }
+    @media (max-width: 900px) and (min-width:450px) {
+        .courseTitle {
+            grid-column: span 2;
+        }
+    }
+    @media (max-width: 550px){
+        .courseBtn{
+            width: max-content;
+        }
+    }
+    @media (max-width: 450px){
+        .moveBtn{
+            left: 7px;
+            bottom: 7px;
+        }
+        .courseBtn{
+            grid-column: span 4;
+            width: -webkit-fill-available;
+        }
+    }
+</style>
+{% endblock imports %}
+
+{% block content %}
+
+<div id="quickBtnsBox" style="display:none">
+    <a class="otherPagesBtn" href="{% url 'self_user_cases'%}">
+        کیس‌های من
+    </a>
+    <a class="otherPagesBtn" href="{% url 'self_user_courses'%}">
+        دوره‌های من
+    </a>
+    <a class="otherPagesBtn" href="{% url 'favorite_calculus'%}">
+        ماشین‌حساب‌های من
+    </a>
+    <a class="otherPagesBtn" href="{% url 'change_user_info'%}">
+        ویرایش اطلاعات من
+    </a>
+    <a class="otherPagesBtn" href="{% url 'password_change'%}">
+        تغییر گذرواژه
+    </a>
+</div>
+
+{% if all_uni_cases %}
+<div class="panelMainContainer">
+    <div id="panelContTitle" style="text-align: right;"><span>لیست شرح حال‌های دانشجوهای شما</span>
+            <a href="{% url 'self_user_unicases' %}" class="itemBTN seeAll" style="display:none">مشاهدۀ تمام موارد</a>
+    </div>
+    <div id="panelContItems">
+        {% for hx in all_uni_cases %}
+        <div class="eachItem eachItemUni">
+            <div class="title">
+                <h4><a href="{% url 'hx_detail' hx.slug%}">{{hx.title}}</a></h4>
+                <span class="tooltip-text" id="fade">{{hx.cc}}</span>
+            </div>
+            <span class="itemBTN" style="width:-webkit-fill-available; height: auto; box-shadow: none;"><b>{{ hx.author.student_profile.get_fa_name }}</b></span>
+            <span class="date">{{hx.date_created|date:"d M"}}</span>
+            {% if hx.get_status == 'Verified' %}
+                <span class="itemBTN public">تایید و نهایی</span>
+            {% elif hx.get_status == 'Professor' %}
+                <span class="itemBTN delete">منتظر شما</span>
+            {% elif hx.get_status == 'Student' %}
+                <span class="itemBTN prsnt" style="font-size:14px; width:auto; height: auto">منتظر دانشجو</span>
+            {% endif %}
+        
+            <a href="{% url 'case_review' hx.slug %}" class="itemBTN edit">بررسی</a>
+            <a href="{% url 'case_finals' hx.slug %}" class="itemBTN delete">نهایی</a>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endif %}
+
+    <div class="panelMainContainer">
+    <div id="panelContTitle">لیست دوره‌های برگزارشده توسط شما</div>
+    {% if courses %}
+    <div id="panelContItems">
+        {% for course_reg in courses %}
+        <div class="eachItem">
+            <div class="title courseTitle">
+                <h4>{{course_reg.course.title}}</h4>
+                <span class="tooltip-text" id="fade">{{course_reg.course.professor.get_name}}</span>
+            </div>
+            <span class="date">{{course_reg.joined_at|date:"d M"}}</span>
+            <a href="{% url 'course_detail' course_reg.course.id%}" class="itemBTN edit courseBtn">صفحۀ دوره</a>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        {% endfor %}
+
+    </div>
+    {% else %}
+        <p class="noHx">شما هنوز دوره‌ای برگزار نکرده‌اید.</p>
+        <p style="margin: 1.5rem">اطلاعات بیشتر به زودی در دسترس شما قرار خواهد گرفت.</p>
+    {% endif %}
+</div>
+    
+</div>
+{% endblock content %}

@@ -52,18 +52,45 @@ class UserChangeInfoView(LoginRequiredMixin, UpdateView):
 @login_required
 def dashboard(request):
     user = request.user
-    cases = Cases.Case.objects.filter(author=user, is_university_case=False).order_by("-date_created")[:5]
-    uni_cases = Cases.Case.objects.filter(author=user, is_university_case=True).order_by("-date_created")[:5]
-    courses = Steps.CourseRegistration.objects.filter(student=user).order_by("-joined_at")[:5]
-    liked_calculi = request.user.liked_calculus.all().order_by('-date_created')
-    
-    context = {'cases': cases,
-               'uni_cases':uni_cases,
-               'courses': courses,
-                'liked_calculi': liked_calculi,
-               }
-
-    return render(request, "user/dashboard.html", context)
+    if user.professor_profile:
+        action_need_uni_cases = Cases.Case.objects.filter(
+            professor=user,
+            done=True,
+            is_university_case=True,
+            professor_verified=False,
+            is_professor_turn=True
+            ).order_by("-date_created") # limit count later
+        reviewed_uni_cases = Cases.Case.objects.filter(
+            professor=user,
+            done=True,
+            is_university_case=True,
+            professor_verified=False,
+            is_professor_turn=False
+            ).order_by("-date_created") # limit count later
+        verified_uni_cases = Cases.Case.objects.filter(
+            professor=user,
+            done=True,
+            is_university_case=True,
+            professor_verified=True,
+            ).order_by("-date_created") # limit count later
+        all_uni_cases = action_need_uni_cases | reviewed_uni_cases | verified_uni_cases
+        template_name = "user/dashboard_professor.html"
+        context = {
+            'all_uni_cases':all_uni_cases,
+        }
+    else:
+        cases = Cases.Case.objects.filter(author=user, is_university_case=False).order_by("-date_created")[:5]
+        uni_cases = Cases.Case.objects.filter(author=user, is_university_case=True).order_by("-date_created")[:5]
+        courses = Steps.CourseRegistration.objects.filter(student=user).order_by("-joined_at")[:5]
+        liked_calculi = request.user.liked_calculus.all().order_by('-date_created')
+        
+        context = {'cases': cases,
+                    'uni_cases':uni_cases,
+                    'courses': courses,
+                    'liked_calculi': liked_calculi,
+                }
+        template_name = "user/dashboard.html"
+    return render(request, template_name, context)
 
 def verification_pending(request):
     try:

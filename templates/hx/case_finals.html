@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/style_HxHelper.css' %}">
+<link rel="stylesheet" href="{% static 'css/style_hx_new_edit.css' %}">
+
+<style>    
+    button {
+        border: none;
+        padding: 10px
+    }
+    h1{
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    #div_id_is_pedi{
+        background: linear-gradient(15deg, rgba(255, 110, 127, 0.7) 0%, rgba(191, 233, 255, 0.7) 100%);
+        padding: 0.5rem;
+        border-radius: 20px;
+        padding-right: 0.75rem;
+    }
+    .hidden {
+        display: none;
+    }
+    .helperDivs {
+        display: block;
+        margin-right: 1rem;
+        line-height: 3;
+    }
+    .AIHelperBtn {
+        margin-right: 0px;
+    }
+    #tabs-container{
+        line-height: 1.8;
+    }
+    
+</style>
+<div class="pad-15">
+<h1>ویرایش‌های نهایی</h1>
+    <form action="" method="post" autocomplete="off">{% csrf_token %}
+        <div class="createForm" style="margin:10px">
+        {{ form|crispy }}
+            <div class="text-center" >
+                <button class="btn btn-primary" id="primaryButton" type="submit" style="padding: .5rem 1.5rem;">بروزرسانی</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock content %}

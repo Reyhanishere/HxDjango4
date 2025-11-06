@@ -212,6 +212,7 @@ class StudentProfile(models.Model):
     
     def get_fa_name(self):
         return f"{self.user.fn_fa} {self.user.ln_fa}"
+    
     class Meta:
         verbose_name = "پروفایل دانشجو"
         verbose_name_plural = "پروفایل دانشجویان"

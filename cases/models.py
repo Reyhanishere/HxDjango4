@@ -375,6 +375,8 @@ class Case(models.Model):
             while Case.objects.filter(slug=self.slug).exists():
                 count += 1
                 self.slug = f"{today}{count:02}"
+        if self.professor_verified:
+            self.visible = True
         super().save(*args, **kwargs)
     
     def __str__(self):

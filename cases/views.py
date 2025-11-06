@@ -147,6 +147,12 @@ class CaseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = "hx_edit.html"
     form_class = CaseUpdateForm
 
+    def get(self, request, slug=None):
+        obj = self.get_object()
+        if obj.professor_verified == True:
+            messages.error(request, "این کیس توسط استاد تایید شده و امکان ویرایش آن وجود ندارد.")
+            return redirect("hx_detail", slug=slug)
+        
     def get_success_url(self):
         case_slug = self.kwargs["slug"]
         case = get_object_or_404(Case, slug=case_slug)
@@ -782,6 +788,9 @@ class CaseNewPageView(View):
 
     def get(self, request, page, slug=None):
         obj = self.get_object()
+        if obj.professor_verified == True:
+            messages.error(request, "این کیس توسط استاد تایید شده و امکان ویرایش آن وجود ندارد.")
+            return redirect("hx_detail", slug=slug)
         if obj != None:
             the_last_feedback = CaseMessage.objects.filter(case=obj, author=obj.professor).order_by('-time_written').first()
             has_more_feedbacks = False
@@ -880,7 +889,7 @@ def toggle_case_done(request, case_slug):
 @login_required
 def case_messages(request, case_slug):
     case = get_object_or_404(Case, slug=case_slug)
-    if case.author == request.user:
+    if case.author == request.user or case.professor == request.user:
         feedbacks = CaseMessage.objects.filter(case=case).order_by('-time_written')
         context = {
             'case': case,
@@ -888,4 +897,52 @@ def case_messages(request, case_slug):
             }
         return render(request, 'hx/case_messages.html', context)
     else:
-        raise Http404("You are not case author.")
+        raise Http404("You are not case author or professor.")
+
+@login_required
+def case_professor_review(request, case_slug):
+    case = get_object_or_404(Case, slug=case_slug)
+    if case.professor == request.user:
+        prof_last_message = CaseMessage.objects.filter(
+            author=request.user, case=case).order_by('time_written').last()
+        student_last_message = CaseMessage.objects.filter(
+            author=case.author, case=case).order_by('time_written').last()
+        if prof_last_message.time_written < student_last_message.time_written:
+            pass
+        else: student_last_message=None
+        if request.method == "POST":
+            if request.POST.get('submit'):
+                message_text = request.POST.get("message_text")
+                if message_text:
+                    CaseMessage.objects.create(
+                        author=request.user,
+                        case=case,
+                        text=message_text,
+                    )
+                    case.is_professor_turn = False
+                    case.save()
+                    # Redirect to prevent form resubmission on refresh
+                    messages.success(request, "پیام شما ثبت شد.")
+                    return redirect("case_review", case_slug=case_slug)
+                else:
+                    messages.error(request, "پیامی ننوشته‌اید.")
+                    return redirect("case_review", case_slug=case_slug)
+            elif request.POST.get('go_next_step'):
+                return redirect("case_finals", case_slug=case_slug)
+        context = {
+            'case': case,
+            'prof_last_message':prof_last_message,
+            'student_last_message':student_last_message,
+            }
+        return render(request, 'hx/hx_prof_review.html', context)
+    else:
+        raise Http404("You are not case professor.")
+    
+class CaseFinalsView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Case
+    template_name = 'hx/case_finals.html'
+    form_class = CaseFinalsForm
+    # fields = ["professor_post_text", "rts", "tags", "cc_tags", "dx_tags", "suggests", 'professor_verified']
+    def test_func(self):
+        obj = self.get_object()
+        return obj.professor == self.request.user
