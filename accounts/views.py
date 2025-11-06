@@ -52,7 +52,8 @@ class UserChangeInfoView(LoginRequiredMixin, UpdateView):
 @login_required
 def dashboard(request):
     user = request.user
-    if user.professor_profile:
+    try:
+        user.professor_profile
         action_need_uni_cases = Cases.Case.objects.filter(
             professor=user,
             done=True,
@@ -78,7 +79,7 @@ def dashboard(request):
         context = {
             'all_uni_cases':all_uni_cases,
         }
-    else:
+    except:
         cases = Cases.Case.objects.filter(author=user, is_university_case=False).order_by("-date_created")[:5]
         uni_cases = Cases.Case.objects.filter(author=user, is_university_case=True).order_by("-date_created")[:5]
         courses = Steps.CourseRegistration.objects.filter(student=user).order_by("-joined_at")[:5]
