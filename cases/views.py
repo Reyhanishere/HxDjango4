@@ -788,10 +788,10 @@ class CaseNewPageView(View):
 
     def get(self, request, page, slug=None):
         obj = self.get_object()
-        if obj.professor_verified == True:
-            messages.error(request, "این کیس توسط استاد تایید شده و امکان ویرایش آن وجود ندارد.")
-            return redirect("hx_detail", slug=slug)
         if obj != None:
+            if obj.professor_verified == True:
+                messages.error(request, "این کیس توسط استاد تایید شده و امکان ویرایش آن وجود ندارد.")
+                return redirect("hx_detail", slug=slug)
             the_last_feedback = CaseMessage.objects.filter(case=obj, author=obj.professor).order_by('-time_written').first()
             has_more_feedbacks = False
             if CaseMessage.objects.filter(case=obj).count() > 1:
