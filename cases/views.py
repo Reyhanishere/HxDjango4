@@ -929,7 +929,7 @@ def case_professor_review(request, case_slug):
                     messages.error(request, "پیامی ننوشته‌اید.")
                     return redirect("case_review", case_slug=case_slug)
             elif request.POST.get('go_next_step'):
-                return redirect("case_finals", case_slug=case_slug)
+                return redirect("case_finals", slug=case_slug)
         context = {
             'case': case,
             'prof_last_message':prof_last_message,
