@@ -85,7 +85,9 @@
 {% if case.verified %}
         
 <h2 style="font-weight:600; padding-top:10px" dir="auto">
-    <img src="{% static "images/buttons/verified_icon.png" %}" width="30"/>
+    {% if case.get_status == 'Verified' %}
+        <img src="{% static "images/buttons/verified_icon.png" %}" width="30"/>
+    {% endif %}
     {{ case.title }}
 </h2>
 <div dir="ltr" class="txtAlgnL">
