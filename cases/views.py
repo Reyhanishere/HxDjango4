@@ -2,24 +2,24 @@ from itertools import chain
 import requests
 import json, math
 
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Q
+from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import ListView, DetailView, FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.http import JsonResponse
-from django.conf import settings
-
-from django.db.models import Q
-
-from django.urls import reverse_lazy, reverse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
 
 from .models import *
 from .forms import *
 from .utils import *
 from .decorators import *
-
 
 
 class CasesListView(ListView):
@@ -782,6 +782,14 @@ class CaseNewPageView(View):
 
     def get(self, request, page, slug=None):
         obj = self.get_object()
+        if obj != None:
+            the_last_feedback = CaseMessage.objects.filter(case=obj, author=obj.professor).order_by('-time_written').first()
+            has_more_feedbacks = False
+            if CaseMessage.objects.filter(case=obj).count() > 1:
+                has_more_feedbacks = True
+        else:
+            has_more_feedbacks = False
+            the_last_feedback = None
         form_class = self.get_form_class(page)
         form = form_class(instance=obj) if form_class else None
         index = PAGES_FLOW.index(page)
@@ -793,6 +801,8 @@ class CaseNewPageView(View):
             
         context = {
             'object': obj,
+            'feedback':the_last_feedback,
+            'has_more_feedbacks':has_more_feedbacks,
             'form': form,
             'page_name': page,
             'has_prev': index > 0,
@@ -851,3 +861,31 @@ class CaseNewPageView(View):
             return redirect('hx_detail', slug=obj.slug)
 
         return redirect('unicase_page', slug=obj.slug, page=current_page)
+
+@login_required
+@require_POST
+def toggle_case_done(request, case_slug):
+    case = get_object_or_404(Case, slug=case_slug)
+    
+    # Check if user is the course professor
+    if case.author == request.user:
+        case.done = not case.done
+        case.save()
+        return redirect(reverse('dashboard'))
+
+    else:
+        messages.error(request, "You don't have permission to modify this case.")
+        return redirect(reverse('dashboard'))
+
+@login_required
+def case_messages(request, case_slug):
+    case = get_object_or_404(Case, slug=case_slug)
+    if case.author == request.user:
+        feedbacks = CaseMessage.objects.filter(case=case).order_by('-time_written')
+        context = {
+            'case': case,
+            'feedbacks':feedbacks,
+            }
+        return render(request, 'hx/case_messages.html', context)
+    else:
+        raise Http404("You are not case author.")

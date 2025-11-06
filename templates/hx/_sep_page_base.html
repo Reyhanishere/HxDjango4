@@ -159,6 +159,13 @@
         align-items: center;
         justify-content: center;
     }
+    #feedbackBox{
+        border: 1px solid cornflowerblue;
+        border-radius: 20px;
+        padding: 1rem;
+        margin: 1rem;
+        background: aliceblue;
+    }
     #00a1ffdd
     #00ff8fdd
     
@@ -182,6 +189,19 @@
             <a href="{% url 'unicase_page' object.slug adrs %}" class="pagesBtn">{{name}}</a>
         {% endfor %}
     </div>
+
+    {% if feedback %}
+    <div id="feedbackBox">
+        <h5><b>دکتر {{ feedback.author.get_name }}</b>: 
+            <span style="font-size: 14px; color: #999">(آخرین پیام)</span>
+            {% if has_more_feedbacks %}
+                <a href="{% url 'case_messages' object.slug %}" class="pagesBtn" target="_blank">نمایش تمام پیام‌ها</a>
+            {% endif %}
+        </h5>
+        {{feedback.text|default_if_none:""|linebreaks}}
+    </div>
+    {% endif %}
+
 {% endif %}
 <form id="caseForm" method="post" action="">
     {% csrf_token %}

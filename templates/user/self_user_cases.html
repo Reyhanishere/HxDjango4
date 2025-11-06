@@ -3,10 +3,13 @@
 {% load my_tags %}
 {% block title %} | User Panel{%endblock title%}
 {% block desc %}تمام شرح‌حال‌های خود را اینجا ببینید و مدیریت کنید.{% endblock desc%}
-{% block content %}
+{% block imports %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link rel="stylesheet" href="{% static 'css/style_base.css' %}">
 <link rel="stylesheet" href="{% static 'css/style_panel.css' %}">
+{% endblock imports %}
+
+{% block content %}
 
 <div id="panelMainContainer">
     <div id="panelContTitle">لیست شرح‌حال‌های شما</div>

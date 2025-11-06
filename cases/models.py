@@ -69,9 +69,6 @@ class Case(models.Model):
     verified = models.BooleanField(
         default=True,
     )
-    professor_verified = models.BooleanField(
-        default=False,
-    )
     visible = models.BooleanField(
         default=True,
     )
@@ -79,6 +76,12 @@ class Case(models.Model):
         default=False,
     )
     done = models.BooleanField(
+        default=False,
+    )
+    is_professor_turn = models.BooleanField(
+        default=True,
+    )
+    professor_verified = models.BooleanField(
         default=False,
     )
     
@@ -350,7 +353,20 @@ class Case(models.Model):
             return title
         else:
             return title[:50]
-        
+    def get_status(self):
+        if self.is_university_case:
+            if self.professor_verified:
+                return "Verified"
+            else:
+                if self.done:
+                    if self.is_professor_turn:
+                        return "Professor"
+                    else:
+                        return "Student"
+                else:
+                    return "Incomplete"
+        else:
+            return None
     def save(self, *args, **kwargs):
         if not self.pk:
             today = now().strftime('%y%m%d')

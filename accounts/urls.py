@@ -5,6 +5,7 @@ urlpatterns = [
     path("signup/", SignUpView.as_view(), name="signup"),
     path("dashboard/", dashboard, name="dashboard"),
     path("cases/", self_user_cases, name="self_user_cases"),
+    path("uni_cases/", self_user_unicases, name="self_user_unicases"),
     path("courses/", self_user_courses, name="self_user_courses"),
 
     path("change/", UserChangeInfoView.as_view(), name="change_user_info"),

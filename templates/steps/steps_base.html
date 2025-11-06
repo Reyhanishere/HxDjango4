@@ -71,22 +71,19 @@
                         </svg>
                     </div>
                     <div class="dropdown-content" id="userDiv" dir="rtl">
-                        <a class="dropdown-item" href="{% url 'self_user_cases'%}">
-                            کیس‌های من</a>
-                        <a class="dropdown-item" href="{% url 'self_user_courses'%}">
-                            دوره‌های من</a>
-                        <a class="dropdown-item" href="{% url 'favorite_calculus'%}">
-                            ماشین‌حساب‌های من</a>
-                        <a class="dropdown-item" href="{% url 'change_user_info' %}">
-                            ویرایش اطلاعات من</a>
-                        <a class="dropdown-item" href="{% url 'password_change'%}">
-                        تغییر گذرواژه</a>
+                        {% if user.university == 'MUMS' or user.university == 'NKUMS' %}
+                        <a class="dropdown-item" href="{% url 'hx_new_choose'%}">
+                            ثبت کیس دانشگاهی
+                        </a>    
+                        {% endif %}
+                        <a class="dropdown-item" href="{% url 'dashboard'%}">
+                            داشبورد
+                        </a>
                         
-                        
-                            <form method="post" action="{% url 'logout' %}">
-                                {% csrf_token %}
-                                <button type="submit" class="dropdown-item" style="color: #B22">خروج</button>
-                            </form>
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item" style="color: #B22">خروج</button>
+                        </form>
                     </div>
                 
             </div>

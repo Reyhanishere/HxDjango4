@@ -98,7 +98,10 @@
                             ثبت کیس دانشگاهی
                         </a>    
                         {% endif %}
-                        <a class="dropdown-item" href="{% url 'self_user_cases'%}">
+                        <a class="dropdown-item" href="{% url 'dashboard'%}">
+                            داشبورد
+                        </a>
+                        {% comment %} <a class="dropdown-item" href="{% url 'self_user_cases'%}">
                             کیس‌های من
                         </a>
                         <a class="dropdown-item" href="{% url 'self_user_courses'%}">
@@ -112,7 +115,7 @@
                         </a>
                         <a class="dropdown-item" href="{% url 'password_change'%}">
                         تغییر گذرواژه
-                        </a>
+                        </a> {% endcomment %}
                             <form method="post" action="{% url 'logout' %}">
                                 {% csrf_token %}
                                 <button type="submit" class="dropdown-item" style="color: #B22">خروج</button>

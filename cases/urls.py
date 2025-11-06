@@ -48,5 +48,9 @@ urlpatterns = [
 
     path('uni_hx/new/<str:page>/', CaseNewPageView.as_view(), name='unicase_new'), # Create mode (first page)
     path('uni_hx/<slug:slug>/edit/<str:page>/', CaseNewPageView.as_view(), name='unicase_page'), # Update mode
+    path('uni_hx/<slug:case_slug>/toggle_case_done/', toggle_case_done, name='toggle_case_done'), # toggle case done field
+    path('uni_hx/<slug:case_slug>/case_messages/', case_messages, name='case_messages'), # case messages
+    
+
 ]
 

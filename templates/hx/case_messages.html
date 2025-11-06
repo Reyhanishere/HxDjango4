@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block imports %}
+
+<style>
+    body{
+        background: transparent;
+    }
+    .pagesBtn{
+        display: inline-block;
+        background: linear-gradient(45deg, #fe8dc6, #fed1c7);
+        box-shadow: 0 0 2px 1px #fed1c7ee;
+        color: rgba(103, 10, 49, 1);
+        font-weight: 400;
+        border-radius: 20px;
+        border: none;
+        padding: 0.1rem 0.75rem;
+        margin:0.25rem;
+        transition: 0.3s;
+        text-decoration: none;
+        font-size: 14px
+    }
+    .pagesBtn:hover{
+        box-shadow: 0 0 4px 2px #fed1c7;
+        transform: translate(0, -1px);
+        color:rgba(164, 19, 80, 1);
+    }
+    .feedbacksBox{
+        border: 1px solid cornflowerblue;
+        border-radius: 20px;
+        padding: 1rem;
+        margin: 1rem;
+        background: aliceblue;
+    }
+    .myFeedback{
+        border-color: wheat;
+        background: floralwhite;
+    }
+</style>
+
+{% endblock imports %}
+
+{% block content %}
+<h2 style="margin: 3rem 1rem;">پیام‌های کیس شما ({{ case.title }})</h2>
+{% if feedbacks %}
+    {% for feedback in feedbacks %}
+        <div class="feedbacksBox{% if feedback.author == case.author %} myFeedback{% endif %}">
+            <h5>
+                <b>
+                    {% if feedback.author == case.author %}
+                        شما
+                    {% else %}
+                    دکتر {{ feedback.author.get_name }}
+                    {% endif %}
+                </b>:
+                {% if forloop.counter == 1 %}
+                    <span style="font-size: 14px; color: #999">(آخرین پیام)</span>
+                {% endif %}
+        </h5>
+        {{feedback.text|default_if_none:""|linebreaks}}
+        </div>
+    {% endfor %}
+{% else %}
+        <h2>هنوز هیچ پیامی برای این کیس ثبت نشده است.</h2>
+{% endif %}
+{% endblock content %}

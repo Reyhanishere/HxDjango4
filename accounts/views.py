@@ -24,11 +24,15 @@ def self_user_cases(request):
     return render(request, 'user/self_user_cases.html', {'hxs': hxs,})
 
 @login_required
+def self_user_unicases(request):
+    user = request.user
+    hxs = Cases.Case.objects.filter(author=user, is_university_case=True).order_by("-date_created")
+    return render(request, 'user/self_user_cases.html', {'hxs': hxs,})
+
+@login_required
 def self_user_courses(request):
     user = request.user
     courses = Steps.CourseRegistration.objects.filter(student=user).order_by("-joined_at")
-    for course in courses:
-        print(course.course.title)
     return render(request, 'user/self_user_courses.html', {'courses': courses,})
 
 class UserChangeInfoView(LoginRequiredMixin, UpdateView):
@@ -45,9 +49,21 @@ class UserChangeInfoView(LoginRequiredMixin, UpdateView):
         kwargs['user'] = self.request.user
         return kwargs
 
-
+@login_required
 def dashboard(request):
-    return render(request, "user/dashboard.html")
+    user = request.user
+    cases = Cases.Case.objects.filter(author=user, is_university_case=False).order_by("-date_created")[:5]
+    uni_cases = Cases.Case.objects.filter(author=user, is_university_case=True).order_by("-date_created")[:5]
+    courses = Steps.CourseRegistration.objects.filter(student=user).order_by("-joined_at")[:5]
+    liked_calculi = request.user.liked_calculus.all().order_by('-date_created')
+    
+    context = {'cases': cases,
+               'uni_cases':uni_cases,
+               'courses': courses,
+                'liked_calculi': liked_calculi,
+               }
+
+    return render(request, "user/dashboard.html", context)
 
 def verification_pending(request):
     try:

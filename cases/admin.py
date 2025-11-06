@@ -17,6 +17,10 @@ class LabGraphInline(admin.TabularInline):
     model=LabGraphSelection
     extra=1
 
+class CaseMessageInline(admin.TabularInline):
+    model = CaseMessage
+    extra=1
+
 @admin.action(description="Deverify selected cases")
 def deverify_case(Case, request, queryset):
     queryset.update(verified=False)
@@ -26,7 +30,7 @@ def verify_case(Case, request, queryset):
     queryset.update(verified=True)
 
 class CaseAdmin(admin.ModelAdmin):  # new
-    inlines = [CommentInline, CaseImageInline, LabGraphInline]
+    inlines = [CommentInline, CaseImageInline, LabGraphInline, CaseMessageInline]
     list_display = ["title", "author", "date_created", "verified","visible"]
     actions = [verify_case,deverify_case]
 
@@ -57,6 +61,7 @@ admin.site.register(Tag)
 admin.site.register(ImageCase)
 admin.site.register(Suggest)
 admin.site.register(Rotation)
+admin.site.register(CaseMessage)
 admin.site.register(Case, CaseAdmin)
 admin.site.register(Picasso, PicassoAdmin)
 admin.site.register(Note,NotesAdmin)
