@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -793,6 +794,8 @@ class CaseNewPageView(View):
 
     def get(self, request, page, slug=None):
         obj = self.get_object()
+        if slug and not obj:
+            raise PermissionDenied("You are not allowed to edit this case.")
         if obj != None:
             if obj.professor_verified == True:
                 messages.error(request, "این کیس توسط استاد تایید شده و امکان ویرایش آن وجود ندارد.")
@@ -808,18 +811,13 @@ class CaseNewPageView(View):
             has_more_feedbacks = False
             the_last_feedback = None
         form_class = self.get_form_class(page)
-        form_kwargs = {}
+        form_kwargs = {'instance': obj}
         if page == 'select_prof':
             form_kwargs['working_university'] = self.request.user.student_profile.working_university
-            print(form_kwargs)
         form = form_class(**form_kwargs) if form_class else None
+        # form = form_class(instance=obj) if form_class else None
         index = PAGES_FLOW.index(page)
-        try:
-            if obj.slug:
-                exists=True
-        except:
-            exists=False
-            
+        exists = bool(obj and obj.slug)
         context = {
             'object': obj,
             'feedback':the_last_feedback,
@@ -841,13 +839,15 @@ class CaseNewPageView(View):
         if page == 'select_prof':
             form_kwargs['working_university'] = self.request.user.student_profile.working_university
         form = form_class(**form_kwargs) if form_class else None
+        # form = form_class(request.POST, instance=obj) if form_class else None
 
         if form and form.is_valid():
             case = form.save(commit=False)
-            case.author = request.user
-            case.title = case.generate_title()
-            case.visible = False
-            case.is_university_case = True
+            if not obj:
+                case.author = request.user
+                case.title = case.generate_title()
+                case.visible = False
+                case.is_university_case = True
             case.save()
 
             # if this was the first creation, return the new slug to frontend
@@ -879,9 +879,9 @@ class CaseNewPageView(View):
         if prev_page and page_index > 0:
             return redirect('unicase_page', slug=obj.slug, page=PAGES_FLOW[page_index - 1])
         
-        if submit_page:
-            case.done = True
-            case.save()
+        if submit_page and obj:
+            obj.done = True
+            obj.save()
             return redirect('hx_detail', slug=obj.slug)
 
         return redirect('unicase_page', slug=obj.slug, page=current_page)
