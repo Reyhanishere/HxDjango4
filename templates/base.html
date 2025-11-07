@@ -94,9 +94,12 @@
                     </div>
                     <div class="dropdown-content" id="userDiv" dir="rtl">
                         {% if user.university == 'MUMS' or user.university == 'NKUMS' %}
-                        <a class="dropdown-item" href="{% url 'hx_new_choose'%}">
-                            ثبت کیس دانشگاهی
-                        </a>    
+                            {% if user.professor_profile %}
+                            {% else %}
+                            <a class="dropdown-item" href="{% url 'hx_new_choose'%}">
+                                ثبت کیس دانشگاهی (آزمایشی)
+                            </a>
+                            {% endif %}
                         {% endif %}
                         <a class="dropdown-item" href="{% url 'dashboard'%}">
                             داشبورد
