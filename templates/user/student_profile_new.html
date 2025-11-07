@@ -196,6 +196,9 @@
             content: "⚠";
             
         }
+        .helpText{
+
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -225,27 +228,27 @@
                             <!-- Simulated form fields -->
                             <div class="form-group">
                                 <label for="id_working_university">دانشگاه</label>
-                                      {{ form.working_university }}
+                                {{ form.working_university.errors }}
+                                {{ form.working_university }}
                             </div>
                             <div class="form-group">
                                 <label for="semester_of_entrance">ورودی</label>
-                                {{ form.semester_of_entrance.help_text }}
+                                <p class="helpText">{{ form.semester_of_entrance.help_text }}</p>
+                                {{ form.semester_of_entrance.errors }}
                                 {{ form.semester_of_entrance }}
                             </div>
                             
                             <div class="form-group">
                                 <label for="id_student_id">شماره دانشجویی:</label>
+                                {{ form.student_id.errors }}
                                 {{ form.student_id }}
                             </div>
                             
                             <div class="form-group">
                                 <label for="id_contact_info">شماره تماس</label>
+                                {{ form.contact_info.errors }}
                                 {{ form.contact_info }}
                             </div>
-                                {{ form.working_university.errors }}
-                                {{ form.semester_of_entrance.errors }}
-                                {{ form.student_id.errors }}
-                                {{ form.contact_info.errors }}
                             <button class="btn" type="submit" id="save">
                                 ثبت اطلاعات
                                 <i class="fas fa-save"></i>
