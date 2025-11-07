@@ -66,6 +66,27 @@
     .eachItem{
         grid-template-rows: 1fr;
     }
+    .pageEditBtn{
+        font-size: small;
+        font-weight: 400;
+        color: #666 !important;
+    }
+    .editBtnDiv{
+        position: relative;
+    }
+    #fade2 {
+        opacity: 0;
+        transition: opacity 0.5s;
+    }
+    .editBtnDiv:hover #fade2 {
+        opacity: 1;
+    }
+    .tooltip-text2{
+        position: absolute;
+        left: -10px;
+        padding: 10px 15px 10px 15px;
+        width: 180px;
+    }
     @media (max-width: 900px) and (min-width:450px) {
         .courseTitle {
             grid-column: span 2;
@@ -118,19 +139,38 @@
         {% for hx in uni_cases %}
         <div class="eachItem eachItemUni">
             <div class="title">
-                <h4><a href="{% url 'hx_detail' hx.slug%}">{{hx.title}}</a></h4>
+                <h4>
+                    <a href="{% url 'hx_detail' hx.slug%}">{{hx.title}}</a>
+                    {% if hx.get_status != "Verified" %}
+                    <a href="{% url 'unicase_page' hx.slug 'cc_id'  %}" class="pageEditBtn">ویرایش صفحه‌ای</a>
+                    {% endif %}
+                </h4>
                 <span class="tooltip-text" id="fade">{{hx.cc}}</span>
             </div>
             <span class="date">{{hx.date_created|date:"d M"}}</span>
-            <form method="post" action="{% url 'toggle_case_done' hx.slug %}" class="d-inline itemBTN" style="border:none; box-shadow: none;">
-                {% csrf_token %}
-                <button type="submit" class="btn itemBTN btn-sm {% if hx.done %}btn-success{% else %}btn-danger{% endif %} moveBtn">
-                    {{ hx.done|yesno:"Complete,Incomplete" }}
-                </button>
-            </form>
+            {% if hx.get_status != "Verified" %}
+                <form method="post" action="{% url 'toggle_case_done' hx.slug %}" class="d-inline itemBTN" style="border:none; box-shadow: none;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn itemBTN btn-sm {% if hx.done %}btn-success{% else %}btn-danger{% endif %} moveBtn">
+                        {{ hx.done|yesno:"Complete,Incomplete" }}
+                    </button>
+                </form>
+            {%else%}
+                <img src="{% static "images/buttons/verified_icon.png" %}" width="40" class="itemBTN" style="width: auto; border-radius: 0; box-shadow: none;"/>
+            {% endif %}
             <a href="{%url 'hx_public' hx.slug %}" class="itemBTN public">{{ hx.get_status }}</a>
-        
-            <a href="{% url 'hx_edit' hx.slug %}" class="itemBTN edit">ویرایش</a>
+            <div class="editBtnDiv itemBTN edit">
+                {% if hx.get_status != "Verified" %}
+                <a href="{% url 'hx_edit' hx.slug %}" style="color: inherit; text-decoration: inherit;">ویرایش</a>
+                <span class="tooltip-text tooltip-text2" id="fade2">به همراه فیلدهای اضافه</span>
+                {%else%}
+                <span></span>
+                {% endif %}
+            </div>
+
+
+
+
             <a href="{% url 'hx_delete' hx.slug %}" class="itemBTN delete">پاک کردن</a>
         </div>
         {% endfor %}
