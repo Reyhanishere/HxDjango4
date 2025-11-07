@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
 from .models import *
+from accounts.models import ProfessorProfile
 
 
 class CaseCreateForm(ModelForm):
@@ -279,7 +280,15 @@ class CaseLastFieldsForm(forms.ModelForm):
 class CaseSelectProfForm(forms.ModelForm):
     class Meta:
         model = Case
-        fields = ["professor"]
+        fields = ['professor']
+
+    def __init__(self, *args, **kwargs):
+        working_university = kwargs.pop('working_university', None)
+        super().__init__(*args, **kwargs)
+        if working_university:
+            self.fields['professor'].queryset = ProfessorProfile.objects.filter(
+                working_university=working_university
+            )
 
 class CaseFinalsForm(forms.ModelForm):
     class Meta:

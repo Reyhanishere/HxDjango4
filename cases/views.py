@@ -808,7 +808,11 @@ class CaseNewPageView(View):
             has_more_feedbacks = False
             the_last_feedback = None
         form_class = self.get_form_class(page)
-        form = form_class(instance=obj) if form_class else None
+        form_kwargs = {}
+        if page == 'select_prof':
+            form_kwargs['working_university'] = self.request.user.student_profile.working_university
+            print(form_kwargs)
+        form = form_class(**form_kwargs) if form_class else None
         index = PAGES_FLOW.index(page)
         try:
             if obj.slug:
@@ -833,7 +837,10 @@ class CaseNewPageView(View):
     def post(self, request, page, slug=None):
         obj = self.get_object()
         form_class = self.get_form_class(page)
-        form = form_class(request.POST, instance=obj) if form_class else None
+        form_kwargs = {'data': request.POST, 'instance': obj }
+        if page == 'select_prof':
+            form_kwargs['working_university'] = self.request.user.student_profile.working_university
+        form = form_class(**form_kwargs) if form_class else None
 
         if form and form.is_valid():
             case = form.save(commit=False)
@@ -920,7 +927,7 @@ def case_professor_review(request, case_slug):
         if prof_last_message != None:
             if student_last_message != None:
                 if prof_last_message.time_written > student_last_message.time_written: student_last_message=None
-                
+
         if request.method == "POST":
             if request.POST.get('submit'):
                 message_text = request.POST.get("message_text")
