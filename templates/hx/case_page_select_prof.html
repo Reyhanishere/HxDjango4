@@ -10,11 +10,41 @@
             display: none;
         }
         select{
-            min-width: 300px;
+            width: 300px;
+        }
+        #searchProf{
+            min-width:300px;
+            margin-bottom: 1rem;
+        }
+        @media(max-width: 350px){
+            select{
+                width: 200px;
+
+            }
+            #searchProf{
+                min-width:200px;
+                margin-bottom: 1rem;
+            }
         }
     </style>
 {% endblock imports %}
 {% block content %}
 <h2>استاد مربوطه را برگزینید</h2>
 {{ block.super }}
+<input type="text" id="searchProf" placeholder="استاد خود را بیابید...">
+<script>
+  const searchInput = document.getElementById('searchProf');
+  const select = document.getElementById('id_professor');
+
+  searchInput.addEventListener('keyup', function() {
+    const search = this.value.toLowerCase();
+    for (const option of select.options) {
+      const text = option.text.toLowerCase();
+      option.style.display = text.includes(search) ? '' : 'none';
+    }
+  });
+
+    const parent = select.parentNode;
+    parent.insertBefore(searchInput, select);
+</script>
 {% endblock %}
