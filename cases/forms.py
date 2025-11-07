@@ -234,6 +234,7 @@ class CaseCCAndIDForm(forms.ModelForm):
                              widget=forms.NumberInput(
                                 attrs={
                                     "value": "40",
+                                    "dir": "ltr",
                                 }
                             ))
     
