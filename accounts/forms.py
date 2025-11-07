@@ -70,9 +70,13 @@ class CustomUserChangeForm(UserChangeForm):
         return cleaned_data
 
 class StudentProfileCreateForm(forms.ModelForm):
+    contact_info = forms.CharField(widget=forms.TextInput(attrs={'dir':'ltr', 'maxlength':'11'}), required=True)
+    semester_of_entrance = forms.IntegerField(widget=forms.NumberInput(attrs={'dir':'ltr', 'maxlength':'5'}), required=True)
+    student_id = forms.IntegerField(widget=forms.NumberInput(attrs={'dir':'ltr'}), required=True)
+
     class Meta:
         model = StudentProfile
-        exclude = ("verified_date", "verified", "completed","user")
+        exclude = ("verified_date", "verified", "completed", "user")
         labels = {
                 'working_university': ('دانشگاه'),
                 'contact_info': ('شماره تماس'),
@@ -88,6 +92,7 @@ class StudentProfileCreateForm(forms.ModelForm):
         
     def clean(self):
         cleaned_data = super().clean()
+
         # Check if the user has Farsi name or not:
         if not self.user.has_fa_name():
             raise forms.ValidationError(
@@ -95,12 +100,11 @@ class StudentProfileCreateForm(forms.ModelForm):
                 )
         
         # Check Semester of Entrance format:
-        
-        if len(str(cleaned_data['semester_of_entrance'])) != 5:
+        if len(str(cleaned_data.get('semester_of_entrance'))) != 5:
             raise forms.ValidationError({"semester_of_entrance": "انتظار داریم یک عدد پنج رقمی وارد کنید."})
         else:
-            year = int(str(cleaned_data['semester_of_entrance'])[:4])
-            semester = str(cleaned_data['semester_of_entrance'])[4]
+            year = int(str(cleaned_data.get('semester_of_entrance'))[:4])
+            semester = str(cleaned_data.get('semester_of_entrance'))[4]
 
         if year < 1390 or year > 1404:
             raise forms.ValidationError(
@@ -110,6 +114,18 @@ class StudentProfileCreateForm(forms.ModelForm):
             raise forms.ValidationError(
                 {"semester_of_entrance":"برای ورودی بهمن، عدد دو و برای ورودی مهر، عدد یک را وارد کنید."}
                 )
-        
-        
+        phone_number = str(cleaned_data.get('contact_info'))
+        if len(phone_number) != 11:
+            raise forms.ValidationError(
+                {"contact_info":"شماره تماس، یک عدد یازده رقمی است."}
+                )
+        elif phone_number[:2] != "09": # Iran phone numbers
+            raise forms.ValidationError(
+                {"contact_info":"شماره تماس، در ایران به صورت 09** *** **** است.."}
+            )
+        elif not phone_number.isnumeric():
+            raise forms.ValidationError(
+                {"contact_info":"من جایی را نمی‌شناسم که کاراکتری غیر از عدد در شماره تماسش داشته باشد."}
+            )
+
         return cleaned_data

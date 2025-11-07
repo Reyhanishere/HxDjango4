@@ -228,9 +228,20 @@ class ProfessorProfile(models.Model):
     phone_number = models.CharField(max_length=20, blank=True, null=True, unique=True)
     academic_email = models.EmailField(blank=True, null=True, unique=True)
     date_added = models.DateField(auto_now_add=True)
-
+    
+    def get_name(self):
+        if self.user.has_fa_name():
+            return f"دکتر {self.user.fn_fa} {self.user.ln_fa}"
+        else:
+            return f"{self.user.get_name()} | (استاد)"
+    
     def __str__(self):
-        return f"{self.user.get_name()} | (استاد)"
+        if self.user.has_fa_name():
+            full_name = f"دکتر {self.user.fn_fa} {self.user.ln_fa}"
+        else:
+            full_name = f"Dr. {self.first_name} {self.last_name}"
+
+        return f"{full_name} ({self.grade} {self.section})"
     
     class Meta:
         verbose_name = "پروفایل استاد"

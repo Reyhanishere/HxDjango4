@@ -39,7 +39,7 @@ class UserChangeInfoView(LoginRequiredMixin, UpdateView):
     model= CustomUser
     template_name='registration/change_info.html'
     form_class=CustomUserChangeForm
-    success_url=reverse_lazy('self_user_cases')
+    success_url=reverse_lazy('dashboard')
 
     def get_object(self, queryset=None):
         return self.request.user
@@ -55,21 +55,21 @@ def dashboard(request):
     try:
         user.professor_profile
         action_need_uni_cases = Cases.Case.objects.filter(
-            professor=user,
+            professor=user.professor_profile,
             done=True,
             is_university_case=True,
             professor_verified=False,
             is_professor_turn=True
             ).order_by("-date_created") # limit count later
         reviewed_uni_cases = Cases.Case.objects.filter(
-            professor=user,
+            professor=user.professor_profile,
             done=True,
             is_university_case=True,
             professor_verified=False,
             is_professor_turn=False
             ).order_by("-date_created") # limit count later
         verified_uni_cases = Cases.Case.objects.filter(
-            professor=user,
+            professor=user.professor_profile,
             done=True,
             is_university_case=True,
             professor_verified=True,
@@ -97,7 +97,7 @@ def verification_pending(request):
     try:
         request.user.student_profile
         if request.user.student_profile.verified:
-            return redirect("self_user_cases")
+            return redirect("dashboard")
         elif not request.user.student_profile.completed:
             return redirect("fill_user_profile")
         else:
