@@ -918,9 +918,9 @@ def case_professor_review(request, case_slug):
         student_last_message = CaseMessage.objects.filter(
             author=case.author, case=case).order_by('time_written').last()
         if prof_last_message != None:
-            if prof_last_message.time_written < student_last_message.time_written:
-                pass
-            else: student_last_message=None
+            if student_last_message != None:
+                if prof_last_message.time_written > student_last_message.time_written: student_last_message=None
+                
         if request.method == "POST":
             if request.POST.get('submit'):
                 message_text = request.POST.get("message_text")
