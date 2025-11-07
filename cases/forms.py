@@ -9,12 +9,8 @@ from .models import *
 
 
 class CaseCreateForm(ModelForm):
-    alg = forms.CharField(
-        widget=forms.Textarea(),
-        label="حساسیت‌ها",
-        help_text="حساسیت‌های دارویی و غذایی شناخته شده را وارد کنید.",
-        required=False,
-    )
+    cc = forms.CharField.widget=forms.TextInput(attrs={'autocomplete':'off',})
+                                                                
     field_order = ["title", "description", "pretext", "location", "is_pedi"]
 
     class Meta:
@@ -32,7 +28,17 @@ class CaseCreateForm(ModelForm):
             "premium",
             "suggests",
             "slug",
+            "is_university_case",
+            "is_professor_turn",
+            "professor_verified",
+            "professor",
+            "alg",
+            "professor_post_text",
+            "cc_tags",
+            "dx_tags",
+            "tags",
         )
+
         labels = {
             "tags": ("دسته‌بندی تظاهرات"),
             "rts": ("بخش"),
@@ -62,6 +68,15 @@ class CaseUpdateForm(ModelForm):
             "visible",
             "premium",
             "suggests",
+            "is_university_case",
+            "is_professor_turn",
+            "professor_verified",
+            "professor",
+            "alg",
+            "professor_post_text",
+            "cc_tags",
+            "dx_tags",
+            "tags",
         )
         labels = {
             "tags": ("دسته‌بندی تظاهرات"),
@@ -209,7 +224,8 @@ class CaseCCAndIDForm(forms.ModelForm):
                         help_text="Chief Complaint",
                         widget=forms.TextInput(
                         attrs={
-                            'dir': 'auto'
+                            'dir': 'auto',
+                            'autocomplete':'off',
                         }
                     ))
     

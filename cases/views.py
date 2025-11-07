@@ -152,6 +152,9 @@ class CaseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if obj.professor_verified == True:
             messages.error(request, "این کیس توسط استاد تایید شده و امکان ویرایش آن وجود ندارد.")
             return redirect("hx_detail", slug=slug)
+        else:
+            slug = obj.slug
+            return super().get(request, slug)
         
     def get_success_url(self):
         case_slug = self.kwargs["slug"]
@@ -177,8 +180,10 @@ class CaseCreateView(LoginRequiredMixin, CreateView):  # new
     model = Case
     template_name = "hx_new.html"
     form_class = CaseCreateForm
-    success_url = reverse_lazy("self_user_cases")
+    # success_url = reverse_lazy("self_user_cases")
 
+    def get_success_url(self):
+        return reverse('hx_detail', kwargs={'slug': self.object.slug })
     
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -792,7 +797,7 @@ class CaseNewPageView(View):
             if obj.professor_verified == True:
                 messages.error(request, "این کیس توسط استاد تایید شده و امکان ویرایش آن وجود ندارد.")
                 return redirect("hx_detail", slug=slug)
-            the_last_feedback = CaseMessage.objects.filter(case=obj, author=obj.professor).order_by('-time_written').first()
+            the_last_feedback = CaseMessage.objects.filter(case=obj, author=obj.professor.user).order_by('-time_written').first()
             has_more_feedbacks = False
             if CaseMessage.objects.filter(case=obj).count() > 1:
                 has_more_feedbacks = True
@@ -878,18 +883,20 @@ def toggle_case_done(request, case_slug):
     
     # Check if user is the course professor
     if case.author == request.user:
-        case.done = not case.done
-        case.save()
-        return redirect(reverse('dashboard'))
-
+        if not case.professor_verified:
+            case.done = not case.done
+            case.save()
+        else:
+            messages.error(request, "You don't have permission to modify this case.")
     else:
         messages.error(request, "You don't have permission to modify this case.")
-        return redirect(reverse('dashboard'))
+
+    return redirect(reverse('dashboard'))
 
 @login_required
 def case_messages(request, case_slug):
     case = get_object_or_404(Case, slug=case_slug)
-    if case.author == request.user or case.professor == request.user:
+    if case.author == request.user or case.professor.user == request.user:
         feedbacks = CaseMessage.objects.filter(case=case).order_by('-time_written')
         context = {
             'case': case,
@@ -902,7 +909,7 @@ def case_messages(request, case_slug):
 @login_required
 def case_professor_review(request, case_slug):
     case = get_object_or_404(Case, slug=case_slug)
-    if case.professor == request.user:
+    if case.professor.user == request.user:
         prof_last_message = CaseMessage.objects.filter(
             author=request.user, case=case).order_by('time_written').last()
         student_last_message = CaseMessage.objects.filter(
@@ -946,4 +953,4 @@ class CaseFinalsView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     # fields = ["professor_post_text", "rts", "tags", "cc_tags", "dx_tags", "suggests", 'professor_verified']
     def test_func(self):
         obj = self.get_object()
-        return obj.professor == self.request.user
+        return obj.professor.user == self.request.user

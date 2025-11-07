@@ -6,6 +6,8 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
+import accounts.models as acc
+
 class Choice(models.Model):
     name = models.CharField(max_length=36)
 
@@ -127,10 +129,9 @@ class Case(models.Model):
     )
     
     professor = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        acc.ProfessorProfile,
         related_name='related_professor',
         on_delete=models.CASCADE,
-        limit_choices_to={'professor_profile': True},
         null= True,
         blank= True,
     )
