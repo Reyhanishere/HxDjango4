@@ -118,7 +118,7 @@
     <p dir="rtl" style='margin:5px; word-break: auto-phrase;'>
         {% if case.get_status == 'Verified' %}
         <img src="{% static "images/buttons/verified_icon.png" %}" width="20"/>
-        تایید شده توسط <b>{{ case.professor }}</b> ({{ case.professor.professor_profile.grade.name }} {{ case.professor.professor_profile.working_university.name }})
+        تایید شده توسط <b>{{ case.professor.get_name }}</b> ({{ case.professor.grade.name }} {{ case.professor.working_university.name }})
         {% endif %}
     </p>
     
