@@ -193,9 +193,11 @@
     {% if feedback %}
     <div id="feedbackBox">
         <h5><b>دکتر {{ feedback.author.get_name }}</b>: 
-            <span style="font-size: 14px; color: #999">(آخرین پیام)</span>
             {% if has_more_feedbacks %}
+                <span style="font-size: 14px; color: #999">(آخرین پیام)</span>
                 <a href="{% url 'case_messages' object.slug %}" class="pagesBtn" target="_blank">نمایش تمام پیام‌ها</a>
+            {% else %}
+                <span style="font-size: 14px; color: #999">(تنها پیام)</span>
             {% endif %}
         </h5>
         {{feedback.text|default_if_none:""|linebreaks}}
