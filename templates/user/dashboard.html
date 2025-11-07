@@ -157,7 +157,7 @@
             {%else%}
                 <img src="{% static "images/buttons/verified_icon.png" %}" width="40" class="itemBTN" style="width: auto; border-radius: 0; box-shadow: none;"/>
             {% endif %}
-            <a href="{%url 'hx_public' hx.slug %}" class="itemBTN public">{{ hx.get_status }}</a>
+            <a href="#" class="itemBTN public">{{ hx.get_status }}</a>
             <div class="editBtnDiv itemBTN edit">
                 {% if hx.get_status != "Verified" %}
                 <a href="{% url 'unicase_page' hx.slug 'cc_id'  %}" style="color: inherit; text-decoration: inherit;">ویرایش</a>
