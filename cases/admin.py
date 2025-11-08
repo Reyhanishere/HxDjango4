@@ -56,8 +56,19 @@ class NotesAdmin(admin.ModelAdmin):
 class AIRRLAdmin(admin.ModelAdmin):
     list_display=["request_content", "ai_model", "user"]
 
+class CCCatAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
+
+class DxCatAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
+
+class TagsAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
+
 admin.site.register(Choice)
-admin.site.register(Tag)
+admin.site.register(CCCategory, CCCatAdmin)
+admin.site.register(DxCategory, DxCatAdmin)
+admin.site.register(Tag, TagsAdmin)
 admin.site.register(ImageCase)
 admin.site.register(Suggest)
 admin.site.register(Rotation)

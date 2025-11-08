@@ -36,10 +36,47 @@
     #tabs-container{
         line-height: 1.8;
     }
+    .searchTags{
+        border-radius: 10px;
+        border: 1px solid #999;
+        padding: .1rem .5rem;
+        margin-bottom: 0.25rem;
+    }
+    .addTag{
+      border-radius: 5px;
+      background: #fff;
+      padding: .15rem;
+      width: auto;
+      display: inline-block;
+      margin: .25rem;
+      box-shadow: 0 0 1px 0px #3339;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .addTag:hover{
+      background: #eee;
+      box-shadow: 0 0 3px 0px #3339;
+    }
     
 </style>
 <div class="pad-15">
 <h1>ویرایش‌های نهایی</h1>
+<a href="{% url 'create_tag' %}?_popup=1"
+   onclick="window.open(this.href, 'popup', 'width=600,height=400'); return false;" class="addTag" id="TagBtn">
+   ➕
+</a>
+<a href="{% url 'create_cc_cat' %}?_popup=1"
+   onclick="window.open(this.href, 'popup', 'width=600,height=400'); return false;" class="addTag" id="ccTagBtn">
+   ➕
+</a>
+<a href="{% url 'create_dx_cat' %}?_popup=1"
+   onclick="window.open(this.href, 'popup', 'width=600,height=400'); return false;" class="addTag" id="dxTagBtn">
+   ➕
+</a>
+<input type="text" id="searchCC" class="searchTags" placeholder="شکایت را بیابید">
+<input type="text" id="searchDx" class="searchTags" placeholder="تشخیص را بیابید">
+<input type="text" id="searchTags" class="searchTags" placeholder="سایر برچسب‌ها را بیابید">
+
     <form action="" method="post" autocomplete="off">{% csrf_token %}
         <div class="createForm" style="margin:10px">
         {{ form|crispy }}
@@ -49,4 +86,82 @@
         </div>
     </form>
 </div>
+
+<script>
+  const ccSearchInput = document.getElementById('searchCC');
+  const dxSearchInput = document.getElementById('searchDx');
+  const tagsSearchInput = document.getElementById('searchTags');
+
+  const TagBtn = document.getElementById('TagBtn');
+  const ccTagBtn = document.getElementById('ccTagBtn');
+  const dxTagBtn = document.getElementById('dxTagBtn');
+
+  const ccSelect = document.getElementById('id_cc_tags');
+  const dxSelect = document.getElementById('id_dx_tags');
+  const tagsSelect = document.getElementById('id_tags');
+
+  ccSearchInput.addEventListener('keyup', function() {
+    const search = this.value.toLowerCase();
+    for (const option of ccSelect.options) {
+      const text = option.text.toLowerCase();
+      option.style.display = text.includes(search) ? '' : 'none';
+    }
+  });
+    dxSearchInput.addEventListener('keyup', function() {
+    const search = this.value.toLowerCase();
+    for (const option of dxSelect.options) {
+      const text = option.text.toLowerCase();
+      option.style.display = text.includes(search) ? '' : 'none';
+    }
+  });
+    tagsSearchInput.addEventListener('keyup', function() {
+    const search = this.value.toLowerCase();
+    for (const option of tagsSelect.options) {
+      const text = option.text.toLowerCase();
+      option.style.display = text.includes(search) ? '' : 'none';
+    }
+  });
+
+    var parent = ccSelect.parentNode;
+    parent.insertBefore(ccSearchInput, ccSelect);
+    parent.insertBefore(ccTagBtn, ccSearchInput);
+    
+
+    parent = dxSelect.parentNode;
+    parent.insertBefore(dxSearchInput, dxSelect);
+    parent.insertBefore(dxTagBtn, dxSearchInput);
+    
+    parent = tagsSelect.parentNode;
+    parent.insertBefore(tagsSearchInput, tagsSelect);
+    parent.insertBefore(TagBtn, tagsSearchInput);
+
+</script>
+<script type="text/javascript">
+function dismissAddRelatedTagPopup(win, newId, newRepr) {
+    if (tagsSelect) {
+        const option = new Option(newRepr, newId, true, true);
+        tagsSelect.add(option);
+        tagsSelect.dispatchEvent(new Event('change'));
+    }
+    win.close();
+}
+
+function dismissAddRelatedCCPopup(win, newId, newRepr) {
+    if (ccSelect) {
+        const option = new Option(newRepr, newId, true, true);
+        ccSelect.add(option);
+        ccSelect.dispatchEvent(new Event('change'));
+    }
+    win.close();
+}
+
+function dismissAddRelatedDxPopup(win, newId, newRepr) {
+    if (dxSelect) {
+        const option = new Option(newRepr, newId, true, true);
+        dxSelect.add(option);
+        dxSelect.dispatchEvent(new Event('change'));
+    }
+    win.close();
+}
+</script>
 {% endblock content %}

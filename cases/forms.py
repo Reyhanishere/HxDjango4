@@ -294,7 +294,7 @@ class CaseSelectProfForm(forms.ModelForm):
 class CaseFinalsForm(forms.ModelForm):
     class Meta:
         model = Case
-        fields = ["professor_post_text", "rts", "tags", "cc_tags", "dx_tags", "suggests", 'professor_verified']
+        fields = ["professor_post_text", "rts", "cc_tags", "dx_tags", "tags", "suggests", 'professor_verified']
         labels = {
             "rts": ("روتیشن / بخش"),
             "cc_tags": ("تگ‌های شکایت اصلی"),

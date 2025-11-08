@@ -51,8 +51,10 @@ urlpatterns = [
     path('uni_hx/<slug:case_slug>/toggle_case_done/', toggle_case_done, name='toggle_case_done'), # toggle case done field
     path('uni_hx/<slug:case_slug>/messages/', case_messages, name='case_messages'), # case messages
     path('uni_hx/<slug:case_slug>/review/', case_professor_review, name='case_review'), # case review
-    path('uni_hx/<slug:slug>/finals/', CaseFinalsView.as_view(), name='case_finals')
+    path('uni_hx/<slug:slug>/finals/', CaseFinalsView.as_view(), name='case_finals'),
+    path('hx/tags/new/', CreateTagView.as_view(), name="create_tag"),
+    path('hx/cc_cats/new/', CreateCCCatView.as_view(), name="create_cc_cat"),
+    path('hx/dx_cats/new/', CreateDxCatView.as_view(), name="create_dx_cat"),
     
-
 ]
 

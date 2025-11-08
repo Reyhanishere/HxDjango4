@@ -1,6 +1,7 @@
 from itertools import chain
-import requests
 import json, math
+import re
+import requests
 
 from django.conf import settings
 from django.contrib import messages
@@ -8,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import View
@@ -964,3 +965,89 @@ class CaseFinalsView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         obj = self.get_object()
         return obj.professor.user == self.request.user
+
+
+def slugify(s):
+    s = s.lower().strip()
+    s = re.sub(r'[^\w\s-]', '', s)
+    s = re.sub(r'[\s_-]+', '-', s)
+    s = re.sub(r'^-+|-+$', '', s)
+    return s
+
+class CreateTagView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Tag
+    template_name='hx/tags_categories_create.html'
+    fields = ['name']
+    success_url = reverse_lazy('cases_main')
+
+    def form_valid(self, form):
+        tag_slug=slugify(form.instance.name)
+        if Tag.objects.filter(slug=tag_slug).exists():
+            messages.error(self.request, "این برچسب از پیش وجود دارد.")
+            return redirect(reverse('create_tag'))
+            
+        else:
+            # Set slug
+            form.instance.slug=tag_slug
+        response = super().form_valid(form)
+        # if '_popup' in self.request.GET:
+        return HttpResponse(f"""
+            <script type="text/javascript">
+                opener.dismissAddRelatedTagPopup(window, '{self.object.pk}', '{self.object}');
+            </script>
+        """)
+        # return response
+    def test_func(self):
+        return self.request.user.is_professor()
+    
+class CreateCCCatView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = CCCategory
+    template_name='hx/tags_categories_create.html'
+    fields = ['name']
+    success_url = reverse_lazy('cases_main')
+
+    def form_valid(self, form):
+        tag_slug=slugify(form.instance.name)
+        if CCCategory.objects.filter(slug=tag_slug).exists():
+            messages.error(self.request, "این برچسب از پیش وجود دارد.")
+            return redirect(reverse('create_tag'))
+            
+        else:
+            # Set slug
+            form.instance.slug=tag_slug
+        response = super().form_valid(form)
+        # if '_popup' in self.request.GET:
+        return HttpResponse(f"""
+            <script type="text/javascript">
+                opener.dismissAddRelatedCCPopup(window, '{self.object.pk}', '{self.object}');
+            </script>
+        """)
+        # return response
+    def test_func(self):
+        return self.request.user.is_professor()
+    
+class CreateDxCatView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = DxCategory
+    template_name='hx/tags_categories_create.html'
+    fields = ['name']
+    success_url = reverse_lazy('cases_main')
+
+    def form_valid(self, form):
+        tag_slug=slugify(form.instance.name)
+        if DxCategory.objects.filter(slug=tag_slug).exists():
+            messages.error(self.request, "این برچسب از پیش وجود دارد.")
+            return redirect(reverse('create_tag'))
+            
+        else:
+            # Set slug
+            form.instance.slug=tag_slug
+        response = super().form_valid(form)
+        # if '_popup' in self.request.GET:
+        return HttpResponse(f"""
+            <script type="text/javascript">
+                opener.dismissAddRelatedDxPopup(window, '{self.object.pk}', '{self.object}');
+            </script>
+        """)
+        # return response
+    def test_func(self):
+        return self.request.user.is_professor()
