@@ -46,11 +46,6 @@
 {% endblock imports%}
 
 {% block content %}
-{% if messages %}
-{% for message in messages %}
-    <div class="m-2 alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %}">{{ message|capfirst }}</div>
-{% endfor %}
-{% endif %}
 {{ block.super }}
 {% if prof_last_message%}
 <div class="feedbacksBox">
