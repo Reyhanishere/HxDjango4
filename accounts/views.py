@@ -14,40 +14,68 @@ from .models import *
 
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
+
 
 @login_required
 def self_user_cases(request):
     user = request.user
     hxs = Cases.Case.objects.filter(author=user).order_by("-date_created")
-    return render(request, 'user/self_user_cases.html', {'hxs': hxs,})
+    return render(
+        request,
+        "user/self_user_cases.html",
+        {
+            "hxs": hxs,
+        },
+    )
+
 
 @login_required
 def self_user_unicases(request):
     user = request.user
-    hxs = Cases.Case.objects.filter(author=user, is_university_case=True).order_by("-date_created")
-    return render(request, 'user/self_user_cases.html', {'hxs': hxs,})
+    hxs = Cases.Case.objects.filter(author=user, is_university_case=True)
+    hxs = hxs.order_by(
+        "professor_verified", "done", "is_professor_turn", "-date_created"
+    )
+    return render(
+        request,
+        "user/self_user_unicases.html",
+        {
+            "hxs": hxs,
+        },
+    )
+
 
 @login_required
 def self_user_courses(request):
     user = request.user
-    courses = Steps.CourseRegistration.objects.filter(student=user).order_by("-joined_at")
-    return render(request, 'user/self_user_courses.html', {'courses': courses,})
+    courses = Steps.CourseRegistration.objects.filter(student=user).order_by(
+        "-joined_at"
+    )
+    return render(
+        request,
+        "user/self_user_courses.html",
+        {
+            "courses": courses,
+        },
+    )
+
 
 class UserChangeInfoView(LoginRequiredMixin, UpdateView):
-    model= CustomUser
-    template_name='registration/change_info.html'
-    form_class=CustomUserChangeForm
-    success_url=reverse_lazy('dashboard')
+    model = CustomUser
+    template_name = "registration/change_info.html"
+    form_class = CustomUserChangeForm
+    success_url = reverse_lazy("dashboard")
 
     def get_object(self, queryset=None):
         return self.request.user
-    
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
+        kwargs["user"] = self.request.user
         return kwargs
+
 
 @login_required
 def dashboard(request):
@@ -59,42 +87,60 @@ def dashboard(request):
             done=True,
             is_university_case=True,
             professor_verified=False,
-            is_professor_turn=True
-            ).order_by("-date_created") # limit count later
+            is_professor_turn=True,
+        ).order_by(
+            "-date_created"
+        )  # limit count later
         reviewed_uni_cases = Cases.Case.objects.filter(
             professor=user.professor_profile,
             done=True,
             is_university_case=True,
             professor_verified=False,
-            is_professor_turn=False
-            ).order_by("-date_created") # limit count later
+            is_professor_turn=False,
+        ).order_by(
+            "-date_created"
+        )  # limit count later
         verified_uni_cases = Cases.Case.objects.filter(
             professor=user.professor_profile,
             done=True,
             is_university_case=True,
             professor_verified=True,
-            ).order_by("-date_created") # limit count later
+        ).order_by(
+            "-date_created"
+        )  # limit count later
         all_uni_cases = action_need_uni_cases | reviewed_uni_cases | verified_uni_cases
-        all_uni_cases = all_uni_cases.order_by('professor_verified', '-is_professor_turn', '-date_created')
+        all_uni_cases = all_uni_cases.order_by(
+            "professor_verified", "-is_professor_turn", "-date_created"
+        )
         for i in all_uni_cases:
             print(i.get_status)
         template_name = "user/dashboard_professor.html"
         context = {
-            'all_uni_cases':all_uni_cases,
+            "all_uni_cases": all_uni_cases,
         }
     except:
-        cases = Cases.Case.objects.filter(author=user, is_university_case=False).order_by("-date_created")[:5]
-        uni_cases = Cases.Case.objects.filter(author=user, is_university_case=True).order_by("-date_created")[:5]
-        courses = Steps.CourseRegistration.objects.filter(student=user).order_by("-joined_at")[:5]
-        liked_calculi = request.user.liked_calculus.all().order_by('-date_created')
-        
-        context = {'cases': cases,
-                    'uni_cases':uni_cases,
-                    'courses': courses,
-                    'liked_calculi': liked_calculi,
-                }
+        cases = Cases.Case.objects.filter(
+            author=user, is_university_case=False
+        ).order_by("-date_created")[:5]
+        uni_cases = Cases.Case.objects.filter(
+            author=user, is_university_case=True
+        ).order_by("professor_verified", "done", "is_professor_turn", "-date_created")[
+            :5
+        ]
+        courses = Steps.CourseRegistration.objects.filter(student=user).order_by(
+            "-joined_at"
+        )[:5]
+        liked_calculi = request.user.liked_calculus.all().order_by("-date_created")
+
+        context = {
+            "cases": cases,
+            "uni_cases": uni_cases,
+            "courses": courses,
+            "liked_calculi": liked_calculi,
+        }
         template_name = "user/dashboard.html"
     return render(request, template_name, context)
+
 
 def verification_pending(request):
     try:
@@ -107,8 +153,8 @@ def verification_pending(request):
             return render(request, "user/verification_pending.html")
     except:
         return redirect("new_user_profile")
-        
-    
+
+
 def my_profile(request):
     if request.user.student_profile.verified:
         return redirect("dashboard")
@@ -116,23 +162,23 @@ def my_profile(request):
     #     pass
     else:
         return redirect("new_user_profile")
-    
+
 
 class StudentProfileCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     model = StudentProfile
     template_name = "user/student_profile_new.html"
     form_class = StudentProfileCreateForm
-    success_url=reverse_lazy('profile_verification_pending')
-    
+    success_url = reverse_lazy("profile_verification_pending")
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
+        kwargs["user"] = self.request.user
         return kwargs
-    
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.instance.completed = True
         return super().form_valid(form)
-    
+
     def test_func(self):
         return not self.request.user.has_profile()
