@@ -31,7 +31,7 @@ def verify_case(Case, request, queryset):
 
 class CaseAdmin(admin.ModelAdmin):  # new
     inlines = [CommentInline, CaseImageInline, LabGraphInline, CaseMessageInline]
-    list_display = ["title", "author", "date_created", "verified","visible"]
+    list_display = ["title", "author", "get_status", "get_professor", "verified", "visible", "date_created",]
     actions = [verify_case,deverify_case]
 
 class CommentsAdmin(admin.ModelAdmin):

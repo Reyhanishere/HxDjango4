@@ -8,15 +8,17 @@ from django.urls import reverse
 
 import accounts.models as acc
 
+
 class Choice(models.Model):
     name = models.CharField(max_length=36)
 
     def __str__(self):
         return self.name
 
+
 class Suggest(models.Model):
-    name=models.CharField(max_length=15,null=False, blank=False)
-    slug=models.SlugField(null=False, blank=False)
+    name = models.CharField(max_length=15, null=False, blank=False)
+    slug = models.SlugField(null=False, blank=False)
 
     def __str__(self):
         return self.name
@@ -29,6 +31,7 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+
 class CCCategory(models.Model):
     name = models.CharField(max_length=25)
     slug = models.SlugField(unique=True)
@@ -36,24 +39,29 @@ class CCCategory(models.Model):
     def __str__(self):
         return self.name
 
+
 class DxCategory(models.Model):
     name = models.CharField(max_length=25)
     slug = models.SlugField(unique=True)
 
     def __str__(self):
         return self.name
-    
+
+
 class Rotation(models.Model):
-    name=models.CharField(max_length=25)
+    name = models.CharField(max_length=25)
     slug = models.SlugField(unique=True)
-    cover= models.ImageField(upload_to="cases/uploads/", null=True, blank=True)
+    cover = models.ImageField(upload_to="cases/uploads/", null=True, blank=True)
+
     def __str__(self):
         return self.name
 
+
 class Review(models.Model):
-    author=models.ForeignKey(
+    author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,)
+        on_delete=models.CASCADE,
+    )
     date_created = models.DateTimeField(auto_now_add=True)
     text = models.TextField(
         ("متن"),
@@ -61,10 +69,11 @@ class Review(models.Model):
         blank=False,
         null=False,
     )
-    
+
     def __str__(self):
         return f"{self.author}: {self.content_object.title}"
-    
+
+
 class Case(models.Model):
     choice = models.ManyToManyField(Choice, blank=True)
     premium = models.BooleanField(default=False)
@@ -86,7 +95,7 @@ class Case(models.Model):
     professor_verified = models.BooleanField(
         default=False,
     )
-    
+
     rating = models.SmallIntegerField(
         choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], null=True, blank=True
     )
@@ -109,7 +118,12 @@ class Case(models.Model):
         blank=False,
     )
 
-    rts = models.ForeignKey(Rotation, on_delete=models.CASCADE, null=True, blank=True,)
+    rts = models.ForeignKey(
+        Rotation,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
 
     description = models.CharField(
         ("توضیح:"),
@@ -121,19 +135,19 @@ class Case(models.Model):
 
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    
+
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        related_name='author',
+        related_name="author",
         on_delete=models.CASCADE,
     )
-    
+
     professor = models.ForeignKey(
         acc.ProfessorProfile,
-        related_name='related_professor',
+        related_name="related_professor",
         on_delete=models.CASCADE,
-        null= True,
-        blank= True,
+        null=True,
+        blank=True,
     )
 
     pretext = models.TextField(
@@ -142,7 +156,7 @@ class Case(models.Model):
         blank=True,
         help_text="اگر خواستید، می‌توانید مقدمه‌ای دربارۀ شرح‌حال خود بنویسید.",
     )
-    is_pedi=models.BooleanField(("آیا کیس کودک است؟"),default=False)
+    is_pedi = models.BooleanField(("آیا کیس کودک است؟"), default=False)
 
     gender = models.CharField(
         ("جنسیت"),
@@ -167,9 +181,18 @@ class Case(models.Model):
     )
     job = models.CharField(("پیشه (شغل)"), max_length=20, null=True, blank=True)
     born_city = models.CharField(("محل تولد"), max_length=20, null=True, blank=True)
-    dwelling = models.CharField(("محل زندگی"), max_length=20, null=True, blank=True,)
-    age = models.PositiveSmallIntegerField(("سن به سال"), null=False, blank=False, default=40)
-    age_m= models.PositiveSmallIntegerField(("باقی سن به ماه"), null=False, blank=False, default=0)
+    dwelling = models.CharField(
+        ("محل زندگی"),
+        max_length=20,
+        null=True,
+        blank=True,
+    )
+    age = models.PositiveSmallIntegerField(
+        ("سن به سال"), null=False, blank=False, default=40
+    )
+    age_m = models.PositiveSmallIntegerField(
+        ("باقی سن به ماه"), null=False, blank=False, default=0
+    )
     marriage = models.CharField(
         ("وضعیت تاهل"),
         max_length=15,
@@ -181,10 +204,12 @@ class Case(models.Model):
         ],
         null=True,
         blank=True,
-        default="متاهل"
+        default="متاهل",
     )
 
-    source = models.CharField(("منبع شرح حال"), max_length=50, null=True, blank=True, default="")
+    source = models.CharField(
+        ("منبع شرح حال"), max_length=50, null=True, blank=True, default=""
+    )
     reliability = models.CharField(
         ("میزان قابل اعتماد بودن بیمار از 5"),
         max_length=1,
@@ -200,14 +225,22 @@ class Case(models.Model):
     )
 
     cc = models.CharField(
-        ("شکایت اصلی"), max_length=100, null=False, blank=False, default="", help_text="Chief Complaint"
+        ("شکایت اصلی"),
+        max_length=100,
+        null=False,
+        blank=False,
+        default="",
+        help_text="Chief Complaint",
     )
-    pi = models.TextField(("شرح بیماری فعلی"), null=False, blank=False, default="", help_text="Present Illness")
+    pi = models.TextField(
+        ("شرح بیماری فعلی"),
+        null=False,
+        blank=False,
+        default="",
+        help_text="Present Illness",
+    )
     pmh = models.TextField(
-        ("شرح بیماری‌های گذشته"),
-        null=True,
-        blank=True,
-        help_text="Past Medical History"
+        ("شرح بیماری‌های گذشته"), null=True, blank=True, help_text="Past Medical History"
     )
     previous_data = models.TextField(
         ("داده‌های پیش از مراجعۀ بیمار"),
@@ -229,10 +262,7 @@ class Case(models.Model):
         help_text="مصرف مواد مخدر، الکل، وضعیت نظام وظیفه، شغل، روابط اجتماعی و جنسی و ...",
     )
     fh = models.TextField(
-        ("سابقۀ بیماری‌های خانواده"),
-        null=True,
-        blank=True,
-        help_text="Family History"
+        ("سابقۀ بیماری‌های خانواده"), null=True, blank=True, help_text="Family History"
     )
     alg = models.CharField(
         ("حساسیت‌ها"),
@@ -241,17 +271,10 @@ class Case(models.Model):
         blank=True,
     )
     ros = models.TextField(
-        ("بررسی دستگاه‌ها"),
-        null=True,
-        blank=True,
-        help_text="Review of Systems"
+        ("بررسی دستگاه‌ها"), null=True, blank=True, help_text="Review of Systems"
     )
     phe = models.TextField(
-        ("معاینۀ بدنی"),
-        null=True,
-        blank=True,
-        help_text="Physical Examinations"
-
+        ("معاینۀ بدنی"), null=True, blank=True, help_text="Physical Examinations"
     )
     dat = models.TextField(
         ("دیگر داده‌ها"),
@@ -312,10 +335,26 @@ class Case(models.Model):
         ),
     )
 
-    tags = models.ManyToManyField(Tag, blank=True, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
-    cc_tags = models.ManyToManyField(CCCategory, blank=True, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
-    dx_tags = models.ManyToManyField(DxCategory, blank=True, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
-    suggests=models.ManyToManyField(Suggest, blank=True, help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).")
+    tags = models.ManyToManyField(
+        Tag,
+        blank=True,
+        help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).",
+    )
+    cc_tags = models.ManyToManyField(
+        CCCategory,
+        blank=True,
+        help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).",
+    )
+    dx_tags = models.ManyToManyField(
+        DxCategory,
+        blank=True,
+        help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).",
+    )
+    suggests = models.ManyToManyField(
+        Suggest,
+        blank=True,
+        help_text="هم می‌توانید خالی بگذارید و هم می‌توانید چند مورد را انتخاب کنید (با نگه‌داشتن Ctrl در ویندوز).",
+    )
     slug = models.SlugField(
         ("لینک"),
         unique=True,
@@ -324,36 +363,38 @@ class Case(models.Model):
         blank=False,
         help_text="لینک مورد علاقه برای کیس خود را وارد کنید. تلاش کنید لینکتان گویا و دقیق باشد، پس از این توانایی تغییر آن را نخواهید داشت. استفاده از فاصله (Space) مجاز نیست.",
     )
+
     def sex_pedi(self):
         if self.is_pedi:
-            if self.gender=='آقا':
+            if self.gender == "آقا":
                 return "پسر"
-            elif self.gender=='خانم':
+            elif self.gender == "خانم":
                 return "دختر"
             else:
                 return self.gender
         else:
-            if self.gender=='آقا':
+            if self.gender == "آقا":
                 return "آقای"
             else:
                 return self.gender
-    
+
     def get_age(self):
         if self.age > 5:
             return f"{self.age} ساله"
         elif self.age == 0:
             return f"{self.age_m} ماهه"
-        elif self.age_m ==0:
+        elif self.age_m == 0:
             return f"{self.age} ساله"
         else:
             return f"{self.age} سال و {self.age_m} ماهه"
-    
+
     def generate_title(self):
         title = f"{self.sex_pedi()} {self.get_age()} با {self.cc}"
         if len(title) <= 50:
             return title
         else:
             return title[:50]
+
     def get_status(self):
         if self.is_university_case:
             if self.professor_verified:
@@ -368,9 +409,18 @@ class Case(models.Model):
                     return "Incomplete"
         else:
             return None
+    get_status.short_description = "Status"
+
+    def get_professor(self):
+        if self.professor:
+            return self.professor.get_name()
+        else:
+            return None
+    get_professor.short_description = "Case Prof"
+        
     def save(self, *args, **kwargs):
         if not self.pk:
-            today = now().strftime('%y%m%d')
+            today = now().strftime("%y%m%d")
             count = Case.objects.filter(date_created__date=now().date()).count() + 1
             self.slug = f"{today}{count:02}"
             while Case.objects.filter(slug=self.slug).exists():
@@ -379,12 +429,13 @@ class Case(models.Model):
         if self.professor_verified:
             self.visible = True
         super().save(*args, **kwargs)
-    
+
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         return reverse("hx_detail", args=[str(self.slug)])
+
 
 class FollowUp(models.Model):
     case = models.ForeignKey(Case, on_delete=models.CASCADE)
@@ -422,7 +473,10 @@ class Comment(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
     related_name = "comments"
     likes = models.SmallIntegerField(default=0)
-    liked_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_comments')
+    liked_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="liked_comments"
+    )
+
     def __str__(self):
         return self.comment[:32]
 
@@ -434,13 +488,15 @@ class Reply(models.Model):
     verified = models.BooleanField(default=True)
     delete = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return f"{self.author.username} in {self.comment.case} to {self.comment.author.username}: {self.content[:50]}"
-    
+
 
 def user_directory_path_hx(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     return "cases/hx/uploads/hx_{0}/{1}".format(instance.case.author.username, filename)
+
 
 class ImageCase(models.Model):
     type_choices = [
@@ -451,10 +507,12 @@ class ImageCase(models.Model):
         ("CT Scan", "CT Scan"),
         ("Other", "Other"),
     ]
-    verified=models.BooleanField(default=True)
-    visible=models.BooleanField(default=True)
+    verified = models.BooleanField(default=True)
+    visible = models.BooleanField(default=True)
     case = models.ForeignKey(Case, on_delete=models.CASCADE)
-    is_old = models.BooleanField(("آیا داده مربوط به مراجعات پیشین است؟"), default=False)
+    is_old = models.BooleanField(
+        ("آیا داده مربوط به مراجعات پیشین است؟"), default=False
+    )
     related_name = "imagecase"
     image = models.ImageField(
         "آپلود تصویر", upload_to=user_directory_path_hx, null=False, blank=False
@@ -474,13 +532,16 @@ class ImageCase(models.Model):
         blank=True,
         null=True,
     )
+
     def __str__(self):
         return f"{self.case.slug}: {self.type}"
 
 
 def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return "cases/picasso/uploads/user_{0}/{1}".format(instance.author.username, filename)
+    return "cases/picasso/uploads/user_{0}/{1}".format(
+        instance.author.username, filename
+    )
 
 
 class Picasso(models.Model):
@@ -493,7 +554,8 @@ class Picasso(models.Model):
     done = models.BooleanField(
         default=True,
     )
-    delete=models.BooleanField("I want to DELETE this Picasso.",
+    delete = models.BooleanField(
+        "I want to DELETE this Picasso.",
         default=False,
     )
     lang = models.CharField(max_length=2, choices=[("Fa", "Fa")], default="Fa")
@@ -534,16 +596,21 @@ class Picasso(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    tags=models.ManyToManyField(Tag)
-    inappropriate=models.BooleanField(("آزاردهنده"),default=False,help_text="اگر این تصویر می‌تواند برای بخشی از جامعۀ هدف آزاردهنده باشد، این تیک را بزنید تا به طور واضح در صفحۀ نخست سایت به نمایش در نیاید.")
+    tags = models.ManyToManyField(Tag)
+    inappropriate = models.BooleanField(
+        ("آزاردهنده"),
+        default=False,
+        help_text="اگر این تصویر می‌تواند برای بخشی از جامعۀ هدف آزاردهنده باشد، این تیک را بزنید تا به طور واضح در صفحۀ نخست سایت به نمایش در نیاید.",
+    )
     case = models.URLField(
         "لینک کیس مرتبط",
         help_text="می‌توانید لینک کیس مربوط به این تصویر را در اینجا قرار دهید.",
         null=True,
         blank=True,
     )
-    editors_review=models.TextField(blank=True,null=True)
-    suggests=models.ManyToManyField(Suggest)
+    editors_review = models.TextField(blank=True, null=True)
+    suggests = models.ManyToManyField(Suggest)
+
     def __str__(self):
         return self.title
 
@@ -564,6 +631,7 @@ class Picasso(models.Model):
 
     #     # Call the parent class's save method to save the instance
     #     super(Picasso, self).save(*args, **kwargs)
+
 
 class Note(models.Model):
     choice = models.ManyToManyField(Choice)
@@ -604,8 +672,8 @@ class Note(models.Model):
         blank=False,
         null=False,
     )
-    
-    tags=models.ManyToManyField(Tag)
+
+    tags = models.ManyToManyField(Tag)
     slug = models.SlugField(
         ("لینک"),
         unique=True,
@@ -614,28 +682,34 @@ class Note(models.Model):
         null=False,
     )
     date_created = models.DateTimeField(auto_now_add=True)
-    
-    delete = models.BooleanField("I want to DELETE this Ex.",
+
+    delete = models.BooleanField(
+        "I want to DELETE this Ex.",
         default=False,
     )
-    editors_review=models.TextField(blank=True,null=True)
+    editors_review = models.TextField(blank=True, null=True)
 
-    suggests=models.ManyToManyField(Suggest, null=True, blank=True)
+    suggests = models.ManyToManyField(Suggest, null=True, blank=True)
 
     def __str__(self):
         return self.title
 
-class LabGraphSelection(models.Model):   
+
+class LabGraphSelection(models.Model):
     title = models.CharField(
         max_length=64,
         help_text="You can name this selection.",
         blank=False,
         null=False,
     )
-    case=models.ForeignKey(Case, on_delete=models.CASCADE, blank=True, null=True)
-    data=models.TextField(blank=False, null=False)
-    description=models.TextField(help_text="Optional", blank=True, null=True)
-    zero=models.BooleanField(("رسم از صفر"),default=False,help_text="اگر می‌خواهید عدد صفر هم در نمودار درج شود، این تیک را بزنید")
+    case = models.ForeignKey(Case, on_delete=models.CASCADE, blank=True, null=True)
+    data = models.TextField(blank=False, null=False)
+    description = models.TextField(help_text="Optional", blank=True, null=True)
+    zero = models.BooleanField(
+        ("رسم از صفر"),
+        default=False,
+        help_text="اگر می‌خواهید عدد صفر هم در نمودار درج شود، این تیک را بزنید",
+    )
     date_created = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -644,23 +718,26 @@ class LabGraphSelection(models.Model):
 
     def __str__(self):
         if self.case:
-            return str(self.title) + " from " + str(self.case) + " by " + str(self.author)
+            return (
+                str(self.title) + " from " + str(self.case) + " by " + str(self.author)
+            )
         else:
             return str(self.title) + " FREE by " + str(self.author)
 
+
 class AIReqResLog(models.Model):
-    AI_MODELS=[        
-        ("CC", "CC" ),
-        ("PI", "PI" ),
-        ("ROS", "ROS" ),
-        ("PhE", "PhE" ),
-        ("Sum", "Sum" ),
-        ("DDx", "DDx" ),
-        ("Act", "Act" ),
-        ]
-    request_content=models.TextField(blank=False, null=False)
-    response_content=models.TextField(blank=False, null=False)
-    user=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    AI_MODELS = [
+        ("CC", "CC"),
+        ("PI", "PI"),
+        ("ROS", "ROS"),
+        ("PhE", "PhE"),
+        ("Sum", "Sum"),
+        ("DDx", "DDx"),
+        ("Act", "Act"),
+    ]
+    request_content = models.TextField(blank=False, null=False)
+    response_content = models.TextField(blank=False, null=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     ai_model = models.CharField(
         max_length=10,
@@ -668,9 +745,10 @@ class AIReqResLog(models.Model):
         null=True,
         blank=True,
     )
-    
+
     def __str__(self):
         return f"{self.ai_model}: {self.request_content[:20]} | {self.response_content[:20]} by {self.user.username}"
+
 
 class CaseMessage(models.Model):
     case = models.ForeignKey(Case, on_delete=models.PROTECT)
