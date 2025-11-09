@@ -75,6 +75,9 @@ def dashboard(request):
             professor_verified=True,
             ).order_by("-date_created") # limit count later
         all_uni_cases = action_need_uni_cases | reviewed_uni_cases | verified_uni_cases
+        all_uni_cases = all_uni_cases.order_by('professor_verified', '-is_professor_turn', '-date_created')
+        for i in all_uni_cases:
+            print(i.get_status)
         template_name = "user/dashboard_professor.html"
         context = {
             'all_uni_cases':all_uni_cases,
