@@ -882,6 +882,7 @@ class CaseNewPageView(View):
         
         if submit_page and obj:
             obj.done = True
+            obj.is_professor_turn = True
             obj.save()
             return redirect('hx_detail', slug=obj.slug)
 
@@ -913,6 +914,24 @@ def case_messages(request, case_slug):
             'case': case,
             'feedbacks':feedbacks,
             }
+        if request.method == "POST":
+                if request.POST.get('submit'):
+                    message_text = request.POST.get("message_text")
+                    if message_text:
+                        CaseMessage.objects.create(
+                            author=request.user,
+                            case=case,
+                            text=message_text,
+                        )
+                        case.is_professor_turn = True
+                        case.save()
+                        # Redirect to prevent form resubmission on refresh
+                        messages.success(request, "پیام شما ثبت شد.")
+                        return redirect("case_messages", case_slug=case_slug)
+                    else:
+                        messages.error(request, "پیامی ننوشته‌اید.")
+                        return redirect("case_messages", case_slug=case_slug)
+
         return render(request, 'hx/case_messages.html', context)
     else:
         raise Http404("You are not case author or professor.")
