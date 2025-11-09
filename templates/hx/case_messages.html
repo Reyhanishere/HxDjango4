@@ -41,6 +41,13 @@
         color: #999;
         font-weight: 400;
     }
+    #msgTextarea{
+        border-radius: 10px;
+        border: 1px solid grey;
+        padding: 1rem;
+        width: auto;
+        height: 35vh;
+    }
 </style>
 
 {% endblock imports %}
@@ -71,4 +78,14 @@
 {% else %}
         <h3 style="margin: 1.5rem 2rem; text-align: center;">هنوز هیچ پیامی برای این کیس ثبت نشده است.</h3>
 {% endif %}
+    <form method="post" style="display: grid; margin: 1rem;">
+        <h5 style="font-weight: 600;">
+            نوشتن پیام جدید: 
+        </h5>
+    {% csrf_token %}
+    <textarea dir="rtl" name="message_text" id="msgTextarea" class="" value=""></textarea>
+    <div style="margin: auto;">
+        <button type="submit" name="submit" value="submit" class="btn btn-success" dir="ltr" style="width: 200px; margin:auto;">&#128190; ثبت</button>
+    </div>
+</form>
 {% endblock content %}
