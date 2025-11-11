@@ -1,6 +1,6 @@
 {
     "platform": "django",
-    "app": "mdpt",
+    "app": "sandman",
     "django": {
         "pythonVersion": "3.10",
         "mirror": false
