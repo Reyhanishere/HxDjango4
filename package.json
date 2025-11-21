@@ -6,10 +6,10 @@
   "directories": {
     "doc": "docs"
   },
-  "scripts": {
-    "build:css": "tailwindcss -i ./assets/src/input.css -o ./static/css/output.css --minify",
-    "watch:css": "tailwindcss -i ./assets/src/input.css -o ./static/css/output.css --watch"
-
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tailwindcss -i ./static/src/input.css -o ./static/css/output.css --watch",
+    "build": "tailwindcss -i ./static/src/input.css -o ./static/css/output.css --minify"
   },
   "repository": {
     "type": "git",
